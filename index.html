@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html lang="en" ng-app="jprApp">
+  <head ng-controller="HeadCtrl">
+    <meta charset="utf-8">
+    <title ng-bind="Page.title()">JPR</title>
+    <link rel="stylesheet" href="app/bower_components/bootstrap/dist/css/bootstrap.css">
+    <script src="app/bower_components/jquery/dist/jquery.js"></script>
+    <script src="app/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="app/bower_components/angular/angular.js"></script>
+    <script src="app/bower_components/angular-route/angular-route.js"></script>
+    <script src="app/bower_components/angular-resource/angular-resource.js"></script>
+    <script src="app/app.js"></script>
+    <script src="app/routes.js"></script>
+    <script src="app/services.js"></script>
+    <script src="app/controllers/home_controller.js"></script>
+    <script src="app/controllers/courses_controller.js"></script>
+    <script src="app/controllers/head_controller.js"></script>
+  </head>
+  <body>
+    
+    <div ng-view>
+    </div>
+    
+    
+  </body>
+</html>
