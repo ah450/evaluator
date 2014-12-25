@@ -1,0 +1,13 @@
+
+<div class="container-fluid pull-right" ng-controller="LoginCtrl" ng-hide="Auth.isLoggedIn">
+  <form  class="login-form">
+    <label for="email" class="glyphicon glyphicon-envelope"></label>
+    <input type="email" name="email" id="email" ng-class="{'bg-danger': login_error}" ng-model="email" placeholder="example@guc.edu.eg" required>
+    <label for="password" class="glyphicon glyphicon-lock"></label>
+    <input type="password" name="password" id="password" ng-class="{'bg-danger': login_error}" ng-model="password" placeholder="password" required>
+    <input type="submit" ng-click="login(email, password)" value="Login" class="btn btn-primary btn-xs">    
+  </form>
+  <div class="alert alert-danger" role="alert" ng-show="login_error">
+      <p>{{error_message}}</p>
+    </div>
+</div>

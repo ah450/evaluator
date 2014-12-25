@@ -12,6 +12,13 @@ jprApp.config(['$routeProvider',
                   }).when('/course/:courseName/projects', {
                     templateUrl: '/app/partials/course_projects.html',
                     controller: 'CourseProjectCtrl'
+                  }).when('/course/:courseName', {
+                    templateUrl: 'app/partials/course.html',
+                    controller: 'CourseCtrl'
+                  })
+                  .when('/signup', {
+                    templateUrl: '/app/partials/signup.html',
+                    controller: 'SignupCtrl'
                   })
                   .otherwise({
                     redirectTo: '/home',

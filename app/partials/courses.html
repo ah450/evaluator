@@ -1,16 +1,34 @@
-<div class="container"> 
-  
-  <div class="panel panel-primary" ng-repeat="course in courses">
-    <div class="panel-heading">
-      <h1>{{course.title}</h1> 
-    </div>
+<style>
+*, *:before, *:after {box-sizing:  border-box !important;}
 
-    <div class="panel-body">
-      <p>{{course.description}}</p> 
-    </div>
+
+.item {
+ display: inline-block;
+ padding:  .25rem;
+ width:  100%;
+}
+
+.well {
+ position:relative;
+ display: block;
+}
+ 
+.block-link{
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+</style>
+
+
+<div class="container">
+  <div class="row">
+    <a  href="/course/{{course.name|encodeuri}}" class="item block-link" ng-repeat="course in courses">
+      <div class="well">
+        <h3>{{course.name}}</h3>
+        <p>{{course.description}}</p>
+      </div>
+    </a>
   </div>
-
 </div>
-
-
 
