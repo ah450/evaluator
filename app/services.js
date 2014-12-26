@@ -35,10 +35,13 @@ jprServices.factory('User', ['$resource', 'Host', function($resource, Host){
 // Utility services
 jprServices.factory('Page', function() {
   var title = 'JPR';
+  var current_link = '';
   return {
     title: function() { return title;},
     setTitle: function(newTitle){ title = newTitle;},
-    setSection: function(section){ title = "JPR| " + section; }
+    setSection: function(section){ title = "JPR| " + section; },
+    currentLink: function(){return current_link;},
+    setLink: function(link){current_link = link;}
   };
 });
 

@@ -1,6 +1,7 @@
 jprApp.controller('SignupCtrl', ['$scope', '$location', 'User', 'Page', 'Validators', 'Login', function($scope, $location, User, Page, Validators, Login) {
     
     Page.setSection('Registration');
+    Page.setLink('signup');
     if (Login.auth.isLoggedIn()) {
       $location.path('/home').replace();
     }

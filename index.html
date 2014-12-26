@@ -2,7 +2,7 @@
 <html lang="en" ng-app="jprApp">
   <head ng-controller="HeadCtrl">
     <meta charset="utf-8">
-    <title ng-bind="Page.title()">JPR</title>
+    <title ng-bind="title()">JPR</title>
     <link rel="stylesheet" href="stylesheets/bootstrap-united.css">
 <!--    <link rel="stylesheet" href="app/bower_components/bootstrap/dist/css/bootstrap.css">-->
 <!--    <link rel="stylesheet" href="app/bower_components/bootstrap/dist/css/bootstrap-theme.css">-->
@@ -45,9 +45,10 @@
       height: 100%;
       margin: 0 auto -155px; /* the bottom margin is the negative value of the footer's height */
     }
-    .footer {
-      height: 155px;
+    .footer, .pusher {
+      height: 200px;
     }
+    
   </style>
   <body>
     
@@ -59,14 +60,14 @@
           </a>          
         </div>
         <ul class="nav navbar-nav">
-            <li><a href="#/courses">Courses</a></li>
-            <li ng-hide="Auth.isLoggedIn()"><a href="#/signup">Create Account</a></li>
+            <li ng-class="{'active': currentLink() == 'courses' }"><a href="#/courses">Courses</a></li>
+            <li ng-if="!Auth.isLoggedIn()" ng-class="{'active': currentLink() == 'signup' }"><a href="#/signup">Create Account</a></li>
         </ul>
-        <ul class="nav navbar-nav navbar-right" ng-show="Auth.isLoggedIn()">
-          <li><a href="#/profile">Hello {{Auth.getUser().name}}</a></li>
+        <ul class="nav navbar-nav navbar-right" ng-if="Auth.isLoggedIn()">
+          <li ng-class="{'active': currentLink() == 'profile' }"><a href="#/profile">Hello {{Auth.getUser().name}}</a></li>
           <li><a ng-click="Auth.clear()">Logout</a></li>
         </ul>
-        <p class="navbar-text navbar-right" ng-hide="Auth.isLoggedIn()">Hello Anon</p>
+        <p class="navbar-text navbar-right" ng-if="!Auth.isLoggedIn()">Hello Anon</p>
       </div>
     </nav>
     <section ng-include="'app/partials/login.html'">
@@ -75,6 +76,7 @@
     <div class="wrapper">
       <div ng-view class="main">
       </div>
+      <section class="pusher"></section>
     </div>
     
     

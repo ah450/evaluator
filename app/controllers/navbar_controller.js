@@ -1,3 +1,4 @@
-jprApp.controller('NavbarCtrl', ['$scope', 'Auth', function($scope, Auth) {
+jprApp.controller('NavbarCtrl', ['$scope', 'Auth', 'Page', function($scope, Auth, Page) {
   $scope.Auth = Auth;
+  $scope.currentLink = Page.currentLink;
 }]);
