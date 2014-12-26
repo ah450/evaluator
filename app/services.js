@@ -102,7 +102,7 @@ jprServices.factory('Auth', ['ipCookie', function(ipCookie) {
     };
     
     auth.setToken = function(token, duration) {
-      ipCookie(TOKEN_COOKIE_KEY, token, {expires: 5000, expirationUnit: 'seconds', secure: false } );
+      ipCookie(TOKEN_COOKIE_KEY, token, {expires: duration, expirationUnit: 'seconds', secure: false } );
     };
     
     auth.setUser = function(user, duration) {

@@ -8,8 +8,12 @@ jprApp.config(['$routeProvider',
                     controller: 'CourseListCtrl'
                   }).when('/users', {
                     templateUrl: '/app/partials/users.html',
-                    controller: 'UsersListCtrl'
-                  }).when('/course/:courseName/projects', {
+                    controller: 'UsersListCtrl',
+                  }).when('/user/:userId', {
+                    templateUrl: '/app/profile.html',
+                    controller: 'ProfileCtrl'
+                  })
+                  .when('/course/:courseName/projects', {
                     templateUrl: '/app/partials/course_projects.html',
                     controller: 'CourseProjectCtrl'
                   }).when('/course/:courseName', {

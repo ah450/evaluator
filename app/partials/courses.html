@@ -1,18 +1,6 @@
 <style>
   *, *:before, *:after {box-sizing:  border-box !important;}
 
-
-  .item {
-   display: inline-block;
-   padding:  .25rem;
-   width:  100%;
-  }
-
-  .well {
-   position:relative;
-   display: block;
-  }
-
   .block-link{
     text-decoration: none !important;
     color: inherit !important;
@@ -42,13 +30,24 @@
     </div>
   </div>
   
-  <div class="row">
-    <a  href="/course/{{course.name|encodeuri}}" class="item block-link" ng-repeat="course in courses | filter: courseQuery">
-      <div class="well">
-        <h3>{{course.name}}</h3>
-        <p>{{course.description}}</p>
+  <div class="row" ng-repeat="course in courses| filter:courseQuery">
+      <div class="col-md-6 col-lg-6">
+        <a href="#{{course.url}}">{{course.name}}</a>
+        <div class="row">
+          <div class="col-md-6 col-lg-6">
+            {{course.description}}
+          </div>
+        </div>
+        <div class="row" ng-if="isLoggedIn()">
+          <div class="button-group" role="group">
+            <a href="#{{course.supervisor.url}}" class="btn btn-small"  title="Course Supervisor">{{course.supervisor.name}}</a>
+            <a href="#{{course.tas_url}}" class="btn btn-small" title="Course Teachers">Teachers</a>
+            <a href="#{{course.students_url}}" class="btn btn-small" title="Course Students">Students</a>
+            <a href="#{{course.projects_url}}" class="btn btn-small" title="Course projects">Projects</a>         
+          </div>
+        </div>
       </div>
-    </a>
   </div>
+  
 </div>
 
