@@ -1,5 +1,3 @@
-jprApp.controller('HomeCtrl', ['$scope', 
-
-function($scope){
+jprApp.controller('HomeCtrl', ['$scope', function($scope){
 
 }]);

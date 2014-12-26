@@ -3,14 +3,15 @@
   <head ng-controller="HeadCtrl">
     <meta charset="utf-8">
     <title ng-bind="Page.title()">JPR</title>
-<!--    <link rel="stylesheet" href="stylesheets/bootstrap-united.css">-->
-    <link rel="stylesheet" href="app/bower_components/bootstrap/dist/css/bootstrap.css">
-    <link rel="stylesheet" href="app/bower_components/bootstrap/dist/css/bootstrap-theme.css">
+    <link rel="stylesheet" href="stylesheets/bootstrap-united.css">
+<!--    <link rel="stylesheet" href="app/bower_components/bootstrap/dist/css/bootstrap.css">-->
+<!--    <link rel="stylesheet" href="app/bower_components/bootstrap/dist/css/bootstrap-theme.css">-->
     <script src="app/bower_components/jquery/dist/jquery.js"></script>
     <script src="app/bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="app/bower_components/angular/angular.js"></script>
     <script src="app/bower_components/angular-route/angular-route.js"></script>
     <script src="app/bower_components/angular-resource/angular-resource.js"></script>
+    <script src="app/bower_components/angular-cookie/angular-cookie.js"></script>
     <script src="app/app.js"></script>
     <script src="app/routes.js"></script>
     <script src="app/services.js"></script>
@@ -19,12 +20,16 @@
     <script src="app/controllers/courses_controller.js"></script>
     <script src="app/controllers/head_controller.js"></script>
     <script src="app/controllers/login_controller.js"></script>
-    <script src="app/controllers/navbar_controller.js"></script>    
+    <script src="app/controllers/navbar_controller.js"></script>
+    <script src="app/controllers/signup_controller.js"></script>
   </head>
   <style>
     .navbar .container-fluid {
       height: 110px;
-    }    
+    }
+    .main {
+      margin-top: 100px;
+    }
   </style>
   <body style="padding-top: 115px;">
     
@@ -37,17 +42,20 @@
         </div>
         <ul class="nav navbar-nav">
             <li><a href="#/courses">Courses</a></li>
-            <li ng-hide="Auth.isLoggedIn"><a href="#/signup">Signup</a></li>
+            <li ng-hide="Auth.isLoggedIn()"><a href="#/signup">Create Account</a></li>
         </ul>
-        <p class="navbar-text navbar-right" ng-show="auth.isLoggedIn" ><a href="#/profile">{{Auth.current_user.name}}</a></p>
-        <p class="navbar-text navbar-right" ng-hide="auth.isLoggedIn">Hello Anon</p>
+        <ul class="nav navbar-nav navbar-right" ng-show="Auth.isLoggedIn()">
+          <li><a href="#/profile">Hello {{Auth.getUser().name}}</a></li>
+          <li><a href="#/home" ng-click="Auth.clear()">Logout</a></li>
+        </ul>
+        <p class="navbar-text navbar-right" ng-hide="Auth.isLoggedIn()">Hello Anon</p>
       </div>
     </nav>
     <section ng-include="'app/partials/login.html'">
     </section>
     
     
-    <div ng-view style="margin-top: 50px;">
+    <div ng-view class="main">
     </div>
     
     

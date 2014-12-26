@@ -1,7 +1,4 @@
-jprApp.controller('CourseListCtrl', ['$scope', '$document', 'Courses', 'Page', 
-     
-function ($scope, $document,Courses, Page) {
-    $scope.courses = Courses.query();
-    $document.title = "Hello"
+jprApp.controller('CourseListCtrl', ['$scope', 'Course', 'Page', function ($scope, Course, Page) {
+    $scope.courses = Course.query();
     Page.setSection('Our Courses');
 }]);

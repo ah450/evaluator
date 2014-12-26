@@ -1,29 +1,49 @@
 <style>
-*, *:before, *:after {box-sizing:  border-box !important;}
+  *, *:before, *:after {box-sizing:  border-box !important;}
 
 
-.item {
- display: inline-block;
- padding:  .25rem;
- width:  100%;
-}
+  .item {
+   display: inline-block;
+   padding:  .25rem;
+   width:  100%;
+  }
 
-.well {
- position:relative;
- display: block;
-}
- 
-.block-link{
-  text-decoration: none !important;
-  color: inherit !important;
-}
+  .well {
+   position:relative;
+   display: block;
+  }
+
+  .block-link{
+    text-decoration: none !important;
+    color: inherit !important;
+  }
+
+
+
 
 </style>
 
 
+
+
 <div class="container">
   <div class="row">
-    <a  href="/course/{{course.name|encodeuri}}" class="item block-link" ng-repeat="course in courses">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div>
+          <div class="input-group col-md-12">
+            <input type="text" class="form-control" placeholder="Search" ng-model="courseQuery" />
+            <span class="input-group-btn">
+               <span class="btn btn-danger glyphicon glyphicon-search"></span>
+            </span>
+          </div>
+        </div> 
+      </div>
+    </div>
+  </div>
+  
+  <div class="row">
+    <a  href="/course/{{course.name|encodeuri}}" class="item block-link" ng-repeat="course in courses | filter: courseQuery">
       <div class="well">
         <h3>{{course.name}}</h3>
         <p>{{course.description}}</p>
