@@ -33,17 +33,23 @@
     <script src="app/controllers/project_controller.js" charset="utf-8"></script>
   </head>
   <style>
-    .navbar {
-      height: 110px;
-    }
     
     .main {
       margin-top: 100px;
     }
     
+        
     html, body {
       height: 100%;
+    }
 
+
+    #wrap {
+      min-height: 100%;
+      height: auto !important;
+      height: 100%;
+      margin: 0 auto -120px;
+      padding: 0 0 140px;
     }
     body {
       padding-top: 115px;
@@ -59,20 +65,19 @@
     }
   </style>
   <body>
-    <section ng-include="'app/partials/nav.html'">
-    </section>
-    <section ng-include="'app/partials/login.html'">
-    </section>
+    <div id="wrap">
+      <section ng-include="'app/partials/nav.html'">
+      </section>
 
       <div ng-view class="main">
       </div>
     
+    </div>
     
     <footer class="footer">
       <div class="container text-center">
         <a href="https://github.com/ah450/runner-frontend"><img src="images/github.png" alt="Fork me" /></a>
       </div>
     </footer>
-    
   </body>
 </html>
