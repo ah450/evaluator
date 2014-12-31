@@ -59,7 +59,7 @@ jprApp.controller('CourseRelatedCtrl', ['$scope', '$routeParams', '$location', '
       $scope.uploadProgress.completed = 0;
       $scope.uploadProgress.on = true;
       $upload.upload({
-        url: 'http://localhost:8080' + window.decodeURIComponent($scope.course.projects_url),
+        url: 'http://178.62.98.209:8080' + window.decodeURIComponent($scope.course.projects_url),
         method: 'POST',
         headers: {
           'X-Auth-Token': 'Replace Me'
