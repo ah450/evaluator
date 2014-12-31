@@ -1,0 +1,71 @@
+<section ng-if="alert">
+<div class="alert {{alert.type}} alert-dismissiable" role="alert">
+<button id="alertDismiss" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+<strong>{{alert.message}}</strong>
+</div>
+</section>
+<section ng-if="loaded">
+
+<div class="page-header">
+  <h1 class="text-primary">{{project.name}}</h1>
+</div>
+
+<p class="lead text-info" ng-if="project.submissions.length == 0">No submissions</p>
+
+<div class="container-fluid text-center">
+    <div class="row top-buffer border-row" ng-repeat="submission in project.submissions">
+        <div class="col-md-6 col-lg-6">
+            <p class="glyphicon glyphicon-user"> {{submission.submitter.name}}<p>
+            <a href="mailto:{{submission.submitter.email}}" class="glyphicon glyphicon-envelope"> {{submission.submitter.email}}</a>
+            <p class="glyphicon glyphicon-calendar"> {{submission.created_at}}</p>
+        </div>
+        <div class="col-md-3 col-lg-3">
+            <span ng-if="submission.processed" class="glyphicon glyphicon-ok bg-success"> Processed</span>
+            <span ng-if="!submission.processed" class="glyphicon glyphicon-remove bg-warning"> Processing...</span>
+        </div>
+        <div class="col-md-6 col-lg-6">
+            <div class="row top-buffer" ng-repeat="test in submission.tests">
+                <div class="col-md-3">
+                    <span ng-if="test.success" class="glyphicon glyphicon-ok bg-success"></span>
+                    <span ng-if="!test.success" class="glyphicon glyphicon-remove bg-warning"></span>
+                </div>
+                <div class="col-md-6 col-lg-6">
+                    <p class="lead">Tests</p>
+                    <div class="row top-buffer" ng-repeat="case in test.cases">
+                        <div class="col-md-3">
+                            <p class="text-primary glyphicon" 
+                            ng-class="{'glyphicon-remove bg-warning': !case.passed, 'glyphicon-ok bg-success': case.passed}"> {{case.name}}</p>
+                        </div>
+                        <div class="col-md-6 col-lg-6">
+                            <p class="lead">{{case.detail}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<section ng-if="isStudent">
+
+<section ng-if="uploadProgress.on" class="progress">
+    <div 
+    class="progres-bar progress-bar-success progress-bar-striped active" 
+    role="progressbar" 
+    aria-valuenow="{{uploadProgress.completed}}" aria-valuemin="0" 
+    aria-valuemax="100" style="width: {{uploadProgress.completed}}%;">
+      {{uploadProgress.completed}}%
+    </div>
+</section>
+    <form>
+        <div class="form-group">
+        <label for="codeFile">Code</label>
+        <input type="file" id="codeFile" name="codeFile" ng-file-select ng-model="code.file"
+        ng-multiple="false" required>
+        </div>
+        <button type="submit" ng-click="submitCode()" class="btn btn-primary">Submit</button>
+    </form>
+</section>
+
+</section>

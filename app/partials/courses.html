@@ -1,28 +1,28 @@
 <style>
   *, *:before, *:after {box-sizing:  border-box !important;}
 
-  .block-link{
+  .block-link {
     text-decoration: none !important;
     color: inherit !important;
   }
-
-
-
-
 </style>
 
-
-
-
+<section ng-if="alert">
+<div class="alert {{alert.type}} alert-dismissiable" role="alert">
+<button id="alertDismiss" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+<strong>{{alert.message}}</strong></div>
+</section>
 <div class="container">
-  <div class="row">
+  
+  <div class="row border-row">
     <div class="panel panel-default">
       <div class="panel-body">
         <div>
           <div class="input-group col-md-12">
             <input type="text" class="form-control" placeholder="Search" ng-model="courseQuery" />
             <span class="input-group-btn">
-               <span class="btn btn-danger glyphicon glyphicon-search"></span>
+              <span class="btn btn-danger glyphicon glyphicon-plus" data-toggle="collapse" id="newCourseExpandButton" data-target="#newCourse" disabled="">
+              </span>
             </span>
           </div>
         </div> 
@@ -30,9 +30,26 @@
     </div>
   </div>
   
-  <div class="row" ng-repeat="course in courses| filter:courseQuery">
+
+  <div class="row top-buffer border-row collapse" id="newCourse">
+    <div class="col-md-6 col-lg-6">
+      <form style="margin-bottom: 10px;">
+        <div class="form-group">
+          <label for="newCourseName">Name</label>
+          <input type="text" name="newCourseName" ng-model="newCourse.name" id="newCourseName" class="form-control" placeholder="Course Name" required>
+        </div>
+        <div class="form-group">
+          <label for="newCourseDescription">Description</label>
+          <input type="text" name="newCourseDescription" id="newCourseDescription" class="form-control" ng-model="newCourse.description" placeholder="Describe the course" required>
+        </div>
+        <button type="submit" class="btn btn-default" ng-click="createCourse()" >Create!</button>
+      </form>
+    </div>
+  </div>
+  <div class="row top-buffer border-row" ng-repeat="course in courses| filter:courseQuery">
       <div class="col-md-6 col-lg-6">
         <a href="#{{course.url}}">{{course.name}}</a>
+        <a href="" class="label label-primary" ng-if="isLoggedIn()" ng-click="join(course)">Join</a>
         <div class="row">
           <div class="col-md-6 col-lg-6">
             {{course.description}}

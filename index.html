@@ -2,26 +2,35 @@
 <html lang="en" ng-app="jprApp">
   <head ng-controller="HeadCtrl">
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title ng-bind="title()">JPR</title>
-    <link rel="stylesheet" href="stylesheets/bootstrap-united.css">
-<!--    <link rel="stylesheet" href="app/bower_components/bootstrap/dist/css/bootstrap.css">-->
-<!--    <link rel="stylesheet" href="app/bower_components/bootstrap/dist/css/bootstrap-theme.css">-->
-    <script src="app/bower_components/jquery/dist/jquery.js"></script>
-    <script src="app/bower_components/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="app/bower_components/angular/angular.js"></script>
-    <script src="app/bower_components/angular-route/angular-route.js"></script>
-    <script src="app/bower_components/angular-resource/angular-resource.js"></script>
-    <script src="app/bower_components/angular-cookie/angular-cookie.js"></script>
-    <script src="app/app.js"></script>
-    <script src="app/routes.js"></script>
-    <script src="app/services.js"></script>
-    <script src="app/filters.js"></script>
-    <script src="app/controllers/home_controller.js"></script>
-    <script src="app/controllers/courses_controller.js"></script>
-    <script src="app/controllers/head_controller.js"></script>
-    <script src="app/controllers/login_controller.js"></script>
-    <script src="app/controllers/navbar_controller.js"></script>
-    <script src="app/controllers/signup_controller.js"></script>
+<!--    <link rel="stylesheet" href="stylesheets/bootstrap-united.css">-->
+    <link rel="stylesheet" href="app/bower_components/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="app/bower_components/bootstrap/dist/css/bootstrap-theme.css">
+    <script src="app/bower_components/jquery/dist/jquery.js" charset="utf-8"></script>
+    <script src="app/bower_components/bootstrap/dist/js/bootstrap.js" charset="utf-8"></script>
+    <script src="app/bower_components/angular/angular.js" charset="utf-8"></script>
+    <script src="app/bower_components/angular-route/angular-route.js" charset="utf-8"></script>
+    <script src="app/bower_components/angular-resource/angular-resource.js" charset="utf-8"></script>
+    <script src="app/bower_components/angular-cookie/angular-cookie.js" charset="utf-8"></script>
+    <script src="app/bower_components/angular-local-storage/dist/angular-local-storage.js" type="text/javascript" charset="utf-8"></script>
+    <script src="app/bower_components/ng-file-upload/angular-file-upload-shim.js" charset="utf-8"></script>
+    <script src="app/bower_components/ng-file-upload/angular-file-upload.js" charset="utf-8"></script>
+    <script src="app/bower_components/momentjs/moment.js" charset="utf-8"></script>
+    <script src="app/app.js" charset="utf-8"></script>
+    <script src="app/routes.js" charset="utf-8"></script>
+    <script src="app/services.js" charset="utf-8"></script>
+    <script src="app/filters.js" charset="utf-8"></script>
+    <script src="app/controllers/home_controller.js" charset="utf-8"></script>
+    <script src="app/controllers/courses_controller.js" charset="utf-8"></script>
+    <script src="app/controllers/head_controller.js" charset="utf-8"></script>
+    <script src="app/controllers/login_controller.js" charset="utf-8"></script>
+    <script src="app/controllers/navbar_controller.js" charset="utf-8"></script>
+    <script src="app/controllers/signup_controller.js" charset="utf-8"></script>
+    <script src="app/controllers/course_related_controller.js" charset="utf-8"></script>
+    <script src="app/controllers/error_controller.js" charset="utf-8"></script>
+    <script src="app/controllers/course_controller.js" charset="utf-8"></script>
+    <script src="app/controllers/project_controller.js" charset="utf-8"></script>
   </head>
   <style>
     .navbar {
@@ -39,45 +48,24 @@
     body {
       padding-top: 115px;
     }
-    .wrapper {
-      min-height: 100%;
-      height: auto !important; /* This line and the next line are not necessary unless you need IE6 support */
-      height: 100%;
-      margin: 0 auto -155px; /* the bottom margin is the negative value of the footer's height */
+    .top-buffer {
+      margin-top: 40px;
     }
-    .footer, .pusher {
-      height: 200px;
+    .border-row {
+      border-bottom: 1px solid #ccc;
     }
-    
+    .bottom-buffer {
+      padding-bottom: 40px;
+    }
   </style>
   <body>
-    
-    <nav class="navbar navbar-default navbar-fixed-top" ng-controller="NavbarCtrl">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="#">
-            <img alt="MET" src="images/logo3.png">
-          </a>          
-        </div>
-        <ul class="nav navbar-nav">
-            <li ng-class="{'active': currentLink() == 'courses' }"><a href="#/courses">Courses</a></li>
-            <li ng-if="!Auth.isLoggedIn()" ng-class="{'active': currentLink() == 'signup' }"><a href="#/signup">Create Account</a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right" ng-if="Auth.isLoggedIn()">
-          <li ng-class="{'active': currentLink() == 'profile' }"><a href="#/profile">Hello {{Auth.getUser().name}}</a></li>
-          <li><a ng-click="Auth.clear()">Logout</a></li>
-        </ul>
-        <p class="navbar-text navbar-right" ng-if="!Auth.isLoggedIn()">Hello Anon</p>
-      </div>
-    </nav>
+    <section ng-include="'app/partials/nav.html'">
+    </section>
     <section ng-include="'app/partials/login.html'">
     </section>
-    
-    <div class="wrapper">
+
       <div ng-view class="main">
       </div>
-      <section class="pusher"></section>
-    </div>
     
     
     <footer class="footer">

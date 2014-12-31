@@ -1,3 +1,6 @@
-jprApp.controller('HomeCtrl', ['$scope', function($scope){
+jprApp.controller('HomeCtrl', ['$scope', 'Page', function($scope, Page) {
+  Page.setLink('home');
+  Page.clearTitle();
+  Page.clearErrorMessage();
 
 }]);

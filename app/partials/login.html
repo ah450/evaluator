@@ -1,15 +1,20 @@
+<section ng-controller="LoginCtrl" ng-hide="isLoggedIn() || currentLink() == 'signup' ">
+<form  class="form-inline pull-right" role="login" novalidation>
+      <label for="email" class="glyphicon glyphicon-envelope"></label>
+      <input type="email" class="input-small" name="email" id="email" ng-class="{'bg-danger': login_error}" ng-model="email" placeholder="example@guc.edu.eg" required>
+      <label for="password" class="glyphicon glyphicon-lock"></label>
+      <input type="password"  class="input-small" name="password" id="password" ng-class="{'bg-danger': login_error}" ng-model="password" placeholder="password" required>
+      <label class="checkbox">
+        <input type="checkbox" id="remember"  ng-model="remember">Remember
+      </label>
+      <input type="submit" ng-click="login(email, password, remember)" value="Login" class="btn btn-primary btn-xs">
+</form>
 
-<div class="container-fluid pull-right" ng-controller="LoginCtrl" ng-hide="Auth.isLoggedIn()">
-  <form  class="login-form" role="login">
-    <label for="email" class="glyphicon glyphicon-envelope"></label>
-    <input type="email" name="email" id="email" ng-class="{'bg-danger': login_error}" ng-model="email" placeholder="example@guc.edu.eg" required>
-    <label for="password" class="glyphicon glyphicon-lock"></label>
-    <input type="password" name="password" id="password" ng-class="{'bg-danger': login_error}" ng-model="password" placeholder="password" required>
-    <label for="remember"><small>remember</small></label>
-    <input type="checkbox" id="remember"  ng-model="remember">
-    <input type="submit" ng-click="login(email, password, remember)" value="Login" class="btn btn-primary btn-xs">    
-  </form>
-  <div class="alert alert-danger" role="alert" ng-show="login_error">
-      <p>{{error_message}}</p>
+<div class="container-fluid pull-right"  >
+
+  <div class="row alert alert-danger" role="alert" ng-show="login_error">>
+        <p class="col-md-6 col-lg-6">{{error_message}}</p>
   </div>
 </div>
+
+</section>

@@ -1,0 +1,12 @@
+<nav class="navbar navbar-default navbar-fixed-top" ng-controller="NavbarCtrl">
+                
+        <ul class="nav navbar-nav">
+            <li ng-class="{'active': currentLink() == 'courses' }"><a href="#/courses">Courses</a></li>
+            <li ng-if="!Auth.isLoggedIn()" ng-class="{'active': currentLink() == 'signup' }"><a href="#/signup">Create Account</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right" ng-if="Auth.isLoggedIn()">
+          <li ng-class="{'active': currentLink() == 'profile' }"><a href="#/profile">Hello {{Auth.getUser().name}}</a></li>
+          <li><a href='#/home' ng-click="Auth.clear()">Logout</a></li>
+        </ul>
+        <p class="navbar-text navbar-right" ng-if="!Auth.isLoggedIn()">Hello Anon</p>
+</nav>
