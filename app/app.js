@@ -1,4 +1,4 @@
-var jprApp = angular.module('jprApp', ['ngRoute', 'jprServices', 'LocalStorageModule', 'angularFileUpload']);
+var jprApp = angular.module('jprApp', ['ngRoute', 'jprServices', 'LocalStorageModule', 'angularFileUpload', 'templates-dist']);
 
 jprApp.factory('tokenInjector', ['Auth', '$q', function(Auth, $q) {
 

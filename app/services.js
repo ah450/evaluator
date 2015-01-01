@@ -2,7 +2,7 @@
 
 
 var jprServices = angular.module('jprServices', ['ngResource', 'ipCookie']).constant('Host', {
-  'base': 'http://178.62.98.209:8080'
+  'base': 'http://api.evaluator.in'
 });
 
 
