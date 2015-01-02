@@ -14,6 +14,10 @@ module.exports = function(grunt) {
       }
     },
     html2js: {
+      options: {
+        base: 'app',
+        module: 'jpr-templates'
+      },
       dist: {
         src: ['app/partials/*.html'],
         dest: 'tmp/templates.js'
