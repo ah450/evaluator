@@ -16,7 +16,11 @@ module.exports = function(grunt) {
     html2js: {
       options: {
         base: 'app',
-        module: 'jpr-templates'
+        module: 'jpr-templates',
+        singleModule: true,
+        htmlmin: {
+          collapseWhitespace: true,
+        }
       },
       dist: {
         src: ['app/partials/*.html'],
