@@ -60,7 +60,7 @@ module.exports = function(grunt) {
     },
     watch: {
       dev: {
-        files: ['Gruntfile.js', 'app/*.js', 'app/*.js', '*.html'],
+        files: ['Gruntfile.js', 'app/*/*.js', 'app/*.js', '*.html'],
         tasks: ['html2js:dist', 'concat:dist', 'clean:temp'],
         options: {
           atBegin: true
@@ -117,6 +117,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-html2js');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-bower-task');
+  grunt.registerTask('dev', ['bower', 'connect:server', 'watch:dev']);
   grunt.registerTask('min', ['bower', 'connect:server', 'watch:min']);
   grunt.registerTask('package', ['bower', 'html2js:dist', 'concat:dist', 'uglify:dist',
     'clean:temp', 'compress:dist'

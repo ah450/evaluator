@@ -52,7 +52,7 @@ jprApp.controller('ProjectCtrl', ['$scope', '$routeParams', '$upload', '$locatio
       $scope.uploadProgress.completed = 0;
       $scope.uploadProgress.on = true;
       $upload.upload({
-        url: 'http://178.62.98.209:8080' + window.decodeURIComponent($scope.project.submissions_url),
+        url: 'http://api.evaluator.in' + window.decodeURIComponent($scope.project.submissions_url),
         method: 'POST',
         headers: {
           'X-Auth-Token': 'Replace Me'
