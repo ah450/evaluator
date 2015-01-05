@@ -1,6 +1,8 @@
 var jprApp = angular.module('jprApp', ['ngRoute', 'jprServices', 'LocalStorageModule', 'angularFileUpload', 'jpr-templates']);
-
-jprApp.factory('tokenInjector', ['Auth', '$q', function(Auth, $q) {
+var jprServices = angular.module('jprServices', ['ngResource', 'ipCookie']).constant('Host', {
+  'base': 'https://api.evaluator.in'
+});
+jprApp.factory('tokenInjector', ['AuthBase', function(Auth) {
 
   var token_injector = {
     request: function(config) {
@@ -19,6 +21,7 @@ jprApp.factory('tokenInjector', ['Auth', '$q', function(Auth, $q) {
   };
   return token_injector;
 }]);
+
 
 
 jprApp.config(function() {

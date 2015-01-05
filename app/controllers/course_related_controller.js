@@ -1,4 +1,4 @@
-jprApp.controller('CourseRelatedCtrl', ['$scope', '$routeParams', '$location', '$upload', 'Auth', 'Page', 'Project', 'User', 'Course', function($scope, $routeParams, $location, $upload, Auth, Page, Project, User, Course) {
+jprApp.controller('CourseRelatedCtrl', ['$scope', '$routeParams', '$location', '$upload', 'Auth', 'Page', 'Project', 'Course', function($scope, $routeParams, $location, $upload, Auth, Page, Project, Course) {
   Page.setSection('Projects');
   Page.setLink('course-projects');
   Page.clearErrorMessage();
@@ -28,7 +28,7 @@ jprApp.controller('CourseRelatedCtrl', ['$scope', '$routeParams', '$location', '
       }, projectsSuccesCallback,
       projectFailureCallback);
   };
-  $scope.isTeacher = Auth.getUser().email.endsWith('@guc.edu.eg');
+  $scope.isTeacher = Auth.getUser().isTeacher();
   $scope.newProject = {
     name: '',
     language: 'J',
@@ -87,47 +87,36 @@ jprApp.controller('CourseRelatedCtrl', ['$scope', '$routeParams', '$location', '
   }
 
   var teachersCtrl = function() {
-
-    $scope.teachers = User.query_relation({
-        ep: window.decodeURIComponent($scope.course.tas_url)
-      },
-      function(teachers) {
+    $scope.course.teachers
+      .then(function(teachers) {
+        $scope.teachers = teachers;
         $scope.loaded = true;
-      },
-      function(httpResponse) {
-        if (httpResponse.status == 403) {
+      }, function(httpResponse) {
+        if (httpResponse.status == 403 || httpResponse.status == 401) {
           Page.setErrorMessage('Must be logged in to view course members.');
           $location.path('/403').replace();
         } else if (httpResponse.status == 404) {
           $location.path('/404').replace();
         }
       });
-
-
   };
 
   var studentsCtrl = function() {
-    $scope.students = User.query_relation({
-      ep: window.decodeURIComponent($scope.course.students_url)
-    }, function(students) {
-      $scope.loaded = true;
-    }, function(httpResponse) {
-      if (httpResponse.status == 403) {
-        Page.setErrorMessage('Must be logged in to view course members.');
-        $location.path('/403').replace();
-      } else if (httpResponse.status == 404) {
-        $location.path('/404').replace();
-      }
-    });
+    $scope.students = [];
+    $scope.course.students
+      .then(function(students) {
+        $scope.students = students;
+        $scope.loaded = true;
+      }, function(httpResponse) {
+        if (httpResponse.status == 403 || httpResponse.status == 401) {
+          Page.setErrorMessage('Must be logged in to view course members.');
+          $location.path('/403').replace();
+        } else if (httpResponse.status == 404) {
+          $location.path('/404').replace();
+        }
+      });
   };
 
-  var courseSuccessFactory = function(toCall) {
-    // calls parameter when course is loaded.
-    return function(course) {
-      $scope.course = course;
-      toCall();
-    };
-  };
 
   $scope.ep = $routeParams.ep;
   var helperCtrl = null;
@@ -146,9 +135,11 @@ jprApp.controller('CourseRelatedCtrl', ['$scope', '$routeParams', '$location', '
       $location.path('/404').replace();
   };
 
-  $scope.course = Course.get({
-    name: $routeParams.courseName
-  }, courseSuccessFactory(helperCtrl));
+  Course.$get($routeParams.courseName)
+    .then(function(course) {
+      $scope.course = course;
+      helperCtrl();
+    });
 
   $('body').on('click', '#alertDismiss', function() {
     $scope.alert = null;

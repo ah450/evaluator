@@ -56,19 +56,22 @@ module.exports = function(grunt) {
     clean: {
       temp: {
         src: ['tmp']
+      },
+      lib: {
+        src: ['lib']
       }
     },
     watch: {
       dev: {
-        files: ['Gruntfile.js', 'app/*/*.js', 'app/*.js', '*.html'],
+        files: ['Gruntfile.js', 'app/*/*.js', 'app/*.js', 'index.html', 'app/partials/*.html'],
         tasks: ['html2js:dist', 'concat:dist', 'clean:temp'],
         options: {
           atBegin: true
         }
       },
       min: {
-        files: ['Gruntfile.js', 'app/*/*.js', 'app/*.js', '*.html'],
-        tasks: ['html2js:dist', 'concat:dist', 'clean:temp', 'uglify:dist'],
+        files: ['Gruntfile.js', 'app/*.js', 'app/*/*.js', 'index.html', 'app/partials/*.html'],
+        tasks: ['html2js:dist', 'concat:dist', 'uglify:dist', 'clean:temp'],
         options: {
           atBegin: true
         }
@@ -89,12 +92,19 @@ module.exports = function(grunt) {
           src: ['images/**'],
           dest: '/'
         }, {
-          src: ['stylesheets/*'],
-          dest: '/'
+          cwd: 'app/bower_components/bootstrap/dist/css/',
+          src: ['bootstrap.min.css', 'bootstrap-theme.min.css', '*.map'],
+          dest: '/stylesheets',
+          expand: true
         }, 
         {
           src: ['favicon.ico'],
           dest: '/'
+        }, {
+          src: ['**/**'],
+          cwd: 'app/bower_components/bootstrap/fonts/',
+          dest: '/fonts',
+          expand: true
         }
         ],
 
@@ -120,6 +130,6 @@ module.exports = function(grunt) {
   grunt.registerTask('dev', ['bower', 'connect:server', 'watch:dev']);
   grunt.registerTask('min', ['bower', 'connect:server', 'watch:min']);
   grunt.registerTask('package', ['bower', 'html2js:dist', 'concat:dist', 'uglify:dist',
-    'clean:temp', 'compress:dist'
+    'clean:temp', 'clean:lib', 'compress:dist'
   ]);
 };

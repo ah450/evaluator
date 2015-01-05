@@ -46,8 +46,12 @@
       <div ng-view class="main">
       </div>    
     </div>    
-    <footer class="footer">
+    <footer class="footer" ng-controller="FooterCtrl">
       <div class="container text-center">
+        <blockquote>
+          <p>{{zen.message}}</p>
+          <footer>{{zen.author}}</footer>
+        </blockquote>
         <a href="https://github.com/ah450/runner-frontend"><img src="images/github.png" title="Fork Me" alt="Fork me" /></a>
       </div>
     </footer>

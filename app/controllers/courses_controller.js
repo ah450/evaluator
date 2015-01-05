@@ -1,13 +1,22 @@
 jprApp.controller('CourseListCtrl', ['$scope', 'Course', 'Page', 'Auth', function($scope, Course, Page, Auth) {
-  $scope.courses = Course.query();
+  $scope.courses = [];
+
+  Course.$all().then(function(courses){
+    $scope.courses = courses;
+  });
   $scope.isLoggedIn = Auth.isLoggedIn;
   $scope.current_user = Auth.getUser();
   Page.setSection('Our Courses');
   Page.setLink('courses');
   Page.clearErrorMessage();
+  $scope.isStudent = $scope.isLoggedIn() ? $scope.current_user.isStudent() : false;
 
   $scope.$watch("isLoggedIn()", function() {
-    $scope.courses = Course.query();
+    Course.$all().then(function(courses){
+      $scope.courses = courses;
+    });
+    $scope.current_user = Auth.getUser();
+    $scope.isStudent = $scope.isLoggedIn() ? $scope.current_user.isStudent() : false;
   });
   $scope.alert = null;
 
@@ -16,10 +25,11 @@ jprApp.controller('CourseListCtrl', ['$scope', 'Course', 'Page', 'Auth', functio
     description: '',
   };
 
-  $scope.isStudent = Auth.getUser().email.endsWith('@student.guc.edu.eg');
-
   $scope.createCourse = function() {
-    Course.create($scope.newCourse, function(newCourse) {
+
+    course = new Course($scope.newCourse);
+
+    course.save(function(newCourse) {
       // success callback
       $scope.newCourse = {
         name: '',
@@ -31,7 +41,7 @@ jprApp.controller('CourseListCtrl', ['$scope', 'Course', 'Page', 'Auth', functio
         type: 'alert-success'
       }
     }, function(httpResponse) {
-      if (httpResponse.status == 403) {
+      if (httpResponse.status == 403 || httpResponse.status == 401) {
         $scope.alert = {
           message: 'Only teachers can create courses!',
           type: 'alert-warning'
@@ -46,17 +56,13 @@ jprApp.controller('CourseListCtrl', ['$scope', 'Course', 'Page', 'Auth', functio
   }
 
   $scope.join = function(course) {
-    if ($scope.current_user.email.endsWith('@student.guc.edu.eg')) {
+    if ($scope.current_user.isStudent()) {
       // join as student
-      Course.add_student({
-          name: course.name
-        }, {
-          id: $scope.current_user.id
-        },
+      course.add_student($scope.current_user,
         function(data) {
           // success callback
           $scope.alert = {
-            message: 'Welcome aboard!',
+            message: 'You are now enrolled in ' + course.name + '.',
             type: 'alert-success'
           };
         },
@@ -72,11 +78,7 @@ jprApp.controller('CourseListCtrl', ['$scope', 'Course', 'Page', 'Auth', functio
       );
     } else {
       // join as teacher
-      Course.add_teacher({
-          name: course.name
-        }, {
-          id: $scope.current_user.id
-        },
+      course.add_teacher( $scope.current_user,
         function(data) {
           // success callback
           $scope.alert = {

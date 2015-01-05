@@ -40,8 +40,8 @@ jprApp.controller('SignupCtrl', ['$scope', '$location', 'User', 'Page', 'Validat
         password: $scope.password
       }
 
-      var user = new User(data);
-      user.$create(function(user, responseHeaders) {
+      var user = new User(data, false);
+      user.save(function(user, responseHeaders) {
         // Log in with the new user
         Login.performLogin(user.email, $scope.password, false)
           .then(function(result) {

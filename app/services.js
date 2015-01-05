@@ -1,205 +1,3 @@
-// RESTFUL services
-
-
-var jprServices = angular.module('jprServices', ['ngResource', 'ipCookie']).constant('Host', {
-  'base': 'http://api.evaluator.in'
-});
-
-
-jprServices.factory('Course', ['$resource', 'Host',
-  function($resource, Host) {
-    var url = [Host.base, ':dest', ':name', ':ep'].join('/');
-
-    return $resource(url, {}, {
-      query: {
-        method: 'GET',
-        params: {
-          dest: 'courses'
-        },
-        isArray: true,
-        headers: {
-          'X-Auth-Token': 'Replace Me'
-        }
-      },
-      create: {
-        method: 'POST',
-        params: {
-          dest: 'courses'
-        },
-        headers: {
-          'X-Auth-Token': 'Replace Me'
-        }
-      },
-      get: {
-        method: 'GET',
-        params: {
-          dest: 'course'
-        },
-        headers: {
-          'X-Auth-Token': 'Replace Me'
-        }
-      },
-      update: {
-        method: 'PUT',
-        params: {
-          dest: 'course'
-        },
-        headers: {
-          'X-Auth-Token': 'Replace Me'
-        }
-      },
-      add_teacher: {
-        method: 'POST',
-        params: {
-          dest: 'course',
-          ep: 'tas'
-        },
-        headers: {
-          'X-Auth-Token': 'Replace Me'
-        },
-
-      },
-      add_student: {
-        method: 'POST',
-        params: {
-          dest: 'course',
-          ep: 'students'
-        },
-        headers: {
-          'X-Auth-Token': 'Replace Me'
-        },
-      },
-      delete: {
-        method: 'DELETE',
-        params: {
-          dest: 'course'
-        },
-        headers: {
-          'X-Auth-Token': 'Replace Me'
-        }
-      }
-    });
-
-  }
-]);
-
-jprServices.factory('User', ['$resource', 'Host', function($resource, Host) {
-  var url = [Host.base, ':dest', ':id'].join('/');
-  var related_custom_url = [Host.base, ':ep'].join('/');
-  return $resource(url, {}, {
-    query: {
-      method: 'GET',
-      params: {
-        dest: 'users'
-      },
-      isArray: true,
-      headers: {
-        'X-Auth-Token': 'Replace Me'
-      }
-    },
-    query_relation: {
-      method: 'GET',
-      url: related_custom_url,
-      isArray: true,
-      headers: {
-        'X-Auth-Token': 'Replace Me'
-      }
-    },
-    create: {
-      method: 'POST',
-      params: {
-        dest: 'users'
-      },
-      headers: {
-        'X-Auth-Token': 'Replace Me'
-      }
-    },
-    update: {
-      method: 'PUT',
-      params: {
-        dest: 'user'
-      },
-      headers: {
-        'X-Auth-Token': 'Replace Me'
-      }
-    },
-    delete: {
-      method: 'DELETE',
-      params: {
-        dest: 'user'
-      },
-      headers: {
-        'X-Auth-Token': 'Replace Me'
-      }
-    },
-    get: {
-      method: 'GET',
-      params: {
-        dest: 'user'
-      },
-      headers: {
-        'X-Auth-Token': 'Replace Me'
-      }
-    }
-  });
-}]);
-
-jprServices.factory('Project', ['$resource', 'Host', function($resource, Host) {
-  var url = [Host.base, ':dest'].join('/');
-  var course_related_url = [Host.base, 'course', ':courseName', 'projects'].join('/');
-  var submissions_url = [course_related_url, ':projectName', 'submissions'].join('/');
-  var project_by_id_url = [Host.base, 'project', ':id'].join('/');
-  return $resource(url, {}, {
-    query_all: {
-      method: 'GET',
-      params: {
-        dest: 'projects'
-      },
-      isArray: true,
-      headers: {
-        'X-Auth-Token': 'Replace Me'
-      }
-    },
-    get: {
-      method: 'GET',
-      url: project_by_id_url,
-      headers: {
-        'X-Auth-Token': 'Replace Me'
-      }
-    },
-    create: {
-      method: 'POST',
-      headers: {
-        'X-Auth-Token': 'Replace Me'
-      },
-      url: course_related_url
-    },
-    query: {
-      method: 'GET',
-      headers: {
-        'X-Auth-Token': 'Replace Me'
-      },
-      url: course_related_url,
-      isArray: true
-    },
-    get_submissions: {
-      method: 'GET',
-      headers: {
-        'X-Auth-Token': 'Replace Me'
-      },
-      url: submissions_url,
-      isArray: true
-    },
-    post_submission: {
-      method: 'POST',
-      headers: {
-        'X-Auth-Token': 'Replace Me'
-      },
-      url: submissions_url
-    }
-  });
-}]);
-
 // Utility services
 jprServices.factory('Page', ['$rootScope', 'localStorageService', function($rootScope, localStorageService) {
   var defaultTitle = 'JPR';
@@ -207,8 +5,8 @@ jprServices.factory('Page', ['$rootScope', 'localStorageService', function($root
   var currentLink = '';
   var currentMessage = localStorageService.get('pageCurrentMessage') || '';
 
-  $rootScope.$on('$locationChangeSuccess', function( _, oldLocation, newLocation) {
-    if(oldLocation != newLocation){
+  $rootScope.$on('$locationChangeSuccess', function(_, oldLocation, newLocation) {
+    if (oldLocation != newLocation) {
       currentMessage = localStorageService.get('pageCurrentMessage');
     }
   });
@@ -238,7 +36,7 @@ jprServices.factory('Page', ['$rootScope', 'localStorageService', function($root
     setErrorMessage: function(message) {
       localStorageService.set('pageCurrentMessage', message);
     },
-    clearErrorMessage: function(){
+    clearErrorMessage: function() {
       localStorageService.remove('pageCurrentMessage');
     }
   };
@@ -246,7 +44,7 @@ jprServices.factory('Page', ['$rootScope', 'localStorageService', function($root
 
 // Authentication
 
-jprServices.factory('Login', ['$q', '$http', 'Host', 'Auth', function($q, $http, Host, Auth) {
+jprServices.factory('Login', ['$q', '$http', 'Host', 'Auth', 'User', function($q, $http, Host, Auth, User) {
   var login = {
     auth: Auth
   };
@@ -290,8 +88,18 @@ jprServices.factory('Login', ['$q', '$http', 'Host', 'Auth', function($q, $http,
   return login;
 }]);
 
+jprServices.factory('Auth', ['AuthBase', 'User', function(AuthBase, User){
+  var auth = {};
+  auth.getUser = function(){
+    return new User(AuthBase.getUser(), true);
+  };
+  auth.isLoggedIn = AuthBase.isLoggedIn;
+  auth.setToken = AuthBase.setToken;
+  auth.setUser = AuthBase.setUser;
+  return auth;
+}]);
 
-jprServices.factory('Auth', ['ipCookie', function(ipCookie) {
+jprServices.factory('AuthBase', ['ipCookie', function(ipCookie) {
   var TOKEN_COOKIE_KEY = 'X-AUTH-TOKEN';
   var USER_COOKIE_KEY = 'CURRENT_USER';
   var auth = {};
@@ -328,8 +136,6 @@ jprServices.factory('Auth', ['ipCookie', function(ipCookie) {
     ipCookie.remove(USER_COOKIE_KEY);
   };
 
-
-
   return auth;
 }]);
 
@@ -353,4 +159,42 @@ jprServices.factory('Validators', function() {
     return id_suffix && id_prefix && !isNaN(id_prefix) && !isNaN(id_suffix);
   }
   return validators;
+});
+
+
+jprServices.factory('Zen', function() {
+  var zen = {};
+  zen.get = function() {
+    return zen.quotes[Math.floor(Math.random() * zen.quotes.length)];
+  };
+  zen.quotes = [
+  {message:"Sitting quietly, doing nothing, Spring comes, and the grass grows by itself.", author: "Zenrin Kushû"}, 
+  {message: "Entering the forest he moves not the grass; Entering the water he makes not a ripple.", author: "Zenrin Kushû"}, 
+  {message: "When the task is done beforehand, then it is easy.", author: "Zen master Yuan-tong"}, 
+  {message: "A day without work, a day without eating. When there's no work for a day, there's no eating for a day.", author: "Chinese Zen"}, 
+  {message: "You don't have to burn books to destroy a culture. Just get people to stop reading them.", author: "Ray Bradbury" },
+  {message: "I know, I know. You're afraid of making mistakes. Don’t be. Mistakes can be profited from. Man, when I was younger I shoved my ignorance in people’s faces. They beat me with sticks. By the time I was forty my blunt instrument had been honed to a fine cutting point for me. If you hide your ignorance, no one will hit you and you’ll never learn.", author: "Ray Bradbury"},
+  {message: "The computing scientist’s main challenge is not to get confused by the complexities of his own making.", author: "Edsger W. Dijkstra"}, 
+  {message: "When in doubt, use brute force.", author: "Ken Thompson"},
+  {message: "Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.", author: "Brian Kernighan"},
+  {message: "Controlling complexity is the essence of computer programming.", author: "Brian Kernighan"}, 
+  {message: "The essence of XML is this: the problem it solves is not hard, and it does not solve the problem well.", author: "Phil Wadler"},
+  {message: "A program that produces incorrect results twice as fast is infinitely slower.", author: "John Osterhout"}, 
+  {message: "Simplicity is prerequisite for reliability.", author: "Edsger W. Dijkstra"}, 
+  {message: "Measuring programming progress by lines of code is like measuring aircraft building progress by weight.", author: "Bill Gates"}, 
+  {message: "First, solve the problem. Then, write the code.", author: "John Johnson"},
+  {message: "Theory is when you know something, but it doesn’t work. Practice is when something works, but you don’t know why. Programmers combine theory and practice: Nothing works and they don’t know why.", author: "Unknown"},
+  {message: "A computer is a stupid machine with the ability to do incredibly smart things, while computer programmers are smart people with the ability to do incredibly stupid things. They are, in short, a perfect match", author: "Unknown"},
+  {message: "If we’d asked the customers what they wanted, they would have said “faster horses”", author: "Henry Ford"}, 
+  {message: "You can’t have great software without a great team, and most software teams behave like dysfunctional families.", author: "Jim McCarthy"},
+  {message: "Software efficiency halves every 18 months, compensating Moore’s Law.", author: "May's Law"},
+  {message: "If you give someone a program, you will frustrate them for a day; if you teach them how to program, you will frustrate them for a lifetime.", author: "David Leinweber"}, 
+  {message: "It is a miracle that curiosity survives formal education.", author: "Albert Einstein"}, 
+  {message: "Never let your schooling interfere with your education.", author: "Mark Twain"},
+  {message: "If you have too many special cases, you are doing it wrong.", author: "Craig Zerouni"}, 
+  {message: "The true sign of intelligence is not knowledge but imagination.", author: "Albert Einstein"}, 
+  {message: "If people are good only because they fear punishment, and hope for reward, then we are a sorry lot indeed.", author: "Albert Einstein"},
+  {message: "Saying that Java is good because it works on all platforms is like saying anal sex is good because it works on all genders.", author: "Unknown"}
+  ];
+  return zen;
 });
