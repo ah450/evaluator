@@ -1,7 +1,7 @@
-jprServices.factory('BaseModel',['$q', function($q) {
-  function BaseModel(data, exists, resource, identifier_name){
+jprServices.factory('BaseModel', ['$q', function($q) {
+  function BaseModel(data, exists, resource, identifier_name) {
     this.loadFromObject(data);
-    this.exists = exists; 
+    this.exists = exists;
     this.modified = false;
     this.resource = resource;
     this.identifier_name = identifier_name;
@@ -42,13 +42,13 @@ jprServices.factory('BaseModel',['$q', function($q) {
     }
   };
 
-  BaseModel.prototype.get = function(id){
+  BaseModel.prototype.get = function(id) {
     // Get a single resource
     var defered = $q.defer(); // create promise
     var parent_this = this;
-    var data = {};
-    data[this.identifier_name] =  id;
-    this.resource.get(data, function(data, headers) {
+    var params = {};
+    params[this.identifier_name] = id;
+    this.resource.get(params, function(data, headers) {
       // translate to class
       defered.resolve(new parent_this.constructor(data, true));
     }, function(httpResponse) {
@@ -75,6 +75,10 @@ jprServices.factory('BaseModel',['$q', function($q) {
     });
     return defered.promise;
   }
+
+  BaseModel.prototype.__defineGetter__('created_at', function() {
+    return moment(this.data.created_at).format("dddd, MMMM Do YYYY");
+  });
   return BaseModel;
 
 }]);

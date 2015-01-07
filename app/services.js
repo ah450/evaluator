@@ -4,11 +4,13 @@ jprServices.factory('Page', ['$rootScope', 'localStorageService', function($root
   var title = defaultTitle;
   var currentLink = '';
   var currentMessage = localStorageService.get('pageCurrentMessage') || '';
-
+  var flash = '';
+  var flashQueue = [];
   $rootScope.$on('$locationChangeSuccess', function(_, oldLocation, newLocation) {
     if (oldLocation != newLocation) {
       currentMessage = localStorageService.get('pageCurrentMessage');
     }
+    flash = flashQueue.shift() || "";
   });
 
   return {
@@ -38,7 +40,17 @@ jprServices.factory('Page', ['$rootScope', 'localStorageService', function($root
     },
     clearErrorMessage: function() {
       localStorageService.remove('pageCurrentMessage');
+    }, 
+    setFlash: function(message){
+      flashQueue.push(message);
+    },
+    getFlash: function(){
+      return flash;
+    },
+    hasFlash: function() {
+      flash != '';
     }
+
   };
 }]);
 
@@ -194,7 +206,14 @@ jprServices.factory('Zen', function() {
   {message: "If you have too many special cases, you are doing it wrong.", author: "Craig Zerouni"}, 
   {message: "The true sign of intelligence is not knowledge but imagination.", author: "Albert Einstein"}, 
   {message: "If people are good only because they fear punishment, and hope for reward, then we are a sorry lot indeed.", author: "Albert Einstein"},
-  {message: "Saying that Java is good because it works on all platforms is like saying anal sex is good because it works on all genders.", author: "Unknown"}
+  {message: "Saying that Java is good because it works on all platforms is like saying anal sex is good because it works on all genders.", author: "Unknown"},
+  {message: "Stop guessing and start asking.", author: "Unknown"},
+  {message: "After three days without programming, life becomes meaningless.", author: "The Tao of programming"},
+  {message: "Testing shows the presence, not the absence of bugs.", author: "Edsger W. Dijkstra"},
+  {message: "We must be very careful when we give advice to younger people: sometimes they follow it!", author: "Edsger W. Dijkstra"},
+  {message: "Besides a mathematical inclination, an exceptionally good mastery of one's native tongue is the most vital asset of a competent programmer.", author: "Edsger W. Dijkstra"},
+  {message: "I mean, if 10 years from now, when you are doing something quick and dirty, you suddenly visualize that I am looking over your shoulders and say to yourself “Dijkstra would not have liked this”, well, that would be enough immortality for me.", author: "Edsger W. Dijkstra"},
+  
   ];
   return zen;
 });

@@ -1,4 +1,4 @@
-jprServices.factory('Course', ['$q', 'User', 'CourseResource', 'BaseModel', function($q, User,CourseResource, BaseModel) {
+jprServices.factory('Course', ['$q', 'User', 'CourseResource', 'BaseModel', '$upload', 'ProjectResource', 'Project', function($q, User,CourseResource, BaseModel, $upload, ProjectResource, Project) {
     Course.prototype = Object.create(BaseModel.prototype);
     Course.prototype.constructor = Course;
     function Course(data, exists) {
@@ -22,6 +22,36 @@ jprServices.factory('Course', ['$q', 'User', 'CourseResource', 'BaseModel', func
         }, function(httpResponse) {
             failure(httpResponse);
         });
+    };
+
+    Course.prototype.create_project = function(project, success, failure){
+        if (project.tests.length == 0) {
+            // create a project without test cases
+            ProjectResource.create({
+                courseName: this.data.name
+            }, project, function(createdProject){
+                success(new Project(createdProject, true))
+            }, function(httpResponse){
+                failure(httpResponse);
+            });
+        }else {
+            $upload.upload({
+                url: 'https://api.evaluator.in' + this.data.projects_url,
+                method: 'POST',
+                headers: {
+                    'X-Auth-Token': 'Replace Me'
+                },
+                data: {
+                    name: project.name,
+                    language: project.language
+                },
+                file: project.tests
+            }).success(function(data){
+                success(new Project(data, true));
+            }).error(function(data, status, headers, config){
+                failure({data: data, status: status, headers: headers, config: config});
+            });
+        }
     };
 
     Course.prototype.__defineGetter__('name', function() {
@@ -85,6 +115,26 @@ jprServices.factory('Course', ['$q', 'User', 'CourseResource', 'BaseModel', func
     Course.prototype.__defineGetter__('projects_url', function() {
         return this.data.projects_url;
     });
+    Course.prototype.__defineGetter__('url', function(){
+        return this.data.url;
+    });
+
+    Course.prototype.__defineGetter__('projects', function(){
+        deferred = $q.defer();
+
+        ProjectResource.query_related({
+            courseName: this.data.name,
+        }, function(projects){
+            projects = projects.map(function(element){
+                return new Project(element, true);
+            })
+            deferred.resolve(projects);
+        }, function(httpResponse){
+            deferred.reject(httpResponse);
+        });
+
+        return deferred.promise;
+    });
 
     Course.$all = function(){
         return new Course({}, false).all();
@@ -92,6 +142,10 @@ jprServices.factory('Course', ['$q', 'User', 'CourseResource', 'BaseModel', func
 
     Course.$get = function(name){
         return new Course({}, false).get(name);
+    }
+
+    Course.$fromProject = function(project){
+        return new Course(project.course, true);
     }
 
     return Course;

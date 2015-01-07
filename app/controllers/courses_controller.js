@@ -104,7 +104,7 @@ jprApp.controller('CourseListCtrl', ['$scope', 'Course', 'Page', 'Auth', functio
   });
 
   $('body').on('click', '#newCourseExpandButton', function() {
-      $(this).toggleClass("glyphicon-plus glyphicon glyphicon-minus");  
+      $(this).toggleClass("glyphicon-plus glyphicon-minus");  
     });
 
 

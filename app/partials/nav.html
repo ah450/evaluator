@@ -3,46 +3,44 @@
     <div class="container">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#/home">JPR</a>
+        <a class="navbar-brand" ng-class="{'active': currentLink() == 'home' }" href="#/home">JPR</a>
       </div>
       <center>
-            <div class="navbar-collapse collapse" id="navbar-main">
-                <ul class="nav navbar-nav">
-                    <ul class="nav navbar-nav">
-                        <li ng-class="{'active': currentLink() == 'courses' }"><a cass="btn" href="#/courses">Courses</a></li>
-                    </ul>
-                </ul>
-
-                <ul class="nav navbar-nav navbar-right" ng-if="Auth.isLoggedIn()">
-                  <li ng-class="{'active': currentLink() == 'profile' }"><a href="#/profile">Hello {{Auth.getUser().name}}</a></li>
-                  <li><a href='#/home' ng-click="Auth.clear()">Logout</a></li>
-                </ul>
-                <span ng-controller="LoginCtrl" ng-hide="isLoggedIn() || currentLink() == 'signup' ">
-                    <form class="navbar-form navbar-right" role="login" ng-if="!Auth.isLoggedIn()" novalidation>
-                        <div class="form-group">
-                            <input  type="email" class="form-control" name="email" id="email" ng-class="{'bg-danger': login_error}" ng-model="email" placeholder="example@guc.edu.eg" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="password" class="form-control" name="password" id="password" ng-class="{'bg-danger': login_error}" ng-model="password" placeholder="password" required>
-                        </div>
-                        <label><input type="checkbox" id="remember"  ng-model="remember"> Remember Me</label>
-                        <button type="submit" ng-click="login(email, password, remember)" class="btn btn-default">Sign In</button>
-
-                    </form>
-                    <div class="container-fluid pull-right">
-                      <div class="row alert alert-danger" role="alert" ng-show="login_error">
-                            <p class="col-md-6 col-lg-6">{{error_message}}</p>
-                      </div>
-                    </div>
-                </span>
-                <ul class="nav navbar-nav navbar-right" >
-                    <li ng-if="!Auth.isLoggedIn()" ng-class="{'active': currentLink() == 'signup' }"><a class="btn" href="#/signup">Create Account</a></li>
-                </ul>
-            </div>
-        </center>
-</nav>
+      <div class="navbar-collapse collapse" id="navbar-main">
+        <ul class="nav navbar-nav">
+          <ul class="nav navbar-nav">
+            <li><a ng-class="{'active': currentLink() == 'courses' }" class="btn" href="#/courses">Courses</a></li>
+          </ul>
+        </ul>
+        <ul class="nav navbar-nav navbar-right" ng-if="Auth.isLoggedIn()">
+          <li ng-class="{'active': currentLink() == Auth.getUser().name}"><a href="#{{Auth.getUser().url}}">Hello {{Auth.getUser().name}}</a></li>
+          <li><a href='#/home' ng-click="Auth.clear()">Logout</a></li>
+        </ul>
+        <span ng-controller="LoginCtrl" ng-hide="isLoggedIn() || currentLink() == 'signup' ">
+        <form class="navbar-form navbar-right" role="login" ng-if="!Auth.isLoggedIn()" novalidation>
+          <div class="form-group">
+            <input  type="email" class="form-control" name="email" id="email" ng-class="{'bg-danger': login_error}" ng-model="email" placeholder="example@guc.edu.eg" required>
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control" name="password" id="password" ng-class="{'bg-danger': login_error}" ng-model="password" placeholder="password" required>
+          </div>
+          <label><input type="checkbox" id="remember"  ng-model="remember"> Remember Me</label>
+          <button type="submit" ng-click="login(email, password, remember)" class="btn btn-default">Sign In</button>
+        </form>
+        <div class="container-fluid pull-right">
+          <div class="row alert alert-danger" role="alert" ng-show="login_error">
+            <p class="col-md-6 col-lg-6">{{error_message}}</p>
+          </div>
+        </div>
+        </span>
+        <ul class="nav navbar-nav navbar-right" >
+          <li ng-if="!Auth.isLoggedIn()" ng-class="{'active': currentLink() == 'signup' }"><a class="btn" href="#/signup">Create Account</a></li>
+        </ul>
+      </div>
+      </center>
+    </nav>

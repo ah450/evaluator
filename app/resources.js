@@ -138,7 +138,7 @@ jprServices.factory('ProjectResource', ['$resource', 'Host', function($resource,
   var submissions_url = [course_related_url, ':projectName', 'submissions'].join('/');
   var project_by_id_url = [Host.base, 'project', ':id'].join('/');
   return $resource(url, {}, {
-    query_all: {
+    query: {
       method: 'GET',
       params: {
         dest: 'projects'
@@ -162,7 +162,7 @@ jprServices.factory('ProjectResource', ['$resource', 'Host', function($resource,
       },
       url: course_related_url
     },
-    query: {
+    query_related: {
       method: 'GET',
       headers: {
         'X-Auth-Token': 'Replace Me'

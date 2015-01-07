@@ -6,74 +6,52 @@ jprApp.controller('ProjectCtrl', ['$scope', '$routeParams', '$upload', '$locatio
     Page.setErrorMessage('Must be a course teacher or student to view projects.');
     $location.path('/403').replace();
   }
-  $scope.isStudent = Auth.getUser().email.endsWith('@student.guc.edu.eg');
+  $scope.isStudent = Auth.isLoggedIn() ? Auth.getUser().isStudent() : false;
+  $scope.submissions = [];
   $scope.loaded = false;
   $scope.alert = null;
-  $scope.project = Project.get({
-      id: $routeParams.id
-    }, function(data) {
-      data.created_at = moment(data.created_at).format("dddd, MMMM Do YYYY, h:mm:ss a");
-      $scope.project = data;
-      Page.setSection($scope.project.name);
-      Project.get_submissions(
-        {
-          courseName: $scope.project.course.name,
-          projectName: $scope.project.name
+  $scope.code = {
+    file: null
+  }
 
-        }, function(submissions){
-          submissions.forEach(function(subm) {
-            subm.created_at = moment(subm.created_at).format("dddd, MMMM Do YYYY, h:mm:ss a");
-          });
-          $scope.project.submissions = submissions;
-          $scope.loaded = true;
-        }, function(httpResponse){
-          $scope.alert = {
-            message: 'Something went horribly wrong!',
-            type: 'alert-warning'
-          };
-        });
-      },
-    function(httpResponse) {
-      // Project fail
-      if (httpResponse == 403 || httpResponse == 401) {
-        Page.setErrorMessage('Must be a course teacher or student to view projects.');
-        $location.path('/403').replace();
-      }
-    });
-    
-    $scope.uploadProgress = {
-      completed: 0,
-      on: false
-    };
-    $scope.code = {
-      file: null
+  Project.$get($routeParams.id)
+    .then(projectLoadSuccessCallback, ProjectLoadFailureCallback);
+
+  function projectLoadSuccessCallback(project) {
+    $scope.project = project;
+    Page.setSection($scope.project.name);
+  }
+
+  function projectLoadFailureCallback(httpResponse) {
+    if (httpResponse.status == 403 || httpResponse.status == 401) {
+      Page.setErrorMessage('Must be a course teacher or student to view projects.');
+      $location.path('/403').replace();
+    } else if (httpResponse.status == 404) {
+      $location.path('/404').replace();
     }
-    $scope.submitCode = function() {
-      $scope.uploadProgress.completed = 0;
-      $scope.uploadProgress.on = true;
-      $upload.upload({
-        url: 'http://api.evaluator.in' + window.decodeURIComponent($scope.project.submissions_url),
-        method: 'POST',
-        headers: {
-          'X-Auth-Token': 'Replace Me'
-        },
-        file: $scope.code.file
-      }).progress(function(evt){
-        $scope.uploadProgress.completed = 100.0 * evt.loaded / evt.total;
-      }).success(function(data, status, headers, config){
-        $scope.alert = {
-          message: 'Code Submitted!',
-          type: 'alert-success'
-        };
-        data.created_at = moment(data.created_at).format("dddd, MMMM Do YYYY, h:mm:ss a");
-        $scope.project.submissions.push(data)
-      }).error(function(data, status, headers, config){
-        $scope.alert = {
-          message: 'Something went horribly wrong!',
-          type: 'alert-warning'
-        };
-      });
-    };
+  }
 
+  function submissionSuccessCallback(submission) {
+    $scope.alert = {
+      message: 'Code Submitted!',
+      type: 'alert-success'
+    };
+    $scope.submissions.push(submission);
+  }
+
+  function submissionFailureCallback(data, status, headers, config) {
+    $scope.alert = {
+      message: 'Something went horribly wrong!',
+      type: 'alert-warning'
+    };
+  }
+
+  $scope.submitCode = function() {
+    $scope.project.submitCode($scope.code.file, submissionSuccessCallback, submissionFailureCallback);
+  };
+
+  $('body').on('click', '#projectAlertDismiss', function() {
+    $scope.alert = null;
+  });
 
 }]);

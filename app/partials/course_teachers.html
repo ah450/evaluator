@@ -1,0 +1,15 @@
+<div class="container">
+    <div class="row top-buffer" ng-repeat="teacher in teachers">
+        <div class="col-md-3 col-lg-3">
+            <a href="#{{teacher.url}}" ><span class="glyphicon glyphicon-user"></span> {{teacher.name}}</a>
+        </div>
+        <div class="col-md-3 col-lg-3">
+            <a href="mailto:{{teacher.email}}"><span class="glyphicon glyphicon-envelope"></span> {{teacher.email}}</a>
+        </div>
+    </div>
+</div>
+
+
+<div ng-if="loaded && teachers.length == 0" class="text-center">
+<p>This course doesn't have any teachers!</p>
+</div>

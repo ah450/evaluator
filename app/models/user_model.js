@@ -37,13 +37,16 @@ jprServices.factory('User', ['UserResource', 'BaseModel', function(UserResource,
   User.prototype.__defineGetter__('password', function(){
     return this.data.password;
   });
+  User.prototype.__defineGetter__('url', function(){
+    return this.data.url;
+  });
 
   User.$all = function(){
       return new User({}, false).all();
   };
 
-  User.$get = function(name){
-      return new User({}, false).get(name);
+  User.$get = function(id){
+      return new User({}, false).get(id);
   };
   return User;
 

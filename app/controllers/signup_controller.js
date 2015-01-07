@@ -42,12 +42,8 @@ jprApp.controller('SignupCtrl', ['$scope', '$location', 'User', 'Page', 'Validat
 
       var user = new User(data, false);
       user.save(function(user, responseHeaders) {
-        // Log in with the new user
-        Login.performLogin(user.email, $scope.password, false)
-          .then(function(result) {
-            // redirect to home
-            $location.path('/home').replace();
-          });
+        Page.setFlash('Activation email sent.');
+        $location.path('/home').replace();
       }, function(failResponse) {
         if (failResponse.status == 422) {
           $scope.errorMessages.push('Email already in use.');

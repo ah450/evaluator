@@ -1,75 +1,16 @@
-<section ng-if="alert">
-<div class="alert {{alert.type}} alert-dismissiable" role="alert">
-<button id="alertDismiss" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-<strong>{{alert.message}}</strong></div>
+<section ng-if="loaded">
+  <section ng-if="ep == 'projects'">
+    <h1>{{course.name}} Projects</h1>
+  <section ng-include="'partials/course_projects.html'" ng-controller="CourseProjectsCtrl"></section>
 </section>
-<section ng-if="ep == 'projects'">
-  <section ng-if="loaded">
-    <h3>{{course.name}} projects</h3>
-    <section ng-if="isTeacher">
-    <h5 class="text-info">Create new project</h5>
-    <form class="form-inline">
-      <div class="form-group">
-        <label for="newProjectName">Name</label>
-        <input type="text" name="newProjectName" id="newProjectName" ng-model="newProject.name" placeholder="Project Name" required>
-      </div>
-      <div class="form-group">
-        <label for="testFiles">Test Files</label>
-        <input type="file" id="testFiles" name="testFiles" 
-        ng-file-select ng-model="newProject.tests" ng-multiple="true">
-      </div>
-      <button type="submit" class="btn btn-default" ng-click="createProject()">Create!</button>      
-    </form>
-    <section ng-if="uploadProgress.on" class="progress">
-    <div 
-    class="progres-bar progress-bar-success progress-bar-striped active" 
-    role="progressbar" 
-    aria-valuenow="{{uploadProgress.completed}}" aria-valuemin="0" 
-    aria-valuemax="100" style="width: {{uploadProgress.completed}}%;">
-      {{uploadProgress.completed}}%
-    </div>
-    </section>
-    </section>
-    <div class="container">
-      <div class="row top-buffer" ng-repeat="project in projects">
-        <div class="col-md-3 col-lg-3">
-          <a href="#{{project.url}}"><strong>{{project.name}}</strong></a>
-        </div>
-
-      </div>
-    </div>
-  </section>
-</section>
-
 <section ng-if="ep == 'tas'">
-  <section ng-if="loaded">
-    <h3>{{course.name}} teachers</h3>
-    <div class="container">
-        <div class="row top-buffer" ng-repeat="teacher in teachers">
-            <div class="col-md-3 col-lg-3">
-                <a href="#{{teacher.url}}" ><span class="glyphicon glyphicon-user"> {{teacher.name}}</span></a>
-            </div>
-            <div class="col-md-3 col-lg-3">
-                <a href="mailto:{{teacher.email}}"><span class="glyphicon glyphicon-envelope"> {{teacher.email}}</span></a>
-            </div>
-        </div>
-    </div>
+  <h1 class="text-primary">{{course.name}} Teachers</h1>
+  <section ng-include="'partials/course_teachers.html'" ng-controller="CourseTeachersCtrl">
   </section>
 </section>
-
-
 <section ng-if="ep == 'students'">
-  <section ng-if="loaded">
-    <h3>{{course.name}} students</h3>
-    <div class="container">
-        <div class="row top-buffer" ng-repeat="student in students">
-            <div class="col-md-3 col-lg-3">
-                <a href="#{{teacher.url}}" ><span class="glyphicon glyphicon-user"> {{student.name}}</span></a>
-            </div>
-            <div class="col-md-3 col-lg-3">
-                <a href="mailto:{{teacher.email}}"><span class="glyphicon glyphicon-envelope"> {{student.email}}</span></a>
-            </div>
-        </div>
-    </div>
+  <h1 class="text-primary">{{course.name}} Students</h1>
+  <section ng-include="'partials/course_students.html'" ng-controller="CourseStudentsCtrl">
   </section>
+</section>
 </section>

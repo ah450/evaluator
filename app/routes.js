@@ -9,7 +9,7 @@ jprApp.config(['$routeProvider',
       }).when('/users', {
         templateUrl: 'partials/users.html',
         controller: 'UsersListCtrl',
-      }).when('/user/:userId', {
+      }).when('/user/:id', {
         templateUrl: 'partials/profile.html',
         controller: 'ProfileCtrl'
       })
@@ -28,6 +28,10 @@ jprApp.config(['$routeProvider',
         templateUrl: 'partials/project.html',
         controller: 'ProjectCtrl'
       })
+      .when('/about', {
+        templateUrl: 'partials/about.html',
+        controller: 'AboutCtrl'
+      })
       .when('/', {
         redirectTo: '/home'
       })
@@ -40,7 +44,8 @@ jprApp.config(['$routeProvider',
         controller: 'ErrorCtrl'
       })
       .otherwise({
-        redirectTo: '/404',
+        templateUrl: 'partials/404.html',
+        controller: 'ErrorCtrl'
       });
 
   }

@@ -3,7 +3,7 @@ jprApp.controller('ProfileCtrl', ['$scope', '$routeParams', 'Page', 'User', func
     Page.setLink('');
     Page.clearTitle();
     $scope.loaded = false;
-    User.get($routeParams.id)
+    User.$get($routeParams.id)
     .then(function(user){
         $scope.user = user;
         Page.setLink(user.name);

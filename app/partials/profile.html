@@ -1,11 +1,11 @@
-<section ng-if="loaded">
+<section ng-if="loaded" class="container">
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3 class="panel-title">{{user.name}}</h3><span ng-if="user.isTeacher()" class="label label-info">TA</span><span ng-if="user.isStudent()" class="label label-success">Student</span>
     </div>
     <div class="panel-body">
         <a href="mailto:{{user.email}}">
-            <span class="glyphicon glyphicon-envelope">{{user.email}}</span>
+            <span class="glyphicon glyphicon-envelope"></span> {{user.email}}
         </a>
     </div>
 </div>
