@@ -32,6 +32,10 @@ jprApp.config(['$routeProvider',
         templateUrl: 'partials/about.html',
         controller: 'AboutCtrl'
       })
+      .when('/activate', {
+        template: "",
+        controller: 'ActivationCtrl'
+      })
       .when('/', {
         redirectTo: '/home'
       })

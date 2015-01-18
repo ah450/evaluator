@@ -44,7 +44,7 @@ jprServices.factory('Page', ['$rootScope', 'localStorageService', function($root
       return errorMessages.length > 0;
     },
     addErrorMessage: function(message) {
-      errorMessages.push(addErrorMessage);
+      errorMessages.push(message);
       localStorageService.set('pageErrorMessages', errorMessages);
     },
     clearErrorMessages: function() {
