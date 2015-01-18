@@ -1,4 +1,4 @@
-jprServices.factory('Course', ['$q', 'User', 'CourseResource', 'BaseModel', '$upload', 'ProjectResource', 'Project', function($q, User,CourseResource, BaseModel, $upload, ProjectResource, Project) {
+jprServices.factory('Course', ['$q', 'User', 'CourseResource', 'BaseModel', '$upload', 'ProjectResource', 'Project', function($q, User, CourseResource, BaseModel, $upload, ProjectResource, Project) {
     Course.prototype = Object.create(BaseModel.prototype);
     Course.prototype.constructor = Course;
     function Course(data, exists) {

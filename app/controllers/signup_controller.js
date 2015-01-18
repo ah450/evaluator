@@ -1,37 +1,43 @@
 jprApp.controller('SignupCtrl', ['$scope', '$location', 'User', 'Page', 'Validators', 'Login', function($scope, $location, User, Page, Validators, Login) {
+  Page.clearErrorMessages();
+  $scope.email = '';
+  $scope.name_error = false;
+  $scope.email_error = false;
+  $scope.pass_error = false;
+  $scope.dash_error = false;
+  $scope.working = false;
 
-  Page.setSection('Registration');
-  Page.setLink('signup');
-  Page.clearErrorMessage();
-
-  if (Login.auth.isLoggedIn()) {
-    $location.path('/home').replace();
+  $scope.isStudent = function(email) {
+    return email && email.endsWith('@student.guc.edu.eg');
   }
-
-  $scope.isStudent = function() {
-    return $scope.email && $scope.email.endsWith('@student.guc.edu.eg');
-  }
-
-  $scope.errorMessages = [];
 
   $scope.createAccount = function() {
-    $scope.errorMessages = [];
+    $scope.working = true;
+    $scope.name_error = false;
+    $scope.email_error = false;
+    $scope.pass_error = false;
+    $scope.dash_error = false;
+    Page.clearErrorMessages()
     if (!Validators.validateName($scope.name)) {
-      $scope.errorMessages.push('Please enter your name.');
+      Page.addErrorMessage('Please enter your name.');
+      $scope.name_error = true;
     }
     if (!Validators.validateEmail($scope.email)) {
-      $scope.errorMessages.push('Please enter a valid GUC email.');
+      Page.addErrorMessage('Please enter a valid GUC email.');
+      $scope.email_error = true;
     }
     if (!Validators.validatePassword($scope.password)) {
-      $scope.errorMessages.push('Password must be atleast 8 characters long.');
+      Page.addErrorMessage('Password must be at least 8 characters long.');
+      $scope.pass_error = true;
     }
-    if ($scope.isStudent()) {
+    if ($scope.isStudent($scope.email)) {
       if (!Validators.validateId($scope.dash_prefix, $scope.dash_suffix)) {
-        $scope.errorMessages.push('Please enter a valid GUC id (hint look at your id card).');
+        Page.addErrorMessage('Please enter a valid GUC id (hint look at your id card).');
+        $scope.dash_error = true;
       }
     }
 
-    if ($scope.errorMessages.length == 0) {
+    if (!Page.hasErrorMessages()) {
       // signup
       var data = {
         name: $scope.name,
@@ -43,13 +49,16 @@ jprApp.controller('SignupCtrl', ['$scope', '$location', 'User', 'Page', 'Validat
       var user = new User(data, false);
       user.save(function(user, responseHeaders) {
         Page.setFlash('Activation email sent.');
-        $location.path('/home').replace();
+        $scope.working = false;
       }, function(failResponse) {
+        $scope.working = false;
         if (failResponse.status == 422) {
-          $scope.errorMessages.push('Email already in use.');
+          Page.addErrorMessage('Email already in use.');
         }
       });
 
+    } else {
+      $scope.working = false;
     }
   }
 }]);

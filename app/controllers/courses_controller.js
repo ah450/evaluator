@@ -8,7 +8,7 @@ jprApp.controller('CourseListCtrl', ['$scope', 'Course', 'Page', 'Auth', functio
   $scope.current_user = Auth.getUser();
   Page.setSection('Our Courses');
   Page.setLink('courses');
-  Page.clearErrorMessage();
+  Page.clearErrorMessages();
   $scope.isStudent = $scope.isLoggedIn() ? $scope.current_user.isStudent() : false;
 
   $scope.$watch("isLoggedIn()", function() {

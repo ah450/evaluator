@@ -1,6 +1,6 @@
 jprApp.controller('CourseRelatedCtrl', ['$scope', '$routeParams', '$location', '$upload', 'Auth', 'Page', 'Project', 'Course', function($scope, $routeParams, $location, $upload, Auth, Page, Project, Course) {
   Page.setLink('course-related');
-  Page.clearErrorMessage();
+  Page.clearErrorMessages();
   $scope.isLoggedIn = Auth.isLoggedIn;
   $scope.loaded = false;
   $scope.redirect = true;

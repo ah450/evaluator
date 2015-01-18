@@ -3,14 +3,16 @@ jprServices.factory('Page', ['$rootScope', 'localStorageService', function($root
   var defaultTitle = 'JPR';
   var title = defaultTitle;
   var currentLink = '';
-  var currentMessage = localStorageService.get('pageCurrentMessage') || '';
+  var errorMessages = localStorageService.get('pageErrorMessages') || []
   var flash = '';
   var flashQueue = [];
   $rootScope.$on('$locationChangeSuccess', function(_, oldLocation, newLocation) {
     if (oldLocation != newLocation) {
-      currentMessage = localStorageService.get('pageCurrentMessage');
-    }
-    flash = flashQueue.shift() || "";
+      errorMessages.clear();
+      // Clear error messages on refresh
+      localStorageService.set('pageErrorMessages', errorMessages);
+      flash = flashQueue.shift() || "";
+    }    
   });
 
   return {
@@ -19,6 +21,9 @@ jprServices.factory('Page', ['$rootScope', 'localStorageService', function($root
     },
     clearTitle: function() {
       title = defaultTitle;
+    },
+    clearCurrentLink: function() {
+      currentLink = '';
     },
     setSection: function(section) {
       title = "JPR| " + section;
@@ -29,17 +34,22 @@ jprServices.factory('Page', ['$rootScope', 'localStorageService', function($root
     setLink: function(link) {
       currentLink = link;
     },
-    getErrorMessage: function() {
-      return currentMessage;
+    getErrorMessages: function() {
+      return errorMessages;
     },
-    hasErrorMessage: function() {
-      return currentMessage != '';
+    removeErrorMessage: function(index) {
+      errorMessages.splice(index, 1);
     },
-    setErrorMessage: function(message) {
-      localStorageService.set('pageCurrentMessage', message);
+    hasErrorMessages: function() {
+      return errorMessages.length > 0;
     },
-    clearErrorMessage: function() {
-      localStorageService.remove('pageCurrentMessage');
+    addErrorMessage: function(message) {
+      errorMessages.push(addErrorMessage);
+      localStorageService.set('pageErrorMessages', errorMessages);
+    },
+    clearErrorMessages: function() {
+      errorMessages.clear();
+      localStorageService.set('pageErrorMessages', errorMessages);
     }, 
     setFlash: function(message){
       flashQueue.push(message);
@@ -49,6 +59,12 @@ jprServices.factory('Page', ['$rootScope', 'localStorageService', function($root
     },
     hasFlash: function() {
       flash != '';
+    },
+    showSpinner: function() {
+      $("#spinner").show();
+    }, 
+    hideSpinner: function() {
+      $("#spinner").hide();
     }
 
   };

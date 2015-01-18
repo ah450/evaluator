@@ -13,6 +13,7 @@
     "angular-cookie": "~4.0.6",
     "angular-local-storage": "~0.1.5",
     "ng-file-upload": "~2.0.5",
-    "momentjs": "~2.8.4"
+    "momentjs": "~2.8.4",
+    "ellipsis-animated": "~0.1.1"
   }
 }

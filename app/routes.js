@@ -21,8 +21,8 @@ jprApp.config(['$routeProvider',
         controller: 'CourseCtrl'
       })
       .when('/signup', {
-        templateUrl: 'partials/signup.html',
-        controller: 'SignupCtrl'
+        templateUrl: 'partials/signup_standalone.html',
+        controller: 'SignupStandAloneCtrl'
       })
       .when('/project/:id', {
         templateUrl: 'partials/project.html',
@@ -37,15 +37,15 @@ jprApp.config(['$routeProvider',
       })
       .when('/403', {
         templateUrl: 'partials/403.html',
-        controller: 'ErrorCtrl'
+        controller: 'DummyCtrl'
       })
       .when('/404', {
         templateUrl: 'partials/404.html',
-        controller: 'ErrorCtrl'
+        controller: 'DummyCtrl'
       })
       .otherwise({
         templateUrl: 'partials/404.html',
-        controller: 'ErrorCtrl'
+        controller: 'DummyCtrl'
       });
 
   }

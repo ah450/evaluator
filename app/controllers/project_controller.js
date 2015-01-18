@@ -1,6 +1,6 @@
 jprApp.controller('ProjectCtrl', ['$scope', '$routeParams', '$upload', '$location', 'Page', 'Auth', 'Project', function($scope, $routeParams, $upload, $location, Page, Auth, Project) {
   Page.setLink('');
-  Page.clearErrorMessage();
+  Page.clearErrorMessages();
   Page.clearTitle();
   if (!Auth.isLoggedIn()) {
     Page.setErrorMessage('Must be a course teacher or student to view projects.');
@@ -50,8 +50,6 @@ jprApp.controller('ProjectCtrl', ['$scope', '$routeParams', '$upload', '$locatio
     $scope.project.submitCode($scope.code.file, submissionSuccessCallback, submissionFailureCallback);
   };
 
-  $('body').on('click', '#projectAlertDismiss', function() {
-    $scope.alert = null;
-  });
+  
 
 }]);

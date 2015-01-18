@@ -1,0 +1,6 @@
+<div class="text-center" ng-controller="ErrorCtrl">
+    <div class="alert alert-danger alert-dismissable" ng-repeat="message in errorMessages" role="alert">
+        <button type="button" class="close alert-close" ng-click="removeMessage($index)" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>{{message}}</strong>
+    </div>
+</div>

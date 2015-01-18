@@ -30,6 +30,11 @@ jprApp.config(function() {
       return this.indexOf(suffix, this.length - suffix.length) !== -1;
     };
   }
+  if(typeof Array.prototype.clear !== 'function'){
+    Array.prototype.clear = function() {
+        while(this.length){this.pop();}
+    }
+  }
 });
 
 jprApp.config(['localStorageServiceProvider', function(localStorageServiceProvider){
@@ -39,3 +44,4 @@ jprApp.config(['localStorageServiceProvider', function(localStorageServiceProvid
 jprApp.config(['$httpProvider', function($httpProvider) {
   $httpProvider.interceptors.push('tokenInjector');
 }]);
+

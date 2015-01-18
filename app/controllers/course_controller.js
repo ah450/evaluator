@@ -1,7 +1,7 @@
 jprApp.controller('CourseCtrl', ['$scope', '$routeParams', 'Auth', 'Page', 'Course', function($scope, $routeParams, Auth, Page, Course){
     Page.setSection($routeParams.courseName);
     Page.setLink('single-course');
-    Page.clearErrorMessage();
+    Page.clearErrorMessages();
     $scope.loaded = false;
     $scope.redirect = false;
     $scope.showCreation = false;

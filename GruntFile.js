@@ -39,6 +39,7 @@ module.exports = function(grunt) {
          'app/bower_components/ng-file-upload/angular-file-upload-shim.js',
          'app/bower_components/ng-file-upload/angular-file-upload.js',
          'app/bower_components/momentjs/moment.js',
+         'app/bower_components/ellipsis-animated/src/ellipsis-animated.js',
          'app/*.js', 'app/*/*.js', 'tmp/*.js'],
         dest: 'app.js'
       }
@@ -96,8 +97,12 @@ module.exports = function(grunt) {
           src: ['bootstrap.min.css', 'bootstrap-theme.min.css', '*.map'],
           dest: '/stylesheets',
           expand: true
-        }, 
-        {
+        },{
+          cwd: 'app/bower_components/ellipsis-animated/src/',
+          src: ['ellipsis-animated.css'],
+          dest: '/stylesheets',
+          expand: true
+        },{
           src: ['favicon.ico'],
           dest: '/'
         }, {

@@ -1,33 +1,28 @@
-<style>
-.input-dash-prefix {
-  height: 22px;
-  width: 45px;
-}
-.input-dash-suffix {
-  height: 22px;
-  width: 65px;
-}
-</style>
-<div class="container text-center">
-  <div class="alert alert-danger" role="alert" ng-hide="errorMessages.length == 0">     
-    <p ng-repeat="message in errorMessages">{{message}}</p>
+<form ng-if="!working">
+  <div class="form-group" ng-class="{'has-error': name_error}">
+    <label for="name_signup" class="glyphicon glyphicon-user"></label>
+    <input type="text" name="name" id="name_signup" ng-model='name' placeholder="Your Full Name" required>
   </div>
-  <form class="form-inline">
-      <label for="name" class="glyphicon glyphicon-user"></label>
-      <input type="text" name="name" id="name" ng-class="{'has-error': name_error}" ng-model='name' placeholder="Your Full Name" required>
-      <hr/>
-      <label for="email" class="glyphicon glyphicon-envelope"></label>
-      <input type="email" name="email" id="email_signup" ng-class="{'has-error': email_error}" ng-model="email" placeholder="example@guc.edu.eg" required>
-      <hr/>
-      <div ng-show="isStudent()">   
-        <input type="number" id="dash_prefix" ng-model="dash_prefix" class="input-dash-prefix">
-        <span class="glyphicon glyphicon-minus"></span>
-        <input type="number" class="input-dash-suffix" ng-model="dash_suffix" id="dash_suffix">
-        <hr/>
-      </div>
-      <label for="password" class="glyphicon glyphicon-lock"></label>
-      <input type="password" name="password" id="password" ng-class="{'has-error': pass_error}" ng-model="password" placeholder="password" required> 
-      <hr/>      
-      <input type="submit" ng-click="createAccount()" value="Register!" class="btn btn-primary"> 
-  </form>
-</div>
+  <div class="form-group" ng-class="{'has-error': email_error}">
+    <label for="email" class="glyphicon glyphicon-envelope"></label>
+    <input type="email" name="email" id="email_signup" ng-model="email" placeholder="example@guc.edu.eg" required>
+  </div>
+  <div ng-if="isStudent(email)" class="form-group" ng-class="{'has-error': dash_error}">   
+    <input type="number" id="dash_prefix" ng-model="dash_prefix" class="input-dash-prefix">
+    <span class="glyphicon glyphicon-minus"></span>
+    <input type="number" class="input-dash-suffix" ng-model="dash_suffix" id="dash_suffix">
+  </div>
+  <div class="form-group" ng-class="{'has-error': pass_error}">
+    <label for="password_signup" class="glyphicon glyphicon-lock"></label>
+    <input type="password" name="password" id="password_signup" ng-model="password" placeholder="password" required> 
+  </div>
+    <button type="submit" ng-click="createAccount()" class="btn btn-primary">Create Account</button>
+</form>
+
+<section ng-if="working">
+<p class="text-info">Creating account<span class="ellipsis_animated-inner">
+        <span>.</span>
+        <span>.</span>
+        <span>.</span>
+    </span></p>
+</section>

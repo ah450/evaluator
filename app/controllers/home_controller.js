@@ -1,6 +1,7 @@
-jprApp.controller('HomeCtrl', ['$scope', 'Page', function($scope, Page) {
+jprApp.controller('HomeCtrl', ['$scope', 'Page', 'Auth', function($scope, Page, Auth) {
   Page.setLink('home');
   Page.clearTitle();
-  Page.clearErrorMessage();
+  Page.clearErrorMessages();
+  $scope.isLoggedIn = Auth.isLoggedIn;
 
 }]);

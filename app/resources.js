@@ -3,7 +3,9 @@
 jprServices.factory('CourseResource', ['$resource', 'Host',
   function($resource, Host) {
     var url = [Host.base, ':dest', ':name', ':ep'].join('/');
-
+    var common_headers = {
+      'X-Auth-Token': 'Replace Me'
+    }
     return $resource(url, {}, {
       query: {
         method: 'GET',
@@ -11,36 +13,28 @@ jprServices.factory('CourseResource', ['$resource', 'Host',
           dest: 'courses'
         },
         isArray: true,
-        headers: {
-          'X-Auth-Token': 'Replace Me'
-        }
+        headers: common_headers
       },
       create: {
         method: 'POST',
         params: {
           dest: 'courses'
         },
-        headers: {
-          'X-Auth-Token': 'Replace Me'
-        }
+        headers: common_headers
       },
       get: {
         method: 'GET',
         params: {
           dest: 'course'
         },
-        headers: {
-          'X-Auth-Token': 'Replace Me'
-        }
+        headers: common_headers
       },
       update: {
         method: 'PUT',
         params: {
           dest: 'course'
         },
-        headers: {
-          'X-Auth-Token': 'Replace Me'
-        }
+        headers: common_headers
       },
       add_teacher: {
         method: 'POST',
@@ -48,9 +42,7 @@ jprServices.factory('CourseResource', ['$resource', 'Host',
           dest: 'course',
           ep: 'tas'
         },
-        headers: {
-          'X-Auth-Token': 'Replace Me'
-        },
+        headers: common_headers,
 
       },
       add_student: {
@@ -59,18 +51,14 @@ jprServices.factory('CourseResource', ['$resource', 'Host',
           dest: 'course',
           ep: 'students'
         },
-        headers: {
-          'X-Auth-Token': 'Replace Me'
-        },
+        headers: common_headers,
       },
       delete: {
         method: 'DELETE',
         params: {
           dest: 'course'
         },
-        headers: {
-          'X-Auth-Token': 'Replace Me'
-        }
+        headers: common_headers
       }
     });
 
@@ -81,6 +69,9 @@ jprServices.factory('CourseResource', ['$resource', 'Host',
 
 jprServices.factory('UserResource', ['$resource', 'Host', function($resource, Host) {
   var url = [Host.base, ':dest', ':id'].join('/');
+  var common_headers = {
+    'X-Auth-Token': 'Replace Me'
+  }
   return $resource(url, {}, {
     query: {
       method: 'GET',
@@ -88,45 +79,35 @@ jprServices.factory('UserResource', ['$resource', 'Host', function($resource, Ho
         dest: 'users'
       },
       isArray: true,
-      headers: {
-        'X-Auth-Token': 'Replace Me'
-      }
+      headers: common_headers
     },
     create: {
       method: 'POST',
       params: {
         dest: 'users'
       },
-      headers: {
-        'X-Auth-Token': 'Replace Me'
-      }
+      headers: common_headers
     },
     update: {
       method: 'PUT',
       params: {
         dest: 'user'
       },
-      headers: {
-        'X-Auth-Token': 'Replace Me'
-      }
+      headers: common_headers
     },
     delete: {
       method: 'DELETE',
       params: {
         dest: 'user'
       },
-      headers: {
-        'X-Auth-Token': 'Replace Me'
-      }
+      headers: common_headers
     },
     get: {
       method: 'GET',
       params: {
         dest: 'user'
       },
-      headers: {
-        'X-Auth-Token': 'Replace Me'
-      }
+      headers: common_headers
     }
   });
 }]);
@@ -137,6 +118,9 @@ jprServices.factory('ProjectResource', ['$resource', 'Host', function($resource,
   var course_related_url = [Host.base, 'course', ':courseName', 'projects'].join('/');
   var submissions_url = [course_related_url, ':projectName', 'submissions'].join('/');
   var project_by_id_url = [Host.base, 'project', ':id'].join('/');
+  var common_headers = {
+    'X-Auth-Token': 'Replace Me'
+  }
   return $resource(url, {}, {
     query: {
       method: 'GET',
@@ -144,46 +128,39 @@ jprServices.factory('ProjectResource', ['$resource', 'Host', function($resource,
         dest: 'projects'
       },
       isArray: true,
-      headers: {
-        'X-Auth-Token': 'Replace Me'
-      }
+      headers: common_headers
     },
     get: {
       method: 'GET',
       url: project_by_id_url,
-      headers: {
-        'X-Auth-Token': 'Replace Me'
-      }
+      headers: common_headers
     },
     create: {
       method: 'POST',
-      headers: {
-        'X-Auth-Token': 'Replace Me'
-      },
+      headers: common_headers,
       url: course_related_url
     },
     query_related: {
       method: 'GET',
-      headers: {
-        'X-Auth-Token': 'Replace Me'
-      },
+      headers: common_headers,
       url: course_related_url,
       isArray: true
     },
     get_submissions: {
       method: 'GET',
-      headers: {
-        'X-Auth-Token': 'Replace Me'
-      },
+      headers: common_headers,
       url: submissions_url,
       isArray: true
     },
     post_submission: {
       method: 'POST',
-      headers: {
-        'X-Auth-Token': 'Replace Me'
-      },
+      headers: common_headers,
       url: submissions_url
     }
   });
+}]);
+
+
+jprServices.factory('SubmissionResource', ['$resource', 'Host', function($resource, Host){
+  
 }]);

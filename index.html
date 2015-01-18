@@ -4,17 +4,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title ng-bind="title()">JPR</title>
-    <!-- <link rel="stylesheet" href="stylesheets/bootstrap.min.css"> -->
-    <!-- <link rel="stylesheet" href="stylesheets/bootstrap-theme.min.css"> -->
-    <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.1/simplex/bootstrap.min.css" rel="stylesheet">
+    <link href="stylesheets/bootstrap.min.css" rel="stylesheet">
+    <link href="stylesheets/ellipsis-animated.css" rel="stylesheet">
     <script src="app.js" charset="utf-8"></script>
   </head>
   <style>
   .main {
   margin-top: 100px;
   }
-  
-  
   html, body {
   height: 100%;
   }
@@ -44,6 +41,14 @@
   border-left: 1px solid grey;
   padding-left: 25px;
   }
+  .input-dash-prefix {
+    height: 22px;
+    width: 45px;
+  }
+  .input-dash-suffix {
+    height: 22px;
+    width: 65px;
+  }
   </style>
   <body>
     <div id="wrap">
@@ -51,6 +56,11 @@
       </section>
       <section ng-include="'partials/flash.html'">
       </section>
+      <section ng-include="'partials/errors.html'">
+      </section>
+      <div class="text-center">
+        <img id="spinner" ng-src="images/spin.gif" style="display:none;">
+      </div>
       <div ng-view class="main">
       </div>
     </div>
@@ -58,9 +68,9 @@
       <div class="container text-center">
         <blockquote id="zenblockquote">
           <p class="text-muted">{{zen.message}}</p>
-        <footer>{{zen.author}}</footer>
+          <footer>{{zen.author}}</footer>
       </blockquote>
-      <a href="https://github.com/ah450/runner-frontend"><img src="images/github.png" title="Fork Me" alt="Fork me" /></a>
+      <a href="https://github.com/ah450/runner-frontend"><img src="images/github.png" title="Fork Me" alt="Fork me" ></a>
     </div>
   </footer>
 </body>

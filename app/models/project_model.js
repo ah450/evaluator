@@ -1,4 +1,4 @@
-jprServices.factory('Project', ['$upload', 'ProjectResource', 'BaseModel', 'SubmissionResource', 'Submission', function($upload, ProjectResource, BaseModel, SubmissionResource, Submission) {
+jprServices.factory('Project', ['$upload', 'ProjectResource', 'BaseModel', 'Submission', function($upload, ProjectResource, BaseModel, SubmissionResource, Submission) {
     Project.prototype = Object.create(BaseModel.prototype);
     Project.prototype.constructor = Project;
 

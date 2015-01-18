@@ -1,0 +1,6 @@
+<div ng-if="!isLoggedIn()" class="container">
+  <div class="row text-center">
+      <div class="col-lg-6" ng-include="'app/partials/signup.html'" ng-controller="SignupCtrl"></div>
+      <div class="col-lg-6" ng-include="'app/partials/login.html'" ng-controller="LoginCtrl"></div>    
+  </div>
+</div>
