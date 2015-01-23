@@ -68,3 +68,8 @@ jprApp.config(['$httpProvider', function($httpProvider) {
   $httpProvider.interceptors.push('tokenInjector');
 }]);
 
+jprApp.run(function(){
+  $('body').on('click', '#newCourseExpandButton', function() {
+      $(this).toggleClass("glyphicon-plus glyphicon-minus");  
+    });
+});

@@ -10,12 +10,15 @@ jprApp.controller('CourseProjectsCtrl', ['$scope', '$upload', 'Auth', 'Page', fu
   };
   $scope.showCreation = $scope.$parent.showCreation;
   $scope.projects = [];
-  var projectsSuccesCallback = function(projects) {
+  
+  // handle success on loading projects
+  function projectsSuccesCallback(projects) {
     $scope.projects = projects;
     $scope.loaded = true;
-  };
+  }
 
-  var projectsFailureCallback = function(httpResponse) {
+  // Handle fail on loading projects
+  function projectsFailureCallback(httpResponse) {
     $scope.loaded = true;
     if ($scope.$parent.redirect) {
       if (httpResponse.status == 403) {
@@ -36,9 +39,12 @@ jprApp.controller('CourseProjectsCtrl', ['$scope', '$upload', 'Auth', 'Page', fu
       }
     }
   };
+  // load projects
   $scope.$parent.course.projects
     .then(projectsSuccesCallback, projectsFailureCallback);
+
   $scope.createProject = function() {
+    Page.clearErrorMessages();
     $scope.creating = true;
     $scope.newProject.due_date = $scope.newProject.due_date.toISOString();
     $scope.$parent.course.create_project($scope.newProject, function(project) {

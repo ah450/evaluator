@@ -162,5 +162,18 @@ jprServices.factory('ProjectResource', ['$resource', 'Host', function($resource,
 
 
 jprServices.factory('SubmissionResource', ['$resource', 'Host', function($resource, Host){
-  
+  var url = [Host.base, 'submission', ':id'].join('/');
+  var common_headers = {
+    'X-Auth-Token': 'Replace Me'
+  }
+  return $resource(url, {}, {
+    get: {
+      method: 'GET',
+      headers: common_headers
+    }, 
+    delete: {
+      method: 'DELETE',
+      headers: common_headers
+    }
+  });
 }]);
