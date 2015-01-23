@@ -1,5 +1,4 @@
 jprApp.controller('SignupCtrl', ['$scope', '$location', 'User', 'Page', 'Validators', 'Login', function($scope, $location, User, Page, Validators, Login) {
-  Page.clearErrorMessages();
   $scope.email = '';
   $scope.name_error = false;
   $scope.email_error = false;

@@ -1,5 +1,4 @@
 jprApp.controller('ProfileCtrl', ['$scope', '$routeParams', 'Page', 'User', function($scope, $routeParams, Page, User){
-    Page.clearErrorMessages();
     Page.setLink('');
     Page.clearTitle();
     $scope.loaded = false;

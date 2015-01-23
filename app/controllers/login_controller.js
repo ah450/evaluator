@@ -1,5 +1,4 @@
 jprApp.controller('LoginCtrl', ['$scope', 'Auth', 'Login', 'Validators', 'Page', function($scope, Auth, Login, Validators, Page) {
-  Page.clearErrorMessages()
   $scope.isLoggedIn = Auth.isLoggedIn;
   $scope.working = false;
   $scope.login_error = false;

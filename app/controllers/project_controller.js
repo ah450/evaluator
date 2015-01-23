@@ -1,6 +1,5 @@
 jprApp.controller('ProjectCtrl', ['$scope', '$routeParams', '$upload', '$location', 'Page', 'Auth', 'Project', function($scope, $routeParams, $upload, $location, Page, Auth, Project) {
   Page.setLink('');
-  Page.clearErrorMessages();
   Page.clearTitle();
   if (!Auth.isLoggedIn()) {
     Page.setErrorMessage('Must be a course teacher or student to view projects.');

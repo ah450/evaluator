@@ -1,13 +1,10 @@
 <section ng-if="showCreation">
-    <!-- Alerts -->
-    <section ng-if="alert">
-        <div class="alert {{alert.type}} alert-dismissiable" role="alert">
-            <button id="alertDismiss" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>select ngModel="string" name="string" required ngRequired="string" ngOptions="comprehension_expression"></select>
-        <strong>{{alert.message}}</strong></div>
-    </section>
     <!-- Project Creation -->
     <section ng-if="isTeacher" style="padding-bottom: 200px;">
         <div class="container pull-left">
+            <div class="row text-center" ng-if="creating">
+                <img id="spinner" ng-src="images/spin.gif">
+            </div>
             <div class="row">
                 <div class="col-md-4">
                     <h5 class="text-info">Create new project</h5>
@@ -21,6 +18,10 @@
                             <input type="file" id="testFiles" name="testFiles"
                             ng-file-select ng-model="newProject.tests" ng-multiple="true">
                         </div>
+                        <div class="form-group">
+                            <label for="dueDate">Due Date</label>
+                            <input type="date" ng-model="newProject.due_date" ng-required="">
+                        </div>
                         <button type="submit" class="btn btn-default" ng-click="createProject()">Create!</button>
                     </form>
                 </div>
@@ -30,6 +31,9 @@
 </section>
 <!-- List projects -->
 <div class="container">
+    <div class="row text-center" ng-if="!loaded">
+        <img id="spinner" ng-src="images/spin.gif">
+    </div>
     <div class="row" ng-repeat="project in projects">
         <div class="col-md-3 col-lg-3">
             <h4><a href="#{{project.url}}">{{project.name}}</a></h4>

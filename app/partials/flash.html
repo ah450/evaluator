@@ -3,4 +3,7 @@
     <div class="alert alert-success" ng-if="hasFlash()">
         <p>{{getFlash()}}</p>
     </div>
+    <div class="alert alert-danger" ng-if="hasErrorFlash()">
+        <p>{{getErrorFlash()}}</p>
+    </div>
 </section>

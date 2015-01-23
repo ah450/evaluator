@@ -1,12 +1,13 @@
 jprApp.controller('CourseProjectsCtrl', ['$scope', '$upload', 'Auth', 'Page', function($scope, $upload, Auth, Page) {
   $scope.isTeacher = Auth.isLoggedIn() ? Auth.getUser().isTeacher() : false;
   $scope.loaded = false;
+  $scope.creating = false;
   $scope.newProject = {
     name: '',
     language: 'J',
-    tests: []
+    tests: [],
+    due_date: Date.now();
   };
-  $scope.alert = null;
   $scope.showCreation = $scope.$parent.showCreation;
   $scope.projects = [];
   var projectsSuccesCallback = function(projects) {
@@ -14,37 +15,43 @@ jprApp.controller('CourseProjectsCtrl', ['$scope', '$upload', 'Auth', 'Page', fu
     $scope.loaded = true;
   };
 
-  var projectFailureCallback = function(httpResponse) {
-    $scope.$parent.loaded = true;
+  var projectsFailureCallback = function(httpResponse) {
     $scope.loaded = true;
     if ($scope.$parent.redirect) {
       if (httpResponse.status == 403) {
-        Page.setErrorMessage('Must be a course teacher or student to view projects.');
+        Page.setErrorFlash('Must be a course teacher or student to view projects.');
         $location.path('/403').replace();
       } else if (httpResponse.status == 404) {
         $location.path('/404').replace();
+      } else {
+        Page.addErrorMessage('Internal server oopsie, please grab a programmer.');
+      }
+    } else {
+      if (httpResponse.status == 403) {
+        Page.addErrorMessage('Must be a course teacher or student to view projects.');
+      } else if (httpResponse.status == 404) {
+        Page.addErrorMessage('Course not found.');
+      } else {
+        Page.addErrorMessage('Internal server oopsie, please grab a programmer.');
       }
     }
   };
   $scope.$parent.course.projects
-    .then(projectsSuccesCallback, projectFailureCallback);
+    .then(projectsSuccesCallback, projectsFailureCallback);
   $scope.createProject = function() {
-    if ($scope.newProject.tests) {
-      $scope.$parent.course.create_project($scope.newProject, function(project) {
-        $scope.projects.push(project);
-        $scope.alert = {
-          message: 'Project Created!',
-          type: 'alert-success'
-        };
-      }, function(httpResponse) {
-        $scope.alert = {
-          message: 'Something went horribly wrong!',
-          type: 'alert-warning'
-        };
-      });
-    }
-  }
-  $('body').on('click', '#alertDismiss', function() {
-    $scope.alert = null;
-  });
+    $scope.creating = true;
+    $scope.$parent.course.create_project($scope.newProject, function(project) {
+      $scope.creating = false;
+      $scope.projects.push(project);
+      Page.addInfoMessage('Project Created!');
+    }, function(httpResponse) {
+      $scope.creating = false;
+      if (httpResponse.status == 403) {
+        Page.addErrorMessage('Must be a course teacher to create a project.');
+      }else  {
+        Page.addErrorMessage(httpResponse.data.message);
+      }
+    });
+  };
+
 }]);

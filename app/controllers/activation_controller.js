@@ -1,5 +1,4 @@
 jprApp.controller('ActivationCtrl', ['$http', '$location', 'Page', function($http, $location, Page) {
-    Page.clearErrorMessages();
     Page.showSpinner();
     Page.clearCurrentLink();
     Page.clearTitle();

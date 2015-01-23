@@ -1,17 +1,21 @@
 // Utility services
-jprServices.factory('Page', ['$rootScope', 'localStorageService', function($rootScope, localStorageService) {
+jprServices.factory('Page', ['$rootScope', function($rootScope) {
   var defaultTitle = 'JPR';
   var title = defaultTitle;
   var currentLink = '';
-  var errorMessages = localStorageService.get('pageErrorMessages') || []
+  var errorMessages = [];
+  var infoMessages = [];
   var flash = '';
   var flashQueue = [];
+  var errorFlash = '';
+  var errorFlashQueue = [];
   $rootScope.$on('$locationChangeSuccess', function(_, oldLocation, newLocation) {
+    // Clear messages on refresh
+    errorMessages.clear();
+    infoMessages.clear();
     if (oldLocation != newLocation) {
-      errorMessages.clear();
-      // Clear error messages on refresh
-      localStorageService.set('pageErrorMessages', errorMessages);
       flash = flashQueue.shift() || "";
+      errorFlash = errorFlashQueue.shift() || "";
     }    
   });
 
@@ -34,31 +38,53 @@ jprServices.factory('Page', ['$rootScope', 'localStorageService', function($root
     setLink: function(link) {
       currentLink = link;
     },
+    getInfoMessages: function() {
+      return infoMessages;
+    },
     getErrorMessages: function() {
       return errorMessages;
+    },
+    removeInfoMessage: function(index) {
+      infoMessages.splice(index, 1);
     },
     removeErrorMessage: function(index) {
       errorMessages.splice(index, 1);
     },
+    hasInfoMessages: function() {
+      return infoMessages.length > 0;
+    },
     hasErrorMessages: function() {
       return errorMessages.length > 0;
     },
+    addInfoMessage: function(message) {
+      infoMessages.push(message);
+    },
     addErrorMessage: function(message) {
       errorMessages.push(message);
-      localStorageService.set('pageErrorMessages', errorMessages);
+    },
+    clearInfoMessages: function() {
+      infoMessages.clear();
     },
     clearErrorMessages: function() {
       errorMessages.clear();
-      localStorageService.set('pageErrorMessages', errorMessages);
     }, 
     setFlash: function(message){
       flashQueue.push(message);
+    },
+    setErrorFlash: function(message){
+      errorFlashQueue.push(message);
+    },
+    getErrorFlash: function() {
+      return errorFlash;
     },
     getFlash: function(){
       return flash;
     },
     hasFlash: function() {
       flash != '';
+    },
+    hasErrorFlash: function() {
+      errorFlash != "";
     },
     showSpinner: function() {
       $("#spinner").show();
@@ -124,6 +150,7 @@ jprServices.factory('Auth', ['AuthBase', 'User', function(AuthBase, User){
   auth.isLoggedIn = AuthBase.isLoggedIn;
   auth.setToken = AuthBase.setToken;
   auth.setUser = AuthBase.setUser;
+  auth.clear = AuthBase.clear;
   return auth;
 }]);
 
