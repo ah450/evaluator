@@ -6,7 +6,7 @@ jprApp.controller('CourseProjectsCtrl', ['$scope', '$upload', 'Auth', 'Page', fu
     name: '',
     language: 'J',
     tests: [],
-    due_date: Date.now();
+    due_date: Date.now()
   };
   $scope.showCreation = $scope.$parent.showCreation;
   $scope.projects = [];
@@ -40,6 +40,7 @@ jprApp.controller('CourseProjectsCtrl', ['$scope', '$upload', 'Auth', 'Page', fu
     .then(projectsSuccesCallback, projectsFailureCallback);
   $scope.createProject = function() {
     $scope.creating = true;
+    $scope.newProject.due_date = $scope.newProject.due_date.toISOString();
     $scope.$parent.course.create_project($scope.newProject, function(project) {
       $scope.creating = false;
       $scope.projects.push(project);

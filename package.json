@@ -13,7 +13,7 @@
   },
   "homepage": "https://github.com/ah450/runner-frontend",
   "devDependencies": {
-    "bower": "^1.3.12",
+    "bower": "latest",
     "grunt": "^0.4.5",
     "grunt-bower-task": "^0.4.0",
     "grunt-cli": "^0.1.13",
