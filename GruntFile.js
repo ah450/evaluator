@@ -39,6 +39,7 @@ module.exports = function(grunt) {
          'app/bower_components/ng-file-upload/angular-file-upload-shim.js',
          'app/bower_components/ng-file-upload/angular-file-upload.js',
          'app/bower_components/momentjs/moment.js',
+         'app/vendor/angular-bootstrap-datetimepicker/src/js/datetimepicker.js',
          'app/bower_components/ellipsis-animated/src/ellipsis-animated.js',
          'app/*.js', 'app/*/*.js', 'tmp/*.js'],
         dest: 'app.js'
@@ -102,7 +103,13 @@ module.exports = function(grunt) {
           src: ['ellipsis-animated.css'],
           dest: '/stylesheets',
           expand: true
-        },{
+        }, {
+          cwd: 'app/vendor/angular-bootstrap-datetimepicker/src/css',
+          src: ['datetimepicker.css'],
+          dest: '/stylesheets',
+          expand: true
+        },
+        {
           src: ['favicon.ico'],
           dest: '/'
         }, {
