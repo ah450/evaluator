@@ -43,7 +43,8 @@ jprServices.factory('Course', ['$q', 'User', 'CourseResource', 'BaseModel', '$up
                 },
                 data: {
                     name: project.name,
-                    language: project.language
+                    language: project.language,
+                    due_date: project.due_date
                 },
                 file: project.tests
             }).success(function(data){
