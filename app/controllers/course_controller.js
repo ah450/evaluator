@@ -14,6 +14,8 @@ jprApp.controller('CourseCtrl', ['$scope', '$routeParams', 'Auth', 'Page', 'Cour
         Page.hideSpinner();
         if(httpResponse.status == 404){
             $location.path('/404').replace();
+        }else if (httpResponse.status == 401) {
+            // Nothing....
         }else {
             Page.addErrorMessage('Internal server oopsie, please grab a programmer!');
         }
