@@ -22,7 +22,7 @@
           <li><a href='#/home' ng-click="Auth.clear()">Logout</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right" >
-          <li ng-if="!Auth.isLoggedIn()"><a class="btn" href="#/home">Login/Signup</a></li>
+          <li ng-if="!Auth.isLoggedIn()" ng-class="{'active': currentLink() == 'home' }"><a class="btn" href="#/home">Login/Signup</a></li>
         </ul>
       </div>
       </center>
