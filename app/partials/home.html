@@ -4,3 +4,6 @@
       <div class="col-lg-6" ng-include="'app/partials/login.html'" ng-controller="LoginCtrl"></div>    
   </div>
 </div>
+
+<div ng-if="isLoggedIn()" ng-include="'app/partials/dashboard.html'" ng-controller="DashboardCtrl">
+</div>

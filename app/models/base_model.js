@@ -55,7 +55,6 @@ jprServices.factory('BaseModel', ['$q', function($q) {
       // pass http response
       defered.reject(httpResponse);
     });
-
     return defered.promise;
   };
 
@@ -76,8 +75,11 @@ jprServices.factory('BaseModel', ['$q', function($q) {
     return defered.promise;
   }
 
-  BaseModel.prototype.__defineGetter__('created_at', function() {
+  BaseModel.prototype.__defineGetter__('created_at_pretty', function() {
     return moment(this.data.created_at).format("dddd, MMMM Do YYYY");
+  });
+  BaseModel.prototype.__defineGetter__('created_at', function() {
+      return new Date(this.data.created_at);
   });
   return BaseModel;
 

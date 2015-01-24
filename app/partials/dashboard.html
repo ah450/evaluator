@@ -1,0 +1,43 @@
+<h1>My Courses</h1>
+<div class="container">
+    <div class="row" ng-if="loading_courses">
+        <img id="spinner" ng-src="images/spin.gif">
+    </div>
+    <div class="row" ng-repeat="course in courses">
+        <div class="col-md-6 col-lg-6">
+            <a href="#{{course.url}}">{{course.name}}</a>
+            <div class="row">
+              <div class="col-md-6 col-lg-6">
+                {{course.description}}
+              </div>
+            </div>
+            <div class="row">
+              <div class="button-group" role="group">
+                <a href="#{{course.supervisor.url}}" class="btn btn-small"  title="Course Supervisor">{{course.supervisor.name}}</a>
+                <a href="#{{course.tas_url}}" class="btn btn-small" title="Course Teachers">Teachers</a>
+                <a href="#{{course.students_url}}" class="btn btn-small" title="Course Students">Students</a>
+                <a href="#{{course.projects_url}}" class="btn btn-small" title="Course projects">Projects</a>
+              </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" ng-if="!loading_courses && courses.length == 0">
+        <p>You are not signed up for any courses</p>
+    </div>
+</div>
+<h1>Upcoming Deadlines</h1>
+<div class="container">
+    <div class="row" ng-if="loading_projects">
+        <img id="spinner" ng-src="images/spin.gif">
+    </div>
+    <div class="row top-buffer border-row" ng-repeat="project in projects | filter:{can_submit:true} | orderBy: '-due_date'">
+        <div class="col-md-3 col-lg-3">
+            <h4><a href="#{{project.url}}">{{project.name}}</a></h4>
+            <p class="text-muted text-center">Due Date {{project.due_date_pretty}}</p>
+            <p class="text-muted text-center">Since {{project.created_at_pretty}}</p>
+        </div>
+    </div>
+    <div class="row" ng-if="!loading_projects && projects.length == 0">
+        <p>There are now projects</p>
+    </div>
+</div>

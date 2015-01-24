@@ -34,6 +34,10 @@ jprServices.factory('Project', ['$upload', 'ProjectResource', 'BaseModel', 'Subm
         return new Date(this.data.due_date);
     });
 
+    Project.prototype.__defineGetter__('due_date_pretty', function() {
+        return moment(this.data.due_date).format("dddd, MMMM Do YYYY");
+    })
+
     Project.prototype.submitCode = function(codeFile, success, failure) {
         $upload.upload({
             url: 'https://api.evaluator.in' + this.data.submissions_url,

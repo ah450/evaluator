@@ -44,7 +44,8 @@
     <div class="row" ng-repeat="project in projects">
         <div class="col-md-3 col-lg-3">
             <h4><a href="#{{project.url}}">{{project.name}}</a></h4>
-            <p class="text-muted text-center">Since {{project.created_at}}</p>
+            <p class="text-muted text-center">Due Date {{project.due_date_pretty}}</p>
+            <p class="text-muted text-center">Since {{project.created_at_pretty}}</p>
         </div>
     </div>
 </div>

@@ -1,4 +1,4 @@
-jprServices.factory('User', ['UserResource', 'BaseModel', function(UserResource, BaseModel) {
+jprServices.factory('User', ['UserResource', 'BaseModel', '$http', 'Host', function(UserResource, BaseModel, $http) {
 
   User.prototype = Object.create(BaseModel.prototype);
   User.prototype.constructor = User;
@@ -40,6 +40,32 @@ jprServices.factory('User', ['UserResource', 'BaseModel', function(UserResource,
   User.prototype.__defineGetter__('url', function(){
     return this.data.url;
   });
+
+  User.prototype.courses = function() {
+    var defered = $q.defer();
+    var ep = [Host.base, 'user', 'dashboard'].join('/');
+    var req = {
+      method: 'GET',
+      url: ep,
+      headers: {
+        'X-Auth-Token': 'Replace Me'
+      }
+    };
+    $http(req)
+    .success(function (data, status, headers, config) {
+      defered.resolve(data);
+    })
+    .error(function(data, status, headers, config) {
+      var response = {
+        data: data,
+        status: status,
+        headers: headers,
+        config: config
+      };
+      defered.reject(response);
+    });
+    return defered.promise;
+  }
 
   User.$all = function(){
       return new User({}, false).all();
