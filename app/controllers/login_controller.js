@@ -17,6 +17,8 @@ jprApp.controller('LoginCtrl', ['$scope', 'Auth', 'Login', 'Validators', 'Page',
           // error
           $scope.working = false;
           $scope.login_error = true;
+          $scope.password = password;
+          $scope.email = email;
           if (reason == 401) {
             Page.addErrorMessage('Invalid email or password.');
           } else if (reason == 422) {
