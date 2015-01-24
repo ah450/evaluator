@@ -22,7 +22,9 @@
         </div>
     </div>
     <div class="row" ng-if="!loading_courses && courses.length == 0">
-        <p>You are not signed up for any courses</p>
+
+        <p ng-if="user.isStudent()">You are not signed up for any courses</p>
+        <p ng-if="!user.isStudent()">You are not a member of any course</p>
     </div>
 </div>
 <h1>Upcoming Deadlines</h1>
@@ -38,6 +40,6 @@
         </div>
     </div>
     <div class="row" ng-if="!loading_projects && projects.length == 0">
-        <p>There are now projects</p>
+        <p>There are no projects</p>
     </div>
 </div>
