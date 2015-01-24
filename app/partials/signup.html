@@ -1,22 +1,39 @@
-<form ng-if="!working">
+<form ng-if="!working" class="form-horizontal">
   <div class="form-group" ng-class="{'has-error': name_error}">
-    <label for="name_signup" class="glyphicon glyphicon-user"></label>
-    <input type="text" name="name" id="name_signup" ng-model='newUserData.name' placeholder="Your Full Name" required>
+    <label for="name_signup" class="glyphicon glyphicon-user control-label col-sm-2"></label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" name="name" id="name_signup" ng-model='newUserData.name' placeholder="Your Full Name" required>
+    </div>
   </div>
   <div class="form-group" ng-class="{'has-error': email_error}">
-    <label for="email" class="glyphicon glyphicon-envelope"></label>
-    <input type="email" name="email" id="email_signup" ng-model="newUserData.email" placeholder="example@guc.edu.eg" required>
+    <label for="email" class="glyphicon glyphicon-envelope control-label col-sm-2"></label>
+    <div class="col-sm-10">
+      <input type="email" class="form-control" name="email" id="email_signup" ng-model="newUserData.email" placeholder="example@guc.edu.eg" required>
+    </div>
   </div>
-  <div ng-if="isStudent(email)" class="form-group" ng-class="{'has-error': dash_error}">   
-    <input type="number" id="dash_prefix" ng-model="newUserData.dash_prefix" class="input-dash-prefix">
-    <span class="glyphicon glyphicon-minus"></span>
-    <input type="number" class="input-dash-suffix" ng-model="newUserData.dash_suffix" id="dash_suffix">
+  <div ng-if="isStudent(newUserData.email)" class="form-group" ng-class="{'has-error': dash_error}">
+    <label for="dash_prefix" class="control-label col-sm-4">Dash number </label>
+    <div class="col-sm-7">   
+      <input type="number" id="dash_prefix" ng-model="newUserData.dash_prefix" placeholder="28" class="form-control">
+    </div>
+  </div>
+  <div ng-if="isStudent(newUserData.email)" class="form-group" ng-class="{'has-error': dash_error}">
+    <label for="dash_suffix" class="control-label col-sm-4">ID Number </label>
+    <div class="col-sm-7">
+      <input type="number" class="form-control" ng-model="newUserData.dash_suffix" id="dash_suffix" placeholder="4444">
+    </div>
   </div>
   <div class="form-group" ng-class="{'has-error': pass_error}">
-    <label for="password_signup" class="glyphicon glyphicon-lock"></label>
-    <input type="password" name="password" id="password_signup" ng-model="newUserData.password" placeholder="password" required> 
+    <label for="password_signup" class="glyphicon glyphicon-lock control-label col-sm-2"></label>
+    <div class="col-sm-10">
+      <input type="password" name="password" class="form-control" id="password_signup" ng-model="newUserData.password" placeholder="password" required> 
+    </div>
   </div>
-    <button type="submit" ng-click="createAccount()" class="btn btn-primary">Create Account</button>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" ng-click="createAccount()" class="btn btn-primary">Create Account</button>
+      </div>
+    </div>
 </form>
 
 <section ng-if="working">

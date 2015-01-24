@@ -69,6 +69,12 @@ jprApp.controller('SignupCtrl', ['$scope', '$location', 'User', 'Page', 'Validat
         $scope.working = false;
         if (failResponse.status == 422) {
           Page.addErrorMessage('Email already in use.');
+          $scope.email_error = true;
+        }else {
+          $scope.name_error = true;
+          $scope.email_error = true;
+          $scope.pass_error = true;
+          $scope.dash_error = true;
         }
       });
 
