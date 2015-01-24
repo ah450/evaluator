@@ -95,10 +95,15 @@ module.exports = function(grunt) {
           dest: '/'
         }, {
           cwd: 'app/bower_components/bootstrap/dist/css/',
-          src: ['bootstrap.min.css', 'bootstrap-theme.min.css', '*.map'],
+          src: ['bootstrap.css.map'],
           dest: '/stylesheets',
           expand: true
-        },{
+        }, {
+          cwd: 'app/vendor/simplex/',
+          src: ['bootstrap.min.css'],
+          dest: 'stylesheets',
+          expand: true
+        }, {
           cwd: 'app/bower_components/ellipsis-animated/src/',
           src: ['ellipsis-animated.css'],
           dest: '/stylesheets',
