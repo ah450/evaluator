@@ -8,7 +8,8 @@ jprApp.controller('DashboardCtrl', ['$scope', '$http', '$location', 'Auth', 'Pag
 
     function myCoursesSuccessCallback(courses) {
         $scope.loading_courses = false;
-        $scope.courses = courses.forEach(function (course) {
+
+        $scope.courses = courses.map(function (course) {
             return new Course(course, true);
         });
         loadProjects();
@@ -43,16 +44,16 @@ jprApp.controller('DashboardCtrl', ['$scope', '$http', '$location', 'Auth', 'Pag
 
     function loadCourses(){
         Page.clearErrorMessages();
-        $scope.user.courses.then(myCoursesSuccessCallback, myCoursesFailureCallback);
+        $scope.user.courses().then(myCoursesSuccessCallback, myCoursesFailureCallback);
     }
-
-    $scope.$watch("isLoggedIn()", function() {
-        if($scope.isLoggedIn()) {
+    loadCourses();
+    $scope.$watch("isLoggedIn()", function(newValue, oldValue) {
+        if(newValue) {
             $scope.user = Auth.getUser();
             $scope.loading_courses = true;
             $scope.loading_projects = true;
             $scope.courses = [];
-        }else{
+        }else {
             $location.path('/home').replace();
         }
     });

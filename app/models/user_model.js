@@ -1,4 +1,4 @@
-jprServices.factory('User', ['UserResource', 'BaseModel', '$http', 'Host', function(UserResource, BaseModel, $http) {
+jprServices.factory('User', ['UserResource', 'BaseModel', '$http', 'Host', '$q', function(UserResource, BaseModel, $http, Host, $q) {
 
   User.prototype = Object.create(BaseModel.prototype);
   User.prototype.constructor = User;
