@@ -1,34 +1,45 @@
-<section ng-if="alert">
-<div class="alert {{alert.type}} alert-dismissiable" role="alert">
-<button id="projectAlertDismiss" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-<strong>{{alert.message}}</strong>
-</div>
-</section>
 <section ng-if="loaded">
 
-<div class="page-header">
-  <h1 class="text-primary">{{project.name}}</h1>
-</div>
-<!-- Current Submissions -->
-<p class="lead text-info" ng-if="submissions.length == 0">No submissions, yet!</p>
+    <div class="page-header">
+        <h1 class="text-primary">{{project.name}}</h1>
+    </div>
+    <!-- Current Submissions -->
+    <p class="lead text-info" ng-if="submissions.length == 0">No submissions, yet!</p>
+    <div class="panel-group" id="submissionsAccordion">
 
-<div class="container">
-<div class="row" ng-repeat="submission in submissions">
-
-</div>
-</div>
-
-
-<!-- Upload Submissions -->
-<section ng-if="isStudent && project.can_submit">
-    <form>
-        <div class="form-group">
-        <label for="codeFile">Code</label>
-        <input type="file" id="codeFile" name="codeFile" ng-file-select ng-model="code.file"
-        ng-multiple="false" required>
+        <div data-ng-repeat="submission in submissions" data-ng-class="{'panel':true, 'panel-success':submission.compile_status, 'panel-default':!submission.compile_status}">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" data-parent="#submissionsAccordion" data-target="#{{submission.id}}" >
+                    <span ng-if="submission.compile_status" class="pull-right"><i class="glyphicon glyphicon-ok-circle"></i></span>
+                    Submission {{submission.id}} | {{submission.created_at_pretty}}
+                  </a>
+                </h4>
+            </div>
+            <div id="{{submission.id}}" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <pre>
+                        {{submission.compiler_out}}
+                    </pre>
+                </div>
+                <ul class="list-group">
+                    <li class="list-group-item" ng-repeat="test in submission.test">
+                        {{test}}
+                    </li>
+                </ul>
+            </div>
         </div>
-        <button type="submit" ng-click="submitCode()" class="btn btn-primary">Submit</button>
-    </form>
-</section>
+
+
+        <!-- Upload Submissions -->
+        <section ng-if="isStudent && project.can_submit">
+            <form>
+                <div class="form-group">
+                    <label for="codeFile">Code</label>
+                    <input type="file" id="codeFile" name="codeFile" ng-file-select ng-model="code.file" ng-multiple="false" required>
+                </div>
+                <button type="submit" ng-click="submitCode()" class="btn btn-primary">Submit</button>
+            </form>
+        </section>
 
 </section>

@@ -36,7 +36,8 @@ module.exports = function(grunt) {
         },
         concat: {
             options: {
-                separator: ';'
+                separator: ';',
+                // sourceMap:true
             },
             dist: {
                 src: ['app/bower_components/jquery/dist/jquery.js', 'app/bower_components/bootstrap/dist/js/bootstrap.js',

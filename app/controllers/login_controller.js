@@ -2,7 +2,7 @@ jprApp.controller('LoginCtrl', ['$scope', 'Auth', 'Login', 'Validators', 'Page',
   $scope.isLoggedIn = Auth.isLoggedIn;
   $scope.working = false;
   $scope.login_error = false;
-  $scope.remember = false; // default value
+  $scope.remember = true; // default value
 
   $scope.login = function(email, password, remember) {
     Page.clearErrorMessages()

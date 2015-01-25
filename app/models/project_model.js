@@ -1,4 +1,4 @@
-jprServices.factory('Project', ['$upload', 'ProjectResource', 'BaseModel', 'Submission', function($upload, ProjectResource, BaseModel, SubmissionResource, Submission) {
+jprServices.factory('Project', ['$q','$upload', 'ProjectResource', 'BaseModel', 'Submission', function($q,$upload, ProjectResource, BaseModel, Submission) {
     Project.prototype = Object.create(BaseModel.prototype);
     Project.prototype.constructor = Project;
 
@@ -36,7 +36,25 @@ jprServices.factory('Project', ['$upload', 'ProjectResource', 'BaseModel', 'Subm
 
     Project.prototype.__defineGetter__('due_date_pretty', function() {
         return moment(this.data.due_date).format("dddd, MMMM Do YYYY");
-    })
+    });
+
+    Project.prototype.__defineGetter__('submissions', function(){
+        var deferred = $q.defer();
+
+        ProjectResource.get_submissions({
+            courseName: this.data.course.name,
+            projectName: this.data.name,
+        }, function(submissions){
+            submissions = submissions.map(function(element){
+                return new Submission(element, true);
+            });
+            deferred.resolve(submissions);
+        }, function(httpResponse){
+            deferred.reject(httpResponse);
+        });
+
+        return deferred.promise;
+    });
 
     Project.prototype.submitCode = function(codeFile, success, failure) {
         $upload.upload({

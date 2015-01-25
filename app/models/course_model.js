@@ -121,14 +121,14 @@ jprServices.factory('Course', ['$q', 'User', 'CourseResource', 'BaseModel', '$up
     });
 
     Course.prototype.__defineGetter__('projects', function(){
-        deferred = $q.defer();
+        var deferred = $q.defer();
 
         ProjectResource.query_related({
             courseName: this.data.name,
         }, function(projects){
             projects = projects.map(function(element){
                 return new Project(element, true);
-            })
+            });
             deferred.resolve(projects);
         }, function(httpResponse){
             deferred.reject(httpResponse);

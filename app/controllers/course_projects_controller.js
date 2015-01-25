@@ -26,6 +26,8 @@ jprApp.controller('CourseProjectsCtrl', ['$scope', '$upload', 'Auth', 'Page', fu
         $location.path('/403').replace();
       } else if (httpResponse.status == 404) {
         $location.path('/404').replace();
+      } else if(httpResponse.status == 401) {
+        Page.addErrorMessage('Must be logged in to see course projects.');
       } else {
         Page.addErrorMessage('Internal server oopsie, please grab a programmer.');
       }

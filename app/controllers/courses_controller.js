@@ -27,7 +27,7 @@ jprApp.controller('CourseListCtrl', ['$scope', 'Course', 'Page', 'Auth', functio
 
   $scope.createCourse = function() {
     Page.clearErrorMessages();
-    course = new Course($scope.newCourse);
+    var course = new Course($scope.newCourse);
     course.save(function(newCourse) {
       // success callback
       $scope.newCourse = {
