@@ -30,8 +30,9 @@
     "karma-mocha": "^0.1.10",
     "karma-phantomjs-launcher": "^0.1.4",
     "karma-sinon-chai": "^0.2.0",
-    "mocha": "^2.1.0"
+    "load-grunt-tasks": "^3.0.0",
+    "mocha": "^2.1.0",
+    "time-grunt": "^1.0.0"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
