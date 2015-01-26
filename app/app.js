@@ -72,4 +72,7 @@ jprApp.run(function(){
   $('body').on('click', '#newCourseExpandButton', function() {
       $(this).toggleClass("glyphicon-plus glyphicon-minus");  
     });
+  $('body').on('click', '#newProjectExpandButton', function() {
+      $(this).toggleClass("glyphicon-plus glyphicon-minus");  
+    });
 });

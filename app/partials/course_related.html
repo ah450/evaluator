@@ -1,6 +1,6 @@
 <section ng-if="loaded">
   <section ng-if="ep == 'projects'">
-    <h1>{{course.name}} Projects</h1>
+    <h1 class="text-primary">{{course.name}} Projects</h1>
   <section ng-include="'partials/course_projects.html'" ng-controller="CourseProjectsCtrl"></section>
 </section>
 <section ng-if="ep == 'tas'">

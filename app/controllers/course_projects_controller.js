@@ -27,7 +27,7 @@ jprApp.controller('CourseProjectsCtrl', ['$scope', '$upload', 'Auth', 'Page', '$
       } else if (httpResponse.status == 404) {
         $location.path('/404').replace();
       } else if(httpResponse.status == 401) {
-        Page.setErrorFlash('Must be logged in to see course projects.');
+        Page.setErrorFlash('Must be logged in to view course projects.');
         $location.path('/home').replace();
       } else {
         Page.addErrorMessage('Internal server oopsie, please grab a programmer.');
@@ -38,7 +38,7 @@ jprApp.controller('CourseProjectsCtrl', ['$scope', '$upload', 'Auth', 'Page', '$
       } else if (httpResponse.status == 404) {
         Page.addErrorMessage('Course not found.');
       } else if(httpResponse.status == 401) {
-        Page.addErrorMessage('Must be logged in to see course projects.');
+        Page.addErrorMessage('Must be logged in to view course projects.');
       } else {
         Page.addErrorMessage('Internal server oopsie, please grab a programmer.');
       }

@@ -5,6 +5,7 @@ jprApp.controller('CourseRelatedCtrl', ['$scope', '$routeParams', '$location', '
   $scope.redirect = true;
   $scope.ep = $routeParams.ep;
   $scope.showCreation = true;
+  $scope.isStudent = $scope.isLoggedIn()? Auth.getUser().isStudent() : false;
   switch ($scope.ep) {
     case 'projects':
       $scope.sectionep = 'Projects';
