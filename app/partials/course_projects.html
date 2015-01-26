@@ -1,40 +1,45 @@
-<section ng-if="showCreation">
-    <!-- Project Creation -->
-    <section ng-if="isTeacher" style="padding-bottom: 200px;">
-        <div class="container pull-left">
-            <div class="row text-center" ng-if="creating">
-                <img id="spinner" ng-src="images/spin.gif">
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <h5 class="text-info">Create new project</h5>
-                    <form>
-                        <div class="form-group">
-                            <label for="newProjectName">Name</label>
-                            <input type="text" name="newProjectName" id="newProjectName" class="form-control" ng-model="newProject.name" placeholder="Project Name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="testFiles">Test Files</label>
-                            <input type="file" id="testFiles" name="testFiles"
-                            ng-file-select ng-model="newProject.tests" ng-multiple="true">
-                        </div>
-                        <div class="form-group">
-                            <div class="dropdown">
-                              <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" href="">
-                                <div class="input-group"><input type="text" class="form-control" data-ng-model="data.dateDropDownInput" ><span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                                </div>
-                              </a>
-                              <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                                <datetimepicker data-ng-model="newProject.due_date" data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }"/>
-                              </ul>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-default" ng-click="createProject()">Create!</button>
-                    </form>
-                </div>
+<section ng-if="showCreation && isTeacher" style="padding-bottom: 20px;">
+<!-- Create Project -->
+    <h4 class="text-primary text-center">Create new project</h4>
+    <div class="text-center" ng-if="creating">
+        <p class="text-info">Creating new project<span class="ellipsis_animated-inner">
+                <span>.</span>
+                <span>.</span>
+                <span>.</span>
+            </span></p>
+    </div>
+    <form class="form-horizontal" ng-if="!creating">
+        <div class="form-group">
+            <label for="newProjectName" class="control-label col-sm-2">Name</label>
+            <div class="col-sm-10">
+                <input type="text" name="newProjectName" id="newProjectName" class="form-control" ng-model="newProject.name" placeholder="Project Name" required>
             </div>
         </div>
-    </section>
+        <div class="form-group">
+            <label for="testFiles" class="control-label col-sm-2">Test Files</label>
+            <div class="col-sm-10">
+                <input type="file" id="testFiles" class="form-control" name="testFiles"
+                ng-file-select ng-model="newProject.tests" ng-multiple="true">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2">Due Date</label>
+            <div class="dropdown col-sm-10">
+              <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" href="">
+                <div class="input-group"><input type="text" class="form-control" data-ng-model="data.dateDropDownInput" ><span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                </div>
+              </a>
+              <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                <datetimepicker data-ng-model="newProject.due_date" data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }"/>
+              </ul>
+            </div>
+        </div>
+        <div class="form-group text-center">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary" ng-click="createProject()">Create Project!</button>
+            </div>
+        </div>
+    </form>
 </section>
 <!-- List projects -->
 <div class="container">
