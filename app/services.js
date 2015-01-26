@@ -1,5 +1,6 @@
 // Utility services
 jprServices.factory('Page', ['$rootScope', function($rootScope) {
+  
   var defaultTitle = 'JPR';
   var title = defaultTitle;
   var currentLink = '';
@@ -9,13 +10,17 @@ jprServices.factory('Page', ['$rootScope', function($rootScope) {
   var flashQueue = [];
   var errorFlash = '';
   var errorFlashQueue = [];
-  $rootScope.$on('$locationChangeSuccess', function(_, oldLocation, newLocation) {
+
+  $rootScope.$on('$locationChangeSuccess', function(_, newLocation, oldLocation) {
     // Clear messages on refresh
+    
     errorMessages.clear();
     infoMessages.clear();
     if (oldLocation != newLocation) {
+      console.log(errorFlash);
       flash = flashQueue.shift() || "";
       errorFlash = errorFlashQueue.shift() || "";
+      console.log(errorFlash);
     }    
   });
 
@@ -75,6 +80,7 @@ jprServices.factory('Page', ['$rootScope', function($rootScope) {
       errorFlashQueue.push(message);
     },
     getErrorFlash: function() {
+      
       return errorFlash;
     },
     getFlash: function(){
@@ -84,7 +90,8 @@ jprServices.factory('Page', ['$rootScope', function($rootScope) {
       flash != '';
     },
     hasErrorFlash: function() {
-      errorFlash != "";
+      
+      errorFlash != '';
     },
     showSpinner: function() {
       $("#spinner").show();

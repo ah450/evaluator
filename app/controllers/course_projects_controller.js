@@ -1,4 +1,4 @@
-jprApp.controller('CourseProjectsCtrl', ['$scope', '$upload', 'Auth', 'Page', function($scope, $upload, Auth, Page) {
+jprApp.controller('CourseProjectsCtrl', ['$scope', '$upload', 'Auth', 'Page', '$location', function($scope, $upload, Auth, Page, $location) {
   $scope.isTeacher = Auth.isLoggedIn() ? Auth.getUser().isTeacher() : false;
   $scope.loaded = false;
   $scope.creating = false;
@@ -27,7 +27,8 @@ jprApp.controller('CourseProjectsCtrl', ['$scope', '$upload', 'Auth', 'Page', fu
       } else if (httpResponse.status == 404) {
         $location.path('/404').replace();
       } else if(httpResponse.status == 401) {
-        Page.addErrorMessage('Must be logged in to see course projects.');
+        Page.setErrorFlash('Must be logged in to see course projects.');
+        $location.path('/home').replace();
       } else {
         Page.addErrorMessage('Internal server oopsie, please grab a programmer.');
       }
