@@ -17,10 +17,8 @@ jprServices.factory('Page', ['$rootScope', function($rootScope) {
     errorMessages.clear();
     infoMessages.clear();
     if (oldLocation != newLocation) {
-      console.log(errorFlash);
       flash = flashQueue.shift() || "";
       errorFlash = errorFlashQueue.shift() || "";
-      console.log(errorFlash);
     }    
   });
 
@@ -87,11 +85,10 @@ jprServices.factory('Page', ['$rootScope', function($rootScope) {
       return flash;
     },
     hasFlash: function() {
-      flash != '';
+      return flash != '';
     },
     hasErrorFlash: function() {
-      
-      errorFlash != '';
+      return errorFlash != '';
     },
     showSpinner: function() {
       $("#spinner").show();

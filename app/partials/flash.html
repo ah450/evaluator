@@ -1,9 +1,9 @@
-<section ng-controller="FlashCtrl">
 <!-- The incredible flash! -->
-    <div class="alert alert-success" ng-if="hasFlash()">
+<div class="container text-center" ng-controller="FlashCtrl">
+    <div class="row alert alert-success" ng-if="hasFlash()">
         <p>{{getFlash()}}</p>
     </div>
-    <div class="alert alert-danger" ng-if="hasErrorFlash()">
+    <div class="row alert alert-danger" ng-if="hasErrorFlash()">
         <p>{{getErrorFlash()}}</p>
     </div>
-</section>
+</div>
