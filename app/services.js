@@ -117,7 +117,7 @@ jprServices.factory('Login', ['$q', '$http', 'Host', 'Auth', 'User', function($q
       url: [Host.base, 'token'].join('/'),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': headVal
+        'X-Auth': headVal
       },
       data: {
         remember: remember.toString()
