@@ -2,6 +2,7 @@ jprApp.controller('CourseListCtrl', ['$scope', 'Course', 'Page', 'Auth', functio
   
   $scope.courses = [];
   $scope.loading = true;
+  $scope.creating = false;
   function handleCoursesLoad(courses) {
     $scope.courses = courses;
     $scope.loading = false;
@@ -27,6 +28,7 @@ jprApp.controller('CourseListCtrl', ['$scope', 'Course', 'Page', 'Auth', functio
 
   $scope.createCourse = function() {
     Page.clearErrorMessages();
+    $scope.creating = true;
     var course = new Course($scope.newCourse);
     course.save(function(newCourse) {
       // success callback
@@ -34,9 +36,11 @@ jprApp.controller('CourseListCtrl', ['$scope', 'Course', 'Page', 'Auth', functio
         name: '',
         description: ''
       };
+      $scope.creating = false;
       $scope.courses.push(newCourse);
       Page.addInfoMessage('Course Created!')
     }, function(httpResponse) {
+      $scope.creating = false;
       if (httpResponse.status == 403 || httpResponse.status == 401) {
         Page.addErrorMessage('Only teachers can create courses!')
       } else if (httpResponse.status == 422) {

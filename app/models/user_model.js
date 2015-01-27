@@ -43,7 +43,7 @@ jprServices.factory('User', ['UserResource', 'BaseModel', '$http', 'Host', '$q',
 
   User.prototype.courses = function() {
     var defered = $q.defer();
-    var ep = [Host.base, 'user', 'dashboard'].join('/');
+    var ep = [Host.api_base, 'user', 'dashboard'].join('/');
     var req = {
       method: 'GET',
       url: ep,

@@ -1,4 +1,4 @@
-jprApp.controller('ActivationCtrl', ['$http', '$location', 'Page', function($http, $location, Page) {
+jprApp.controller('ActivationCtrl', ['$http', '$location', 'Page', 'Host', function($http, $location, Page, Host) {
     Page.showSpinner();
     Page.clearCurrentLink();
     Page.clearTitle();
@@ -6,7 +6,7 @@ jprApp.controller('ActivationCtrl', ['$http', '$location', 'Page', function($htt
     if (!searchObject.hasOwnProperty('token')) {
         searchObject.token = 'triggerA404Response';
     }
-    var activateUrl = 'https://api.evaluator.in/activate?token=' + searchObject.token;
+    var activateUrl = Host.api_base + '?token=' + searchObject.token;
 
     function activationCallback(data, status) {
         Page.hideSpinner();

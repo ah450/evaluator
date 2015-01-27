@@ -3,19 +3,38 @@
     <div class="page-header">
         <h1 class="text-primary">{{project.name}}</h1>
     </div>
+    <div class="container" ng-if="project.tests.length > 0 && isTeacher">
+        <div class="row">
+            <div class="col-md-6">
+                <h4 class="text-primary" >Test Files <span class="glyphicon glyphicon-plus" data-toggle="collapse" id="projectTestFilesExpand" data-target="#projectTestFiles"></span></h4>
+                <div ng-if="isTeacher" id="projectTestFiles" class="container collapse">
+                        <div class="row" ng-repeat="test in project.tests">
+                            <div class="col-md-6">
+                                <p class="text-primary clickable" ng-click="downloadHandler(test.download_url)">{{test.name}}</p>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <form class="form-horizontal" ng-if="isStudent && project.can_submit">
+        <div class="form-group">
+            <label for="codeFile" class="control-label col-sm-2">Code</label>
+            <div class="col-sm-5">
+                <input type="file" id="codeFile" name="codeFile" data-ng-file-select data-ng-model="code.file" data-ng-multiple="false" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-5">
+                <button type="submit" data-ng-click="submitCode()" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </form>
 
     <div class="container">
         <!-- Upload Submissions -->
-        <form data-ng-if="isStudent && project.can_submit">
-            <h2>New Submittion</h2>
-            <div class="form-group">
-                <label for="codeFile">Code</label>
-                <input type="file" id="codeFile" name="codeFile" data-ng-file-select data-ng-model="code.file" data-ng-multiple="false" required>
-            </div>
-            <button type="submit" data-ng-click="submitCode()" class="btn btn-primary">Submit</button>
-        </form>
-
-        <hr>
         <!-- Current Submissions -->
         <p class="lead text-info row" data-ng-if="submissions.length == 0">No submissions, yet!</p>
         <div class="panel-group" id="submissionsAccordion">
@@ -23,7 +42,7 @@
             <div data-ng-repeat="submission in submissions" data-ng-class="{'panel':true, 'panel-info':!submission.processed, 'panel-danger':submission.processed && !submission.compile_status, 'panel-success':submission.processed && submission.compile_status}">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                      <a data-toggle="collapse" data-parent="#submissionsAccordion" data-target="#{{submission.id}}" >
+                      <a data-toggle="collapse" class="clickable" data-parent="#submissionsAccordion" data-target="#{{submission.id}}" >
                         <span data-ng-if="!submission.processed" class="pull-right"><img id="spinner" ng-src="images/spin.gif"></span>
                         <span data-ng-if="submission.processed && submission.compile_status" class="pull-right"><i class="glyphicon glyphicon-ok-circle"></i></span>
                         <span data-ng-if="submission.processed && !submission.compile_status" class="pull-right"><i class="glyphicon glyphicon-remove-circle"></i></span>
@@ -39,7 +58,7 @@
                             <div data-ng-repeat="test in submission.tests" data-ng-class="{'panel':true, 'panel-success':test.success, 'panel-default':!test.success}">
                                 <div class="panel-heading">
                                     <h4 class="panel-title">
-                                      <a data-toggle="collapse" data-parent="#{{submission.id}}Accordion" data-target="#{{submission.id}}{{test.name}}" >
+                                      <a data-toggle="collapse" data-parent="#{{submission.id}}Accordion" data-target="#{{submission.id}}{{test.name}}" class="clickable" >
                                         <span data-ng-if="test.success" class="pull-right text-success"><i class="glyphicon glyphicon-ok-circle"></i></span>
                                         <span data-ng-if="!test.success" class="pull-right text-danger"><i class="glyphicon glyphicon-remove-circle"></i></span>
                                         {{test.name}}

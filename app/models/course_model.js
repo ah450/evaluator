@@ -1,4 +1,4 @@
-jprServices.factory('Course', ['$q', 'User', 'CourseResource', 'BaseModel', '$upload', 'ProjectResource', 'Project', function($q, User, CourseResource, BaseModel, $upload, ProjectResource, Project) {
+jprServices.factory('Course', ['$q', 'User', 'CourseResource', 'BaseModel', '$upload', 'ProjectResource', 'Project', 'Host', function($q, User, CourseResource, BaseModel, $upload, ProjectResource, Project, Host) {
     Course.prototype = Object.create(BaseModel.prototype);
     Course.prototype.constructor = Course;
     function Course(data, exists) {
@@ -36,7 +36,7 @@ jprServices.factory('Course', ['$q', 'User', 'CourseResource', 'BaseModel', '$up
             });
         }else {
             $upload.upload({
-                url: 'https://api.evaluator.in' + this.data.projects_url,
+                url: Host.api_base + this.data.projects_url,
                 method: 'POST',
                 headers: {
                     'X-Auth-Token': 'Replace Me'

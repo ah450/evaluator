@@ -34,7 +34,9 @@ jprServices.factory('Submission', ['$q', 'SubmissionResource', 'BaseModel', 'Use
         return new User(this.data.submitter, true);
     });
 
-
+    Submission.prototype.__defineGetter__('download_url', function() {
+        return this.data.download_url;
+    });
 
 
     return Submission;

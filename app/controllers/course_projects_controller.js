@@ -2,11 +2,21 @@ jprApp.controller('CourseProjectsCtrl', ['$scope', '$upload', 'Auth', 'Page', '$
   $scope.isTeacher = Auth.isLoggedIn() ? Auth.getUser().isTeacher() : false;
   $scope.loaded = false;
   $scope.creating = false;
+  $scope.nameError = false;
   $scope.newProject = {
     name: '',
     language: 'J',
     tests: [],
-    due_date: Date.now()
+    due_date: Date.now(),
+    validate: function(){
+      var allClear = true;
+      if(this.name.length < 5 ) {
+        Page.addErrorMessage('Project name must be at least five characters long.');
+        $scope.nameError = true;
+        allClear = false;
+      }
+      return allClear;
+    }
   };
   $scope.showCreation = $scope.$parent.showCreation;
   $scope.projects = [];
@@ -50,8 +60,12 @@ jprApp.controller('CourseProjectsCtrl', ['$scope', '$upload', 'Auth', 'Page', '$
 
   $scope.createProject = function() {
     Page.clearErrorMessages();
+    if (!$scope.newProject.validate()) {
+      return;
+    }
     $scope.creating = true;
     $scope.newProject.due_date = $scope.newProject.due_date.toISOString();
+    console.log($scope.newProject)
     $scope.$parent.course.create_project($scope.newProject, function(project) {
       $scope.creating = false;
       $scope.projects.push(project);

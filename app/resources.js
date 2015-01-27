@@ -2,7 +2,7 @@
 
 jprServices.factory('CourseResource', ['$resource', 'Host',
   function($resource, Host) {
-    var url = [Host.base, ':dest', ':name', ':ep'].join('/');
+    var url = [Host.api_base, ':dest', ':name', ':ep'].join('/');
     var common_headers = {
       'X-Auth-Token': 'Replace Me'
     }
@@ -68,7 +68,7 @@ jprServices.factory('CourseResource', ['$resource', 'Host',
 
 
 jprServices.factory('UserResource', ['$resource', 'Host', function($resource, Host) {
-  var url = [Host.base, ':dest', ':id'].join('/');
+  var url = [Host.api_base, ':dest', ':id'].join('/');
   var common_headers = {
     'X-Auth-Token': 'Replace Me'
   }
@@ -114,10 +114,10 @@ jprServices.factory('UserResource', ['$resource', 'Host', function($resource, Ho
 
 
 jprServices.factory('ProjectResource', ['$resource', 'Host', function($resource, Host) {
-  var url = [Host.base, ':dest'].join('/');
-  var course_related_url = [Host.base, 'course', ':courseName', 'projects'].join('/');
+  var url = [Host.api_base, ':dest'].join('/');
+  var course_related_url = [Host.api_base, 'course', ':courseName', 'projects'].join('/');
   var submissions_url = [course_related_url, ':projectName', 'submissions'].join('/');
-  var project_by_id_url = [Host.base, 'project', ':id'].join('/');
+  var project_by_id_url = [Host.api_base, 'project', ':id'].join('/');
   var common_headers = {
     'X-Auth-Token': 'Replace Me'
   }
@@ -162,7 +162,7 @@ jprServices.factory('ProjectResource', ['$resource', 'Host', function($resource,
 
 
 jprServices.factory('SubmissionResource', ['$resource', 'Host', function($resource, Host){
-  var url = [Host.base, 'submission', ':id'].join('/');
+  var url = [Host.api_base, 'submission', ':id'].join('/');
   var common_headers = {
     'X-Auth-Token': 'Replace Me'
   }

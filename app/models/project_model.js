@@ -1,4 +1,4 @@
-jprServices.factory('Project', ['$q','$upload', 'ProjectResource', 'BaseModel', 'Submission', function($q,$upload, ProjectResource, BaseModel, Submission) {
+jprServices.factory('Project', ['$q','$upload', 'ProjectResource', 'BaseModel', 'Submission', 'Host', function($q,$upload, ProjectResource, BaseModel, Submission, Host) {
     Project.prototype = Object.create(BaseModel.prototype);
     Project.prototype.constructor = Project;
 
@@ -58,7 +58,7 @@ jprServices.factory('Project', ['$q','$upload', 'ProjectResource', 'BaseModel', 
 
     Project.prototype.submitCode = function(codeFile, success, failure) {
         $upload.upload({
-            url: 'https://api.evaluator.in' + this.data.submissions_url,
+            url: Host.api_base + this.data.submissions_url,
             method: 'POST',
             headers: {
                 'X-Auth-Token': 'Replace Me'
@@ -73,6 +73,10 @@ jprServices.factory('Project', ['$q','$upload', 'ProjectResource', 'BaseModel', 
 
     Project.prototype.__defineGetter__('can_submit', function() {
         return this.data.can_submit;
+    });
+
+    Project.prototype.__defineGetter__('tests', function() {
+        return this.data.tests;
     });
 
     Project.$all = function() {

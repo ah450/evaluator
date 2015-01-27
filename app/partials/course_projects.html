@@ -25,8 +25,8 @@
                 <span>.</span>
             </span></p>
     </div>
-    <form class="form-horizontal collapse top-buffer" id="newProject" ng-if="!creating">
-        <div class="form-group">
+    <form class="form-horizontal collapse top-buffer" id="newProject" ng-hide="creating">
+        <div class="form-group"  ng-class="{'has-error': nameError}">
             <label for="newProjectName" class="control-label col-sm-2">Name</label>
             <div class="col-sm-5">
                 <input type="text" name="newProjectName" id="newProjectName" class="form-control" ng-model="newProject.name" placeholder="Project Name" required>

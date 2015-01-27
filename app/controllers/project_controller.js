@@ -1,16 +1,19 @@
-jprApp.controller('ProjectCtrl', ['$scope', '$routeParams', '$upload', '$location', 'Page', 'Auth', 'Project', function($scope, $routeParams, $upload, $location, Page, Auth, Project) {
+jprApp.controller('ProjectCtrl', ['$scope', '$routeParams', '$upload', '$location', 'Page', 'Auth', 'Project', 'Host', function($scope, $routeParams, $upload, $location, Page, Auth, Project, Host) {
     Page.setLink('');
     Page.clearTitle();
+    $scope.Host = Host;
     if (!Auth.isLoggedIn()) {
         Page.setErrorFlash('Must be a course teacher or student to view projects.');
         $location.path('/403').replace();
     }
     $scope.isStudent = Auth.isLoggedIn() ? Auth.getUser().isStudent() : false;
+    $scope.isTeacher = Auth.isLoggedIn() ? Auth.getUser().isTeacher() : false;
     $scope.submissions = [];
     $scope.loaded = false;
     $scope.code = {
         file: null
     };
+    $scope.downloadHandler = Page.downloadHandler;
     Page.showSpinner();
     Project.$get($routeParams.id)
         .then(projectLoadSuccessCallback, projectLoadFailureCallback);

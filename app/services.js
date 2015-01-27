@@ -1,5 +1,5 @@
 // Utility services
-jprServices.factory('Page', ['$rootScope', function($rootScope) {
+jprServices.factory('Page', ['$rootScope', 'Host', '$http', function($rootScope, Host, $http) {
   
   var defaultTitle = 'JPR';
   var title = defaultTitle;
@@ -13,7 +13,7 @@ jprServices.factory('Page', ['$rootScope', function($rootScope) {
 
   $rootScope.$on('$locationChangeSuccess', function(_, newLocation, oldLocation) {
     // Clear messages on refresh
-    
+    $('#downloadIframe').removeAttr('src');
     errorMessages.clear();
     infoMessages.clear();
     if (oldLocation != newLocation) {
@@ -23,6 +23,27 @@ jprServices.factory('Page', ['$rootScope', function($rootScope) {
   });
 
   return {
+    downloadHandler: function(endpoint) {
+      var url = Host.api_base + endpoint;
+      var req = {
+        method: 'GET',
+        url: url,
+        headers: {
+          'X-Auth-Token': 'Replace Me'
+        }
+      };
+      $http(req)
+      .success(function(data, status, config){
+        var regex = RegExp("filename=\"(.*)\"");
+        var contentDisp = config('Content-Disposition');
+        var match = regex.exec(contentDisp);
+        var fileName = match[1];
+        console.log(contentDisp, match);
+        var contentType = config('Content-Type');
+        var blob = new Blob([data], {type: contentType});
+        saveAs(blob, fileName);
+      });
+    },
     title: function() {
       return title;
     },
@@ -114,7 +135,7 @@ jprServices.factory('Login', ['$q', '$http', 'Host', 'Auth', 'User', function($q
     var headVal = ["Basic", btoa([email, password].join(':'))].join(' ');
     var req = {
       method: 'POST',
-      url: [Host.base, 'token'].join('/'),
+      url: [Host.api_base, 'token'].join('/'),
       headers: {
         'Content-Type': 'application/json',
         'X-Auth': headVal

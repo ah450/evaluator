@@ -24,7 +24,14 @@ color: inherit !important;
   </div>
   
   <div class="row top-buffer border-row collapse" id="newCourse">
-      <form class="form-horizontal" style="margin-bottom: 10px;">
+      <div class="text-center" ng-if="creating">
+          <p class="text-info">Creating new project<span class="ellipsis_animated-inner">
+                  <span>.</span>
+                  <span>.</span>
+                  <span>.</span>
+              </span></p>
+      </div>
+      <form class="form-horizontal" style="margin-bottom: 10px;" ng-hide="creating">
         <div class="form-group">
           <label for="newCourseName" class="control-label col-sm-2">Name</label>
           <div class="col-sm-10">

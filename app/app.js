@@ -1,6 +1,7 @@
 var jprApp = angular.module('jprApp', ['ui.bootstrap.datetimepicker', 'ngRoute', 'jprServices', 'LocalStorageModule', 'angularFileUpload', 'jpr-templates']);
 var jprServices = angular.module('jprServices', ['ngResource', 'ipCookie']).constant('Host', {
-  'base': 'https://api.evaluator.in'
+  'api_base': 'https://api.evaluator.in',
+  'base': 'https://evaluator.in'
 });
 jprApp.factory('tokenInjector', ['AuthBase', function(Auth) {
 
@@ -69,10 +70,7 @@ jprApp.config(['$httpProvider', function($httpProvider) {
 }]);
 
 jprApp.run(function(){
-  $('body').on('click', '#newCourseExpandButton', function() {
-      $(this).toggleClass("glyphicon-plus glyphicon-minus");  
-    });
-  $('body').on('click', '#newProjectExpandButton', function() {
+  $('body').on('click', '#newProjectExpandButton, #newCourseExpandButton, #projectTestFilesExpand', function() {
       $(this).toggleClass("glyphicon-plus glyphicon-minus");  
     });
 });
