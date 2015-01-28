@@ -40,7 +40,6 @@ jprServices.factory('Page', ['$rootScope', 'Host', '$http', function($rootScope,
         var fileName = match[1];
         var contentType = config('Content-Type');
         if (contentType != 'text/plain') {
-          debugger
           var bytes = new Uint8Array(data.length);
           for(var i=0; i < data.length; i++) {
             bytes[i] = data.charCodeAt(i);
