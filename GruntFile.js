@@ -49,6 +49,7 @@ module.exports = function(grunt) {
                     'app/bower_components/momentjs/moment.js',
                     'app/vendor/angular-bootstrap-datetimepicker/src/js/datetimepicker.js',
                     'app/bower_components/ellipsis-animated/src/ellipsis-animated.js',
+                    'app/vendor/Blob.js/Blob.js',
                     'app/vendor/FileSaver.js/FileSaver.js',
                     'app/*.js', 'app/*/*.js', 'tmp/*.js'
                 ],

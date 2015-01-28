@@ -1,3 +1,6 @@
 [submodule "app/vendor/FileSaver.js"]
 	path = app/vendor/FileSaver.js
 	url = https://github.com/eligrey/FileSaver.js.git
+[submodule "app/vendor/Blob.js"]
+	path = app/vendor/Blob.js
+	url = https://github.com/eligrey/Blob.js.git
