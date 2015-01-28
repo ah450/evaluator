@@ -46,7 +46,7 @@
                         <span data-ng-if="!submission.processed" class="pull-right"><img id="spinner" ng-src="images/spin.gif"></span>
                         <span data-ng-if="submission.processed && submission.compile_status" class="pull-right"><i class="glyphicon glyphicon-ok-circle"></i></span>
                         <span data-ng-if="submission.processed && !submission.compile_status" class="pull-right"><i class="glyphicon glyphicon-remove-circle"></i></span>
-                        Submission {{submission.id}} | {{submission.created_at_pretty}}
+                        Submission {{submission.id}} | {{submission.created_at_pretty}} | by {{submission.submitter.name}}
                       </a>
                     </h4>
                 </div>
@@ -80,6 +80,9 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="panel-footer text-center">
+                        <button class="btn btn-block btn-info" ng-click="downloadHandler(submission.download_url)">Download</button>
                     </div>
                 </div>
             </div>
