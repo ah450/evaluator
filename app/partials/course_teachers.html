@@ -13,3 +13,7 @@
 <div ng-if="loaded && teachers.length == 0" class="text-center">
 <p>This course doesn't have any teachers!</p>
 </div>
+
+<div class="row text-center" ng-if="!loaded">
+    <img id="spinner" ng-src="images/spin.gif">
+</div>
