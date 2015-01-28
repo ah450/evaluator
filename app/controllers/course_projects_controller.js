@@ -3,6 +3,7 @@ jprApp.controller('CourseProjectsCtrl', ['$scope', '$upload', 'Auth', 'Page', '$
   $scope.loaded = false;
   $scope.creating = false;
   $scope.nameError = false;
+  $scope.dateError = false;
   $scope.newProject = {
     name: '',
     language: 'J',
@@ -14,6 +15,10 @@ jprApp.controller('CourseProjectsCtrl', ['$scope', '$upload', 'Auth', 'Page', '$
         Page.addErrorMessage('Project name must be at least five characters long.');
         $scope.nameError = true;
         allClear = false;
+      }
+      if(typeof due_date.toISOString !== 'function') {
+        allClear = false;
+        $scope.dateError = true;
       }
       return allClear;
     }

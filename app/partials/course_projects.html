@@ -26,13 +26,13 @@
             </span></p>
     </div>
     <form class="form-horizontal collapse top-buffer" id="newProject" ng-hide="creating">
-        <div class="form-group"  ng-class="{'has-error': nameError}">
+        <div class="form-group" ng-class="{'has-error': nameError}">
             <label for="newProjectName" class="control-label col-sm-2">Name</label>
             <div class="col-sm-5">
                 <input type="text" name="newProjectName" id="newProjectName" class="form-control" ng-model="newProject.name" placeholder="Project Name" required>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" ng-class="{'has-error': dateError}">
             <label for="testFiles" class="control-label col-sm-2">Test Files</label>
             <div class="col-sm-5">
                 <input type="file" id="testFiles" class="form-control" name="testFiles"
