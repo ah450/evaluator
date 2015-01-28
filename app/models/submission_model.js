@@ -24,6 +24,11 @@ jprServices.factory('Submission', ['$q', 'SubmissionResource', 'BaseModel', 'Use
     Submission.prototype.__defineGetter__('tests', function() {
         return this.data.tests;
     });
+    Submission.prototype.__defineGetter__('all_tests_passed', function() {
+        return this.data.tests.reduce(function(previousValue, testCase) {
+            return previousValue && testCase.success;
+        }, true); 
+    });
 
     Submission.prototype.__defineGetter__('project', function() {
         return this.data.project;

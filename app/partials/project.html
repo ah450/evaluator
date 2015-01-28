@@ -39,7 +39,7 @@
         <p class="lead text-info row" data-ng-if="submissions.length == 0">No submissions, yet!</p>
         <div class="panel-group" id="submissionsAccordion">
 
-            <div data-ng-repeat="submission in submissions" data-ng-class="{'panel':true, 'panel-info':!submission.processed, 'panel-danger':submission.processed && !submission.compile_status, 'panel-success':submission.processed && submission.compile_status}">
+            <div data-ng-repeat="submission in submissions" data-ng-class="{'panel':true, 'panel-info':!submission.processed, 'panel-danger':submission.processed && !submission.compile_status, 'panel-success':submission.processed && submission.compile_status && submission.all_tests_passed, 'panel-warning': submission.processed && submission.compile_status && !submission.all_tests_passed}">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                       <a data-toggle="collapse" class="clickable" data-parent="#submissionsAccordion" data-target="#{{submission.id}}" >
@@ -55,7 +55,7 @@
                         <pre>{{submission.compiler_out}}</pre>
 
                         <div class="panel-group" id="{{submission.id}}Accordion">
-                            <div data-ng-repeat="test in submission.tests" data-ng-class="{'panel':true, 'panel-success':test.success, 'panel-default':!test.success}">
+                            <div data-ng-repeat="test in submission.tests" data-ng-class="{'panel':true, 'panel-success':test.success, 'panel-danger':!test.success}">
                                 <div class="panel-heading">
                                     <h4 class="panel-title">
                                       <a data-toggle="collapse" data-parent="#{{submission.id}}Accordion" data-target="#{{submission.id}}{{test.name}}" class="clickable" >

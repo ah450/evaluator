@@ -39,7 +39,17 @@ jprServices.factory('Page', ['$rootScope', 'Host', '$http', function($rootScope,
         var match = regex.exec(contentDisp);
         var fileName = match[1];
         var contentType = config('Content-Type');
-        var blob = new Blob([data], {type: 'contentType'});
+        if (contentType != 'text/plain') {
+          var buffer = new ArrayBuffer(data.length);
+          var view = new Uint8Array(buffer);
+          for (var i = 0; i < data.length; i++) {
+            view[i] = data.charCodeAt(i);
+          }
+          var blob = new Blob(buffer, {type: contentType});
+        }else {
+          var blob = new Blob([data], {type: contentType});
+        }
+        
         saveAs(blob, fileName);
       });
     },
