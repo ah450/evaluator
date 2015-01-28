@@ -30,7 +30,8 @@ jprServices.factory('Page', ['$rootScope', 'Host', '$http', function($rootScope,
         url: url,
         headers: {
           'X-Auth-Token': 'Replace Me'
-        }
+        },
+        responseType: 'arraybuffer'
       };
       $http(req)
       .success(function(data, status, config){
@@ -39,15 +40,7 @@ jprServices.factory('Page', ['$rootScope', 'Host', '$http', function($rootScope,
         var match = regex.exec(contentDisp);
         var fileName = match[1];
         var contentType = config('Content-Type');
-        if (contentType != 'text/plain') {
-          var bytes = new Uint8Array(data.length);
-          for(var i=0; i < data.length; i++) {
-            bytes[i] = data.charCodeAt(i);
-          }
-          var blob = new Blob([bytes], {type: contentType});
-        }else {
-          var blob = new Blob([data], {type: contentType});
-        }
+        var blob = new Blob([data], {type: contentType});
         saveAs(blob, fileName);
       });
     },
