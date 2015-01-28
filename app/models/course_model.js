@@ -35,6 +35,10 @@ jprServices.factory('Course', ['$q', 'User', 'CourseResource', 'BaseModel', '$up
                 failure(httpResponse);
             });
         }else {
+            var formDataNames = []
+            for (var i = 0; i < project.tests.length; i++) {
+                formDataNames.push('file[' + i +']');
+            };
             $upload.upload({
                 url: Host.api_base + this.data.projects_url,
                 method: 'POST',
@@ -46,7 +50,8 @@ jprServices.factory('Course', ['$q', 'User', 'CourseResource', 'BaseModel', '$up
                     language: project.language,
                     due_date: project.due_date
                 },
-                file: project.tests
+                file: project.tests,
+                fileFormDataName: formDataNames
             }).success(function(data){
                 success(new Project(data, true));
             }).error(function(data, status, headers, config){

@@ -1,4 +1,4 @@
-jprApp.controller('CourseProjectsCtrl', ['$scope', '$upload', 'Auth', 'Page', '$location', function($scope, $upload, Auth, Page, $location) {
+jprApp.controller('CourseProjectsCtrl', ['$scope', 'Auth', 'Page', '$location', function($scope, Auth, Page, $location) {
   $scope.isTeacher = Auth.isLoggedIn() ? Auth.getUser().isTeacher() : false;
   $scope.loaded = false;
   $scope.creating = false;
@@ -16,7 +16,7 @@ jprApp.controller('CourseProjectsCtrl', ['$scope', '$upload', 'Auth', 'Page', '$
         $scope.nameError = true;
         allClear = false;
       }
-      if(typeof due_date.toISOString !== 'function') {
+      if(typeof this.due_date.toISOString !== 'function') {
         allClear = false;
         $scope.dateError = true;
       }
@@ -70,7 +70,6 @@ jprApp.controller('CourseProjectsCtrl', ['$scope', '$upload', 'Auth', 'Page', '$
     }
     $scope.creating = true;
     $scope.newProject.due_date = $scope.newProject.due_date.toISOString();
-    console.log($scope.newProject)
     $scope.$parent.course.create_project($scope.newProject, function(project) {
       $scope.creating = false;
       $scope.projects.push(project);
