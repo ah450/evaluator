@@ -4,11 +4,13 @@ jprApp.controller('CourseProjectsCtrl', ['$scope', 'Auth', 'Page', '$location', 
   $scope.creating = false;
   $scope.nameError = false;
   $scope.dateError = false;
+  $scope.timeoutError = false;
   $scope.newProject = {
     name: '',
     language: 'J',
     tests: [],
     due_date: new Date(),
+    test_timeout: 600,
     validate: function(){
       var allClear = true;
       if(this.name.length < 5 ) {
@@ -19,6 +21,11 @@ jprApp.controller('CourseProjectsCtrl', ['$scope', 'Auth', 'Page', '$location', 
       if(typeof this.due_date.toISOString !== 'function') {
         allClear = false;
         $scope.dateError = true;
+      }
+      if(this.test_timeout < 600 || this.test_timeout > 1800) {
+        Page.addErrorMessage('Test Timout must be between 600 and 1800 inclusive.');
+        $scope.timeoutError = true;
+        allClear = false;
       }
       return allClear;
     }
@@ -65,6 +72,9 @@ jprApp.controller('CourseProjectsCtrl', ['$scope', 'Auth', 'Page', '$location', 
 
   $scope.createProject = function() {
     Page.clearErrorMessages();
+    $scope.nameError = false;
+    $scope.dateError = false;
+    $scope.timeoutError = false;
     if (!$scope.newProject.validate()) {
       return;
     }
