@@ -8,7 +8,7 @@ jprApp.controller('CourseProjectsCtrl', ['$scope', 'Auth', 'Page', '$location', 
     name: '',
     language: 'J',
     tests: [],
-    due_date: Date.now(),
+    due_date: new Date(),
     validate: function(){
       var allClear = true;
       if(this.name.length < 5 ) {
