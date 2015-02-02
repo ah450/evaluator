@@ -113,6 +113,11 @@ module.exports = function(grunt) {
                     dest: '/stylesheets',
                     expand: true
                 }, {
+                    cwd: 'app/style',
+                    src: ['*.css'],
+                    dest: '/stylesheets',
+                    expand: true
+                }, {
                     cwd: 'app/bower_components/bootstrap/dist/css/',
                     src: ['bootstrap.min.css'],
                     dest: 'stylesheets',
