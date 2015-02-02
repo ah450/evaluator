@@ -113,7 +113,7 @@ module.exports = function(grunt) {
                     dest: '/stylesheets',
                     expand: true
                 }, {
-                    cwd: 'app/vendor/simplex/',
+                    cwd: 'app/bower_components/bootstrap/dist/css/',
                     src: ['bootstrap.min.css'],
                     dest: 'stylesheets',
                     expand: true
