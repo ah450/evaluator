@@ -9,7 +9,7 @@ module.exports = function(grunt) {
    
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-
+        config: grunt.file.readJSON('bower.json'),
         bower: {
             install: {
                 options: {
@@ -32,6 +32,47 @@ module.exports = function(grunt) {
             dist: {
                 src: ['app/partials/*.html'],
                 dest: 'tmp/templates.js'
+            }
+        },
+        // Compiles Sass to CSS and generates necessary files if requested
+        compass: {
+            options: {
+                sassDir: '<%= config.app %>/style',
+                cssDir: 'stylesheets',
+                generatedImagesDir: '.tmp/images/generated',
+                imagesDir: '/images',
+                javascriptsDir: '<%= config.app %>',
+                fontsDir: 'fonts',
+                importPath: '<%= config.app %>/bower_components',
+                httpImagesPath: '/images',
+                httpGeneratedImagesPath: '/images/generated',
+                httpFontsPath: 'fonts',
+                relativeAssets: false,
+                assetCacheBuster: false,
+                raw: 'Sass::Script::Number.precision = 10\n'
+            },
+            dist: {
+                options: {
+                    generatedImagesDir: '/images/generated'
+                }
+            },
+            server: {
+                options: {
+                    debugInfo: true
+                }
+            }
+        },
+        autoprefixer: {
+            options: {
+                browsers: ['last 1 version']
+            },
+            dist: {
+                files: [{
+                    expand: true,
+                    cwd: '.tmp/style/',
+                    src: '{,*/}*.css',
+                    dest: '.tmp/style/'
+                }]
             }
         },
         concat: {
@@ -76,21 +117,28 @@ module.exports = function(grunt) {
         },
         watch: {
             dev: {
-                files: ['app/**/*.js', 'index.html', 'app/partials/*.html'],
-                tasks: ['html2js:dist', 'concat:dist', 'clean:temp'],
-                 options: {
+                files: ['app/**/*.js'],
+                tasks: ['concat:dist'],
+                options: {
+                    atBegin: true
+                }
+            },
+            html2js: {
+                files:['app/partials/*.html'],
+                tasks:['html2js:dist', 'concat:dist'],
+                options: {
+                    atBegin: true
+                }
+            },
+            compass: {
+                files: ['<%= config.app %>/style/{,*/}*.{scss,sass}'],
+                tasks: ['compass:server', 'autoprefixer'],
+                options: {
                     atBegin: true
                 }
             },
             gruntfile: {
                 files: ['Gruntfile.js']
-            },
-            min: {
-                files: ['app/*.js', 'app/*/*.js', 'index.html', 'app/partials/*.html'],
-                tasks: ['html2js:dist', 'concat:dist', 'uglify:dist', 'clean:temp'],
-                options: {
-                    atBegin: true
-                }
             }
         },
         compress: {
@@ -108,20 +156,9 @@ module.exports = function(grunt) {
                     src: ['images/**'],
                     dest: '/'
                 }, {
-                    cwd: 'app/bower_components/bootstrap/dist/css/',
-                    src: ['bootstrap.css.map'],
-                    dest: '/stylesheets',
-                    expand: true
-                }, {
-                    cwd: 'app/style',
+                    cwd: '/stylesheets/**',
                     src: ['*.css'],
-                    dest: '/stylesheets',
-                    expand: true
-                }, {
-                    cwd: 'app/bower_components/bootstrap/dist/css/',
-                    src: ['bootstrap.min.css'],
-                    dest: 'stylesheets',
-                    expand: true
+                    dest: '/stylesheets'
                 }, {
                     cwd: 'app/bower_components/ellipsis-animated/src/',
                     src: ['ellipsis-animated.css'],
@@ -154,9 +191,8 @@ module.exports = function(grunt) {
         }
     });
    
-    grunt.registerTask('dev', ['bower', 'connect:server', 'watch:dev']);
-    grunt.registerTask('min', ['bower', 'connect:server', 'watch:min']);
-    grunt.registerTask('package', ['bower', 'html2js:dist', 'concat:dist', 'uglify:dist',
+    grunt.registerTask('dev', ['bower', 'connect:server', 'clean:temp', 'watch']);
+    grunt.registerTask('package', ['bower', 'html2js:dist', 'concat:dist', 'compass:dist', 'uglify:dist',
         'clean:temp', 'clean:lib', 'compress:dist'
     ]);
 };

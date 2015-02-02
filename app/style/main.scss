@@ -1,8 +1,17 @@
+$icon-font-path: "../fonts/";
+// bower:scss
+@import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
+// endbower
+.browsehappy {
+    margin: 0.2em 0;
+    background: #ccc;
+    color: #000;
+    padding: 0.2em 0;
+}
 .main {
     margin-top: 100px;
 }
-html,
-body {
+html, body {
     height: 100%;
 }
 #wrap {
@@ -38,7 +47,4 @@ body {
 .input-dash-suffix {
     height: 22px;
     width: 65px;
-}
-.clickable {
-    cursor: pointer;
 }

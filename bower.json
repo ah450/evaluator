@@ -2,6 +2,7 @@
   "name": "JPR frontend",
   "description": "Frontend for Java Project Runner",
   "version": "0.0.1",
+  "app": "app",
   "homepage": "https://github.com/ah450/runner-frontend",
   "license": "MIT",
   "dependencies": {
@@ -14,6 +15,7 @@
     "bootstrap-material-design": "~0.2.2",
     "momentjs": "latest",
     "ellipsis-animated": "~0.1.1",
-    "ng-file-upload": "~2.2.2"
+    "ng-file-upload": "~2.2.2",
+    "bootstrap-sass-official": "~3.3.3"
   }
 }
