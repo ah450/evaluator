@@ -76,7 +76,7 @@ jprServices.factory('BaseModel', ['$q', function($q) {
   }
 
   BaseModel.prototype.__defineGetter__('created_at_pretty', function() {
-    return moment(this.data.created_at).format("dddd, MMMM Do YYYY");
+    return moment(this.data.created_at).format("dddd, MMMM Do YYYY, h:mm:ss a");
   });
   BaseModel.prototype.__defineGetter__('created_at', function() {
       return new Date(this.data.created_at);

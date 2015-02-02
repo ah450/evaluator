@@ -1,0 +1,44 @@
+.main {
+    margin-top: 100px;
+}
+html,
+body {
+    height: 100%;
+}
+#wrap {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -120px;
+    padding: 0 0 140px;
+}
+body {
+    padding-top: 40px;
+}
+.top-buffer {
+    margin-top: 40px;
+}
+.border-row {
+    border-bottom: 1px solid #ccc;
+}
+.bottom-buffer {
+    padding-bottom: 40px;
+}
+#zenblockquote {
+    border: 0px;
+}
+.border-left {
+    border-left: 1px solid grey;
+    padding-left: 25px;
+}
+.input-dash-prefix {
+    height: 22px;
+    width: 45px;
+}
+.input-dash-suffix {
+    height: 22px;
+    width: 65px;
+}
+.clickable {
+    cursor: pointer;
+}

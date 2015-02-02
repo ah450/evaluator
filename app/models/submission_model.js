@@ -29,6 +29,11 @@ jprServices.factory('Submission', ['$q', 'SubmissionResource', 'BaseModel', 'Use
             return previousValue && testCase.success;
         }, true); 
     });
+    Submission.prototype.__defineGetter__('tests_passed_count', function() {
+        return this.data.tests.reduce(function(count, testCase) {
+            return (testCase.success)?count+1:count;
+        }, 0); 
+    });
 
     Submission.prototype.__defineGetter__('project', function() {
         return this.data.project;

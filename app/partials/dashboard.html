@@ -1,45 +1,44 @@
-<h1>My Courses</h1>
-<div class="container">
-    <div class="row" ng-if="loading_courses">
+<h1>Upcoming Deadlines</h1>
+<div class="row">
+    <div class="col-md-12" ng-if="loading_projects">
         <img id="spinner" ng-src="images/spin.gif">
     </div>
-    <div class="row" ng-repeat="course in courses">
-        <div class="col-md-6 col-lg-6">
-            <a href="#{{course.url}}">{{course.name}}</a>
-            <div class="row">
-              <div class="col-md-6 col-lg-6">
-                {{course.description}}
-              </div>
+    <div class="list-group">
+        <a href="#{{project.url}}" class="list-group-item" ng-repeat="project in projects | filter:{can_submit:true} | orderBy: '-due_date'">
+            <h4 class="list-group-item-heading"><span class="text-primary">{{project.name}}</span></h4>
+            <p class="list-group-item-text">Due Date {{project.due_date_pretty}} | Posted Since {{project.created_at_pretty}}</p>
+        </a>
+    </div>
+    <div class="col-md-12" ng-if="!loading_projects && projects.length == 0">
+        <p>There are no upcoming deadlines</p>
+    </div>
+</div>
+<h1>My Courses</h1>
+<div class="row">
+    <div class="col-md-12" ng-if="loading_courses">
+        <img id="spinner" ng-src="images/spin.gif">
+    </div>
+    <div class="col-md-12" ng-repeat="course in courses">
+        <div class="panel panel-default col-md-6 col-lg-6">
+            <div class="panel-heading">
+                <a href="#{{course.url}}">
+                    <h3 class="panel-title">{{course.name}}</h3>
+                </a>
             </div>
-            <div class="row">
-              <div class="button-group" role="group">
-                <a href="#{{course.supervisor.url}}" class="btn btn-small"  title="Course Supervisor">{{course.supervisor.name}}</a>
-                <a href="#{{course.tas_url}}" class="btn btn-small" title="Course Teachers">Teachers</a>
-                <a href="#{{course.students_url}}" class="btn btn-small" title="Course Students">Students</a>
-                <a href="#{{course.projects_url}}" class="btn btn-small" title="Course projects">Projects</a>
-              </div>
+            <div class="panel-body">
+                <p>{{course.description}}</p>
+            </div>
+            <div class="panel-footer">
+                <a href="#{{course.supervisor.url}}" title="Course Supervisor">{{course.supervisor.name}}</a> |
+                <a href="#{{course.tas_url}}" title="Course Teachers">Teachers</a> |
+                <a href="#{{course.students_url}}" title="Course Students">Students</a> |
+                <a href="#{{course.projects_url}}" title="Course projects">Projects</a>
             </div>
         </div>
     </div>
-    <div class="row" ng-if="!loading_courses && courses.length == 0">
+    <div class="col-md-12" ng-if="!loading_courses && courses.length == 0">
 
         <p ng-if="user.isStudent()">You are not signed up for any courses</p>
         <p ng-if="!user.isStudent()">You are not a member of any course</p>
-    </div>
-</div>
-<h1>Upcoming Deadlines</h1>
-<div class="container">
-    <div class="row" ng-if="loading_projects">
-        <img id="spinner" ng-src="images/spin.gif">
-    </div>
-    <div class="row top-buffer border-row" ng-repeat="project in projects | filter:{can_submit:true} | orderBy: '-due_date'">
-        <div class="col-md-3 col-lg-3">
-            <h4><a href="#{{project.url}}">{{project.name}}</a></h4>
-            <p class="text-muted text-center">Due Date {{project.due_date_pretty}}</p>
-            <p class="text-muted text-center">Since {{project.created_at_pretty}}</p>
-        </div>
-    </div>
-    <div class="row" ng-if="!loading_projects && projects.length == 0">
-        <p>There are no projects</p>
     </div>
 </div>

@@ -1,81 +1,40 @@
 <!DOCTYPE HTML>
 <html lang="en" ng-app="jprApp">
-  <head ng-controller="HeadCtrl">
+
+<head ng-controller="HeadCtrl">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title ng-bind="title()">JPR</title>
     <link href="stylesheets/bootstrap.min.css" rel="stylesheet">
     <link href="stylesheets/ellipsis-animated.css" rel="stylesheet">
     <link href="stylesheets/datetimepicker.css" rel="stylesheet">
-    <script src="app.js" charset="utf-8"></script>
-  </head>
-  <style>
-  .main {
-  margin-top: 100px;
-  }
-  html, body {
-  height: 100%;
-  }
-  #wrap {
-  min-height: 100%;
-  height: auto !important;
-  height: 100%;
-  margin: 0 auto -120px;
-  padding: 0 0 140px;
-  }
-  body {
-  padding-top: 40px;
-  }
-  .top-buffer {
-  margin-top: 40px;
-  }
-  .border-row {
-  border-bottom: 1px solid #ccc;
-  }
-  .bottom-buffer {
-  padding-bottom: 40px;
-  }
-  #zenblockquote {
-  border: 0px;
-  }
-  .border-left {
-  border-left: 1px solid grey;
-  padding-left: 25px;
-  }
-  .input-dash-prefix {
-    height: 22px;
-    width: 45px;
-  }
-  .input-dash-suffix {
-    height: 22px;
-    width: 65px;
-  }
-  .clickable {
-    cursor: pointer;
-  }
-  </style>
-  <body>
-    <div id="wrap">
-      <section ng-include="'partials/nav.html'">
-      </section>
-      <section ng-include="'partials/flash.html'">
-      </section>
-      <section ng-include="'partials/messages.html'">
-      </section>
-      <div class="text-center">
-        <img id="spinner" ng-src="images/spin.gif" style="display:none;">
-      </div>
-      <div ng-view class="main">
-      </div>
+    <link href="stylesheets/main.css" rel="stylesheet">
+</head>
+<body>
+    <div id="wrap" class="container">
+        <section ng-include="'partials/nav.html'">
+        </section>
+        <section ng-include="'partials/flash.html'">
+        </section>
+        <section ng-include="'partials/messages.html'">
+        </section>
+        <div class="text-center">
+            <img id="spinner" ng-src="images/spin.gif" style="display:none;">
+        </div>
+        <div ng-view class="main">
+        </div>
     </div>
     <footer class="footer" ng-controller="FooterCtrl">
-      <div class="container text-center">
-        <blockquote id="zenblockquote">
-          <p class="text-muted">{{zen.message}}</p>
-          <footer>{{zen.author}}</footer>
-      </blockquote>
-      <a href="https://github.com/ah450/runner-frontend"><img src="images/github.png" title="Fork Me" alt="Fork me" ></a>
-    </div>
-  </footer>
+        <div class="container text-center">
+            <blockquote id="zenblockquote">
+                <p class="text-muted">{{zen.message}}</p>
+                <footer>{{zen.author}}</footer>
+            </blockquote>
+            <a href="https://github.com/ah450/runner-frontend"><img src="images/github.png" title="Fork Me" alt="Fork me">
+            </a>
+        </div>
+    </footer>
+    <script src="app.js" charset="utf-8"></script>
 </body>
+
 </html>

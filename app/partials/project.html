@@ -3,21 +3,17 @@
     <div class="page-header">
         <h1 class="text-primary">{{project.name}}</h1>
     </div>
-    <div class="container" ng-if="project.tests.length > 0 && isTeacher">
-        <div class="row">
-            <div class="col-md-6">
-                <h4 class="text-primary" >Test Files <span class="glyphicon glyphicon-plus" data-toggle="collapse" id="projectTestFilesExpand" data-target="#projectTestFiles"></span></h4>
-                <div ng-if="isTeacher" id="projectTestFiles" class="container collapse">
-                        <div class="row" ng-repeat="test in project.tests">
-                            <div class="col-md-6">
-                                <p class="text-primary clickable" ng-click="downloadHandler(test.download_url)">{{test.name}}</p>
-                            </div>
-                        </div>
+    <div class="row" ng-if="project.tests.length > 0 && isTeacher">
+        <div class="col-md-6">
+            <h4 class="text-primary">Test Files <span class="glyphicon glyphicon-plus" data-toggle="collapse" id="projectTestFilesExpand" data-target="#projectTestFiles"></span></h4>
+            <div ng-if="isTeacher" id="projectTestFiles" class="row collapse">
+                <div class="col-md-12" ng-repeat="test in project.tests">
+                    <p class="text-primary clickable" ng-click="downloadHandler(test.download_url)">{{test.name}}</p>
                 </div>
             </div>
         </div>
     </div>
-    
+
 
     <form class="form-horizontal" ng-if="isStudent && project.can_submit">
         <div class="form-group">
@@ -33,19 +29,23 @@
         </div>
     </form>
 
-    <div class="container">
+    <div class="row">
         <!-- Upload Submissions -->
         <!-- Current Submissions -->
-        <p class="lead text-info row" data-ng-if="submissions.length == 0">No submissions, yet!</p>
-        <div class="panel-group" id="submissionsAccordion">
+        <p class="lead text-info col-md-12" data-ng-if="submissions.length == 0">No submissions, yet!</p>
+        <div class="panel-group col-md-12" id="submissionsAccordion">
 
-            <div data-ng-repeat="submission in submissions" data-ng-class="{'panel':true, 'panel-info':!submission.processed, 'panel-danger':submission.processed && !submission.compile_status, 'panel-success':submission.processed && submission.compile_status && submission.all_tests_passed, 'panel-warning': submission.processed && submission.compile_status && !submission.all_tests_passed}">
+            <div data-ng-repeat="submission in submissions" data-ng-class="{'panel':true, 'panel-info':!submission.processed, 'panel-danger':submission.processed && !submission.compile_status, 'panel-success': submission.processed && submission.compile_status && submission.all_tests_passed, 'panel-warning': submission.processed && submission.compile_status && !submission.all_tests_passed}">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                       <a data-toggle="collapse" class="clickable" data-parent="#submissionsAccordion" data-target="#{{submission.id}}" >
+
                         <span data-ng-if="!submission.processed" class="pull-right"><img id="spinner" ng-src="images/spin.gif"></span>
-                        <span data-ng-if="submission.processed && submission.compile_status" class="pull-right"><i class="glyphicon glyphicon-ok-circle"></i></span>
-                        <span data-ng-if="submission.processed && !submission.compile_status" class="pull-right"><i class="glyphicon glyphicon-remove-circle"></i></span>
+
+                        <span data-ng-if="submission.processed && submission.compile_status" class="pull-right"><span ng-if="submission.tests.length">{{submission.tests_passed_count}}/{{submission.tests.length}}</span> <i class="glyphicon glyphicon-ok-circle"></i></span>
+
+                        <span data-ng-if="submission.processed && !submission.compile_status" class="pull-right"><span ng-if="submission.tests.length">{{submission.tests_passed_count}}/{{submission.tests.length}}</span> <i class="glyphicon glyphicon-remove-circle"></i></span>
+
                         Submission {{submission.id}} | {{submission.created_at_pretty}} | by {{submission.submitter.name}}
                       </a>
                     </h4>
@@ -73,7 +73,7 @@
                                                     <span data-ng-if="case.passed" class="text-success"><i class="glyphicon glyphicon-ok-circle"></i></span>
                                                     <span data-ng-if="!case.passed" class="text-danger"><i class="glyphicon glyphicon-remove-circle"></i></span> {{case.name}}
                                                 </div>
-                                                <pre data-ng-if="!case.passed" class="list-group-item-text" >{{case.detail}}</pre>
+                                                <pre data-ng-if="!case.passed" class="list-group-item-text">{{case.detail}}</pre>
                                             </div>
                                         </div>
                                     </div>

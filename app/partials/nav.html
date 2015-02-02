@@ -1,4 +1,4 @@
-<div id="wrap">
+<div class="container-fluid">
   <div class="navbar navbar-default navbar-fixed-top" role="navigation"  ng-controller="NavbarCtrl">
     <div class="container">
       <div class="navbar-header">
@@ -11,18 +11,16 @@
         <a class="navbar-brand" ng-class="{'active': currentLink() == 'home' }" href="#/home">JPR</a>
       </div>
       <center>
-      <div class="navbar-collapse collapse" id="navbar-main">
+      <div class="navbar-collapse collapse navbar-responsive-collapse">
         <ul class="nav navbar-nav">
-          <ul class="nav navbar-nav">
-            <li><a ng-class="{'active': currentLink() == 'courses' }" class="btn" href="#/courses">Courses</a></li>
-          </ul>
+            <li ng-class="{'active': currentLink() == 'courses' }" ng-if="Auth.isLoggedIn()"><a href="#/courses">Courses</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right" ng-if="Auth.isLoggedIn()">
           <li ng-class="{'active': currentLink() == Auth.getUser().name}"><a href="#{{Auth.getUser().url}}">Hello {{Auth.getUser().name}}</a></li>
           <li><a href='#/home' ng-click="Auth.clear()">Logout</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right" >
-          <li ng-if="!Auth.isLoggedIn()" ng-class="{'active': currentLink() == 'home' }"><a class="btn" href="#/home">Login/Signup</a></li>
+          <li ng-if="!Auth.isLoggedIn()" ng-class="{'active': currentLink() == 'home' }"><a href="#/home">Login/Signup</a></li>
         </ul>
       </div>
       </center>

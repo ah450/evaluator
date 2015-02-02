@@ -1,5 +1,5 @@
-<div class="container">
-    <div class="row border-row">
+<div class="row">
+    <div class="col-md-12 border-row">
         <div class="panel panel-default">
             <div class="panel-body">
                 <div>
@@ -65,18 +65,18 @@
     </form>
 </section>
 <!-- List projects -->
-<div class="container">
-    <div class="row text-center" ng-if="!loaded">
+<div class="row">
+    <div class="col-md-12 text-center" ng-if="!loaded">
         <img id="spinner" ng-src="images/spin.gif">
     </div>
-    <div class="row" ng-repeat="project in projects | filter:projectQuery | orderBy: '-due_date'">
-        <div class="col-md-3 col-lg-3">
-            <h4><a href="#{{project.url}}">{{project.name}}</a></h4>
-            <p class="text-muted text-center">Due Date {{project.due_date_pretty}}</p>
-            <p class="text-muted text-center">Since {{project.created_at_pretty}}</p>
-        </div>
+    <div class="list-group">
+        <a href="#{{project.url}}" class="list-group-item" ng-repeat="project in projects | filter:projectQuery | orderBy: '-due_date'">
+            <h4 class="list-group-item-heading"><span class="text-primary">{{project.name}}</span></h4>
+            <p class="list-group-item-text">Due Date {{project.due_date_pretty}} | Posted Since {{project.created_at_pretty}}</p>
+        </a>
     </div>
 </div>
+
 <div class="row text-center" ng-if="!loaded">
     <img id="spinner" ng-src="images/spin.gif">
 </div>

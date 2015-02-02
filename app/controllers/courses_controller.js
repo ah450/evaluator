@@ -1,6 +1,7 @@
 jprApp.controller('CourseListCtrl', ['$scope', 'Course', 'Page', 'Auth', function($scope, Course, Page, Auth) {
   
   $scope.courses = [];
+  $scope.courseQuery = "";
   $scope.loading = true;
   $scope.creating = false;
   function handleCoursesLoad(courses) {

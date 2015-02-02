@@ -1,80 +1,82 @@
 <style>
-*, *:before, *:after {box-sizing:  border-box !important;}
+*,
+*:before,
+*:after {
+    box-sizing: border-box !important;
+}
 .block-link {
-text-decoration: none !important;
-color: inherit !important;
+    text-decoration: none !important;
+    color: inherit !important;
 }
 </style>
-<div class="container">
-  
-  <div class="row border-row">
+
+<div class="row border-row">
     <div class="panel panel-default">
-      <div class="panel-body">
-        <div>
-          <div class="input-group col-md-12">
-            <input type="text" class="form-control" placeholder="Search" ng-model="courseQuery" />
-            <span class="input-group-btn">
-            <span class="btn btn-danger glyphicon glyphicon-plus" data-toggle="collapse" id="newCourseExpandButton" data-target="#newCourse" ng-disabled="!isLoggedIn() || isStudent">
+        <div class="panel-body">
+            <div class="input-group col-md-12">
+                <input type="text" class="form-control" placeholder="Search" ng-model="courseQuery" />
+                <div class="input-group-btn">
+                    <span class="btn btn-danger glyphicon glyphicon-plus" data-toggle="collapse" id="newCourseExpandButton" data-target="#newCourse" ng-show="isLoggedIn() && !isStudent">
             </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row top-buffer border-row collapse" id="newCourse">
+    <div class="text-center" ng-if="creating">
+        <p class="text-info">Creating new course<span class="ellipsis_animated-inner">
+                  <span>.</span>
+            <span>.</span>
+            <span>.</span>
             </span>
-          </div>
-        </div>
-      </div>
+        </p>
     </div>
-  </div>
-  
-  <div class="row top-buffer border-row collapse" id="newCourse">
-      <div class="text-center" ng-if="creating">
-          <p class="text-info">Creating new course<span class="ellipsis_animated-inner">
-                  <span>.</span>
-                  <span>.</span>
-                  <span>.</span>
-              </span></p>
-      </div>
-      <form class="form-horizontal" style="margin-bottom: 10px;" ng-hide="creating">
+    <form class="form-horizontal" style="margin-bottom: 10px;" ng-hide="creating">
         <div class="form-group">
-          <label for="newCourseName" class="control-label col-sm-2">Name</label>
-          <div class="col-sm-10">
-            <input type="text" name="newCourseName" ng-model="newCourse.name" id="newCourseName" class="form-control" placeholder="Course Name" required>
-          </div>
+            <label for="newCourseName" class="control-label col-sm-2">Name</label>
+            <div class="col-sm-10">
+                <input type="text" name="newCourseName" ng-model="newCourse.name" id="newCourseName" class="form-control" placeholder="Course Name" required>
+            </div>
         </div>
         <div class="form-group">
-          <label for="newCourseDescription" class="control-label col-sm-2">Description</label>
-          <div class="col-sm-10">
-            <input type="text" name="newCourseDescription" id="newCourseDescription" class="form-control" ng-model="newCourse.description" placeholder="Describe the course" required>
-          </div>
+            <label for="newCourseDescription" class="control-label col-sm-2">Description</label>
+            <div class="col-sm-10">
+                <input type="text" name="newCourseDescription" id="newCourseDescription" class="form-control" ng-model="newCourse.description" placeholder="Describe the course" required>
+            </div>
         </div>
         <div class="form-group">
-          <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-primary" ng-click="createCourse()" >Create!</button>
-          </div>
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary" ng-click="createCourse()">Create!</button>
+            </div>
         </div>
-      </form>
-  </div>
-  <div class="row text-center" ng-if="loading">
-      <img id="spinner" ng-src="images/spin.gif">
-  </div>
-  <div class="row text-center" ng-if="!loading && courses.length == 0">
-        <p class="text-info">There are no courses</p>
-  </div>
-  <div class="row top-buffer border-row" ng-repeat="course in courses| filter:courseQuery">
-    <div class="col-md-6 col-lg-6">
-      <a href="#{{course.url}}">{{course.name}}</a>
-      <a href="" class="label label-primary" ng-if="isLoggedIn()" ng-click="join(course)">Join</a>
-      <div class="row">
-        <div class="col-md-6 col-lg-6">
-          {{course.description}}
+    </form>
+</div>
+
+<div class="row text-center" ng-if="loading">
+    <img id="spinner" ng-src="images/spin.gif">
+</div>
+
+<div class="row text-center" ng-if="!loading && courses.length == 0">
+    <p class="text-info">There are no courses</p>
+</div>
+<div class="row top-buffer border-row" ng-repeat="course in courses| filter:courseQuery">
+    <div class="panel panel-default col-md-6 col-lg-6">
+        <div class="panel-heading">
+            <a href="" class="pull-right label label-primary" ng-if="isLoggedIn()" ng-click="join(course)">Join</a>
+            <a href="#{{course.url}}">
+                <h3 class="panel-title">{{course.name}}</h3>
+            </a>
         </div>
-      </div>
-      <div class="row" ng-if="isLoggedIn()">
-        <div class="button-group" role="group">
-          <a href="#{{course.supervisor.url}}" class="btn btn-small"  title="Course Supervisor">{{course.supervisor.name}}</a>
-          <a href="#{{course.tas_url}}" class="btn btn-small" title="Course Teachers">Teachers</a>
-          <a href="#{{course.students_url}}" class="btn btn-small" title="Course Students">Students</a>
-          <a href="#{{course.projects_url}}" class="btn btn-small" title="Course projects">Projects</a>
+        <div class="panel-body">
+            <p>{{course.description}}</p>
         </div>
-      </div>
+        <div class="panel-footer" ng-if="isLoggedIn()">
+            <a href="#{{course.supervisor.url}}" title="Course Supervisor">{{course.supervisor.name}}</a> |
+            <a href="#{{course.tas_url}}" title="Course Teachers">Teachers</a> |
+            <a href="#{{course.students_url}}" title="Course Students">Students</a> |
+            <a href="#{{course.projects_url}}" title="Course projects">Projects</a>
+        </div>
     </div>
-  </div>
-  
 </div>
