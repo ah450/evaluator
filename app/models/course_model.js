@@ -25,20 +25,20 @@ jprServices.factory('Course', ['$q', 'User', 'CourseResource', 'BaseModel', '$up
     };
 
     Course.prototype.create_project = function(project, success, failure){
-        if (project.tests.length == 0) {
+        if (project.tests.length === 0) {
             // create a project without test cases
             ProjectResource.create({
                 courseName: this.data.name
             }, project, function(createdProject){
-                success(new Project(createdProject, true))
+                success(new Project(createdProject, true));
             }, function(httpResponse){
                 failure(httpResponse);
             });
-        }else {
-            var formDataNames = []
+        } else {
+            var formDataNames = [];
             for (var i = 0; i < project.tests.length; i++) {
                 formDataNames.push('file[' + i +']');
-            };
+            }
             $upload.upload({
                 url: Host.api_base + this.data.projects_url,
                 method: 'POST',
@@ -66,18 +66,18 @@ jprServices.factory('Course', ['$q', 'User', 'CourseResource', 'BaseModel', '$up
     });
     Course.prototype.__defineSetter__('name', function(value) {
         this.modified = true;
-        return this.data.name = value;
+        return (this.data.name = value);
     });
     Course.prototype.__defineSetter__('description', function(value){
         this.modified = true;
-        return this.data.description = value;
+        return (this.data.description = value);
     });
     Course.prototype.__defineGetter__('description', function(){
         return this.data.description;
     });
     Course.prototype.__defineGetter__('supervisor', function(){
         return new User(this.data.supervisor, true);
-    })
+    });
 
     Course.prototype.__defineGetter__('students', function(){
         students = $q.defer();
@@ -145,15 +145,15 @@ jprServices.factory('Course', ['$q', 'User', 'CourseResource', 'BaseModel', '$up
 
     Course.$all = function(){
         return new Course({}, false).all();
-    }
+    };
 
     Course.$get = function(name){
         return new Course({}, false).get(name);
-    }
+    };
 
     Course.$fromProject = function(project){
         return new Course(project.course, true);
-    }
+    };
 
     return Course;
     

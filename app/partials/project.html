@@ -1,14 +1,47 @@
 <section data-ng-if="loaded">
-
     <div class="page-header">
+         <button type="button" class="btn btn-default pull-right" ng-if="isTeacher" aria-label="Edit" data-toggle="collapse" data-target="#projectEdit" aria-expanded="false" aria-controls="projectEdit">Edit <i class="glyphicon glyphicon-edit"></i>
+        </button>
         <h1 class="text-primary">{{project.name}}</h1>
     </div>
+    <div class="row collapse" id="projectEdit" ng-if="isTeacher">
+        <div class="col-md-12">
+            <form id="projectEditForm" class="form-horizontal top-buffer">
+                <div class="form-group" ng-class="{'has-error': dateError}">
+                    <label for="testFiles" class="control-label col-sm-2">Test Files</label>
+                    <div class="col-sm-5">
+                        <input type="file" id="testFiles" class="form-control" name="testFiles" ng-file-select ng-model="project.tests" ng-multiple="true">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2">Due Date</label>
+                    <div class="dropdown col-sm-5">
+                        <a class="dropdown-toggle" id="project_due_date" role="button" data-toggle="dropdown" data-target="#" href="">
+                            <div class="input-group">
+                                <input type="text" class="form-control" ng-model="due_date"><span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                            <datetimepicker ng-model="due_date" data-datetimepicker-config="{ dropdownSelector: '#project_due_date' }"></datetimepicker>
+                        </ul>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" class="btn btn-primary" ng-click="updateProject()" />
+                          Update Project
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
     <div class="row" ng-if="project.tests.length > 0 && isTeacher">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <h4 class="text-primary">Test Files <span class="glyphicon glyphicon-plus" data-toggle="collapse" id="projectTestFilesExpand" data-target="#projectTestFiles"></span></h4>
             <div ng-if="isTeacher" id="projectTestFiles" class="row collapse">
                 <div class="col-md-12" ng-repeat="test in project.tests">
-                    <p class="text-primary clickable" ng-click="downloadHandler(test.download_url)">{{test.name}}</p>
+                    <a class="text-primary clickable" href="" ng-click="downloadHandler(test.download_url)">{{test.name}}</a>
                 </div>
             </div>
         </div>

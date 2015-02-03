@@ -274,7 +274,7 @@ jprServices.factory('Zen', function() {
   {message: "If you have too many special cases, you are doing it wrong.", author: "Craig Zerouni"}, 
   {message: "The true sign of intelligence is not knowledge but imagination.", author: "Albert Einstein"}, 
   {message: "If people are good only because they fear punishment, and hope for reward, then we are a sorry lot indeed.", author: "Albert Einstein"},
-  {message: "Saying that Java is good because it works on all platforms is like saying anal sex is good because it works on all genders.", author: "Unknown"},
+  // {message: "Saying that Java is good because it works on all platforms is like saying anal sex is good because it works on all genders.", author: "Unknown"},
   {message: "Stop guessing and start asking.", author: "Unknown"},
   {message: "After three days without programming, life becomes meaningless.", author: "The Tao of programming"},
   {message: "Testing shows the presence, not the absence of bugs.", author: "Edsger W. Dijkstra"},

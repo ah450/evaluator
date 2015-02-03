@@ -8562,57 +8562,68 @@ button.close {
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/draz\/web\/runner-frontend\/app\/style\/main\.scss}line{font-family:\0000314}}
-html, body {
+html {
   height: 100%;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/draz\/web\/runner-frontend\/app\/style\/main\.scss}line{font-family:\0000317}}
-#wrap {
+html, body {
+  position: relative;
+  width: 100%;
   min-height: 100%;
-  height: auto !important;
-  height: 100%;
-  margin: 0 auto -120px;
-  padding: 0 0 140px;
+  margin: 0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/draz\/web\/runner-frontend\/app\/style\/main\.scss}line{font-family:\0000324}}
-body {
-  padding-top: 40px;
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/draz\/web\/runner-frontend\/app\/style\/main\.scss}line{font-family:\0000323}}
+#wrap {
+  margin: 0;
+  width: 100%;
+  min-height: 100%;
+  padding: 60px 0 140px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/draz\/web\/runner-frontend\/app\/style\/main\.scss}line{font-family:\0000327}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/draz\/web\/runner-frontend\/app\/style\/main\.scss}line{font-family:\0000329}}
+footer.footer {
+  position: absolute;
+  bottom: 0;
+  padding-bottom: 20px;
+  text-align: center;
+  width: 100%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/draz\/web\/runner-frontend\/app\/style\/main\.scss}line{font-family:\0000336}}
 .top-buffer {
   margin-top: 40px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/draz\/web\/runner-frontend\/app\/style\/main\.scss}line{font-family:\0000330}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/draz\/web\/runner-frontend\/app\/style\/main\.scss}line{font-family:\0000339}}
 .border-row {
   border-bottom: 1px solid #ccc;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/draz\/web\/runner-frontend\/app\/style\/main\.scss}line{font-family:\0000333}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/draz\/web\/runner-frontend\/app\/style\/main\.scss}line{font-family:\0000342}}
 .bottom-buffer {
   padding-bottom: 40px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/draz\/web\/runner-frontend\/app\/style\/main\.scss}line{font-family:\0000336}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/draz\/web\/runner-frontend\/app\/style\/main\.scss}line{font-family:\0000345}}
 #zenblockquote {
   border: 0px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/draz\/web\/runner-frontend\/app\/style\/main\.scss}line{font-family:\0000339}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/draz\/web\/runner-frontend\/app\/style\/main\.scss}line{font-family:\0000348}}
 .border-left {
   border-left: 1px solid grey;
   padding-left: 25px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/draz\/web\/runner-frontend\/app\/style\/main\.scss}line{font-family:\0000343}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/draz\/web\/runner-frontend\/app\/style\/main\.scss}line{font-family:\0000352}}
 .input-dash-prefix {
   height: 22px;
   width: 45px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/draz\/web\/runner-frontend\/app\/style\/main\.scss}line{font-family:\0000347}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/draz\/web\/runner-frontend\/app\/style\/main\.scss}line{font-family:\0000356}}
 .input-dash-suffix {
   height: 22px;
   width: 65px;

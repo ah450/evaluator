@@ -11,18 +11,27 @@ $icon-font-path: "../fonts/";
 .main {
     margin-top: 100px;
 }
-html, body {
+html {
     height: 100%;
+}
+html, body {
+    position: relative;
+    width: 100%;
+    min-height: 100%;
+    margin: 0;
 }
 #wrap {
+    margin: 0;
+    width: 100%;
     min-height: 100%;
-    height: auto !important;
-    height: 100%;
-    margin: 0 auto -120px;
-    padding: 0 0 140px;
+    padding: 60px 0 140px;
 }
-body {
-    padding-top: 40px;
+footer.footer {
+    position: absolute;
+    bottom:0;
+    padding-bottom:20px;
+    text-align: center;
+    width: 100%;
 }
 .top-buffer {
     margin-top: 40px;

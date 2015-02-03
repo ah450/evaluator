@@ -1,4 +1,4 @@
-jprServices.factory('Project', ['$q','$upload', 'ProjectResource', 'BaseModel', 'Submission', 'Host', function($q,$upload, ProjectResource, BaseModel, Submission, Host) {
+jprServices.factory('Project', ['$q', '$upload', 'ProjectResource', 'BaseModel', 'Submission', 'Host', function($q, $upload, ProjectResource, BaseModel, Submission, Host) {
     Project.prototype = Object.create(BaseModel.prototype);
     Project.prototype.constructor = Project;
 
@@ -34,22 +34,28 @@ jprServices.factory('Project', ['$q','$upload', 'ProjectResource', 'BaseModel', 
         return new Date(this.data.due_date);
     });
 
-    Project.prototype.__defineGetter__('due_date_pretty', function() {
-        return moment(this.data.due_date).format("dddd, MMMM Do YYYY");
+    Project.prototype.__defineSetter__('due_date', function(due_date) {
+        console.log(due_date);
+        this.data.due_date = due_date.toISOString();
+        return due_date;
     });
 
-    Project.prototype.__defineGetter__('submissions', function(){
+    Project.prototype.__defineGetter__('due_date_pretty', function() {
+        return moment(this.data.due_date).format("dddd, MMMM Do YYYY, h:mm:ss");
+    });
+
+    Project.prototype.__defineGetter__('submissions', function() {
         var deferred = $q.defer();
 
         ProjectResource.get_submissions({
             courseName: this.data.course.name,
             projectName: this.data.name,
-        }, function(submissions){
-            submissions = submissions.map(function(element){
+        }, function(submissions) {
+            submissions = submissions.map(function(element) {
                 return new Submission(element, true);
             });
             deferred.resolve(submissions);
-        }, function(httpResponse){
+        }, function(httpResponse) {
             deferred.reject(httpResponse);
         });
 
@@ -71,12 +77,47 @@ jprServices.factory('Project', ['$q','$upload', 'ProjectResource', 'BaseModel', 
         });
     };
 
+    Project.prototype.update_project = function(project, success, failure) {
+
+        var formDataNames = [];
+        for (var i = 0; i < project.tests.length; i++) {
+            formDataNames.push('file[' + i + ']');
+        }
+        $upload.upload({
+            url: Host.api_base + this.data.url,
+            method: 'PUT',
+            headers: {
+                'X-Auth-Token': 'Replace Me'
+            },
+            data: {
+                due_date: this.data.due_date,
+            },
+            file: project.tests,
+            fileFormDataName: formDataNames
+        }).success(function(data) {
+            success(new Project(data, true));
+        }).error(function(data, status, headers, config) {
+            failure({
+                data: data,
+                status: status,
+                headers: headers,
+                config: config
+            });
+        });
+
+    };
+
     Project.prototype.__defineGetter__('can_submit', function() {
         return this.data.can_submit;
     });
 
     Project.prototype.__defineGetter__('tests', function() {
         return this.data.tests;
+    });
+
+
+    Project.prototype.__defineSetter__('tests', function(tests) {
+        return this.data.tests = tests;
     });
 
     Project.$all = function() {
