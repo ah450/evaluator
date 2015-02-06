@@ -22,7 +22,7 @@
                             </div>
                         </a>
                         <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                            <datetimepicker ng-model="due_date" data-datetimepicker-config="{ dropdownSelector: '#project_due_date' }"></datetimepicker>
+                            <datetimepicker ng-model="due_date" data-datetimepicker-config="{ dropdownSelector: '#project_due_date' }" data-on-set-time="updateDate(newDate, oldDate)"></datetimepicker>
                         </ul>
                     </div>
                 </div>
@@ -36,6 +36,7 @@
             </form>
         </div>
     </div>
+    
     <div class="row" ng-if="project.tests.length > 0 && isTeacher">
         <div class="col-md-12">
             <h4 class="text-primary">Test Files <span class="glyphicon glyphicon-plus" data-toggle="collapse" id="projectTestFilesExpand" data-target="#projectTestFiles"></span></h4>
@@ -68,7 +69,7 @@
         <p class="lead text-info col-md-12" data-ng-if="submissions.length == 0">No submissions, yet!</p>
         <div class="panel-group col-md-12" id="submissionsAccordion">
 
-            <div data-ng-repeat="submission in submissions" data-ng-class="{'panel':true, 'panel-info':!submission.processed, 'panel-danger':submission.processed && !submission.compile_status, 'panel-success': submission.processed && submission.compile_status && submission.all_tests_passed, 'panel-warning': submission.processed && submission.compile_status && !submission.all_tests_passed}">
+            <div data-ng-repeat="submission in submissions | orderBy:'-created_at'" data-ng-class="{'panel':true, 'panel-info':!submission.processed, 'panel-danger':submission.processed && !submission.compile_status, 'panel-success': submission.processed && submission.compile_status && submission.all_tests_passed, 'panel-warning': submission.processed && submission.compile_status && !submission.all_tests_passed}">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                       <a data-toggle="collapse" class="clickable" data-parent="#submissionsAccordion" data-target="#{{submission.id}}" >

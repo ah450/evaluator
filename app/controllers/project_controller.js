@@ -28,7 +28,7 @@ jprApp.controller('ProjectCtrl', ['$scope', '$routeParams', '$upload', '$locatio
         }, projectLoadFailureCallback);
 
         $scope.project = project;
-        // $scope.due_date = project.due_date;
+        $scope.due_date = project.due_date;
         Page.setSection($scope.project.name);
     }
 
@@ -69,25 +69,27 @@ jprApp.controller('ProjectCtrl', ['$scope', '$routeParams', '$upload', '$locatio
         $scope.project.submitCode($scope.code.file, submissionSuccessCallback, submissionFailureCallback);
     };
 
+    $scope.updateDate = function (newDate, oldDate) {
+        $scope.project.due_date = newDate;
+    };
 
     $scope.updateProject = function() {
-    Page.clearErrorMessages();
+        Page.clearErrorMessages();
 
-    $scope.updating = true;
-    $scope.project.due_date = $scope.due_date;
-    $scope.project.update_project($scope.project, function(project) {
-      $scope.updating = false;
-      $scope.project = project;
-      Page.addInfoMessage('Project Updated!');
-    }, function(httpResponse) {
-      $scope.creating = false;
-      if (httpResponse.status == 403) {
-        Page.addErrorMessage('Must be a course teacher to update a project.');
-      } else  {
-        Page.addErrorMessage(httpResponse.data.message);
-      }
-    });
-  };
+        $scope.updating = true;
+        $scope.project.update_project($scope.project, function(project) {
+            $scope.updating = false;
+            $scope.project = project;
+            Page.addInfoMessage('Project Updated!');
+        }, function(httpResponse) {
+            $scope.creating = false;
+            if (httpResponse.status == 403) {
+                Page.addErrorMessage('Must be a course teacher to update a project.');
+            } else {
+                Page.addErrorMessage(httpResponse.data.message);
+            }
+        });
+    };
 
 
 

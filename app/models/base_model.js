@@ -5,7 +5,7 @@ jprServices.factory('BaseModel', ['$q', function($q) {
     this.modified = false;
     this.resource = resource;
     this.identifier_name = identifier_name;
-  };
+  }
 
   BaseModel.prototype.loadFromObject = function(data) {
     this.data = {};
@@ -17,8 +17,8 @@ jprServices.factory('BaseModel', ['$q', function($q) {
   };
 
   BaseModel.prototype.save = function(success, error) {
+    var parent_this = this;
     if (!this.exists) {
-      var parent_this = this;
       this.resource.create(this.data, function(data, headers) {
         parent_this.loadFromObject(data);
         parent_this.exists = true; // it now exists
@@ -28,7 +28,6 @@ jprServices.factory('BaseModel', ['$q', function($q) {
         error(httpResponse);
       });
     } else if (this.modified) {
-      var parent_this = this;
       this.resource.update(this.data, function(data, headers) {
         parent_this.loadFromObject(data);
         parent_this.modified = false;
@@ -73,7 +72,7 @@ jprServices.factory('BaseModel', ['$q', function($q) {
       defered.reject(httpResponse);
     });
     return defered.promise;
-  }
+  };
 
   BaseModel.prototype.__defineGetter__('created_at_pretty', function() {
     return moment(this.data.created_at).format("dddd, MMMM Do YYYY, h:mm:ss a");

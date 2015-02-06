@@ -35,7 +35,6 @@ jprServices.factory('Project', ['$q', '$upload', 'ProjectResource', 'BaseModel',
     });
 
     Project.prototype.__defineSetter__('due_date', function(due_date) {
-        console.log(due_date);
         this.data.due_date = due_date.toISOString();
         return due_date;
     });
@@ -117,7 +116,8 @@ jprServices.factory('Project', ['$q', '$upload', 'ProjectResource', 'BaseModel',
 
 
     Project.prototype.__defineSetter__('tests', function(tests) {
-        return this.data.tests = tests;
+        this.data.tests = tests;
+        return tests;
     });
 
     Project.$all = function() {
