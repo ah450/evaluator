@@ -39,7 +39,7 @@ module.exports = function(grunt) {
             options: {
                 sassDir: '<%= config.app %>/style',
                 cssDir: 'stylesheets',
-                generatedImagesDir: '.tmp/images/generated',
+                generatedImagesDir: 'tmp/images/generated',
                 imagesDir: '/images',
                 javascriptsDir: '<%= config.app %>',
                 fontsDir: 'fonts',
@@ -52,9 +52,8 @@ module.exports = function(grunt) {
                 raw: 'Sass::Script::Number.precision = 10\n'
             },
             dist: {
-                options: {
-                    generatedImagesDir: '/images/generated'
-                }
+               options: {
+               }
             },
             server: {
                 options: {
@@ -109,7 +108,7 @@ module.exports = function(grunt) {
         },
         clean: {
             temp: {
-                src: ['tmp']
+                src: ['tmp', 'stylesheets']
             },
             lib: {
                 src: ['lib']
@@ -156,9 +155,8 @@ module.exports = function(grunt) {
                     src: ['images/**'],
                     dest: '/'
                 }, {
-                    cwd: '/stylesheets/**',
-                    src: ['*.css'],
-                    dest: '/stylesheets'
+                    src: ['stylesheets/**'],
+                    dest: '/'
                 }, {
                     cwd: 'app/bower_components/ellipsis-animated/src/',
                     src: ['ellipsis-animated.css'],
@@ -192,7 +190,7 @@ module.exports = function(grunt) {
     });
    
     grunt.registerTask('dev', ['bower', 'connect:server', 'clean:temp', 'watch']);
-    grunt.registerTask('package', ['bower', 'html2js:dist', 'concat:dist', 'compass:dist', 'uglify:dist',
-        'clean:temp', 'clean:lib', 'compress:dist'
+    grunt.registerTask('package', ['bower', 'clean:temp','html2js:dist', 'concat:dist', 'compass:dist', 'uglify:dist',
+         'clean:lib', 'compress:dist'
     ]);
 };

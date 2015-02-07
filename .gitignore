@@ -1,5 +1,5 @@
 logs/*
-.sass_cache
+#.sass_cache
 !.gitkeep
 node_modules/
 app/bower_components/
