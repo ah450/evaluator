@@ -1,17 +1,21 @@
 <section ng-if="loaded">
   <div class="page-header">
-    <h1 class="text-primary">{{course.name}}</h1>
+    <h1 class="text-primary">{{course.name}}<a href="" class="pull-right label label-primary" ng-show="loggedIn && !courseMember" ng-click="join(course)">Join</a></h1>
   </div>
   <blockquote>{{course.description}}</blockquote>
   <p class="text-info">Supervisor:
   <a href="#{{course.supervisor.url}}">{{course.supervisor.name}}</a>
   </p>
-  <h3><a href="#{{course.students_url}}">Students</a></h3>
-  <section ng-include="'partials/course_students.html'" ng-controller="CourseStudentsCtrl">
+  <section >
+    <h3><a href="#{{course.students_url}}">Students</a></h3>
+    <section ng-include="'partials/course_students.html'" ng-controller="CourseStudentsCtrl">
+    </section>
+    <h3><a href="#{{course.tas_url}}">Teachers</a></h3>
+    <section ng-include="'partials/course_teachers.html'" ng-controller="CourseTeachersCtrl">
+    </section>
+    <section ng-if="courseMember">
+      <h3><a href="#{{course.projects_url}}">Projects</a></h3>
+      <section ng-include="'partials/course_projects.html'" ng-controller="CourseProjectsCtrl"></section>
+    </section>
   </section>
-  <h3><a href="#{{course.tas_url}}">Teachers</a></h3>
-  <section ng-include="'partials/course_teachers.html'" ng-controller="CourseTeachersCtrl">
-  </section>
-  <h3><a href="#{{course.projects_url}}">Projects</a></h3>
-  <section ng-include="'partials/course_projects.html'" ng-controller="CourseProjectsCtrl"></section>
 </section>
