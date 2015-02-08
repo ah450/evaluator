@@ -75,7 +75,9 @@
         <div class="panel-footer" ng-if="isLoggedIn()">
             <a href="#{{course.supervisor.url}}" title="Course Supervisor">{{course.supervisor.name}}</a> |
             <a href="#{{course.tas_url}}" title="Course Teachers">Teachers</a> |
+            <span data-ng-if="!isStudent" >
             <a href="#{{course.students_url}}" title="Course Students">Students</a> |
+            </span>
             <a href="#{{course.projects_url}}" title="Course projects">Projects</a>
         </div>
     </div>

@@ -172,6 +172,9 @@ jprServices.factory('Auth', ['AuthBase', 'User', function(AuthBase, User){
   auth.getUser = function(){
     return new User(AuthBase.getUser(), true);
   };
+  auth.isUser = function (user) {
+    return auth.getUser().id === user.id;
+  };
   auth.isLoggedIn = AuthBase.isLoggedIn;
   auth.setToken = AuthBase.setToken;
   auth.setUser = AuthBase.setUser;
@@ -233,6 +236,10 @@ jprServices.factory('Validators', function() {
 
   validators.validatePassword = function(password) {
     return password && password.length >= 8;
+  }
+
+  validators.validateSamePassword = function(password, confirmPass) {
+    return password===confirmPass;
   }
 
   validators.validateId = function(id_prefix, id_suffix) {
