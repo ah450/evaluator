@@ -64,7 +64,10 @@
 <div class="row top-buffer border-row" ng-repeat="course in courses| filter:courseQuery">
     <div class="panel panel-default col-md-6 col-lg-6">
         <div class="panel-heading">
-            <a href="" class="pull-right label label-primary" ng-if="isLoggedIn()" ng-click="join(course)">Join</a>
+            <div class="pull-right" style="display: inline-block;">
+                <a href="" class="label label-primary" ng-if="isLoggedIn()" ng-click="join(course)">Join</a>
+                <span class="label label-info" ng-if="course.published">Published</span>
+            </div>
             <a href="#{{course.url}}">
                 <h3 class="panel-title">{{course.name}}</h3>
             </a>
