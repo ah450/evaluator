@@ -49,11 +49,12 @@ jprServices.factory('Project', ['$q', '$upload', 'ProjectResource', 'BaseModel',
         ProjectResource.get_submissions({
             courseName: this.data.course.name,
             projectName: this.data.name,
-        }, function(submissions) {
-            submissions = submissions.map(function(element) {
+        }, function(submissionPage) {
+            var submissions = submissionPage.submissions.map(function(element) {
                 return new Submission(element, true);
             });
-            deferred.resolve(submissions);
+            submissionPage.submissions = submissions;
+            deferred.resolve(submissionPage);
         }, function(httpResponse) {
             deferred.reject(httpResponse);
         });
