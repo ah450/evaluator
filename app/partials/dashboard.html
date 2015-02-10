@@ -21,6 +21,7 @@
     <div class="col-md-12" >
         <div class="panel panel-default col-md-6 col-lg-6" ng-repeat="course in courses">
             <div class="panel-heading">
+                <span class="label label-info" ng-if="course.published">Published</span>
                 <a href="#{{course.url}}">
                     <h3 class="panel-title">{{course.name}}</h3>
                 </a>
