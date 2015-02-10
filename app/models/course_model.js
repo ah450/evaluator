@@ -79,6 +79,14 @@ jprServices.factory('Course', ['$q', 'User', 'CourseResource', 'BaseModel', '$up
         return new User(this.data.supervisor, true);
     });
 
+    Course.prototype.__defineGetter__('published', function() {
+        return this.data.published == 'true';
+    });
+
+    Course.prototype.__defineSetter__('published', function(value) { 
+        this.data.published = value ? 'True': 'False';
+        return this.published;
+    });
     Course.prototype.__defineGetter__('students', function(){
         students = $q.defer();
         this.resource.query({
