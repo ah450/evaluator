@@ -25,6 +25,12 @@ jprServices.factory('Course', ['$q', 'User', 'CourseResource', 'BaseModel', '$up
     };
 
     Course.prototype.create_project = function(project, success, failure){
+
+        if (project.published) {
+            project.published = 'True';
+        } else {
+            project.published = 'False';
+        }
         if (project.tests.length === 0) {
             // create a project without test cases
             ProjectResource.create({
