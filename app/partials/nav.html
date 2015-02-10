@@ -14,6 +14,7 @@
       <div class="navbar-collapse collapse navbar-responsive-collapse">
         <ul class="nav navbar-nav">
             <li ng-class="{'active': currentLink() == 'courses' }"><a href="#/courses">Courses</a></li>
+            <li ng-class="{'active': currentLink() == 'about'}"><a href="#/about">About</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right" ng-if="Auth.isLoggedIn()">
           <li ng-class="{'active': currentLink() == Auth.getUser().name}"><a href="#{{Auth.getUser().url}}">Hello {{Auth.getUser().name}}</a></li>
