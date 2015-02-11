@@ -30,7 +30,7 @@ module.exports = function(grunt) {
                 }
             },
             dist: {
-                src: ['app/partials/*.html'],
+                src: ['app/partials/*.html', 'app/bower_components/angular-utils-pagination/*.html'],
                 dest: 'tmp/templates.js'
             }
         },
@@ -86,6 +86,7 @@ module.exports = function(grunt) {
                     'app/bower_components/angular-local-storage/dist/angular-local-storage.js',
                     'app/bower_components/ng-file-upload/angular-file-upload-shim.js',
                     'app/bower_components/ng-file-upload/angular-file-upload.js',
+                    'app/bower_components/angular-utils-pagination/dirPagination.js',
                     'app/bower_components/momentjs/moment.js',
                     'app/vendor/angular-bootstrap-datetimepicker/src/js/datetimepicker.js',
                     'app/bower_components/ellipsis-animated/src/ellipsis-animated.js',
@@ -152,6 +153,10 @@ module.exports = function(grunt) {
                     src: ['app.js'],
                     dest: '/'
                 }, {
+                    src: ['app/dirPagination.tpl.html']m
+                    dest: '/app'
+                },
+                 {
                     src: ['images/**'],
                     dest: '/'
                 }, {

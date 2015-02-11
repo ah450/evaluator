@@ -116,7 +116,7 @@ jprServices.factory('UserResource', ['$resource', 'Host', function($resource, Ho
 jprServices.factory('ProjectResource', ['$resource', 'Host', function($resource, Host) {
   var url = [Host.api_base, ':dest'].join('/');
   var course_related_url = [Host.api_base, 'course', ':courseName', 'projects'].join('/');
-  var submissions_url = [course_related_url, ':projectName', 'submissions'].join('/');
+  var submissions_url = [course_related_url, ':projectName', 'submissions', ':page'].join('/');
   var project_by_id_url = [Host.api_base, 'project', ':id'].join('/');
   var common_headers = {
     'X-Auth-Token': 'Replace Me'
@@ -149,8 +149,7 @@ jprServices.factory('ProjectResource', ['$resource', 'Host', function($resource,
     get_submissions: {
       method: 'GET',
       headers: common_headers,
-      url: submissions_url,
-      isArray: true
+      url: submissions_url
     },
     post_submission: {
       method: 'POST',

@@ -1,30 +1,45 @@
 jprApp.controller('ProjectCtrl', ['$scope', '$routeParams', '$upload', '$location', 'Page', 'Auth', 'Project', 'Host', function($scope, $routeParams, $upload, $location, Page, Auth, Project, Host) {
-    Page.setLink('');
-    Page.clearTitle();
-    $scope.Host = Host;
+
     if (!Auth.isLoggedIn()) {
+        // Not on my watch!
         Page.setErrorFlash('Must be a course teacher or student to view projects.');
         $location.path('/403').replace();
+    } else {
+        $scope.user = Auth.getUser();
+        $scope.isStudent = $scope.user.isStudent();
+        // because lots of ! look silly
+        $scope.isTeacher = !$scope.isStudent;
     }
-    $scope.isStudent = Auth.isLoggedIn() ? Auth.getUser().isStudent() : false;
-    $scope.isTeacher = Auth.isLoggedIn() ? Auth.getUser().isTeacher() : false;
-    $scope.submissions = [];
+    Page.setLink('');
+    Page.clearTitle();
+    // Function that shows save file dialog for a link
+    // does an AJAX request for the download
+    $scope.downloadHandler = Page.downloadHandler;
+    // Loading....
+    Page.showSpinner();
     $scope.loaded = false;
+    // Variable used to show spinner for course edit
     $scope.updating = false;
+
     $scope.due_date = new Date();
     $scope.code = {
         file: null
     };
-    $scope.downloadHandler = Page.downloadHandler;
-    Page.showSpinner();
+
+    //Pagination variables
+    $scope.submissionsPerPage = Project.submissionsPerPage;
+    $scope.totalSubmissions = 0;
+
+
     Project.$get($routeParams.id)
         .then(projectLoadSuccessCallback, projectLoadFailureCallback);
 
     function projectLoadSuccessCallback(project) {
-        project.submissions.then(function(submissions) {
+        project.getSubmissionsPage(1).then(function(submissionPage) {
             Page.hideSpinner();
             $scope.loaded = true;
-            $scope.submissions = submissions;
+            $scope.submissions = submissionPage.submissions;
+            $scope.totalSubmissions = submissionPage.pages * $scope.submissionsPerPage;
         }, projectLoadFailureCallback);
 
         $scope.project = project;

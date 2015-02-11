@@ -43,12 +43,13 @@ jprServices.factory('Project', ['$q', '$upload', 'ProjectResource', 'BaseModel',
         return moment(this.data.due_date).format("dddd, MMMM Do YYYY, h:mm:ss");
     });
 
-    Project.prototype.__defineGetter__('submissions', function() {
+    Project.prototype.getSubmissionsPage = function(page) {
         var deferred = $q.defer();
 
         ProjectResource.get_submissions({
             courseName: this.data.course.name,
             projectName: this.data.name,
+            page: page
         }, function(submissionPage) {
             var submissions = submissionPage.submissions.map(function(element) {
                 return new Submission(element, true);
@@ -60,7 +61,7 @@ jprServices.factory('Project', ['$q', '$upload', 'ProjectResource', 'BaseModel',
         });
 
         return deferred.promise;
-    });
+    };
 
     Project.prototype.submitCode = function(codeFile, success, failure) {
         $upload.upload({
@@ -120,6 +121,8 @@ jprServices.factory('Project', ['$q', '$upload', 'ProjectResource', 'BaseModel',
         this.data.tests = tests;
         return tests;
     });
+
+    Project.submissionsPerPage = 10;
 
     Project.$all = function() {
         return new Project({}, false).all();
