@@ -68,6 +68,7 @@ jprApp.controller('ProjectCtrl', ['$scope', '$routeParams', '$upload', '$locatio
 
     function submissionSuccessCallback(submission) {
         $scope.loadingSubmissions = false;
+        Page.clearInfoMessages();
         Page.addInfoMessage('Code Submitted!');
         $scope.submissions.unshift(submission);
     }
@@ -95,6 +96,7 @@ jprApp.controller('ProjectCtrl', ['$scope', '$routeParams', '$upload', '$locatio
 
     $scope.submitCode = function() {
         $scope.project.submitCode($scope.code.file, submissionSuccessCallback, submissionFailureCallback);
+        $scope.code.file = null;
     };
 
     $scope.updateDate = function (newDate, oldDate) {
