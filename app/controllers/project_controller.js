@@ -34,15 +34,18 @@ jprApp.controller('ProjectCtrl', ['$scope', '$routeParams', '$upload', '$locatio
     Project.$get($routeParams.id)
         .then(projectLoadSuccessCallback, projectLoadFailureCallback);
 
-    function projectLoadSuccessCallback(project) {
-        project.getSubmissionsPage(1).then(function(submissionPage) {
+    function loadSubmissionsPage(page){
+        $scope.project.getSubmissionsPage(1).then(function(submissionPage) {
             Page.hideSpinner();
             $scope.loaded = true;
             $scope.submissions = submissionPage.submissions;
             $scope.totalSubmissions = submissionPage.pages * $scope.submissionsPerPage;
-        }, projectLoadFailureCallback);
+        }, submissionFailureCallback);
+    }
 
+    function projectLoadSuccessCallback(project) {
         $scope.project = project;
+        loadSubmissionsPage(1);
         $scope.due_date = project.due_date;
         Page.setSection($scope.project.name);
     }
