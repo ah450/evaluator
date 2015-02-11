@@ -20,7 +20,7 @@ jprApp.controller('ProjectCtrl', ['$scope', '$routeParams', '$upload', '$locatio
     $scope.loaded = false;
     // Variable used to show spinner for course edit
     $scope.updating = false;
-
+    $scope.currentPage = 1;
     $scope.due_date = new Date();
     $scope.code = {
         file: null
@@ -69,7 +69,8 @@ jprApp.controller('ProjectCtrl', ['$scope', '$routeParams', '$upload', '$locatio
     function submissionSuccessCallback(submission) {
         $scope.loadingSubmissions()
         Page.addInfoMessage('Code Submitted!');
-        $scope.submissions.push(submission);
+        $scope.submissions.unshift(submission);
+        $scope.currentPage = 1;
     }
 
     function submissionFailureCallback(data, status, headers, config) {
