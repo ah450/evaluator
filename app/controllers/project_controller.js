@@ -34,18 +34,24 @@ jprApp.controller('ProjectCtrl', ['$scope', '$routeParams', '$upload', '$locatio
     Project.$get($routeParams.id)
         .then(projectLoadSuccessCallback, projectLoadFailureCallback);
 
-    function loadSubmissionsPage(page){
-        $scope.project.getSubmissionsPage(1).then(function(submissionPage) {
-            Page.hideSpinner();
-            $scope.loaded = true;
+    $scope.loadSubmissionsPage = function(page){
+        $scope.loadingSubmissions = true;
+        $scope.submissions = []; // clear
+        $scope.project.getSubmissionsPage(page).then(function(submissionPage) {
+            $scope.loadingSubmissions = false;
             $scope.submissions = submissionPage.submissions;
             $scope.totalSubmissions = submissionPage.pages * $scope.submissionsPerPage;
-        }, submissionFailureCallback);
+        }, function(data, status, headers, config){
+            $scope.loadingSubmissions = false;
+            Page.addErrorMessage(data.message);
+        });
     }
 
     function projectLoadSuccessCallback(project) {
         $scope.project = project;
-        loadSubmissionsPage(1);
+        $scope.loaded = true;
+        Page.hideSpinner();
+        $scope.loadSubmissionsPage(1);
         $scope.due_date = project.due_date;
         Page.setSection($scope.project.name);
     }
@@ -61,6 +67,7 @@ jprApp.controller('ProjectCtrl', ['$scope', '$routeParams', '$upload', '$locatio
     }
 
     function submissionSuccessCallback(submission) {
+        $scope.loadingSubmissions()
         Page.addInfoMessage('Code Submitted!');
         $scope.submissions.push(submission);
     }

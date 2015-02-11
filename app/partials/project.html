@@ -53,6 +53,7 @@
         </div>
     </div>
 
+        <!-- Upload Submissions -->
 
     <form class="form-horizontal" ng-if="isStudent && project.can_submit">
         <div class="form-group">
@@ -68,10 +69,16 @@
         </div>
     </form>
 
+    <div class="row text-center">
+        <div class="col-md-6">
+            <img ng-src="images/spin.gif" ng-if="loadingSubmissions">
+        </div>
+    </div>
     <div class="row">
-        <!-- Upload Submissions -->
+
         <!-- Current Submissions -->
-        <p class="lead text-info col-md-12" data-ng-if="submissions.length == 0">No submissions, yet!</p>
+        <p class="lead text-info col-md-12" data-ng-if="submissions.length == 0 && !loadingSubmissions">No submissions, yet!</p>
+        
         <div class="panel-group col-md-12" id="submissionsAccordion">
             <div dir-paginate="submission in submissions | itemsPerPage: submissionsPerPage" total-items="totalSubmissions"
             class="panel"
@@ -126,8 +133,9 @@
                 </div>
             </div>
             </div>
-
-            <dir-pagination-controls class="text-center" template-url="app/dirPagination.tpl.html" on-page-change="pageChanged(loadSubmissionsPage)"></dir-pagination-controls>
+            <div class="text-center">
+                <dir-pagination-controls template-url="app/dirPagination.tpl.html" on-page-change="loadSubmissionsPage(newPageNumber)"></dir-pagination-controls>
+            </div>
         </div>
     </div>
 
