@@ -67,10 +67,9 @@ jprApp.controller('ProjectCtrl', ['$scope', '$routeParams', '$upload', '$locatio
     }
 
     function submissionSuccessCallback(submission) {
-        $scope.loadingSubmissions()
+        $scope.loadingSubmissions = false;
         Page.addInfoMessage('Code Submitted!');
         $scope.submissions.unshift(submission);
-        $scope.currentPage = 1;
     }
 
     function submissionFailureCallback(data, status, headers, config) {
@@ -85,10 +84,13 @@ jprApp.controller('ProjectCtrl', ['$scope', '$routeParams', '$upload', '$locatio
             case 498:
                 msg = 'You passed the Due-date deadline';
                 break;
+            case 400:
+                msg = data.message;
+                break;
             default:
                 msg = 'Server woopsy, please grab a programmer';
         }
-        $scope.addErrorMessage(msg);
+        Page.addErrorMessage(msg);
     }
 
     $scope.submitCode = function() {
