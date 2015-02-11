@@ -95,8 +95,10 @@ jprApp.controller('ProjectCtrl', ['$scope', '$routeParams', '$upload', '$locatio
     }
 
     $scope.submitCode = function() {
-        $scope.project.submitCode($scope.code.file, submissionSuccessCallback, submissionFailureCallback);
-        $scope.code.file = null;
+        var file = $scope.code.file;
+        $scope.code = {file: null};
+        $scope.project.submitCode(file, submissionSuccessCallback, submissionFailureCallback);
+        
     };
 
     $scope.updateDate = function (newDate, oldDate) {
