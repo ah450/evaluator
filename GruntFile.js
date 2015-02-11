@@ -154,7 +154,7 @@ module.exports = function(grunt) {
                     dest: '/'
                 }, {
                     src: ['app/dirPagination.tpl.html'],
-                    dest: '/app'
+                    dest: '/'
                 },
                  {
                     src: ['images/**'],
