@@ -4,7 +4,7 @@ jprServices.factory('User', ['UserResource', 'BaseModel', '$http', 'Host', '$q',
     User.prototype.constructor = User;
 
     function User(data, exists) {
-        BaseModel.call(this, data, exists, UserResource, 'id');
+        BaseModel.call(this, data, exists, UserResource, 'id', 'users');
     }
 
     User.prototype.isStudent = function() {

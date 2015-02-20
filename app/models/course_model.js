@@ -2,7 +2,7 @@ jprServices.factory('Course', ['$q', 'User', 'CourseResource', 'BaseModel', '$up
     Course.prototype = Object.create(BaseModel.prototype);
     Course.prototype.constructor = Course;
     function Course(data, exists) {
-      BaseModel.call(this, data, exists, CourseResource, 'name');
+      BaseModel.call(this, data, exists, CourseResource, 'name', 'courses');
     }
     Course.prototype.add_student = function(user, success, failure) {
         this.resource.add_student({
@@ -181,6 +181,7 @@ jprServices.factory('Course', ['$q', 'User', 'CourseResource', 'BaseModel', '$up
 
     Course.studentsPerPage = 5;
     Course.teachersPerPage = 5;
+    Course.coursesPerPage = 5;
     return Course;
     
 }]);

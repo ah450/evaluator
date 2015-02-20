@@ -1,10 +1,11 @@
 jprServices.factory('BaseModel', ['$q', function($q) {
-  function BaseModel(data, exists, resource, identifier_name) {
+  function BaseModel(data, exists, resource, identifier_name, collection_name) {
     this.loadFromObject(data);
     this.exists = exists;
     this.modified = false;
     this.resource = resource;
     this.identifier_name = identifier_name;
+    this.collection_name = collection_name;
   }
 
   BaseModel.prototype.loadFromObject = function(data) {
@@ -61,12 +62,15 @@ jprServices.factory('BaseModel', ['$q', function($q) {
     // Return all objects.
     var defered = $q.defer(); // create promise
     var parent_this = this;
-    this.resource.query(function(data, headers) {
+    this.resource.query(
+      {page: pageNumber},
+      function(objectsPage) {
       // convert received objects to Class instances.
-      objects = data.map(function(element) {
+      var objects = objectsPage[parent_this.collection_name].map(function(element) {
         return new parent_this.constructor(element, true);
       });
-      defered.resolve(objects);
+      objectsPage[this.collection_name] = objects;
+      defered.resolve(objectsPage);
     }, function(httpResponse) {
       // Pass http response
       defered.reject(httpResponse);

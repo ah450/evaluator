@@ -4,11 +4,19 @@ jprApp.controller('CourseListCtrl', ['$scope', 'Course', 'Page', 'Auth', functio
   $scope.courseQuery = "";
   $scope.loading = true;
   $scope.creating = false;
-  function handleCoursesLoad(courses) {
-    $scope.courses = courses;
+  $scope.coursesPerPage = Course.coursesPerPage;
+  $scope.totalCourses = 0;
+  function handleCoursesLoad(coursePage) {
+    $scope.courses = coursePage.courses;
     $scope.loading = false;
+    $scope.totalCourses = coursePage.pages * $scope.coursesPerPage;
   }
-  Course.$all().then(handleCoursesLoad);
+  $scope.loadCoursePage = function(newPageNumber) {
+    $scope.courses = [];
+    $scope.loading = true;
+    Course.$all(newPageNumber).then(handleCoursesLoad);
+  };
+  Course.$all(1).then(handleCoursesLoad);
   
   $scope.isLoggedIn = Auth.isLoggedIn;
   $scope.current_user = Auth.getUser();
@@ -18,7 +26,7 @@ jprApp.controller('CourseListCtrl', ['$scope', 'Course', 'Page', 'Auth', functio
 
   $scope.$watch("isLoggedIn()", function() {
     $scope.loading = true;
-    Course.$all().then(handleCoursesLoad);
+    Course.$all(1).then(handleCoursesLoad);
     $scope.current_user = Auth.getUser();
     $scope.isStudent = $scope.isLoggedIn() ? $scope.current_user.isStudent() : false;
   });

@@ -61,7 +61,7 @@
 <div class="row text-center" ng-if="!loading && courses.length == 0">
     <p class="text-info">There are no courses</p>
 </div>
-<div class="row top-buffer border-row" ng-repeat="course in courses| filter:courseQuery">
+<div class="row top-buffer border-row" dir-paginate="course in courses | itemsPerPage: studentsPerPage| filter:courseQuery" total-items="totalCourses" pagination-id="coursesList">
     <div class="panel panel-default col-md-6 col-lg-6">
         <div class="panel-heading">
             <div class="pull-right" style="display: inline-block;">
@@ -84,4 +84,7 @@
             <a href="#{{course.projects_url}}" title="Course projects">Projects</a>
         </div>
     </div>
+</div>
+<div class="text-center">
+    <dir-pagination-controls pagination-id="coursesList" template-url="app/dirPagination.tpl.html" on-page-change="loadCoursePage(newPageNumber)"></dir-pagination-controls>
 </div>
