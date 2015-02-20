@@ -1,5 +1,5 @@
-jprApp.controller('CourseStudentsCtrl', ['$scope', 'Page', 'Auth', 'Course',
-  function($scope, Page, Auth, Course) {
+jprApp.controller('CourseStudentsCtrl', ['$scope', 'Page', 'Course',
+  function($scope, Page, Course) {
   $scope.students = [];
   $scope.course = $scope.$parent.course;
 

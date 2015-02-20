@@ -1,29 +1,23 @@
-jprApp.controller('CourseTeachersCtrl', ['$scope', 'Page', 'Auth', function($scope, Page, Auth) {
-  // $scope.teachers = [];
-  // $scope.loaded = false;
-  // $scope.$parent.course.teachers
-  //   .then(function(teachers) {
-  //     $scope.teachers = teachers;
-  //     $scope.loaded = true;
-  //     var user = Auth.getUser()
-  //     $scope.teachers.forEach(function (value) {
-  //         if (value.id == user.id) {
-  //           $scope.$parent.courseMember = true;
-  //         }
-  //       });
-  //   }, function(httpResponse) {
-  //     $scope.loaded = true;
-  //     if ($scope.$parent.redirect) {
-  //       if (httpResponse.status == 403 || httpResponse.status == 401) {
-  //         Page.setErrorFlash('Must be logged in to view course teachers.');
-  //         $location.path('/403').replace();
-  //       } else if (httpResponse.status == 404) {
-  //         $location.path('/404').replace();
-  //       }
-  //     } else {
-  //       if (httpResponse.status == 403 || httpResponse.status == 401) {
-  //         Page.addErrorMessage('Must be logged in to view course teachers.');
-  //       }
-  //     }
-  //   });
+jprApp.controller('CourseTeachersCtrl', ['$scope', 'Page', 'Course', 
+  function($scope, Page, Course) {
+  $scope.teachers = [];
+  $scope.course = $scope.$parent.course;
+  $scope.teachersPerPage = Course.teachersPerPage;
+  $scope.totalTeachers = 0;
+
+  $scope.loadTeachersPage = function(newPageNumber){
+    $scope.loadingTeachers = true;
+    $scope.teachers = [];
+    $scope.course.getTeachersPage(newPageNumber)
+    .then(function(teachersPage){
+      $scope.loadingTeachers = false;
+      $scope.teachers = teachersPage.teachers;
+      $scope.totalTeachers = teachersPage.pages * $scope.teachersPerPage;
+    }, function(data, status, headers, config){
+      $scope.loadingTeachers = false;
+      Page.addErrorMessage(data.message);
+    });
+  };
+
+  $scope.loadTeachersPage(1);
 }]);

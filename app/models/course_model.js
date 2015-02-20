@@ -132,7 +132,7 @@ jprServices.factory('Course', ['$q', 'User', 'CourseResource', 'BaseModel', '$up
             deferred.reject(httpResponse);
         } );
 
-        return deferred.promise
+        return deferred.promise;
     }
 
     

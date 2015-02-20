@@ -1,5 +1,10 @@
 <div class="container">
-    <div class="row top-buffer" ng-repeat="teacher in teachers">
+    <div class="row top-buffer text-center" ng-show="loadingTeachers">
+        <div class="col-md-6">
+            <img ng-src="images/spin.gif">
+        </div>
+    </div>
+<div class="row top-buffer" dir-paginate="teacher in teachers | itemsPerPage: teachersPerPage" total-items="totalTeachers" pagination-id="courseTeachers">
         <div class="col-md-3 col-lg-3">
             <a href="#{{teacher.url}}" ><span class="glyphicon glyphicon-user"></span> {{teacher.name}}</a>
         </div>
@@ -8,9 +13,11 @@
         </div>
     </div>
 </div>
+<div class="text-center">
+    <dir-pagination-controls pagination-id="courseTeachers" template-url="app/dirPagination.tpl.html" on-page-change="loadTeachersPage(newPageNumber)"></dir-pagination-controls>
+</div>
 
-
-<div ng-if="loaded && teachers.length == 0" class="text-center">
+<div ng-if="!loadingTeachers && teachers.length == 0" class="text-center">
 <p>This course doesn't have any teachers!</p>
 </div>
 
