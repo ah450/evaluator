@@ -46,7 +46,7 @@ jprServices.factory('Project', ['$q', '$upload', 'ProjectResource', 'BaseModel',
     Project.prototype.getSubmissionsPage = function(page) {
         var deferred = $q.defer();
 
-        ProjectResource.get_submissions({
+        this.resource.get_submissions({
             courseName: this.data.course.name,
             projectName: this.data.name,
             page: page

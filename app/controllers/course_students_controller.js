@@ -1,30 +1,32 @@
-jprApp.controller('CourseStudentsCtrl', ['$scope', 'Page', 'Auth', function($scope, Page, Auth) {
+jprApp.controller('CourseStudentsCtrl', ['$scope', 'Page', 'Auth', 'Course',
+  function($scope, Page, Auth, Course) {
+  $scope.loaded = false; // we are still loading!
   $scope.students = [];
-  $scope.loaded = false;
-  $scope.$parent.course.students
-    .then(function(students) {
-      $scope.students = students;
-      $scope.loaded = true;
-      var user = Auth.getUser()
-      $scope.students.forEach(function (value) {
-          if (value.id == user.id) {
-            $scope.$parent.courseMember = true;
-          }
-        });
+  $scope.course = $scope.$parent.course;
+  if (Auth.isLoggedIn() ) {
+    $scope.loggedIn = true;
+  } else {
+    $scope.loggedIn = false;
+    $scope.loaded = true;
+  }
 
-    }, function(httpResponse) {
-      $scope.loaded = true;
-      if ($scope.$parent.redirect) {
-        if (httpResponse.status == 403 || httpResponse.status == 401) {
-          Page.setErrorFlash('Must be logged in to view course students.');
-          $location.path('/403').replace();
-        } else if (httpResponse.status == 404) {
-          $location.path('/404').replace();
-        }
-      } else {
-        if (httpResponse.status == 403 || httpResponse.status == 401) {
-          Page.addErrorMessage('Must be logged in to view course students.');
-        }
-      }
-    });
+  // Pagination variables
+  $scope.StudentsPerPage = Course.studentsPerPage;
+  $scope.totalStudents = 0;
+
+  $scope.loadStudentsPage = function (newPageNumber) {
+      $scope.loadingStudents = true;
+      $scope.students = [];
+      $scope.course.getStudentsPage(newPageNumber)
+      .then(function(studentsPage) {
+        $scope.loadingStudents = false;
+        $scope.students = studentsPage.students;
+        $scope.totalStudents = studentsPage.pages * $scope.studentsPerPage;
+      }, function(data, status, headers, config) {
+        $scope.loadingStudents = false;
+        Page.addErrorMessage(data.message);
+      });
+  };
+  // load the first page
+  $scope.loadStudentsPage(1);
 }]);

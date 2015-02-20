@@ -93,39 +93,49 @@ jprServices.factory('Course', ['$q', 'User', 'CourseResource', 'BaseModel', '$up
         this.data.published = value ? 'True': 'False';
         return this.published;
     });
-    Course.prototype.__defineGetter__('students', function(){
-        students = $q.defer();
+    
+    Course.prototype.getStudentsPage = function(pageNumber) {
+        var deferred = $q.defer();
         this.resource.query({
             name: this.data.name,
+            page: pageNumber,
             dest: 'course',
             ep: 'students'
-        }, function(data, headers) {
-            data = data.map(function(element) {
+        }, function(studentsPage) {
+            var students = studentsPage.users.map(function(element) {
                 return new User(element, true);
             });
-            students.resolve(data);
-        }, function(httpResponse){
-            students.reject(httpResponse);
+            studentsPage.students = students;
+            delete studentsPage.users;
+            deferred.resolve(studentsPage); 
+        }, function(httpResponse) {
+            deferred.reject(httpResponse);
         });
-        return students.promise;
-    });
+        return deferred.promise;
+    };
 
-    Course.prototype.__defineGetter__('teachers', function(){
-        teachers = $q.defer();
+    Course.prototype.getTeachersPage = function (pageNumber) {
+        var deferred = $q.defer();
         this.resource.query({
             name: this.data.name,
             dest: 'course',
-            ep: 'tas'
-        }, function(data, headers) {
-            data = data.map(function(element){
+            ep: 'tas',
+            page: pageNumber
+        }, function(teachersPage) {
+            var teachers = teachersPage.users.map(function (element) {
                 return new User(element, true);
             });
-            teachers.resolve(data);
-        }, function(httpResponse){
-            teachers.reject(httpResponse);
-        });
-        return teachers.promise;
-    });
+            teachersPage.teachers = teachers;
+            delete teachersPage.users;
+            deferred.resolve(teachersPage);
+        }, function(httpResponse) {
+            deferred.reject(httpResponse);
+        } );
+
+        return deferred.promise
+    }
+
+    
 
     Course.prototype.__defineGetter__('tas_url', function(){
         return this.data.tas_url;
@@ -157,8 +167,8 @@ jprServices.factory('Course', ['$q', 'User', 'CourseResource', 'BaseModel', '$up
         return deferred.promise;
     });
 
-    Course.$all = function(){
-        return new Course({}, false).all();
+    Course.$all = function(pageNumber){
+        return new Course({}, false).all(pageNumber);
     };
 
     Course.$get = function(name){
@@ -169,6 +179,7 @@ jprServices.factory('Course', ['$q', 'User', 'CourseResource', 'BaseModel', '$up
         return new Course(project.course, true);
     };
 
+    Course.StudentsPerPage = 5;
     return Course;
     
 }]);

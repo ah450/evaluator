@@ -2,7 +2,7 @@
 
 jprServices.factory('CourseResource', ['$resource', 'Host',
   function($resource, Host) {
-    var url = [Host.api_base, ':dest', ':name', ':ep'].join('/');
+    var url = [Host.api_base, ':dest', ':name', ':ep', ':page'].join('/');
     var common_headers = {
       'X-Auth-Token': 'Replace Me'
     }
@@ -12,9 +12,9 @@ jprServices.factory('CourseResource', ['$resource', 'Host',
         params: {
           dest: 'courses'
         },
-        isArray: true,
+        isArray: false,
         headers: common_headers
-      },
+      }, 
       create: {
         method: 'POST',
         params: {

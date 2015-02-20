@@ -7,11 +7,9 @@
   <a href="#{{course.supervisor.url}}">{{course.supervisor.name}}</a>
   </p>
   <section data-ng-if="loggedIn" >
-    <div data-ng-if="!isStudent">
-      <h3><a href="#{{course.students_url}}">Students</a></h3>
-      <section ng-include="'partials/course_students.html'" ng-controller="CourseStudentsCtrl">
-      </section>
-    </div>
+    <h3><a href="#{{course.students_url}}">Students</a></h3>
+    <section ng-include="'partials/course_students.html'" ng-controller="CourseStudentsCtrl">
+    </section>
     <h3><a href="#{{course.tas_url}}">Teachers</a></h3>
     <section ng-include="'partials/course_teachers.html'" ng-controller="CourseTeachersCtrl">
     </section>

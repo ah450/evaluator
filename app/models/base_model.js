@@ -57,7 +57,7 @@ jprServices.factory('BaseModel', ['$q', function($q) {
     return defered.promise;
   };
 
-  BaseModel.prototype.all = function() {
+  BaseModel.prototype.all = function(pageNumber) {
     // Return all objects.
     var defered = $q.defer(); // create promise
     var parent_this = this;

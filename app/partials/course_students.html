@@ -1,5 +1,10 @@
 <div class="container">
-    <div class="row top-buffer" ng-repeat="student in students">
+    <div class="row top-buffer text-center" ng-show="loadingStudents">
+        <div class="col-md-6">
+            <img ng-src="images/spin.gif">
+        </div>
+    </div>
+    <div class="row top-buffer" dir-paginate="student in students | itemsPerPage: studentsPerPage" total-items="totalStudents">
         <div class="col-md-3 col-lg-3">
             <a href="#{{student.url}}" ><span class="glyphicon glyphicon-user"></span> {{student.name}}</a>
         </div>
@@ -8,11 +13,12 @@
         </div>
     </div>
 </div>
-
-<div ng-if="loaded && students.length == 0" class="text-center">
-<p>This course doesn't have any students!</p>
+<div class="text-center">
+    <dir-pagination-controls template-url="app/dirPagination.tpl.html" on-page-change="loadStudentsPage(newPageNumber)"></dir-pagination-controls>
 </div>
 
-<div class="row text-center" ng-if="!loaded">
-    <img id="spinner" ng-src="images/spin.gif">
+
+<div ng-if="students.length == 0 && !loadingStudents" class="text-center">
+    <p>This course doesn't have any students!</p>
 </div>
+
