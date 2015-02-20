@@ -6,7 +6,6 @@ jprApp.controller('CourseCtrl', ['$scope', '$routeParams', 'Auth', 'Page', 'Cour
     $scope.redirect = false;
     $scope.showCreation = false;
     $scope.loggedIn = Auth.isLoggedIn();
-    $scope.courseMember = true;
     $scope.current_user = Auth.getUser();
     $scope.isStudent = Auth.isLoggedIn() ? $scope.current_user.isStudent() : false;
     Course.$get($routeParams.courseName)
