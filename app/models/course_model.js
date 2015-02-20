@@ -138,10 +138,10 @@ jprServices.factory('Course', ['$q', 'User', 'CourseResource', 'BaseModel', '$up
     
 
     Course.prototype.__defineGetter__('tas_url', function(){
-        return this.data.tas_url;
+        return this.data.tas_url.substring(0, this.data.tas_url.lastIndexOf('/'));
     });
     Course.prototype.__defineGetter__('students_url', function() {
-        return this.data.students_url;
+        return this.data.students_url.substring(0, this.data.students_url.lastIndexOf('/'));
     });
     Course.prototype.__defineGetter__('projects_url', function() {
         return this.data.projects_url;

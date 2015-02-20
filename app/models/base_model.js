@@ -69,7 +69,7 @@ jprServices.factory('BaseModel', ['$q', function($q) {
       var objects = objectsPage[parent_this.collection_name].map(function(element) {
         return new parent_this.constructor(element, true);
       });
-      objectsPage[this.collection_name] = objects;
+      objectsPage[parent_this.collection_name] = objects;
       defered.resolve(objectsPage);
     }, function(httpResponse) {
       // Pass http response

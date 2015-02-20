@@ -13,7 +13,7 @@ jprApp.config(['$routeProvider',
         templateUrl: 'partials/profile.html',
         controller: 'ProfileCtrl'
       })
-      .when('/course/:courseName/:ep/:page', {
+      .when('/course/:courseName/:ep', {
         templateUrl: 'partials/course_related.html',
         controller: 'CourseRelatedCtrl'
       }).when('/course/:courseName', {
