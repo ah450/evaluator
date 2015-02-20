@@ -56,7 +56,7 @@ jprApp.controller('CourseProjectsCtrl', ['$scope', 'Auth', 'Page', '$location', 
       }
     } else {
       if (httpResponse.status == 403) {
-        Page.addErrorMessage('Must be a course teacher or student to view projects.');
+        // Nothing!
       } else if (httpResponse.status == 404) {
         Page.addErrorMessage('Course not found.');
       } else if(httpResponse.status == 401) {

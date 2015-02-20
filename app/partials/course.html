@@ -15,7 +15,7 @@
     <h3><a href="#{{course.tas_url}}">Teachers</a></h3>
     <section ng-include="'partials/course_teachers.html'" ng-controller="CourseTeachersCtrl">
     </section>
-    <section ng-if="courseMember">
+    <section>
       <h3><a href="#{{course.projects_url}}">Projects</a></h3>
       <section ng-include="'partials/course_projects.html'" ng-controller="CourseProjectsCtrl"></section>
     </section>
