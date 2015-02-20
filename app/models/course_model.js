@@ -179,7 +179,8 @@ jprServices.factory('Course', ['$q', 'User', 'CourseResource', 'BaseModel', '$up
         return new Course(project.course, true);
     };
 
-    Course.StudentsPerPage = 5;
+    Course.studentsPerPage = 5;
+    Course.teachersPerPage = 5;
     return Course;
     
 }]);
