@@ -124,6 +124,15 @@ jprServices.factory('Project', ['$q', '$upload', 'ProjectResource', 'BaseModel',
 
     Project.submissionsPerPage = 10;
 
+    Project.prototype.__defineGetter__('published', function() {
+        return this.data.published == 'True';
+    });
+
+    Project.prototype.__defineSetter__('published', function(value) { 
+        this.data.published = value ? 'True': 'False';
+        return this.published;
+    });
+
     Project.$all = function() {
         return new Project({}, false).all();
     }
