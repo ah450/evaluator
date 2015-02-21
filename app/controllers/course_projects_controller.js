@@ -80,13 +80,17 @@ jprApp.controller('CourseProjectsCtrl', ['$scope', 'Auth', 'Page', '$location', 
       return;
     }
     $scope.creating = true;
-    $scope.newProject.due_date = $scope.newProject.due_date.toISOString();
+    var oldDate = $scope.newProject.due_date;
+    var oldPublished = $scope.newProject.published;
+    $scope.newProject.due_date = oldDate.toISOString();
     $scope.$parent.course.create_project($scope.newProject, function(project) {
       $scope.creating = false;
       $scope.projects.push(project);
       Page.addInfoMessage('Project Created!');
     }, function(httpResponse) {
       $scope.creating = false;
+      $scope.newProject.due_date = oldDate;
+      $scope.newProject.published = oldPublished;
       if (httpResponse.status == 403) {
         Page.addErrorMessage('Must be a course teacher to create a project.');
       }else  {
