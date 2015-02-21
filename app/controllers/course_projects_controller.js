@@ -10,6 +10,7 @@ jprApp.controller('CourseProjectsCtrl', ['$scope', 'Auth', 'Page', '$location', 
     language: 'J',
     tests: [],
     due_date: new Date(),
+    published: true,
     test_timeout: 600,
     validate: function(){
       var allClear = true;
