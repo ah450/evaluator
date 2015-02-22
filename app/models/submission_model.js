@@ -28,7 +28,7 @@ jprServices.factory('Submission', ['$q', 'SubmissionResource', 'BaseModel', 'Use
         return this.data.tests;
     });
     Submission.prototype.__defineGetter__('all_tests_passed', function() {
-        return this.data.tests.reduce(function(previousValue, testCase) {
+        return  (this.data.project.tests.length>0 && this.data.tests.length!==0) && this.data.tests.reduce(function(previousValue, testCase) {
             return previousValue && testCase.success;
         }, true);
     });
