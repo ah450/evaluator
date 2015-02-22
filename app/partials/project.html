@@ -82,16 +82,16 @@
         <div class="panel-group col-md-12" id="submissionsAccordion">
             <div dir-paginate="submission in submissions | itemsPerPage: submissionsPerPage" total-items="totalSubmissions"
             class="panel"
-            data-ng-class="{'panel-info':!submission.processed, 'panel-danger':submission.compile_fail, 'panel-success': submission.processed && !submission.compile_fail && submission.all_tests_passed, 'panel-warning': submission.processed && submission.compile_status && !submission.all_tests_passed}" current-page="currentPage">
+            data-ng-class="{'panel-info':submission.processing, 'panel-danger':submission.error, 'panel-success': submission.passing, 'panel-warning': submission.failing}" current-page="currentPage">
             <div class="panel-heading">
                 <h4 class="panel-title">
                   <a data-toggle="collapse" class="clickable" data-parent="#submissionsAccordion" data-target="#{{submission.id}}" >
 
-                    <span data-ng-if="!submission.processed" class="pull-right"><img id="spinner" ng-src="images/spin.gif"></span>
+                    <span data-ng-if="submission.processing" class="pull-right"><img id="spinner" ng-src="images/spin.gif"></span>
 
-                    <span data-ng-if="submission.processed && submission.compile_status" class="pull-right"><span ng-if="submission.tests.length">{{submission.tests_passed_count}}/{{submission.tests.length}}</span> <i class="glyphicon glyphicon-ok-circle"></i></span>
+                    <span data-ng-if="submission.passing" class="pull-right"><span ng-if="submission.tests.length">{{submission.tests_passed_count}}/{{submission.tests.length}}</span> <i class="glyphicon glyphicon-ok-circle"></i></span>
 
-                    <span data-ng-if="submission.processed && !submission.compile_status" class="pull-right"><span ng-if="submission.tests.length">{{submission.tests_passed_count}}/{{submission.tests.length}}</span> <i class="glyphicon glyphicon-remove-circle"></i></span>
+                    <span data-ng-if="submission.error || submission.failing" class="pull-right"><span ng-if="submission.tests.length">{{submission.tests_passed_count}}/{{submission.tests.length}}</span> <i class="glyphicon glyphicon-remove-circle"></i></span>
 
                     Submission {{submission.id}} | {{submission.created_at_pretty}} | by {{submission.submitter.name}}
                   </a>
