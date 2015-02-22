@@ -45,7 +45,7 @@ jprApp.controller('ProjectCtrl', ['$scope', '$routeParams', '$upload', '$locatio
             $scope.loadingSubmissions = false;
             Page.addErrorMessage(data.message);
         });
-    }
+    };
 
     function projectLoadSuccessCallback(project) {
         $scope.project = project;

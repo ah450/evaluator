@@ -15,7 +15,7 @@ jprServices.factory('Submission', ['$q', 'SubmissionResource', 'BaseModel', 'Use
         return this.data.compile_status;
     });
     Submission.prototype.__defineGetter__('processed', function() {
-        return this.data.processed;
+        return this.data.processed || this.data.compiler_out!=="";
     });
     Submission.prototype.__defineGetter__('url', function() {
         return this.data.url;
@@ -27,12 +27,21 @@ jprServices.factory('Submission', ['$q', 'SubmissionResource', 'BaseModel', 'Use
     Submission.prototype.__defineGetter__('all_tests_passed', function() {
         return this.data.tests.reduce(function(previousValue, testCase) {
             return previousValue && testCase.success;
-        }, true); 
+        }, true);
     });
+
     Submission.prototype.__defineGetter__('tests_passed_count', function() {
         return this.data.tests.reduce(function(count, testCase) {
-            return (testCase.success)?count+1:count;
-        }, 0); 
+            return (testCase.success) ? count + 1 : count;
+        }, 0);
+    });
+
+    Submission.prototype.__defineGetter__('cases_passed_count', function() {
+        return this.data.tests.reduce(function(count, test) {
+            return count + test.cases.reduce(function(c, tcase) {
+                return (tcase.pass) ? c + 1 : c;
+            }, 0);
+        }, 0);
     });
 
     Submission.prototype.__defineGetter__('project', function() {
