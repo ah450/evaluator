@@ -82,7 +82,7 @@
         <div class="panel-group col-md-12" id="submissionsAccordion">
             <div dir-paginate="submission in submissions | itemsPerPage: submissionsPerPage" total-items="totalSubmissions"
             class="panel"
-            data-ng-class="{'panel-info':!submission.processed, 'panel-danger':submission.processed && !submission.compile_status, 'panel-success': submission.processed && submission.compile_status && submission.all_tests_passed, 'panel-warning': submission.processed && submission.compile_status && !submission.all_tests_passed}" current-page="currentPage">
+            data-ng-class="{'panel-info':!submission.processed, 'panel-danger':submission.compile_fail, 'panel-success': submission.processed && !submission.compile_fail && submission.all_tests_passed, 'panel-warning': submission.processed && submission.compile_status && !submission.all_tests_passed}" current-page="currentPage">
             <div class="panel-heading">
                 <h4 class="panel-title">
                   <a data-toggle="collapse" class="clickable" data-parent="#submissionsAccordion" data-target="#{{submission.id}}" >

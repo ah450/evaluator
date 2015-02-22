@@ -14,6 +14,9 @@ jprServices.factory('Submission', ['$q', 'SubmissionResource', 'BaseModel', 'Use
     Submission.prototype.__defineGetter__('compile_status', function() {
         return this.data.compile_status;
     });
+    Submission.prototype.__defineGetter__('compile_fail', function() {
+        return this.data.processed && !this.data.compile_status;
+    });
     Submission.prototype.__defineGetter__('processed', function() {
         return this.data.processed || this.data.compiler_out!=="";
     });
