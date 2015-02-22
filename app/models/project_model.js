@@ -92,6 +92,7 @@ jprServices.factory('Project', ['$q', '$upload', 'ProjectResource', 'BaseModel',
             },
             data: {
                 due_date: this.data.due_date,
+                published: this.data.published
             },
             file: project.tests,
             fileFormDataName: formDataNames
