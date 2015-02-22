@@ -89,7 +89,7 @@
 
                     <span data-ng-if="submission.processing" class="pull-right"><img id="spinner" ng-src="images/spin.gif"></span>
 
-                    <span data-ng-if="submission.passing" class="pull-right"><span ng-if="submission.tests.length">{{submission.tests_passed_count}}/{{submission.tests.length}}</span> <i class="glyphicon glyphicon-ok-circle"></i></span>
+                    <span data-ng-if="submission.passing" class="pull-right"><span ng-if="submission.tests.length">{{submission.cases_passed_count}}/{{submission.cases_count}}</span><i class="glyphicon glyphicon-ok-circle"></i></span>
 
                     <span data-ng-if="submission.error || submission.failing" class="pull-right"><span ng-if="submission.tests.length">{{submission.cases_passed_count}}/{{submission.cases_count}}</span> <i class="glyphicon glyphicon-remove-circle"></i></span>
 
