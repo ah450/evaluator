@@ -91,7 +91,7 @@
 
                     <span data-ng-if="submission.passing" class="pull-right"><span ng-if="submission.tests.length">{{submission.tests_passed_count}}/{{submission.tests.length}}</span> <i class="glyphicon glyphicon-ok-circle"></i></span>
 
-                    <span data-ng-if="submission.error || submission.failing" class="pull-right"><span ng-if="submission.tests.length">{{submission.tests_passed_count}}/{{submission.tests.length}}</span> <i class="glyphicon glyphicon-remove-circle"></i></span>
+                    <span data-ng-if="submission.error || submission.failing" class="pull-right"><span ng-if="submission.tests.length">{{submission.cases_passed_count}}/{{submission.cases_count}}</span> <i class="glyphicon glyphicon-remove-circle"></i></span>
 
                     Submission {{submission.id}} | {{submission.created_at_pretty}} | by {{submission.submitter.name}}
                   </a>
@@ -108,6 +108,7 @@
                                   <a data-toggle="collapse" data-parent="#{{submission.id}}Accordion" data-target="#{{submission.id}}{{test.name}}" class="clickable" >
                                     <span data-ng-if="test.success" class="pull-right text-success"><i class="glyphicon glyphicon-ok-circle"></i></span>
                                     <span data-ng-if="!test.success" class="pull-right text-danger"><i class="glyphicon glyphicon-remove-circle"></i></span>
+                                    <span class="pull-right">{{countPassed(test.cases)}}/{{test.cases.length}} </span>
                                     {{test.name}}
                                   </a>
                                 </h4>

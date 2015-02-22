@@ -61,10 +61,16 @@ jprServices.factory('Submission', ['$q', 'SubmissionResource', 'BaseModel', 'Use
         }, 0);
     });
 
+    Submission.prototype.__defineGetter__('cases_count', function() {
+        return this.data.tests.reduce(function(count, test) {
+            return count + test.cases.length;
+        }, 0);
+    });
+
     Submission.prototype.__defineGetter__('cases_passed_count', function() {
         return this.data.tests.reduce(function(count, test) {
             return count + test.cases.reduce(function(c, tcase) {
-                return (tcase.pass) ? c + 1 : c;
+                return (tcase.passed) ? c + 1 : c;
             }, 0);
         }, 0);
     });

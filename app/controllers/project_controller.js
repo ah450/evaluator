@@ -34,14 +34,14 @@ jprApp.controller('ProjectCtrl', ['$scope', '$routeParams', '$upload', '$locatio
     Project.$get($routeParams.id)
         .then(projectLoadSuccessCallback, projectLoadFailureCallback);
 
-    $scope.loadSubmissionsPage = function(page){
+    $scope.loadSubmissionsPage = function(page) {
         $scope.loadingSubmissions = true;
         $scope.submissions = []; // clear
         $scope.project.getSubmissionsPage(page).then(function(submissionPage) {
             $scope.loadingSubmissions = false;
             $scope.submissions = submissionPage.submissions;
             $scope.totalSubmissions = submissionPage.pages * $scope.submissionsPerPage;
-        }, function(data, status, headers, config){
+        }, function(data, status, headers, config) {
             $scope.loadingSubmissions = false;
             Page.addErrorMessage(data.message);
         });
@@ -96,12 +96,14 @@ jprApp.controller('ProjectCtrl', ['$scope', '$routeParams', '$upload', '$locatio
 
     $scope.submitCode = function() {
         var file = $scope.code.file;
-        $scope.code = {file: null};
+        $scope.code = {
+            file: null
+        };
         $scope.project.submitCode(file, submissionSuccessCallback, submissionFailureCallback);
-        
+
     };
 
-    $scope.updateDate = function (newDate, oldDate) {
+    $scope.updateDate = function(newDate, oldDate) {
         $scope.project.due_date = newDate;
     };
 
@@ -121,6 +123,12 @@ jprApp.controller('ProjectCtrl', ['$scope', '$routeParams', '$upload', '$locatio
                 Page.addErrorMessage(httpResponse.data.message);
             }
         });
+    };
+
+    $scope.countPassed = function(cases) {
+        return cases.reduce(function(c, tcase) {
+            return (tcase.passed) ? c + 1 : c;
+        }, 0);
     };
 
 
