@@ -47,6 +47,13 @@
             </div>
         </div>
         <div class="form-group">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="newCourse.published"> Publish Course
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <button type="submit" class="btn btn-primary" ng-click="createCourse()">Create!</button>
             </div>
@@ -78,7 +85,7 @@
         <div class="panel-footer" ng-if="isLoggedIn()">
             <a href="#{{course.supervisor.url}}" title="Course Supervisor">{{course.supervisor.name}}</a> |
             <a href="#{{course.tas_url}}" title="Course Teachers">Teachers</a> |
-            <span data-ng-if="!isStudent" >
+            <span data-ng-if="!isStudent">
             <a href="#{{course.students_url}}" title="Course Students">Students</a> |
             </span>
             <a href="#{{course.projects_url}}" title="Course projects">Projects</a>

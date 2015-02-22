@@ -43,7 +43,8 @@ jprApp.controller('CourseListCtrl', ['$scope', 'Course', 'Page', 'Auth', functio
       // success callback
       $scope.newCourse = {
         name: '',
-        description: ''
+        description: '',
+        published: false
       };
       $scope.creating = false;
       $scope.courses.push(newCourse);

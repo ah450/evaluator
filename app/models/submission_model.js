@@ -18,13 +18,13 @@ jprServices.factory('Submission', ['$q', 'SubmissionResource', 'BaseModel', 'Use
         return this.processed_patch && !this.data.compile_status;
     });
     Submission.prototype.__defineGetter__('compile_fail_patch', function() {
-        return this.compile_fail || (!this.compile_fail && (this.data.project.tests.length>0 && this.data.tests.length===0));
+        return this.compile_fail || (this.processed_patch && !this.compile_fail && (this.data.project.tests.length>0 && this.data.tests.length===0));
     });
     Submission.prototype.__defineGetter__('processed', function() {
         return this.data.processed;
     });
     Submission.prototype.__defineGetter__('processed_patch', function() {
-        return this.data.processed || this.data.compiler_out!=="";
+        return this.data.processed || (!this.data.processed && this.data.compiler_out!==null);
     });
 
     // facad
