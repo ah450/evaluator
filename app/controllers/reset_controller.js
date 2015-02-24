@@ -6,9 +6,9 @@ jprApp.controller('ActivationCtrl', ['$http', '$location', 'Page', 'Host', funct
     if (!searchObject.hasOwnProperty('token')) {
         searchObject.token = 'triggerA404Response';
     }
-    var activateUrl = Host.api_base + '/activate?token=' + searchObject.token;
+    var resetUrl = Host.api_base + '/user/reset?token=' + searchObject.token;
 
-    function activationCallback(data, status) {
+    function resetCallback(data, status) {
         Page.hideSpinner();
         if (status == 204) {
             Page.setFlash('Account Activated.');
@@ -18,10 +18,10 @@ jprApp.controller('ActivationCtrl', ['$http', '$location', 'Page', 'Host', funct
             Page.addErrorMessage('Please make sure you copy the link correctly from the email.');
         } else {
             // undocumented behaviour !!!
-            Page.addErrorMessage('Major server oopsie, please grab a programmer.');
+            Page.addErrorMessage(data.message || 'Major server oopsie, please grab a programmer.');
         }
     }
-    $http.get(activateUrl)
-    .success(activationCallback)
-    .error(activationCallback);
+    $http.get(resetUrl)
+    .success(resetCallback)
+    .error(resetCallback);
 }]);

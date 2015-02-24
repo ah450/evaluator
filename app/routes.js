@@ -36,6 +36,10 @@ jprApp.config(['$routeProvider',
         template: "",
         controller: 'ActivationCtrl'
       })
+      .when('/reset', {
+        template: "",
+        controller: 'ResetCtrl'
+      })
       .when('/', {
         redirectTo: '/home'
       })
