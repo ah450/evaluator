@@ -29,7 +29,9 @@ jprServices.factory('BaseModel', ['$q', function($q) {
         error(httpResponse);
       });
     } else if (this.modified) {
-      this.resource.update(this.data, function(data, headers) {
+      var params = {};
+      params[this.identifier_name] = this.data[this.identifier_name];
+      this.resource.update(params ,this.data, function(data, headers) {
         parent_this.loadFromObject(data);
         parent_this.modified = false;
         // Already exists

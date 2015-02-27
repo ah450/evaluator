@@ -10,7 +10,7 @@ jprApp.controller('ProfileCtrl', ['$scope', '$routeParams', 'Page', 'User', 'Val
             Page.setSection(user.name);
             $scope.loaded = true;
         }, function(httpResonse) {
-            Page.addErrorMessage(httpResponse.data.message);
+            Page.addErrorMessage(httpResponse.message);
         });
 
     $scope.isOwner = function() {
@@ -20,12 +20,12 @@ jprApp.controller('ProfileCtrl', ['$scope', '$routeParams', 'Page', 'User', 'Val
     $scope.changePassword = function() {
         var user = $scope.user;
         if (Validators.validatePassword(user.password) && Validators.validateSamePassword(user.password, $scope.profile.confirmpass)) {
-            user.update().success(function (user) {
+            user.save(function (user) {
                 $scope.user = user;
                 Page.addInfoMessage("Password changed");
                 $scope.profile.confirmpass = "";
-            }).error(function (httpResponse) {
-                Page.addErrorMessage(httpResponse.data.message);
+            }, function (httpResponse) {
+                Page.addErrorMessage(httpResponse.message);
             });
         } else {
             Page.addErrorMessage('password less than 8 charachters or doesn\'t match');

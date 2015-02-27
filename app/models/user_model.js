@@ -48,16 +48,6 @@ jprServices.factory('User', ['UserResource', 'BaseModel', '$http', 'Host', '$q',
         return this.data.url;
     });
 
-    User.prototype.update = function() {
-        return $http({
-            method: 'PUT',
-            headers: {
-                'X-Auth-Token': 'Replace Me'
-            },
-            url: [Host.api_base, 'user', this.data.id].join('/'),
-            data: this.data
-        });
-    };
 
     User.prototype.courses = function() {
         var defered = $q.defer();
