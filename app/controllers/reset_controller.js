@@ -1,4 +1,4 @@
-jprApp.controller('ActivationCtrl', ['$http', '$location', 'Page', 'Host', function($http, $location, Page, Host) {
+jprApp.controller('ResetCtrl', ['$http', '$location', 'Page', 'Host', function($http, $location, Page, Host) {
     Page.showSpinner();
     Page.clearCurrentLink();
     Page.clearTitle();
