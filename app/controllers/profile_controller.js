@@ -9,7 +9,7 @@ jprApp.controller('ProfileCtrl', ['$scope', '$routeParams', 'Page', 'User', 'Val
             Page.setLink(user.name);
             Page.setSection(user.name);
             $scope.loaded = true;
-        }, function(httpResonse) {
+        }, function(httpResponse) {
             Page.addErrorMessage(httpResponse.message);
         });
 
