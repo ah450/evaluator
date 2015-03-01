@@ -74,24 +74,7 @@ jprApp.controller('ProjectCtrl', ['$scope', '$routeParams', '$upload', '$locatio
     }
 
     function submissionFailureCallback(data, status, headers, config) {
-        var msg = '';
-        switch (status) {
-            case 403:
-                msg = 'You need to be a student';
-                break;
-            case 401:
-                msg = 'You need to loggin';
-                break;
-            case 498:
-                msg = 'You passed the Due-date deadline';
-                break;
-            case 400:
-                msg = data.message;
-                break;
-            default:
-                msg = 'Server woopsy, please grab a programmer';
-        }
-        Page.addErrorMessage(msg);
+        Page.addErrorMessage(data.message);
     }
 
     $scope.submitCode = function() {
