@@ -28,7 +28,7 @@ jprApp.controller('ProfileCtrl', ['$scope', '$routeParams', 'Page', 'User', 'Val
                 Page.addErrorMessage(httpResponse.message);
             });
         } else {
-            Page.addErrorMessage('password less than 8 charachters or doesn\'t match');
+            Page.addErrorMessage('password less than 8 characters or doesn\'t match');
         }
     };
 }]);
