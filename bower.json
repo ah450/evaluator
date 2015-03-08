@@ -16,7 +16,8 @@
     "momentjs": "latest",
     "ellipsis-animated": "~0.1.1",
     "ng-file-upload": "~2.2.2",
-    "bootstrap-sass-official": "~3.3.3"
+    "bootstrap-sass-official": "~3.3.3",
+    "angular-modal-service": "~0.6.3"
   },
   "devDependencies": {
     "angular-utils-pagination": "~0.5.0"

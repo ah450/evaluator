@@ -1,4 +1,4 @@
-var jprApp = angular.module('jprApp', ['ui.bootstrap.datetimepicker', 'ngRoute', 'jprServices', 'LocalStorageModule', 'angularFileUpload', 'jpr-templates', 'angularUtils.directives.dirPagination']);
+var jprApp = angular.module('jprApp', ['ui.bootstrap.datetimepicker', 'ngRoute', 'jprServices', 'LocalStorageModule', 'angularFileUpload', 'jpr-templates', 'angularUtils.directives.dirPagination', 'angularModalService']);
 var jprServices = angular.module('jprServices', ['ngResource', 'ipCookie']).constant('Host', {
   'api_base': 'https://api.evaluator.in',
   'base': 'https://evaluator.in'

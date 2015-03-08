@@ -88,6 +88,7 @@ module.exports = function(grunt) {
                     'app/bower_components/ng-file-upload/angular-file-upload.js',
                     'app/bower_components/angular-utils-pagination/dirPagination.js',
                     'app/bower_components/momentjs/moment.js',
+                    'app/bower_components/angular-modal-service/dst/angular-modal-service.min.js',
                     'app/vendor/angular-bootstrap-datetimepicker/src/js/datetimepicker.js',
                     'app/bower_components/ellipsis-animated/src/ellipsis-animated.js',
                     'app/vendor/Blob.js/Blob.js',
