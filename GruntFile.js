@@ -80,20 +80,26 @@ module.exports = function(grunt) {
                 // sourceMap:true
             },
             dist: {
-                src: ['app/bower_components/jquery/dist/jquery.js', 'app/bower_components/bootstrap/dist/js/bootstrap.js',
-                    'app/bower_components/angular/angular.js', 'app/bower_components/angular-route/angular-route.js',
-                    'app/bower_components/angular-resource/angular-resource.js', 'app/bower_components/angular-cookie/angular-cookie.js',
+                src: [
+                    'app/bower_components/jquery/dist/jquery.js', 
+                    'app/bower_components/bootstrap/dist/js/bootstrap.js',
+                    'app/bower_components/angular/angular.js', 
+                    'app/bower_components/angular-route/angular-route.js',
+                    'app/bower_components/angular-resource/angular-resource.js', 
+                    'app/bower_components/angular-cookie/angular-cookie.js',
                     'app/bower_components/angular-local-storage/dist/angular-local-storage.js',
                     'app/bower_components/ng-file-upload/angular-file-upload-shim.js',
                     'app/bower_components/ng-file-upload/angular-file-upload.js',
                     'app/bower_components/angular-utils-pagination/dirPagination.js',
                     'app/bower_components/momentjs/moment.js',
-                    'app/bower_components/angular-modal-service/dst/angular-modal-service.min.js',
                     'app/vendor/angular-bootstrap-datetimepicker/src/js/datetimepicker.js',
                     'app/bower_components/ellipsis-animated/src/ellipsis-animated.js',
                     'app/vendor/Blob.js/Blob.js',
                     'app/vendor/FileSaver.js/FileSaver.js',
-                    'app/*.js', 'app/*/*.js', 'tmp/*.js'
+                    'app/bower_components/angular-modal-service/dst/angular-modal-service.js',
+                    'tmp/*.js',
+                    'app/*.js',
+                    'app/*/*.js'
                 ],
                 dest: 'app.js'
             }

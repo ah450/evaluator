@@ -1,4 +1,4 @@
-jprApp.controller('ProjectCtrl', ['$scope', '$routeParams', '$upload', '$location', 'Page', 'Auth', 'Project', 'Host', function($scope, $routeParams, $upload, $location, Page, Auth, Project, Host) {
+jprApp.controller('ProjectCtrl', ['$scope', '$routeParams', '$upload', '$location', 'ModalService', 'Page', 'Auth', 'Project', 'Host', function($scope, $routeParams, $upload, $location, ModalService, Page, Auth, Project, Host) {
 
     if (!Auth.isLoggedIn()) {
         // Not on my watch!
@@ -82,7 +82,23 @@ jprApp.controller('ProjectCtrl', ['$scope', '$routeParams', '$upload', '$locatio
         $scope.code = {
             file: null
         };
-        $scope.project.submitCode(file, submissionSuccessCallback, submissionFailureCallback);
+        if ($scope.project.is_quiz) {
+            // handle verification code 
+            ModalService.showModal({
+                templateUrl: 'app/quiz_verification.html',
+                controller: 'QuizVeririficationModalCtrl'
+            }).then(function(modal) {
+                modal.element.modal();
+                modal.close.then(function(result){
+                    if (result.status) {
+                        $scope.project.submitCode(file, result.verification_code, submissionSuccessCallback, submissionFailureCallback);
+                    }
+                });
+            });
+
+        }else {
+            $scope.project.submitCode(file, '', submissionSuccessCallback, submissionFailureCallback);
+        }
 
     };
 

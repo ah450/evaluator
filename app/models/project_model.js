@@ -63,12 +63,15 @@ jprServices.factory('Project', ['$q', '$upload', 'ProjectResource', 'BaseModel',
         return deferred.promise;
     };
 
-    Project.prototype.submitCode = function(codeFile, success, failure) {
+    Project.prototype.submitCode = function(codeFile, verification_code, success, failure) {
         $upload.upload({
             url: Host.api_base + this.data.submissions_url,
             method: 'POST',
             headers: {
                 'X-Auth-Token': 'Replace Me'
+            },
+            data: {
+                verification_code: verification_code
             },
             file: codeFile
         }).success(function(data, status, headers, config) {
