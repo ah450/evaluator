@@ -160,7 +160,7 @@ module.exports = function(grunt) {
                     src: ['app.js'],
                     dest: '/'
                 }, {
-                    src: ['app/dirPagination.tpl.html'],
+                    src: ['app/dirPagination.tpl.html', 'app/quiz_verification.html'],
                     dest: '/'
                 },
                  {
