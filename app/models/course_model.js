@@ -61,7 +61,8 @@ jprServices.factory('Course', ['$q', 'User', 'CourseResource', 'BaseModel', '$up
                     language: project.language,
                     due_date: project.due_date,
                     test_timeout: project.test_timeout,
-                    published: project.published
+                    published: project.published,
+                    is_quiz: project.is_quiz
                 },
                 file: project.tests,
                 fileFormDataName: formDataNames
