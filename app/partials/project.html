@@ -31,6 +31,11 @@
                         <input type="checkbox" ng-model="project.published"> Publish project
                     </label>
                 </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" ng-model="project.is_quiz"> Is this a quiz?
+                    </label>
+                </div>
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         <button type="button" class="btn btn-primary" ng-click="updateProject()" />
@@ -74,7 +79,7 @@
 
     <div class="row text-center">
         <div class="col-md-6">
-            <img ng-src="images/spin.gif" ng-if="loadingSubmissions">
+            <img ng-src="images/spin.gif" ng-if="loadingSubmissions"/>
         </div>
     </div>
     <div class="row">

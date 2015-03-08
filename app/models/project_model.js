@@ -92,7 +92,8 @@ jprServices.factory('Project', ['$q', '$upload', 'ProjectResource', 'BaseModel',
             },
             data: {
                 due_date: this.data.due_date,
-                published: this.data.published
+                published: this.data.published,
+                is_quiz: this.data.is_quiz
             },
             file: project.tests,
             fileFormDataName: formDataNames
@@ -132,6 +133,15 @@ jprServices.factory('Project', ['$q', '$upload', 'ProjectResource', 'BaseModel',
     Project.prototype.__defineSetter__('published', function(value) { 
         this.data.published = value ? 'True': 'False';
         return this.published;
+    });
+
+    Project.prototype.__defineGetter__('is_quiz', function() {
+        return this.data.is_quiz == 'True';
+    });
+
+    Project.prototype.__defineSetter__('is_quiz', function(value) { 
+        this.data.is_quiz = value ? 'True': 'False';
+        return this.is_quiz;
     });
 
     Project.$all = function() {
