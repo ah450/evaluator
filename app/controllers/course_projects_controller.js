@@ -11,6 +11,7 @@ jprApp.controller('CourseProjectsCtrl', ['$scope', 'Auth', 'Page', '$location', 
     tests: [],
     due_date: new Date(),
     published: true,
+    is_quiz: false,
     test_timeout: 600,
     validate: function(){
       var allClear = true;
@@ -82,6 +83,7 @@ jprApp.controller('CourseProjectsCtrl', ['$scope', 'Auth', 'Page', '$location', 
     $scope.creating = true;
     var oldDate = $scope.newProject.due_date;
     var oldPublished = $scope.newProject.published;
+    var oldIsQuiz = $scope.newProject.is_quiz;
     $scope.newProject.due_date = oldDate.toISOString();
     $scope.$parent.course.create_project($scope.newProject, function(project) {
       $scope.creating = false;
@@ -91,6 +93,7 @@ jprApp.controller('CourseProjectsCtrl', ['$scope', 'Auth', 'Page', '$location', 
       $scope.creating = false;
       $scope.newProject.due_date = oldDate;
       $scope.newProject.published = oldPublished;
+      $scope.newProject.is_quiz = oldIsQuiz;
       if (httpResponse.status == 403) {
         Page.addErrorMessage('Must be a course teacher to create a project.');
       }else  {

@@ -31,6 +31,11 @@ jprServices.factory('Course', ['$q', 'User', 'CourseResource', 'BaseModel', '$up
         } else {
             project.published = 'False';
         }
+        if (project.is_quiz) {
+            project.is_quiz = 'True';
+        } else {
+            project.is_quiz = 'False';
+        }
         if (project.tests.length === 0) {
             // create a project without test cases
             ProjectResource.create({
