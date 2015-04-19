@@ -37,6 +37,13 @@ jprServices.factory('User', ['UserResource', 'BaseModel', '$http', 'Host', '$q',
     User.prototype.__defineGetter__('guc_id', function() {
         return this.data.guc_id;
     });
+    User.prototype.__defineSetter__('team_id', function(value) {
+        this.modified = true;
+        return this.data.team_id = value;
+    });
+    User.prototype.__defineGetter__('team_id', function() {
+        return this.data.team_id;
+    });
     User.prototype.__defineSetter__('password', function(value) {
         this.modified = true;
         return this.data.password = value;
@@ -73,7 +80,33 @@ jprServices.factory('User', ['UserResource', 'BaseModel', '$http', 'Host', '$q',
                 defered.reject(response);
             });
         return defered.promise;
-    }
+    };
+
+    User.prototype.teamGrades = function() {
+        var defered = $q.defer();
+        var ep = [Host.api_base, 'user', 'grades'].join('/');
+        var req = {
+            method: 'GET',
+            url: ep,
+            headers: {
+                'X-Auth-Token': 'Replace Me'
+            }
+        };
+        $http(req)
+            .success(function(data, status, headers, config) {
+                defered.resolve(data);
+            })
+            .error(function(data, status, headers, config) {
+                var response = {
+                    data: data,
+                    status: status,
+                    headers: headers,
+                    config: config
+                };
+                defered.reject(response);
+            });
+        return defered.promise;
+    };
 
     User.$all = function() {
         return new User({}, false).all();

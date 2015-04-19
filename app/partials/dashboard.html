@@ -1,27 +1,65 @@
+<div class="row" data-ng-if="user.isStudent()">
+    <div class="col-md-12">
+        <h1>Team Grades</h1>
+    </div>
+    <div class="col-md-12" data-ng-if="loading_teamgrades">
+        <img id="spinner" data-ng-src="images/spin.gif">
+    </div>
+    <div class="col-md-12 " data-ng-if="!loading_teamgrades && teamGrades.length">
+        <div class="alert alert-warning">
+            <ul>
+                <li>Each milstone is worth 17.5% from the course</li>
+                <li>The following grades are subject to cahnge based on cheating detection results</li>
+                <li>If there are any problems contact your TA</li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-12" data-ng-if="!loading_teamgrades && !teamGrades.length">
+        <p>No grades are out yet for team {{user.team_id}}</p>
+    </div>
+    <div class="col-md-12">
+        <table class="table table-condensed" data-ng-if="teamGrades.length">
+            <thead>
+                <th>Project</th>
+                <th>Completed</th>
+                <th>Total</th>
+                <th>Grade in Percentage</th>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="grade in teamGrades">
+                    <td>{{grade.project.name}}</td>
+                    <td>{{grade.best_submission.passed_cases_count}}</td>
+                    <td>{{grade.best_submission.cases_count}}</td>
+                    <td>{{grade.best_submission.passed_percentage}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 <h1>Upcoming Deadlines</h1>
 <div class="row">
-    <div class="col-md-12" ng-if="loading_projects">
-        <img id="spinner" ng-src="images/spin.gif">
+    <div class="col-md-12" data-ng-if="loading_projects">
+        <img id="spinner" data-ng-src="images/spin.gif">
     </div>
     <div class="list-group">
-        <a href="#{{project.url}}" class="list-group-item" ng-repeat="project in projects | filter:{can_submit:true} | orderBy: '-due_date'">
+        <a href="#{{project.url}}" class="list-group-item" data-ng-repeat="project in projects | filter:{can_submit:true} | orderBy: '-due_date'">
             <h4 class="list-group-item-heading"><span class="text-primary">{{project.name}}</span></h4>
             <p class="list-group-item-text">Due Date {{project.due_date_pretty}} | Posted Since {{project.created_at_pretty}}</p>
         </a>
     </div>
-    <div class="col-md-12" ng-if="!loading_projects && projects.length == 0">
+    <div class="col-md-12" data-ng-if="!loading_projects && projects.length == 0">
         <p>There are no upcoming deadlines</p>
     </div>
 </div>
 <h1>My Courses</h1>
 <div class="row">
-    <div class="col-md-12" ng-if="loading_courses">
-        <img id="spinner" ng-src="images/spin.gif">
+    <div class="col-md-12" data-ng-if="loading_courses">
+        <img id="spinner" data-ng-src="images/spin.gif">
     </div>
-    <div class="col-md-12" >
-        <div class="panel panel-default col-md-6 col-lg-6" ng-repeat="course in courses">
+    <div class="col-md-12">
+        <div class="panel panel-default col-md-6 col-lg-6" data-ng-repeat="course in courses">
             <div class="panel-heading">
-                <span class="label label-info" ng-if="course.published">Published</span>
+                <span class="label label-info" data-ng-if="course.published">Published</span>
                 <a href="#{{course.url}}">
                     <h3 class="panel-title">{{course.name}}</h3>
                 </a>
@@ -37,9 +75,8 @@
             </div>
         </div>
     </div>
-    <div class="col-md-12" ng-if="!loading_courses && courses.length == 0">
-
-        <p ng-if="user.isStudent()">You are not signed up for any courses</p>
-        <p ng-if="!user.isStudent()">You are not a member of any course</p>
+    <div class="col-md-12" data-ng-if="!loading_courses && courses.length == 0">
+        <p data-ng-if="user.isStudent()">You are not signed up for any courses</p>
+        <p data-ng-if="!user.isStudent()">You are not a member of any course</p>
     </div>
 </div>

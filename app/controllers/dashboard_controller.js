@@ -1,10 +1,25 @@
 jprApp.controller('DashboardCtrl', ['$scope', '$http', '$location', 'Auth', 'Page', 'Course', function ($scope, $http, $location, Auth, Page, Course) {
     $scope.loading_courses = true;
     $scope.loading_projects = true;
+    $scope.loading_teamgrades = true;
     $scope.projects = [];
     $scope.courses = [];
+    $scope.teamGrades = [];
     $scope.isLoggedIn = Auth.isLoggedIn;
     $scope.user = Auth.getUser();
+
+
+
+    function loadTeamGrades(){
+        $scope.user.teamGrades().then(function (teamGrades) {
+            $scope.loading_teamgrades = false;
+            $scope.teamGrades = teamGrades;
+        }, function(httpResponse) {
+            $scope.loading_teamgrades = false;
+            Page.addErrorMessage(httpResponse.data.message);
+        });
+    }
+    loadTeamGrades();
 
     function myCoursesSuccessCallback(courses) {
         $scope.loading_courses = false;
@@ -47,6 +62,7 @@ jprApp.controller('DashboardCtrl', ['$scope', '$http', '$location', 'Auth', 'Pag
         $scope.user.courses().then(myCoursesSuccessCallback, myCoursesFailureCallback);
     }
     loadCourses();
+
     $scope.$watch("isLoggedIn()", function(newValue, oldValue) {
         if(newValue) {
             $scope.user = Auth.getUser();
