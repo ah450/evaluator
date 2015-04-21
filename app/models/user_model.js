@@ -108,6 +108,33 @@ jprServices.factory('User', ['UserResource', 'BaseModel', '$http', 'Host', '$q',
         return defered.promise;
     };
 
+
+    User.prototype.getSubmissions = function() {
+        var defered = $q.defer();
+        var ep = [Host.api_base, 'user', this.id, 'submissions'].join('/');
+        var req = {
+            method: 'GET',
+            url: ep,
+            headers: {
+                'X-Auth-Token': 'Replace Me'
+            }
+        };
+        $http(req)
+            .success(function(data, status, headers, config) {
+                defered.resolve(data);
+            })
+            .error(function(data, status, headers, config) {
+                var response = {
+                    data: data,
+                    status: status,
+                    headers: headers,
+                    config: config
+                };
+                defered.reject(response);
+            });
+        return defered.promise;
+    };
+
     User.$all = function() {
         return new User({}, false).all();
     };

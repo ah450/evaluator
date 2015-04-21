@@ -18,3 +18,11 @@ var compareTo = function() {
 };
  
 jprApp.directive("compareTo", compareTo);
+
+jprApp.directive("submissions", function () {
+   return {
+    restrict:'E',
+    // scope: {'submissions':'=', 'loadingSubmission':'='},
+    templateUrl:'submissions.html'
+   }; 
+});

@@ -1,34 +1,4 @@
-<section ng-if="loaded" class="row">
-    <div class="col-md-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">{{user.name}}</h3><span ng-if="user.isTeacher()" class="label label-info">TA</span><span ng-if="user.isStudent()" class="label label-success">Student</span>
-            </div>
-            <div class="panel-body">
-                <a href="mailto:{{user.email}}">
-                    <span class="glyphicon glyphicon-envelope"></span> {{user.email}}
-                </a>
-            </div>
-        </div>
-    </div>
-    <form name="changePassFrom" class="form col-md-12" data-ng-submit="changePassword()" data-ng-if="isOwner()">
-        <fieldset>
-            <legend>Change Password</legend>
-            <div class="form-group">
-                <label class="control-label" for="newpass">New Password</label>
-                <input class="form-control" type="password" name="password" id="newpass" data-ng-model="user.password" required>
-            </div>
-            <div class="form-group">
-                <label class="control-label" for="confirmpass">Confirm New Password</label>
-                <input class="form-control" type="password" name="confirmpass" id="confirmpass" data-ng-model="profile.confirmpass" required>
-            </div>
-            <button class="btn btn-primary">Change</button>
-        </fieldset>
-    </form>
-
-    <div class="col-md-12" data-ng-if="user.isStudent()">
-        <h3>Submissions</h3>
-        <div class="row text-center">
+<div class="row text-center">
     <div class="col-md-6">
         <img ng-src="images/spin.gif" ng-if="loadingSubmissions" />
     </div>
@@ -85,12 +55,11 @@
                 </div>
                 <div class="panel-footer text-center">
                     <button class="btn btn-block btn-info" ng-click="downloadHandler(submission.download_url)">Download</button>
-                    <button class="btn btn-block btn-info" ng-click="runSubmission(submission)" ng-if="currentUser.isTeacher()">Rerun Submission</button>
                 </div>
             </div>
         </div>
+        <div class="text-center">
+            <dir-pagination-controls template-url="app/dirPagination.tpl.html" on-page-change="loadSubmissionsPage(newPageNumber)"></dir-pagination-controls>
+        </div>
     </div>
 </div>
-
-    </div>
-</section>
