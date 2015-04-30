@@ -6,6 +6,7 @@ jprServices.factory('Page', ['$rootScope', 'Host', '$http', function($rootScope,
   var currentLink = '';
   var errorMessages = [];
   var infoMessages = [];
+  var warningMessages = [];
   var flash = '';
   var flashQueue = [];
   var errorFlash = '';
@@ -16,6 +17,7 @@ jprServices.factory('Page', ['$rootScope', 'Host', '$http', function($rootScope,
     $('#downloadIframe').removeAttr('src');
     errorMessages.clear();
     infoMessages.clear();
+    warningMessages.clear();
     if (oldLocation != newLocation) {
       flash = flashQueue.shift() || "";
       errorFlash = errorFlashQueue.shift() || "";
@@ -65,11 +67,17 @@ jprServices.factory('Page', ['$rootScope', 'Host', '$http', function($rootScope,
     getInfoMessages: function() {
       return infoMessages;
     },
+    getWarningMessages: function() {
+      return warningMessages;
+    },
     getErrorMessages: function() {
       return errorMessages;
     },
     removeInfoMessage: function(index) {
       infoMessages.splice(index, 1);
+    },
+    removeWarningMessage: function(index) {
+      warningMessages.splice(index, 1);
     },
     removeErrorMessage: function(index) {
       errorMessages.splice(index, 1);
@@ -77,17 +85,26 @@ jprServices.factory('Page', ['$rootScope', 'Host', '$http', function($rootScope,
     hasInfoMessages: function() {
       return infoMessages.length > 0;
     },
+    hasWarningMessages: function() {
+      return warningMessages.length > 0;
+    },
     hasErrorMessages: function() {
       return errorMessages.length > 0;
     },
     addInfoMessage: function(message) {
       infoMessages.push(message);
     },
+    addWarningMessage: function(message) {
+      warningMessages.push(message);
+    },
     addErrorMessage: function(message) {
       errorMessages.push(message);
     },
     clearInfoMessages: function() {
       infoMessages.clear();
+    },
+    clearWarningMessages: function() {
+      warningMessages.clear();
     },
     clearErrorMessages: function() {
       errorMessages.clear();

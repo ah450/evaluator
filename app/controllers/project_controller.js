@@ -26,6 +26,8 @@ jprApp.controller('ProjectCtrl', ['$scope', '$routeParams', '$upload', '$locatio
         file: null
     };
 
+    var longUploadTimer;
+
     //Pagination variables
     $scope.submissionsPerPage = Project.submissionsPerPage;
     $scope.totalSubmissions = 0;
@@ -68,17 +70,25 @@ jprApp.controller('ProjectCtrl', ['$scope', '$routeParams', '$upload', '$locatio
 
     function submissionSuccessCallback(submission) {
         $scope.loadingSubmissions = false;
+        clearTimeout(longUploadTimer);
+        Page.hideSpinner();
         Page.clearInfoMessages();
         Page.addInfoMessage('Code Submitted!');
         $scope.submissions.unshift(submission);
     }
 
     function submissionFailureCallback(data, status, headers, config) {
+        clearTimeout(longUploadTimer);
+        Page.hideSpinner();
         Page.addErrorMessage(data.message);
     }
 
     $scope.submitCode = function() {
         var file = $scope.code.file;
+        Page.showSpinner();
+        longUploadTimer = setTimeout(function () {
+            Page.addWarningMessage("You seem like you're uplaoding a large file, this may take a while...");
+        }, 30000);
         $scope.code = {
             file: null
         };

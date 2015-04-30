@@ -100,6 +100,9 @@ jprServices.factory('Project', ['$q', '$upload', 'ProjectResource', 'BaseModel',
             },
             file: project.tests,
             fileFormDataName: formDataNames
+        }).progress(function(evt) {
+            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+            console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
         }).success(function(data) {
             success(new Project(data, true));
         }).error(function(data, status, headers, config) {
@@ -133,8 +136,8 @@ jprServices.factory('Project', ['$q', '$upload', 'ProjectResource', 'BaseModel',
         return this.data.published == 'True';
     });
 
-    Project.prototype.__defineSetter__('published', function(value) { 
-        this.data.published = value ? 'True': 'False';
+    Project.prototype.__defineSetter__('published', function(value) {
+        this.data.published = value ? 'True' : 'False';
         return this.published;
     });
 
@@ -142,8 +145,8 @@ jprServices.factory('Project', ['$q', '$upload', 'ProjectResource', 'BaseModel',
         return this.data.is_quiz == 'True';
     });
 
-    Project.prototype.__defineSetter__('is_quiz', function(value) { 
-        this.data.is_quiz = value ? 'True': 'False';
+    Project.prototype.__defineSetter__('is_quiz', function(value) {
+        this.data.is_quiz = value ? 'True' : 'False';
         return this.is_quiz;
     });
 
