@@ -5,21 +5,25 @@ jprApp.controller('DashboardCtrl', ['$scope', '$http', '$location', 'Auth', 'Pag
     $scope.projects = [];
     $scope.courses = [];
     $scope.teamGrades = [];
+    $scope.quizGrades = [];
+    $scope.milstoneGrades = [];
     $scope.isLoggedIn = Auth.isLoggedIn;
     $scope.user = Auth.getUser();
 
 
 
-    function loadTeamGrades(){
-        $scope.user.teamGrades().then(function (teamGrades) {
+    function loadGrades(){
+        $scope.user.grades().then(function (grades) {
             $scope.loading_teamgrades = false;
-            $scope.teamGrades = teamGrades;
+            $scope.teamGrades = grades.team_grades;
+            $scope.quizeGrades = grades.quiz_grades;
+            $scope.milestoneGrades = grades.milestone_grades;
         }, function(httpResponse) {
             $scope.loading_teamgrades = false;
             Page.addErrorMessage(httpResponse.data.message);
         });
     }
-    loadTeamGrades();
+    loadGrades();
 
     function myCoursesSuccessCallback(courses) {
         $scope.loading_courses = false;

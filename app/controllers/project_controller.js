@@ -106,7 +106,7 @@ jprApp.controller('ProjectCtrl', ['$scope', '$routeParams', '$upload', '$locatio
                 });
             });
 
-        }else {
+        } else {
             $scope.project.submitCode(file, '', submissionSuccessCallback, submissionFailureCallback);
         }
 

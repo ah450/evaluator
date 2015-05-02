@@ -35,6 +35,40 @@
             </tbody>
         </table>
     </div>
+    <div class="col-md-12">
+        <table class="table table-condensed" data-ng-if="quizGrades.length">
+            <thead>
+                <th>Quiz</th>
+                <th>Completed</th>
+                <th>Total</th>
+                <th>Grade in Percentage</th>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="grade in quizGrades">
+                    <td>{{grade.quiz}}</td>
+                    <td>{{grade.passed_tests}}</td>
+                    <td>{{grade.total_tests}}</td>
+                    <td>{{grade.grade_in_percentage}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-12">
+        <table class="table table-condensed" data-ng-if="milestoneGrades.length">
+            <thead>
+                <th>Milestone</th>
+                <th>Milstone Ratio</th>
+                <th>Grade in Percentage</th>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="grade in milestoneGrades">
+                    <td>{{grade.milestone}}</td>
+                    <td>{{grade.milstone_ratio}}</td>
+                    <td>{{grade.grade_in_percentage}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 <h1>Upcoming Deadlines</h1>
 <div class="row">
