@@ -1,6 +1,6 @@
 <div class="row" data-ng-if="user.isStudent()">
     <div class="col-md-12">
-        <h1>Team Grades</h1>
+        <h1>Grades</h1>
     </div>
     <div class="col-md-12" data-ng-if="loading_teamgrades">
         <img id="spinner" data-ng-src="images/spin.gif">
@@ -13,6 +13,9 @@
                 <li>If there are any problems contact your project TA</li>
             </ul>
         </div>
+    </div>
+    <div class="col-md-12">
+        <h2>Team Project Grades</h2>
     </div>
     <div class="col-md-12" data-ng-if="!loading_teamgrades && !teamGrades.length">
         <p>No grades are out yet for team {{user.team_id}}</p>
@@ -36,6 +39,9 @@
         </table>
     </div>
     <div class="col-md-12">
+        <h2>Quiz Grades</h2>
+    </div>
+    <div class="col-md-12">
         <table class="table table-condensed" data-ng-if="quizGrades.length">
             <thead>
                 <th>Quiz</th>
@@ -53,6 +59,13 @@
             </tbody>
         </table>
     </div>
+    <div class="col-md-12" data-ng-if="!loading_teamgrades && !quizGrades.length">
+        <p>No Quiz grades are out yet for You</p>
+    </div>
+
+    <div class="col-md-12">
+        <h2>Overall Milestone Grades</h2>
+    </div>
     <div class="col-md-12">
         <table class="table table-condensed" data-ng-if="milestoneGrades.length">
             <thead>
@@ -68,6 +81,10 @@
                 </tr>
             </tbody>
         </table>
+    </div>
+
+    <div class="col-md-12" data-ng-if="!loading_teamgrades && !milestoneGrades.length">
+        <p>No milestone grades are out yet for You</p>
     </div>
 </div>
 <h1>Upcoming Deadlines</h1>
