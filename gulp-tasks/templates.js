@@ -11,15 +11,17 @@ var html2jsOptions = {
 
 gulp.task('templates', function() {
   // Turns templates to html
-  return gulp.src(['src/views/*.html', 'src/views/**/*.html'])
+  return gulp.src(['src/views/**/*.html'])
     .pipe(ngHTML2JS(html2jsOptions))
-    .pipe(gulp.dest('./build/'));
+    .pipe(gulp.dest('./build/templates'));
 });
 
 gulp.task('templates-min', function() {
-  return gulp.src(['src/views/*.html', 'src/views/**/*.html'])
-    .pipe(minifyHtml())
+  return gulp.src(['src/views/**/*.html'])
+    .pipe(minifyHtml({
+      empty: true
+    }))
     .pipe(ngHTML2JS(html2jsOptions))
     .pipe(concat('partials.min.js'))
-    .pipe(gulp.dest('./temp/'));
+    .pipe(gulp.dest('./build/temp/'));
 })

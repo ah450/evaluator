@@ -15,7 +15,7 @@ gulp.task('clean', function() {
   });
 });
 
-gulp.task('webserver', ['assets', 'scripts', 'watch', 'css'], function() {
+gulp.task('webserver', ['assets', 'scripts', 'watch', 'css', 'manifest'], function() {
   connect.server({
     livereload: true,
     root: 'build'
@@ -28,15 +28,18 @@ gulp.task('watch', function() {
   });
 });
 
-gulp.task('reload', ['assets', 'scripts', 'css'], function() {
+gulp.task('reload', ['assets', 'scripts', 'css', 'manifest'], function() {
   return gulp.src('./build/**/*')
     .pipe(connect.reload());
 });
 
 gulp.task('dev', ['clean'], function() {
   return gulp.start('webserver');
-})
+});
+
+gulp.task('default', ['dev']);
+
 
 gulp.task('dist', ['clean'], function() {
-  return gulp.start('uglify', 'css-min', 'assets');
+  return gulp.start('uglify', 'css-min', 'assets', 'manifest-dist');
 });
