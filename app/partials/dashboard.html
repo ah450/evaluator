@@ -1,0 +1,135 @@
+<div class="row" data-ng-if="user.isStudent()">
+    <div class="col-md-12">
+        <h1>Grades</h1>
+    </div>
+    <div class="col-md-12" data-ng-if="loading_teamgrades">
+        <img id="spinner" data-ng-src="images/spin.gif">
+    </div>
+    <div class="col-md-12 " data-ng-if="!loading_teamgrades && teamGrades.length">
+        <div class="alert alert-warning">
+            <ul>
+                <li>Each milstone is worth 17.5% from the course</li>
+                <li>The following grades are subject to change based on cheating detection results</li>
+                <li>If there are any problems contact your project TA</li>
+            </ul>
+        </div>
+    </div>
+    <!-- 
+    <div class="col-md-12">
+        <h2>Team Project Grades</h2>
+    </div>
+    <div class="col-md-12" data-ng-if="!loading_teamgrades && !teamGrades.length">
+        <p>No grades are out yet for team {{user.team_id}}</p>
+    </div>
+    <div class="col-md-12">
+        <table class="table table-condensed" data-ng-if="teamGrades.length">
+            <thead>
+                <th>Project</th>
+                <th>Completed</th>
+                <th>Total</th>
+                <th>Grade in Percentage</th>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="grade in teamGrades">
+                    <td>{{grade.project.name}}</td>
+                    <td>{{grade.best_submission.passed_cases_count}}</td>
+                    <td>{{grade.best_submission.cases_count}}</td>
+                    <td>{{grade.best_submission.passed_percentage}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+     -->
+    <div class="col-md-12">
+        <h2>Quiz and Project Milsetone Grades</h2>
+    </div>
+    <div class="col-md-12">
+        <table class="table table-condensed" data-ng-if="quizGrades.length">
+            <thead>
+                <th>Grade For</th>
+                <th>Completed</th>
+                <th>Total</th>
+                <th>Grade in Percentage</th>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="grade in quizGrades">
+                    <td>{{grade.quiz}}</td>
+                    <td>{{grade.passed_tests}}</td>
+                    <td>{{grade.total_tests}}</td>
+                    <td>{{grade.grade_in_percentage}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-12" data-ng-if="!loading_teamgrades && !quizGrades.length">
+        <p>No Quiz grades are out yet for You</p>
+    </div>
+
+    <div class="col-md-12">
+        <h2>Overall Milestone Grades</h2>
+    </div>
+    <div class="col-md-12">
+        <table class="table table-condensed" data-ng-if="milestoneGrades.length">
+            <thead>
+                <th>Milestone</th>
+                <th>Milstone Ratio</th>
+                <th>Grade in Percentage</th>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="grade in milestoneGrades">
+                    <td>{{grade.milestone}}</td>
+                    <td>{{grade.milestone_ratio}}</td>
+                    <td>{{grade.grade_in_percentage}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-12" data-ng-if="!loading_teamgrades && !milestoneGrades.length">
+        <p>No milestone grades are out yet for You</p>
+    </div>
+</div>
+<h1>Upcoming Deadlines</h1>
+<div class="row">
+    <div class="col-md-12" data-ng-if="loading_projects">
+        <img id="spinner" data-ng-src="images/spin.gif">
+    </div>
+    <div class="list-group">
+        <a href="#{{project.url}}" class="list-group-item" data-ng-repeat="project in projects | filter:{can_submit:true} | orderBy: '-due_date'">
+            <h4 class="list-group-item-heading"><span class="text-primary">{{project.name}}</span></h4>
+            <p class="list-group-item-text">Due Date {{project.due_date_pretty}} | Posted Since {{project.created_at_pretty}}</p>
+        </a>
+    </div>
+    <div class="col-md-12" data-ng-if="!loading_projects && projects.length == 0">
+        <p>There are no upcoming deadlines</p>
+    </div>
+</div>
+<h1>My Courses</h1>
+<div class="row">
+    <div class="col-md-12" data-ng-if="loading_courses">
+        <img id="spinner" data-ng-src="images/spin.gif">
+    </div>
+    <div class="col-md-12">
+        <div class="panel panel-default col-md-6 col-lg-6" data-ng-repeat="course in courses">
+            <div class="panel-heading">
+                <span class="label label-info" data-ng-if="course.published">Published</span>
+                <a href="#{{course.url}}">
+                    <h3 class="panel-title">{{course.name}}</h3>
+                </a>
+            </div>
+            <div class="panel-body">
+                <p>{{course.description}}</p>
+            </div>
+            <div class="panel-footer">
+                <a href="#{{course.supervisor.url}}" title="Course Supervisor">{{course.supervisor.name}}</a> |
+                <a href="#{{course.tas_url}}" title="Course Teachers">Teachers</a> |
+                <a href="#{{course.students_url}}" title="Course Students">Students</a> |
+                <a href="#{{course.projects_url}}" title="Course projects">Projects</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12" data-ng-if="!loading_courses && courses.length == 0">
+        <p data-ng-if="user.isStudent()">You are not signed up for any courses</p>
+        <p data-ng-if="!user.isStudent()">You are not a member of any course</p>
+    </div>
+</div>
