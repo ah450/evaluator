@@ -2,7 +2,7 @@ FactoryGirl.define do
   factory :user do
     name {Faker::Name.name}
     password {Faker::Internet.password}
-
+    
 
     factory :student do
       email { (0...10).map { ('a'..'z').to_a[rand(26)] }.join + "@student.guc.edu.eg" }

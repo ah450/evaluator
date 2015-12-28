@@ -18,7 +18,9 @@ class User < ActiveRecord::Base
 
 
   def as_json(options={})
-    super(except: [:password_digest])
+    super(except: [:password_digest],
+      methods: [:guc_id]
+    )
   end
 
   # Generates a timed JWT

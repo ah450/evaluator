@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
                               .per(page_params[:page_size])
     instance_variable_set(plural_resource_variable, resources)
     render json: {
-      page:resources.current_page,
+      page: resources.current_page,
       total_pages: resources.total_pages,
       page_size: resources.size,
       "#{resource_name.pluralize}" => resources.as_json
@@ -155,7 +155,7 @@ class ApplicationController < ActionController::Base
   # Attempts to set current user
   def authenticate
     pattern = /^Bearer /
-    header  = request.headers["Authorization"] # <= env
+    header  = request.headers["Authorization"]
     if header && header.match(pattern)
       token = header.gsub(pattern, '')
       @current_user = User.find_by_token token
