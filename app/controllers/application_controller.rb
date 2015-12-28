@@ -121,7 +121,7 @@ class ApplicationController < ActionController::Base
 
   # Set Header and response
   def prepare_unauthorized_response
-    response.headers['WWW-Authenticate'] = 'Token realm="ChattyCatty"'
+    response.headers['WWW-Authenticate'] = 'Token realm="Evaluator"'
     response.status = :unauthorized
   end
 
@@ -144,7 +144,7 @@ class ApplicationController < ActionController::Base
   end
 
   def error_messages
-    Rails.application.config.configuration[:error_messages]
+    Rails.application.config.configurations[:error_messages]
   end
 
   def authorize
