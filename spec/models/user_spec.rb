@@ -121,6 +121,19 @@ RSpec.describe User, type: :model do
 
   end # Student specs
 
+  describe 'type scope' do
+    let(:teachers) { FactoryGirl.create_list(:teacher, 10) }
+    let(:students) { FactoryGirl.create_list(:student, 10) }
+    it 'should query by teachers' do
+      are_teachers = User.teachers.reduce { |memo, user| memo && user.teacher? }
+      expect(are_teachers).to_not be true
+    end
+    it 'should query by students' do
+      are_students = User.students.reduce { |memo, user| memo && user.student? }
+      expect(are_students).to_not be true
+    end
+  end
+
   describe 'Teacher' do
     
     describe 'validation' do

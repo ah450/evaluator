@@ -10,6 +10,8 @@ class User < ActiveRecord::Base
   validate :email_not_changed
   validate :student_fields
   before_validation :set_subtype
+  scope :students, -> { where student: true }
+  scope :teachers, -> { where student: false }
 
 
   def teacher?
