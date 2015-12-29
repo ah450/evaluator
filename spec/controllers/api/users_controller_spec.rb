@@ -11,12 +11,12 @@ RSpec.describe Api::UsersController, type: :controller do
       expect(response).to be_unauthorized
     end
     it 'should respond to index action' do
-      request.headers['Authorization'] = "Bearer #{user.token}"
+      set_token user.token
       get :index, format: :json
       expect(response).to be_success
     end
     it 'should have pagination' do
-      request.headers['Authorization'] = "Bearer #{user.token}"
+      set_token user.token
       get :index, format: :json, page: 1, page_size: students.length
       expect(json_response).to include(
         :users, :page, :page_size, :total_pages
@@ -26,7 +26,7 @@ RSpec.describe Api::UsersController, type: :controller do
       expect(json_response[:total_pages]).to eql expected_total_pages
     end
     it 'should return all records' do
-      request.headers['Authorization'] = "Bearer #{user.token}"
+      set_token user.token
       get :index, format: :json, page: 1, page_size: students.length + teachers.length
       expect(json_response).to include(
         :users, :page, :page_size, :total_pages
@@ -49,7 +49,7 @@ RSpec.describe Api::UsersController, type: :controller do
       expect(response).to be_unauthorized
     end
     it 'should show the correct user' do
-      request.headers['Authorization'] = "Bearer #{student.token}"
+      set_token student.token
       get :show, format: :json, id: student.id
       expect(json_response[:id]).to eql student.id
       expect(json_response).to include(
@@ -78,7 +78,7 @@ RSpec.describe Api::UsersController, type: :controller do
 
     it 'should not allow a user to change another user' do
       old_digest = teacher_one.password_digest
-      request.headers['Authorization'] = "Bearer #{student_two.token}"
+      set_token student_two.token
       put :update, id: teacher_one.id, format: :json, password: 'new password!'
       expect(response).to be_forbidden
       teacher_one.reload
@@ -87,7 +87,7 @@ RSpec.describe Api::UsersController, type: :controller do
 
     it 'should allow a user to modify its fields' do
       old_digest = teacher_one.password_digest
-      request.headers['Authorization'] = "Bearer #{teacher_one.token}"
+      set_token teacher_one.token
       put :update, id: teacher_one.id, format: :json, password: 'new password!'
       expect(response).to be_success
       teacher_one.reload
@@ -97,7 +97,7 @@ RSpec.describe Api::UsersController, type: :controller do
     it 'should not allow a user to modify its email' do
       teacher_one.reload
       old_json = teacher_one.as_json
-      request.headers['Authorization'] = "Bearer #{teacher_one.token}"
+      set_token teacher_one.token
       put :update, id: teacher_one.id, format: :json, email: 'newteach@guc.edu.eg'
       expect(response).to be_unprocessable
       teacher_one.reload
@@ -107,7 +107,7 @@ RSpec.describe Api::UsersController, type: :controller do
     it 'should allow a user to modify more than one field' do
       student_two.reload
       old_json = student_two.as_json
-      request.headers['Authorization'] = "Bearer #{student_two.token}"
+      set_token student_two.token
       put :update, id: student_two.id, format: :json, password: 'new password!', name: 'new name!'
       expect(response).to be_success
       student_two.reload
@@ -115,7 +115,7 @@ RSpec.describe Api::UsersController, type: :controller do
     end
 
     it 'should not allow a user to change its type' do
-      request.headers['Authorization'] = "Bearer #{student_two.token}"
+      set_token student_two.token
       put :update, id: student_two.id, format: :json, student: false
       expect(response).to be_unprocessable
       student_two.reload
@@ -123,7 +123,7 @@ RSpec.describe Api::UsersController, type: :controller do
     end
 
     it 'should not allow a user to make its self verified' do
-      request.headers['Authorization'] = "Bearer #{teacher_two.token}"
+      set_token teacher_two.token
       put :update, id: teacher_two.id, format: :json, verified: true
       expect(response).to be_unprocessable
       teacher_two.reload
