@@ -10,6 +10,10 @@ Rails.application.config.configurations = {
             record_not_found: "Record not found",
             forbidden_teacher_only: "Must be a teacher to perform this action"
         },
-        default_token_exp: 24 * 60 * 60
+        default_token_exp: 24 * 60 * 60,
+        messages: {
+            registration_success: "Registered to course",
+            unregistration_success: "Unregistered from course"
+        }
     }
 

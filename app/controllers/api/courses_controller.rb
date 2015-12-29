@@ -3,8 +3,20 @@ class Api::CoursesController < ApplicationController
   prepend_before_action :authenticate
   before_action :hide_unpublished, only: [:index]
   before_action :hide_unpublished_single, only: [:show]
+  before_action :must_be_published, only: [:register, :unregister]
+  before_action :authorize_student, only: [:register, :unregister]
 
-  
+
+
+  def register
+    get_resource.register @current_user
+    render json: {message: messages[:registration_success]}, status: :created
+  end
+
+  def unregister
+    get_resource.unregister @current_user
+    render json: {message: messages[:unregistration_success]}
+  end
 
 
   private
@@ -19,6 +31,10 @@ class Api::CoursesController < ApplicationController
     end
   end
 
+  def must_be_published
+    raise ForbiddenError, error_messages[:forbidden] unless get_resource.published?
+  end
+
   def query_params
     params.permit(:name, :published)
   end
@@ -29,8 +45,5 @@ class Api::CoursesController < ApplicationController
     params.permit attributes
   end
 
-  def authorize_teacher
-    raise ForbiddenError, error_messages[:forbidden_teacher_only] unless
-      @current_user.teacher?
-  end
+
 end

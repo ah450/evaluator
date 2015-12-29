@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  before_action :set_resource, only: [:show, :destroy, :update]
+  before_action :set_resource, except: [:index, :create]
   before_action :authenticate, :authorize, only: [:destroy, :update]
   after_filter :no_cache, only: [:create, :destroy, :update]
   rescue_from AuthenticationError, with: :authentication_error
@@ -148,6 +148,10 @@ class ApplicationController < ActionController::Base
     Rails.application.config.configurations[:error_messages]
   end
 
+  def messages
+    Rails.application.config.configurations[:messages]
+  end
+
   def forbidden_error(error)
     render json: {message: error.message}, status: :forbidden
   end
@@ -155,6 +159,19 @@ class ApplicationController < ActionController::Base
   def authorize
     raise ForbiddenError, error_messages[:forbidden] unless user_authorized
   end
+
+  # Optional teacher only authorization
+  def authorize_teacher
+    raise ForbiddenError, error_messages[:forbidden_teacher_only] unless
+      @current_user.teacher?
+  end
+
+  # Optional student only
+  def authorize_student
+    raise ForbiddenError, error_messages[:forbidden_student_only] unless
+      @current_user.student?
+  end
+
 
   # Attempts to set current user
   def authenticate

@@ -4,4 +4,13 @@ class Course < ActiveRecord::Base
   has_many :studentships, inverse_of: :course
   has_many :students, through: :studentships, dependent: :delete_all, class_name: 'User'
   scope :published, -> { where published: true }
+
+  def register(student)
+    students << student
+  end
+
+  def unregister(student)
+    students.delete student
+  end
+
 end

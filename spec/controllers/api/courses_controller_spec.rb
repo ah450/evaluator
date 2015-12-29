@@ -123,6 +123,8 @@ RSpec.describe Api::CoursesController, type: :controller do
       expect(json_response[:published]).to be true
     end
   end
+
+
   describe "update" do
     let(:course) {FactoryGirl.create(:course)}
     let(:teacher) {FactoryGirl.create(:teacher)}
@@ -154,6 +156,8 @@ RSpec.describe Api::CoursesController, type: :controller do
       expect(course.as_json).to_not match old_json
     end
   end
+
+
   describe "destroy" do
     let(:students) {FactoryGirl.create_list(:student, 5)}
     let(:student) {FactoryGirl.create(:student)}
@@ -182,4 +186,77 @@ RSpec.describe Api::CoursesController, type: :controller do
       }.to change(Course, :count).by -1
     end
   end
+
+  describe 'registration' do
+    let(:student) {FactoryGirl.create(:student)}
+    let(:teacher) {FactoryGirl.create(:teacher)}
+    let(:course) {FactoryGirl.create(:course)}
+    let(:published_course) {FactoryGirl.create(:course, published: true)}
+    it 'should not allow unauthorized' do
+      expect {
+        post :register, format: :json, id: published_course.id
+        }.to change(Studentship, :count).by 0
+      expect(response).to be_unauthorized
+    end
+    it 'should not allow registration to unpublished course' do
+      expect {
+        set_token student.token
+        post :register, format: :json, id: course.id
+        }.to change(Studentship, :count).by 0
+      expect(response).to be_forbidden
+    end
+    it 'should not allow registration by teacher' do
+      expect {
+        set_token teacher.token
+        post :register, format: :json, id: published_course.id
+        }.to change(Studentship, :count).by 0
+      expect(response).to be_forbidden
+    end
+
+    it 'should allow registration by student' do
+      expect {
+        set_token student.token
+        post :register, format: :json, id: published_course.id
+        }.to change(Studentship, :count).by 1
+      expect(response).to be_created
+    end
+  end
+
+
+  describe 'ununregistration' do
+    let(:student) {FactoryGirl.create(:student)}
+    let(:teacher) {FactoryGirl.create(:teacher)}
+    let(:course) {FactoryGirl.create(:course)}
+    let(:published_course) {FactoryGirl.create(:course, published: true)}
+    it 'should not allow unauthorized' do
+      expect {
+        delete :unregister, format: :json, id: published_course.id
+        }.to change(Studentship, :count).by 0
+      expect(response).to be_unauthorized
+    end
+    it 'should not allow unregistration to unpublished course' do
+      expect {
+        set_token student.token
+        delete :unregister, format: :json, id: course.id
+        }.to change(Studentship, :count).by 0
+      expect(response).to be_forbidden
+    end
+    it 'should not allow unregistration by teacher' do
+      expect {
+        set_token teacher.token
+        delete :unregister, format: :json, id: published_course.id
+        }.to change(Studentship, :count).by 0
+      expect(response).to be_forbidden
+    end
+
+    it 'should allow unregistration by student' do
+      published_course.register student
+      expect {
+        set_token student.token
+        delete :unregister, format: :json, id: published_course.id
+        }.to change(Studentship, :count).by -1
+      expect(response).to be_success
+    end
+  end
+
 end
