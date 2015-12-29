@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   before_action :authenticate, :authorize, only: [:destroy, :update]
   after_filter :no_cache, only: [:create, :destroy, :update]
   rescue_from AuthenticationError, with: :authentication_error
+  rescue_from ForbiddenError, with: :forbidden_error
   rescue_from JWT::ExpiredSignature, with: :expired_signature
   rescue_from JWT::VerificationError, with: :verification_error
 
@@ -147,9 +148,12 @@ class ApplicationController < ActionController::Base
     Rails.application.config.configurations[:error_messages]
   end
 
+  def forbidden_error(error)
+    render json: {message: error.message}, status: :forbidden
+  end
+
   def authorize
-    render json: {message: error_messages[:forbidden]},
-      status: :forbidden unless user_authorized
+    raise ForbiddenError, error_messages[:forbidden] unless user_authorized
   end
 
   # Attempts to set current user
