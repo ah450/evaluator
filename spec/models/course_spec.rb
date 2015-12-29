@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Course, type: :model do
   describe 'validations' do
     let(:course) {FactoryGirl.build(:course)}
-    it 'hase a valid factory' do
+    it 'has a valid factory' do
       expect(course).to be_valid
     end
     context 'name is nil' do
