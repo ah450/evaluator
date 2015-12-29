@@ -10,8 +10,12 @@ class User < ActiveRecord::Base
   validate :email_not_changed
   validate :student_fields
   before_validation :set_subtype
+  scope :verified, -> { where verified: true }
   scope :students, -> { where student: true }
   scope :teachers, -> { where student: false }
+  has_many :studentships, inverse_of: :student, foreign_key: :student_id
+  has_many :courses, through: :studentships, dependent: :delete_all
+
 
 
   def teacher?

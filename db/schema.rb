@@ -11,10 +11,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151228111701) do
+ActiveRecord::Schema.define(version: 20151228202624) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "courses", force: :cascade do |t|
+    t.string   "name",                        null: false
+    t.text     "description",                 null: false
+    t.boolean  "published",   default: false, null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+  end
+
+  add_index "courses", ["name"], name: "index_courses_on_name", unique: true, using: :btree
+  add_index "courses", ["published"], name: "index_courses_on_published", using: :btree
+
+  create_table "studentships", force: :cascade do |t|
+    t.integer  "course_id"
+    t.integer  "student_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "studentships", ["course_id"], name: "index_studentships_on_course_id", using: :btree
+  add_index "studentships", ["student_id"], name: "index_studentships_on_student_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "name",                            null: false
@@ -37,4 +58,6 @@ ActiveRecord::Schema.define(version: 20151228111701) do
   add_index "users", ["student"], name: "index_users_on_student", using: :btree
   add_index "users", ["team"], name: "index_users_on_team", using: :btree
 
+  add_foreign_key "studentships", "courses"
+  add_foreign_key "studentships", "users", column: "student_id"
 end
