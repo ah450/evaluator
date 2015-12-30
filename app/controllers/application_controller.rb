@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
 
   # GET /api/{plural_resource_variable}
   def index
-    resources = resource_class.where(query_params)
+    resources = base_index_query.where(query_params)
                               .page(page_params[:page])
                               .per(page_params[:page_size])
     instance_variable_set(plural_resource_variable, resources)
@@ -53,6 +53,13 @@ class ApplicationController < ActionController::Base
 
 
   private
+
+  # By default it is resource_class
+  # Override for special filtering
+  # Usage is base_index_query.where(...)...
+  def base_index_query
+    resource_class
+  end
 
   def no_cache
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate" # HTTP 1.1.

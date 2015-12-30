@@ -5,48 +5,49 @@ RSpec.describe Api::CoursesController, type: :controller do
     let(:student) {FactoryGirl.create(:student)}
     let(:teacher) {FactoryGirl.create(:teacher)}
     let(:courses) {FactoryGirl.create_list(:course, 5)}
-    it 'should not allow unauthorized index' do
+    it 'disallow unauthorized index' do
       get :index, format: :json
       expect(response).to be_unauthorized
     end
-    it 'should allow a student to index' do
+    it 'allow a student to index' do
       set_token student.token
       get :index, format: :json
       expect(response).to be_success
     end
-    it 'should allow a teacher to index' do
+    it 'allow a teacher to index' do
       set_token teacher.token
       get :index, format: :json
       expect(response).to be_success
     end
-    it 'should have pagination' do
+    it 'have pagination' do
       set_token student.token
       get :index, format: :json, page: 1, page_size: courses.length
       expect(json_response).to include(
         :courses, :page, :page_size, :total_pages
         )
     end
-    it 'should not return unpublished courses to students' do
+    it 'not return unpublished courses to students' do
+      courses
       set_token student.token
       get :index, format: :json
       expect(json_response[:page_size]).to eql 0
     end
     context 'query' do
 
-      it 'should override published param for students' do
+      it 'override published param for students' do
         set_token student.token
         get :index, format: :json, published: false
         expect(json_response[:page_size]).to eql 0
       end
 
-      it 'should query by published' do
+      it 'query by published' do
         course = FactoryGirl.create(:course, published: true)
         set_token teacher.token
         get :index, format: :json, published: true
         expect(json_response[:page_size]).to eql 1
         expect(json_response[:courses].first[:id]).to eql course.id
       end
-      it 'should query by name' do
+      it 'query by name' do
         course = FactoryGirl.create(:course, published: true)
         set_token student.token
         get :index, format: :json, name: course.name
@@ -60,11 +61,11 @@ RSpec.describe Api::CoursesController, type: :controller do
     let(:teacher) {FactoryGirl.create(:teacher)}
     let(:course) {FactoryGirl.create(:course)}
     let(:published_course) {FactoryGirl.create(:course, published: true)}
-    it 'should not allow unauthorized show' do
+    it 'disallow unauthorized show' do
       get :show, format: :json, id: course.id
       expect(response).to be_unauthorized
     end
-    it 'should allow a teacher' do
+    it 'allow a teacher' do
       set_token teacher.token
       get :show, format: :json, id: course.id
       expect(json_response[:id]).to eql course.id
@@ -72,7 +73,7 @@ RSpec.describe Api::CoursesController, type: :controller do
         :id, :name, :description, :published
         )
     end
-    it 'should allow a student' do
+    it 'allow a student' do
       set_token student.token
       get :show, format: :json, id: published_course.id
       expect(json_response[:id]).to eql published_course.id
@@ -80,7 +81,7 @@ RSpec.describe Api::CoursesController, type: :controller do
         :id, :name, :description, :published
         )
     end
-    it 'should not allow a student to request an unpublished course' do
+    it 'disallow a student to request an unpublished course' do
       set_token student.token
       get :show, format: :json, id: course.id
       expect(response).to be_forbidden
@@ -90,13 +91,13 @@ RSpec.describe Api::CoursesController, type: :controller do
   describe "create" do
     let(:course_params) {FactoryGirl.attributes_for(:course)}
     let(:teacher) {FactoryGirl.create(:teacher)}
-    it 'should not allow unauthorized' do
+    it 'disallow unauthorized' do
       expect {
         post :create, format: :json, **course_params
       }.to change(Course, :count).by 0
       expect(response).to be_unauthorized
     end
-    it 'should not allow students' do
+    it 'disallow students' do
       student = FactoryGirl.create(:student)
       expect {
         set_token student.token
@@ -104,19 +105,19 @@ RSpec.describe Api::CoursesController, type: :controller do
       }.to change(Course, :count).by 0
       expect(response).to be_forbidden
     end
-    it 'should allow teachers' do
+    it 'allow teachers' do
       expect {
         set_token teacher.token
         post :create, format: :json, **course_params
       }.to change(Course, :count).by 1
       expect(response).to be_created
     end
-    it 'should be unpublished by default' do
+    it 'be unpublished by default' do
       set_token teacher.token
       post :create, format: :json, **course_params
       expect(json_response[:published]).to be false
     end
-    it 'should allow setting of published field' do
+    it 'allow setting of published field' do
       set_token teacher.token
       course_params[:published] = true
       post :create, format: :json, **course_params
@@ -128,7 +129,7 @@ RSpec.describe Api::CoursesController, type: :controller do
   describe "update" do
     let(:course) {FactoryGirl.create(:course)}
     let(:teacher) {FactoryGirl.create(:teacher)}
-    it 'should not allow unauthorized' do
+    it 'disallow unauthorized' do
       course.reload
       old_json = course.as_json
       put :update, id: course.id, format: :json, name: "new course name!"
@@ -136,7 +137,7 @@ RSpec.describe Api::CoursesController, type: :controller do
       course.reload
       expect(course.as_json).to match old_json
     end
-    it 'should not allow student' do
+    it 'disallow student' do
       course.reload
       old_json = course.as_json
       student = FactoryGirl.create(:student)
@@ -146,7 +147,7 @@ RSpec.describe Api::CoursesController, type: :controller do
       course.reload
       expect(course.as_json).to match old_json
     end
-    it 'should allow teacher' do
+    it 'allow teacher' do
       course.reload
       old_json = course.as_json
       set_token teacher.token
@@ -163,14 +164,14 @@ RSpec.describe Api::CoursesController, type: :controller do
     let(:student) {FactoryGirl.create(:student)}
     let(:teacher) {FactoryGirl.create(:teacher)}
     let(:course) {FactoryGirl.create(:course)}
-    it 'should not allow unauthorized' do
+    it 'disallow unauthorized' do
       course
       expect {
         delete :destroy, format: :json, id: course.id
       }.to change(Course, :count).by 0
       expect(response).to be_unauthorized
     end
-    it 'should not allow a student' do
+    it 'disallow a student' do
       course
       expect {
         set_token student.token
@@ -178,7 +179,7 @@ RSpec.describe Api::CoursesController, type: :controller do
       }.to change(Course, :count).by 0
       expect(response).to be_forbidden
     end
-    it 'should allow a teacher' do
+    it 'allow a teacher' do
       course
       expect {
         set_token teacher.token
@@ -192,20 +193,20 @@ RSpec.describe Api::CoursesController, type: :controller do
     let(:teacher) {FactoryGirl.create(:teacher)}
     let(:course) {FactoryGirl.create(:course)}
     let(:published_course) {FactoryGirl.create(:course, published: true)}
-    it 'should not allow unauthorized' do
+    it 'disallow unauthorized' do
       expect {
         post :register, format: :json, id: published_course.id
         }.to change(Studentship, :count).by 0
       expect(response).to be_unauthorized
     end
-    it 'should not allow registration to unpublished course' do
+    it 'disallow registration to unpublished course' do
       expect {
         set_token student.token
         post :register, format: :json, id: course.id
         }.to change(Studentship, :count).by 0
       expect(response).to be_forbidden
     end
-    it 'should not allow registration by teacher' do
+    it 'disallow registration by teacher' do
       expect {
         set_token teacher.token
         post :register, format: :json, id: published_course.id
@@ -213,7 +214,7 @@ RSpec.describe Api::CoursesController, type: :controller do
       expect(response).to be_forbidden
     end
 
-    it 'should allow registration by student' do
+    it 'allow registration by student' do
       expect {
         set_token student.token
         post :register, format: :json, id: published_course.id
@@ -228,20 +229,20 @@ RSpec.describe Api::CoursesController, type: :controller do
     let(:teacher) {FactoryGirl.create(:teacher)}
     let(:course) {FactoryGirl.create(:course)}
     let(:published_course) {FactoryGirl.create(:course, published: true)}
-    it 'should not allow unauthorized' do
+    it 'allow unauthorized' do
       expect {
         delete :unregister, format: :json, id: published_course.id
         }.to change(Studentship, :count).by 0
       expect(response).to be_unauthorized
     end
-    it 'should not allow unregistration to unpublished course' do
+    it 'allow unregistration to unpublished course' do
       expect {
         set_token student.token
         delete :unregister, format: :json, id: course.id
         }.to change(Studentship, :count).by 0
       expect(response).to be_forbidden
     end
-    it 'should not allow unregistration by teacher' do
+    it 'allow unregistration by teacher' do
       expect {
         set_token teacher.token
         delete :unregister, format: :json, id: published_course.id
@@ -249,7 +250,7 @@ RSpec.describe Api::CoursesController, type: :controller do
       expect(response).to be_forbidden
     end
 
-    it 'should allow unregistration by student' do
+    it 'allow unregistration by student' do
       published_course.register student
       expect {
         set_token student.token

@@ -6,16 +6,16 @@ RSpec.describe Api::UsersController, type: :controller do
     let(:students) {FactoryGirl.create_list(:student, 10)}
     let(:teachers) {FactoryGirl.create_list(:teacher, 10)}
     let(:user) {FactoryGirl.create(:student)}
-    it 'should not allow unauthoried index' do
+    it 'disallow unauthoried index' do
       get :index, format: :json
       expect(response).to be_unauthorized
     end
-    it 'should respond to index action' do
+    it 'respond to index action' do
       set_token user.token
       get :index, format: :json
       expect(response).to be_success
     end
-    it 'should have pagination' do
+    it 'have pagination' do
       set_token user.token
       get :index, format: :json, page: 1, page_size: students.length
       expect(json_response).to include(
@@ -25,7 +25,7 @@ RSpec.describe Api::UsersController, type: :controller do
       expected_total_pages = (students.length + teachers.length) % students.length + 2
       expect(json_response[:total_pages]).to eql expected_total_pages
     end
-    it 'should return all records' do
+    it 'return all records' do
       set_token user.token
       get :index, format: :json, page: 1, page_size: students.length + teachers.length
       expect(json_response).to include(
@@ -44,11 +44,11 @@ RSpec.describe Api::UsersController, type: :controller do
 
   describe 'show' do
     let(:student) {FactoryGirl.create(:student)}
-    it 'should not allow unauthorized requests' do
+    it 'disallow unauthorized requests' do
       get :show, format: :json, id: student.id
       expect(response).to be_unauthorized
     end
-    it 'should show the correct user' do
+    it 'show the correct user' do
       set_token student.token
       get :show, format: :json, id: student.id
       expect(json_response[:id]).to eql student.id
@@ -68,7 +68,7 @@ RSpec.describe Api::UsersController, type: :controller do
     let(:teacher_one) {FactoryGirl.create(:teacher)}
     let(:teacher_two) {FactoryGirl.create(:teacher)}
 
-    it 'should not allow unauthorized updates' do
+    it 'allow unauthorized updates' do
       old_digest = student_one.password_digest
       put :update, id: student_one.id, format: :json, password: 'new password!'
       expect(response).to be_unauthorized
@@ -76,7 +76,7 @@ RSpec.describe Api::UsersController, type: :controller do
       expect(student_one.password_digest).to eql old_digest
     end
 
-    it 'should not allow a user to change another user' do
+    it 'allow a user to change another user' do
       old_digest = teacher_one.password_digest
       set_token student_two.token
       put :update, id: teacher_one.id, format: :json, password: 'new password!'
@@ -85,7 +85,7 @@ RSpec.describe Api::UsersController, type: :controller do
       expect(teacher_one.password_digest).to eql old_digest
     end
 
-    it 'should allow a user to modify its fields' do
+    it 'allow a user to modify its fields' do
       old_digest = teacher_one.password_digest
       set_token teacher_one.token
       put :update, id: teacher_one.id, format: :json, password: 'new password!'
@@ -94,7 +94,7 @@ RSpec.describe Api::UsersController, type: :controller do
       expect(teacher_one.password_digest).to_not eql old_digest
     end
 
-    it 'should not allow a user to modify its email' do
+    it 'allow a user to modify its email' do
       teacher_one.reload
       old_json = teacher_one.as_json
       set_token teacher_one.token
@@ -104,7 +104,7 @@ RSpec.describe Api::UsersController, type: :controller do
       expect(teacher_one.as_json).to match old_json
     end
 
-    it 'should allow a user to modify more than one field' do
+    it 'allow a user to modify more than one field' do
       student_two.reload
       old_json = student_two.as_json
       set_token student_two.token
@@ -114,7 +114,7 @@ RSpec.describe Api::UsersController, type: :controller do
       expect(student_two.as_json).to_not match old_json
     end
 
-    it 'should not allow a user to change its type' do
+    it 'allow a user to change its type' do
       set_token student_two.token
       put :update, id: student_two.id, format: :json, student: false
       expect(response).to be_unprocessable
@@ -122,7 +122,7 @@ RSpec.describe Api::UsersController, type: :controller do
       expect(student_two.student?).to be true
     end
 
-    it 'should not allow a user to make its self verified' do
+    it 'allow a user to make its self verified' do
       set_token teacher_two.token
       put :update, id: teacher_two.id, format: :json, verified: true
       expect(response).to be_unprocessable
@@ -137,19 +137,19 @@ RSpec.describe Api::UsersController, type: :controller do
       context 'for student' do
         let(:student_params) {FactoryGirl.attributes_for(:student)}
         let(:teacher_params) {FactoryGirl.attributes_for(:teacher)}
-        it 'should create a new student' do
+        it 'create a new student' do
           expect {
             post :create, format: :json, **student_params
           }.to change(User, :count).by 1
           expect(response).to be_created
         end
-        it 'should create a new teacher' do
+        it 'create a new teacher' do
           expect {
             post :create, format: :json, **teacher_params
           }.to change(User, :count).by 1
           expect(response).to be_created
         end
-        it 'should set new users to unverified' do
+        it 'set new users to unverified' do
           post :create, format: :json, **teacher_params
           user = User.find json_response[:id]
           expect(user.verified?).to be false
@@ -159,19 +159,19 @@ RSpec.describe Api::UsersController, type: :controller do
     context 'with invalid params' do
       let(:student_params) {FactoryGirl.attributes_for(:student)}
       let(:teacher_params) {FactoryGirl.attributes_for(:teacher)}
-      it 'should not allow a user to set type' do
+      it 'allow a user to set type' do
         student_params[:student] = false
         post :create, format: :json, **student_params
         expect(json_response[:student]).to be true
         expect(response).to be_created
       end
-      it 'should not allow users to set verified' do
+      it 'allow users to set verified' do
         teacher_params[:verified] = true
         post :create, format: :json, **teacher_params
         expect(json_response[:verified]).to be false
         expect(response).to be_created
       end
-      it 'should not allow invalid params' do
+      it 'allow invalid params' do
         teacher_params.delete :email
         expect {
           post :create, format: :json, **teacher_params
@@ -182,7 +182,7 @@ RSpec.describe Api::UsersController, type: :controller do
   end
 
   describe 'destroy' do
-    it 'should not be routable' do
+    it 'be routable' do
       expect( delete: 'api/users/1').to_not be_routable
     end
   end

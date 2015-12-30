@@ -29,21 +29,22 @@ ActiveRecord::Schema.define(version: 20151229181829) do
 
   create_table "projects", force: :cascade do |t|
     t.datetime "due_date",                             null: false
+    t.datetime "start_date",                           null: false
     t.string   "name",                                 null: false
     t.integer  "course_id"
     t.integer  "test_timeout_seconds", default: 600,   null: false
     t.boolean  "quiz",                 default: false, null: false
     t.boolean  "published",            default: false, null: false
-    t.boolean  "ready",                default: false, null: false
     t.datetime "created_at",                           null: false
     t.datetime "updated_at",                           null: false
   end
 
   add_index "projects", ["course_id"], name: "index_projects_on_course_id", using: :btree
+  add_index "projects", ["due_date"], name: "index_projects_on_due_date", using: :btree
   add_index "projects", ["name"], name: "index_projects_on_name", using: :btree
   add_index "projects", ["published"], name: "index_projects_on_published", using: :btree
   add_index "projects", ["quiz"], name: "index_projects_on_quiz", using: :btree
-  add_index "projects", ["ready"], name: "index_projects_on_ready", using: :btree
+  add_index "projects", ["start_date"], name: "index_projects_on_start_date", using: :btree
 
   create_table "studentships", force: :cascade do |t|
     t.integer  "course_id"
