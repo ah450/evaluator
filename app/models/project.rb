@@ -1,5 +1,6 @@
 class Project < ActiveRecord::Base
   belongs_to :course, inverse_of: :projects
+  has_many :submissions, inverse_of: :project
   validates :name, :due_date, :course, presence: true
   validate :unique_name_per_course
   before_save :due_date_to_utc, :default_start_date, :start_date_to_utc
