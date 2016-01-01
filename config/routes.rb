@@ -16,6 +16,7 @@ Rails.application.routes.draw do
       resources :projects, shallow: true, except: [:new]
     end
     resources :tokens, only: [:create]
+    resources :configurations, only: [:index]
   end
 
 # For non api namespaced paths

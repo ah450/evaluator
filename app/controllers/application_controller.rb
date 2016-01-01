@@ -190,6 +190,7 @@ class ApplicationController < ActionController::Base
       if @current_user.nil?
         raise AuthenticationError
       end
+      raise ForbiddenError, error_messages[:unverified_login] unless @current_user.verified?
     else
       raise AuthenticationError
     end

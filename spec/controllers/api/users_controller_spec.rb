@@ -33,9 +33,9 @@ RSpec.describe Api::UsersController, type: :controller do
         )
       expect(json_response[:total_pages]).to eql 2 # extra user for authentication
       expect(json_response[:page_size]).to eql students.length + teachers.length
-      are_equal = json_response[:users].reduce do |memo, user|
-        check = lambda {|other| other.id == user[:id]}
-        memo && (students.any?(&check) || teachers.any?(&check))
+      are_equal = json_response[:users].reduce true do |memo, responseUser|
+        check = lambda {|other| responseUser[:id] == other.id }
+        memo && ( user.id == responseUser[:id] || students.any?(&check) || teachers.any?(&check))
       end
       expect(are_equal).to be true
     end
@@ -122,12 +122,13 @@ RSpec.describe Api::UsersController, type: :controller do
       expect(student_two.student?).to be true
     end
 
-    it 'allow a user to make its self verified' do
+    it 'disallow a user to change verification' do
+
       set_token teacher_two.token
-      put :update, id: teacher_two.id, format: :json, verified: true
+      put :update, id: teacher_two.id, format: :json, verified: false
       expect(response).to be_unprocessable
       teacher_two.reload
-      expect(student_two.verified?).to be false
+      expect(teacher_two.verified?).to be true
     end
 
   end

@@ -11,7 +11,7 @@ Rails.application.config.configurations = {
             forbidden_teacher_only: "Must be a teacher to perform this action",
             unverified_login: 'Must be verified to login'
         },
-        default_token_exp: 24 * 60 * 60,
+        default_token_exp: 24.hours,
         messages: {
             registration_success: "Registered to course",
             unregistration_success: "Unregistered from course"

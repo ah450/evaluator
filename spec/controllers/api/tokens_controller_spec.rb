@@ -10,7 +10,7 @@ RSpec.describe Api::TokensController, type: :controller do
     end
   end
   context 'unverified users' do
-    let(:user) {FactoryGirl.create(:teacher)}
+    let(:user) {FactoryGirl.create(:teacher, verified: false)}
     it 'should be forbidden' do
       post :create, format: :json, token: {email: user.email, password: user.password}
       expect(response).to be_forbidden
