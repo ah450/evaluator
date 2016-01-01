@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151230214709) do
+ActiveRecord::Schema.define(version: 20151231221819) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,6 +46,15 @@ ActiveRecord::Schema.define(version: 20151230214709) do
   add_index "projects", ["quiz"], name: "index_projects_on_quiz", using: :btree
   add_index "projects", ["start_date"], name: "index_projects_on_start_date", using: :btree
 
+  create_table "reset_tokens", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "token",      null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "reset_tokens", ["user_id"], name: "index_reset_tokens_on_user_id", unique: true, using: :btree
+
   create_table "results", force: :cascade do |t|
     t.integer  "submission_id"
     t.boolean  "compiled",        null: false
@@ -57,13 +66,14 @@ ActiveRecord::Schema.define(version: 20151230214709) do
     t.boolean  "success",         null: false
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.integer  "test_suite_id"
   end
 
   add_index "results", ["submission_id"], name: "index_results_on_submission_id", using: :btree
 
   create_table "solutions", force: :cascade do |t|
     t.integer  "submission_id"
-    t.binary   "code"
+    t.binary   "code",          null: false
     t.string   "file_name",     null: false
     t.string   "mime_type",     null: false
     t.datetime "created_at",    null: false
@@ -95,17 +105,17 @@ ActiveRecord::Schema.define(version: 20151230214709) do
 
   create_table "suite_cases", force: :cascade do |t|
     t.integer  "test_suite_id"
-    t.string   "name"
-    t.integer  "grade"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.string   "name",                      null: false
+    t.integer  "grade",         default: 0, null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
   end
 
   add_index "suite_cases", ["test_suite_id"], name: "index_suite_cases_on_test_suite_id", using: :btree
 
   create_table "suite_codes", force: :cascade do |t|
     t.integer  "test_suite_id"
-    t.binary   "code"
+    t.binary   "code",          null: false
     t.string   "file_name",     null: false
     t.string   "mime_type",     null: false
     t.datetime "created_at",    null: false
@@ -115,7 +125,7 @@ ActiveRecord::Schema.define(version: 20151230214709) do
   add_index "suite_codes", ["test_suite_id"], name: "index_suite_codes_on_test_suite_id", using: :btree
 
   create_table "team_grades", force: :cascade do |t|
-    t.string   "name"
+    t.string   "name",       null: false
     t.integer  "project_id"
     t.boolean  "private",    null: false
     t.integer  "result_id"
@@ -129,24 +139,25 @@ ActiveRecord::Schema.define(version: 20151230214709) do
 
   create_table "test_cases", force: :cascade do |t|
     t.integer  "result_id"
-    t.string   "name"
+    t.string   "name",        null: false
     t.text     "detail"
-    t.text     "error"
-    t.boolean  "passed",     null: false
-    t.boolean  "private",    null: false
-    t.integer  "grade",      null: false
-    t.integer  "max_grade",  null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.text     "description"
+    t.boolean  "passed",      null: false
+    t.boolean  "private",     null: false
+    t.integer  "grade",       null: false
+    t.integer  "max_grade",   null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   add_index "test_cases", ["result_id"], name: "index_test_cases_on_result_id", using: :btree
 
   create_table "test_suites", force: :cascade do |t|
     t.integer  "project_id"
-    t.boolean  "private",    null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.boolean  "private",                    null: false
+    t.boolean  "ready",      default: false, null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
     t.integer  "code_id"
   end
 
@@ -174,8 +185,19 @@ ActiveRecord::Schema.define(version: 20151230214709) do
   add_index "users", ["student"], name: "index_users_on_student", using: :btree
   add_index "users", ["team"], name: "index_users_on_team", using: :btree
 
+  create_table "verification_tokens", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "token",      null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "verification_tokens", ["user_id"], name: "index_verification_tokens_on_user_id", unique: true, using: :btree
+
   add_foreign_key "projects", "courses"
+  add_foreign_key "reset_tokens", "users"
   add_foreign_key "results", "submissions"
+  add_foreign_key "results", "test_suites"
   add_foreign_key "solutions", "submissions"
   add_foreign_key "studentships", "courses"
   add_foreign_key "studentships", "users", column: "student_id"
@@ -189,4 +211,5 @@ ActiveRecord::Schema.define(version: 20151230214709) do
   add_foreign_key "test_cases", "results"
   add_foreign_key "test_suites", "projects"
   add_foreign_key "test_suites", "suite_codes", column: "code_id"
+  add_foreign_key "verification_tokens", "users"
 end

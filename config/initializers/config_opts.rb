@@ -14,6 +14,8 @@ Rails.application.config.configurations = {
         messages: {
             registration_success: "Registered to course",
             unregistration_success: "Unregistered from course"
-        }
+        },
+        verification_expiration: 5.hours,
+        pass_reset_expiration: 24.hours
     }
 

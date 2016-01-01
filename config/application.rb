@@ -23,7 +23,8 @@ module Evaluator
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
     config.autoload_paths << "#{Rails.root}/app/exceptions"
-
+    config.verification_token_str_max_length = 30
+    config.pass_reset_token_str_max_length = 100
     # Disable asset generation
     config.assets.enabled = false
     config.generators do |g|

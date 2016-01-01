@@ -15,11 +15,16 @@ class User < ActiveRecord::Base
   scope :teachers, -> { where student: false }
   has_many :studentships, inverse_of: :student, foreign_key: :student_id
   has_many :courses, through: :studentships, dependent: :delete_all
-
-
+  has_many :submissions, inverse_of: :student, foreign_key: :student_id
+  has_many :verification_tokens, dependent: :delete_all
+  has_many :reset_tokens, dependent: :delete_all
 
   def teacher?
     not student?
+  end
+
+  def full_name
+    name.split.map { |e| e.capitalize  }.join ' '
   end
 
 
@@ -54,7 +59,7 @@ class User < ActiveRecord::Base
   # Raises AuthenticationError if incorrect authentication data supplied
   # returns User instance
   def self.find_by_token(token)
-    decoded = JWT.decode token, hmac_key, true, {leeway: 60}
+    decoded = JWT.decode token, hmac_key, true, {leeway: 60, algorithm: 'HS512'}
     data = decoded.first['data']
     user = find data['id']
     raise AuthenticationError unless Rack::Utils.secure_compare(
@@ -71,6 +76,49 @@ class User < ActiveRecord::Base
     self.guc_prefix = guc_prefix.to_i
     self.guc_suffix = guc_suffix.to_i
   end
+
+
+  def gen_verification_token
+    verification_token = with_lock("FOR SHARE") do
+      expirationTime = User.verification_expiration.ago
+      VerificationToken.where(user_id: id).where('created_at <= ?', expirationTime).delete_all
+      VerificationToken.where(user_id: id).order(created_at: :desc).offset(1).each do |r|
+        r.destroy
+      end
+      token = VerificationToken.where(user_id: id).order(created_at: :desc).first
+      tokenStr = SecureRandom.urlsafe_base64 User.verification_token_str_max_length
+      if !token.nil? && token.created_at <= expirationTime
+        token.destroy
+        token = nil
+      end
+      token ||= VerificationToken.create user: self, token: tokenStr
+    end
+    verification_token.token
+  end
+
+  def verify
+
+    verified?
+  end
+
+  def gen_reset_token
+    reset_token = with_lock("FOR SHARE") do
+      expirationTime = User.pass_reset_expiration.ago
+      ResetToken.where(user_id: id).where('created_at <= ?', expirationTime).delete_all
+      ResetToken.where(user_id: id).order(created_at: :desc).offset(1).each do |r|
+        r.destroy
+      end
+      token = VerificationToken.where(user_id: id).order(created_at: :desc).first
+      tokenStr = SecureRandom.urlsafe_base64 User.pass_reset_token_str_max_length
+      if !token.nil? && token.created_at <= expirationTime
+        token.destroy
+        token = nil
+      end
+      token ||= ResetToken.create user: self, token: tokenStr
+    end
+    reset_token.token
+  end
+
   private
 
   def email_not_changed
@@ -95,6 +143,22 @@ class User < ActiveRecord::Base
 
   def self.hmac_key
     Rails.application.config.jwt_key
+  end
+
+  def self.verification_expiration
+    Rails.application.config.configurations[:verification_expiration]
+  end
+
+  def self.pass_reset_expiration
+    Rails.application.config.configurations[:pass_reset_expiration]
+  end
+
+  def self.pass_reset_token_str_max_length
+    Rails.application.config.pass_reset_token_str_max_length
+  end
+
+  def self.verification_token_str_max_length
+    Rails.application.config.verification_token_str_max_length
   end
 
 
