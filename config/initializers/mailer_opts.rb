@@ -1,7 +1,3 @@
-Rails.configuration.action_mailer.default_url_options = {
-  host: 'evaluator.in'
-}
-
 class SubjectTaggerEmailInterceptor
   def self.delivering_email(message)
     message.subject = '[EVALUATOR] ' + message.subject
