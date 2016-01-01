@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   scope :teachers, -> { where student: false }
   has_many :studentships, inverse_of: :student, foreign_key: :student_id
   has_many :courses, through: :studentships, dependent: :delete_all
-  has_many :submissions, inverse_of: :student, foreign_key: :student_id
+  has_many :submissions, inverse_of: :student, foreign_key: :student_id, dependent: :destroy
   has_many :verification_tokens, dependent: :delete_all
   has_many :reset_tokens, dependent: :delete_all
 
@@ -108,7 +108,7 @@ class User < ActiveRecord::Base
       ResetToken.where(user_id: id).order(created_at: :desc).offset(1).each do |r|
         r.destroy
       end
-      token = VerificationToken.where(user_id: id).order(created_at: :desc).first
+      token = ResetToken.where(user_id: id).order(created_at: :desc).first
       tokenStr = SecureRandom.urlsafe_base64 User.pass_reset_token_str_max_length
       if !token.nil? && token.created_at <= expirationTime
         token.destroy

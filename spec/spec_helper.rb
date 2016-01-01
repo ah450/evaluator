@@ -16,6 +16,7 @@
 # users commonly want.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+require "email_spec"
 module Request
   module JsonHelpers
     def json_response
@@ -56,5 +57,9 @@ RSpec.configure do |config|
   end
   config.profile_examples = 10
   config.order = :random
+  RSpec.configure do |config|
+    config.include(EmailSpec::Helpers)
+    config.include(EmailSpec::Matchers)
+  end
 
 end
