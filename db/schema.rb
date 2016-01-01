@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151231221819) do
+ActiveRecord::Schema.define(version: 20160101141315) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,6 +53,8 @@ ActiveRecord::Schema.define(version: 20151231221819) do
     t.datetime "updated_at", null: false
   end
 
+  add_index "reset_tokens", ["created_at"], name: "index_reset_tokens_on_created_at", using: :btree
+  add_index "reset_tokens", ["user_id", "token"], name: "index_reset_tokens_on_user_id_and_token", using: :btree
   add_index "reset_tokens", ["user_id"], name: "index_reset_tokens_on_user_id", unique: true, using: :btree
 
   create_table "results", force: :cascade do |t|
@@ -67,6 +69,7 @@ ActiveRecord::Schema.define(version: 20151231221819) do
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
     t.integer  "test_suite_id"
+    t.integer  "project_id"
   end
 
   add_index "results", ["submission_id"], name: "index_results_on_submission_id", using: :btree
@@ -156,6 +159,7 @@ ActiveRecord::Schema.define(version: 20151231221819) do
     t.integer  "project_id"
     t.boolean  "private",                    null: false
     t.boolean  "ready",      default: false, null: false
+    t.string   "name",                       null: false
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
     t.integer  "code_id"
@@ -192,10 +196,13 @@ ActiveRecord::Schema.define(version: 20151231221819) do
     t.datetime "updated_at", null: false
   end
 
+  add_index "verification_tokens", ["created_at"], name: "index_verification_tokens_on_created_at", using: :btree
+  add_index "verification_tokens", ["user_id", "token"], name: "index_verification_tokens_on_user_id_and_token", using: :btree
   add_index "verification_tokens", ["user_id"], name: "index_verification_tokens_on_user_id", unique: true, using: :btree
 
   add_foreign_key "projects", "courses"
   add_foreign_key "reset_tokens", "users"
+  add_foreign_key "results", "projects"
   add_foreign_key "results", "submissions"
   add_foreign_key "results", "test_suites"
   add_foreign_key "solutions", "submissions"

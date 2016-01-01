@@ -96,9 +96,34 @@ class User < ActiveRecord::Base
     verification_token.token
   end
 
-  def verify
-
+  def verify(token)
+    if !verified?
+      with_lock("FOR SHARE") do
+        expirationTime = User.verification_expiration.ago
+        verification_tokens = VerificationToken.where(user_id: id, token: token).where('created_at >= ?', expirationTime)
+        if verification_tokens.count > 0
+          self.verified = true
+          self.save!
+          verification_tokens.delete_all
+        end
+      end
+    end
     verified?
+  end
+
+  def reset_password(token, newPass)
+    with_lock("FOR SHARE") do
+      expirationTime = User.pass_reset_expiration.ago
+      reset_tokens = ResetToken.where(user_id: id, token: token).where('created_at >= ?', expirationTime)
+      if reset_tokens.count > 0
+        self.password = newPass
+        self.save!
+        reset_tokens.delete_all
+        return true
+      else
+        return false
+      end
+    end
   end
 
   def gen_reset_token

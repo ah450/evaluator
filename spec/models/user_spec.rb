@@ -205,4 +205,61 @@ RSpec.describe User, type: :model do
   end # Teacher specs
 
 
+  describe 'Password reset' do
+    let(:student){FactoryGirl.create(:student, password: 'old password')}
+    it 'should generate reset token' do
+      expect(student).to respond_to :gen_reset_token
+    end
+    it 'should not generate new tokens unecessarily' do
+      token_one = student.gen_reset_token
+      token_two = student.gen_reset_token
+      expect(token_one).to eql token_two
+    end
+
+    it 'should reset password with generated token' do
+      newPass = 'new password'
+      token = student.gen_reset_token
+      expect(student.reset_password(token, newPass)).to be true
+      expect(student.authenticate(newPass)).to be_truthy
+
+    end
+
+    it 'should not reset password with another token' do
+      newPass = 'new password'
+      student.gen_reset_token
+      other = FactoryGirl.create(:teacher)
+      token = other.gen_reset_token
+      expect(student.reset_password(token, newPass)).to be false
+      expect(student.authenticate(newPass)).to be false
+    end
+  end
+
+  describe 'verification' do
+    let(:teacher){FactoryGirl.create(:teacher, verified: false)}
+    it 'should generate verification token' do
+      expect(teacher).to respond_to :gen_verification_token
+    end
+    it 'should not generate new tokens unecessarily' do
+      token_one = teacher.gen_verification_token
+      token_two = teacher.gen_verification_token
+      expect(token_one).to eql token_two
+    end
+
+    it 'should accept generated token' do
+      expect(teacher.verified?).to be false
+      token = teacher.gen_verification_token
+      expect(teacher.verify(token)).to be true
+      expect(teacher.verified?).to be true
+    end
+
+    it 'should not accept another token' do
+      expect(teacher.verified?).to be false
+      teacher.gen_verification_token
+      other = FactoryGirl.create(:student)
+      other_token = other.gen_verification_token
+      expect(teacher.verify(other_token)).to be false
+      expect(teacher.verified?).to be false
+    end
+  end
+
 end
