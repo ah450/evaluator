@@ -12,5 +12,5 @@
 !/log/.keep
 /tmp
 erd.pdf
-
+coverage
 *.sublime-workspace
