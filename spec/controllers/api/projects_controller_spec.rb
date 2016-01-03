@@ -50,6 +50,24 @@ RSpec.describe Api::ProjectsController, type: :controller do
       expect(response).to be_success
     end
     context 'query' do
+      context 'due' do
+        let(:due_project) {FactoryGirl.create(:project, course: published_course, due_date: 5.days.ago, published: true)}
+        let(:not_due_project) {FactoryGirl.create(:project, course: published_course, published: true, due_date: 5.days.from_now)}
+        it 'due only' do
+          set_token student.token
+          not_due_project # Force creation
+          get :index, format: :json, course_id: due_project.course.id, due: true
+          expect(json_response[:projects].size).to eql 1
+          expect(json_response[:projects].first[:id]).to eql due_project.id
+        end
+        it 'not due only' do
+          set_token student.token
+          due_project # Force creation
+          get :index, format: :json, course_id: not_due_project.course.id, due: false
+          expect(json_response[:projects].size).to eql 1
+          expect(json_response[:projects].first[:id]).to eql not_due_project.id
+        end
+      end
       it 'override published param for students' do
         projects
         set_token student.token

@@ -18,12 +18,16 @@ class Api::ProjectsController < ApplicationController
 
   
   def project_params
-    attributes = model_attributes << :course
-    attributes.delete :id
-    attributes.delete :course_id
-    permitted = params.permit attributes
-    permitted.merge!({course: @course}) if not @course.nil?
-    return permitted
+    if @permitted_params.nil?
+      attributes = model_attributes
+      attributes.delete :id
+      attributes.delete :course_id
+      permitted = params.permit attributes
+      permitted.merge!({course: @course}) unless @course.nil?
+      @permitted_params = permitted
+    else
+      @permitted_params
+    end
   end
 
 
