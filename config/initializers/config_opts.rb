@@ -9,7 +9,10 @@ Rails.application.config.configurations = {
             argument_error: "Argument error",
             record_not_found: "Record not found",
             forbidden_teacher_only: "Must be a teacher to perform this action",
-            unverified_login: 'Must be verified to login'
+            unverified_login: 'Must be verified to login',
+            incorrect_reset_token: 'Incorrect reset token',
+            incorrect_verification_token: 'Incorrect verification token',
+            too_soon: 'Please calm down'
         },
         default_token_exp: 24.hours,
         messages: {
@@ -17,6 +20,8 @@ Rails.application.config.configurations = {
             unregistration_success: "Unregistered from course"
         },
         verification_expiration: 5.hours,
-        pass_reset_expiration: 24.hours
+        pass_reset_expiration: 24.hours,
+        user_verification_resend_delay: 3.hours,
+        pass_reset_resend_delay: 30.minutes
     }
 

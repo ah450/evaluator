@@ -28,5 +28,7 @@ module Evaluator
     config.generators do |g|
       g.assets false
     end
+    config.api_only = true
+    
   end
 end
