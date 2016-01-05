@@ -9,7 +9,7 @@ class CreateResults < ActiveRecord::Migration
       t.text :compiler_stdout, null: false
       t.integer :grade, null: false
       t.integer :max_grade, null: false
-      t.boolean :private, null: false
+      t.boolean :hidden, null: false
       t.boolean :success, null: false
       t.timestamps null: false
     end

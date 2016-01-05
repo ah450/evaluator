@@ -66,7 +66,7 @@ ActiveRecord::Schema.define(version: 20151231221819) do
     t.text     "compiler_stdout", null: false
     t.integer  "grade",           null: false
     t.integer  "max_grade",       null: false
-    t.boolean  "private",         null: false
+    t.boolean  "hidden",          null: false
     t.boolean  "success",         null: false
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
