@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160101141315) do
+ActiveRecord::Schema.define(version: 20151231221819) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -59,6 +59,8 @@ ActiveRecord::Schema.define(version: 20160101141315) do
 
   create_table "results", force: :cascade do |t|
     t.integer  "submission_id"
+    t.integer  "test_suite_id"
+    t.integer  "project_id"
     t.boolean  "compiled",        null: false
     t.text     "compiler_stderr", null: false
     t.text     "compiler_stdout", null: false
@@ -68,11 +70,11 @@ ActiveRecord::Schema.define(version: 20160101141315) do
     t.boolean  "success",         null: false
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
-    t.integer  "test_suite_id"
-    t.integer  "project_id"
   end
 
+  add_index "results", ["project_id"], name: "index_results_on_project_id", using: :btree
   add_index "results", ["submission_id"], name: "index_results_on_submission_id", using: :btree
+  add_index "results", ["test_suite_id"], name: "index_results_on_test_suite_id", using: :btree
 
   create_table "solutions", force: :cascade do |t|
     t.integer  "submission_id"
@@ -97,14 +99,14 @@ ActiveRecord::Schema.define(version: 20160101141315) do
 
   create_table "submissions", force: :cascade do |t|
     t.integer  "project_id"
-    t.integer  "student_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.integer  "submitter_id", null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
     t.integer  "solution_id"
   end
 
   add_index "submissions", ["project_id"], name: "index_submissions_on_project_id", using: :btree
-  add_index "submissions", ["student_id"], name: "index_submissions_on_student_id", using: :btree
+  add_index "submissions", ["submitter_id"], name: "index_submissions_on_submitter_id", using: :btree
 
   create_table "suite_cases", force: :cascade do |t|
     t.integer  "test_suite_id"
@@ -157,15 +159,15 @@ ActiveRecord::Schema.define(version: 20160101141315) do
 
   create_table "test_suites", force: :cascade do |t|
     t.integer  "project_id"
-    t.boolean  "private",                    null: false
-    t.boolean  "ready",      default: false, null: false
-    t.string   "name",                       null: false
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
-    t.integer  "code_id"
+    t.boolean  "hidden",        default: true,  null: false
+    t.boolean  "ready",         default: false, null: false
+    t.string   "name",                          null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.integer  "suite_code_id"
   end
 
-  add_index "test_suites", ["private"], name: "index_test_suites_on_private", using: :btree
+  add_index "test_suites", ["hidden"], name: "index_test_suites_on_hidden", using: :btree
   add_index "test_suites", ["project_id"], name: "index_test_suites_on_project_id", using: :btree
 
   create_table "users", force: :cascade do |t|
@@ -210,13 +212,13 @@ ActiveRecord::Schema.define(version: 20160101141315) do
   add_foreign_key "studentships", "users", column: "student_id"
   add_foreign_key "submissions", "projects"
   add_foreign_key "submissions", "solutions"
-  add_foreign_key "submissions", "users", column: "student_id"
+  add_foreign_key "submissions", "users", column: "submitter_id"
   add_foreign_key "suite_cases", "test_suites"
   add_foreign_key "suite_codes", "test_suites"
   add_foreign_key "team_grades", "projects"
   add_foreign_key "team_grades", "results"
   add_foreign_key "test_cases", "results"
   add_foreign_key "test_suites", "projects"
-  add_foreign_key "test_suites", "suite_codes", column: "code_id"
+  add_foreign_key "test_suites", "suite_codes"
   add_foreign_key "verification_tokens", "users"
 end

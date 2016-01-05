@@ -2,6 +2,8 @@ class CreateResults < ActiveRecord::Migration
   def change
     create_table :results do |t|
       t.references :submission, index: true, foreign_key: true
+      t.references :test_suite, index: true, foreign_key: true
+      t.references :project, index: true, foreign_key: true
       t.boolean :compiled, null: false
       t.text :compiler_stderr, null: false
       t.text :compiler_stdout, null: false

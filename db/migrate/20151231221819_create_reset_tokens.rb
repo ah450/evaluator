@@ -5,5 +5,7 @@ class CreateResetTokens < ActiveRecord::Migration
       t.string :token, null: false
       t.timestamps null: false
     end
+    add_index :reset_tokens, [:user_id, :token]
+    add_index :reset_tokens, :created_at
   end
 end

@@ -4,7 +4,6 @@ class CreateCourses < ActiveRecord::Migration
       t.string :name, null: false
       t.text :description, null: false
       t.boolean :published, default: false, null: false
-
       t.timestamps null: false
     end
     add_index :courses, :name, unique: true

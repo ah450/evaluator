@@ -7,5 +7,6 @@ class CreateTeamGrades < ActiveRecord::Migration
       t.references :result, index: true, foreign_key: true
       t.timestamps null: false
     end
+    add_index :team_grades, [:name, :project_id]
   end
 end

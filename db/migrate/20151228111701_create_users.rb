@@ -10,7 +10,6 @@ class CreateUsers < ActiveRecord::Migration
       t.string :team
       t.integer :guc_suffix
       t.integer :guc_prefix
-
       t.timestamps null: false
     end
     add_index :users, :name
