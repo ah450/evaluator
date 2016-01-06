@@ -3,7 +3,7 @@ class User < ActiveRecord::Base
   STUDENT_EMAIL_REGEX = /\A[a-zA-Z\.\-]+@student.guc.edu.eg\z/
   TEACHER_EMAIL_REGEX = /\A[a-zA-Z\.\-]+@guc.edu.eg\z/
   GUC_EMAIL_REGEX = /\A[a-zA-Z\.\-]+@(student.)?guc.edu.eg\z/
-  validates :password, length: { minimum: 2 }
+  validates :password, length: { minimum: 2 }, allow_nil: true
   validates :name, presence: true
   validates :email, presence: true, uniqueness: { case_sensitive: false }
   validates_format_of :email, with: GUC_EMAIL_REGEX, message: 'must be a GUC email'
@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   scope :teachers, -> { where student: false }
   has_many :studentships, inverse_of: :student, foreign_key: :student_id
   has_many :courses, through: :studentships, dependent: :delete_all
-  has_many :submissions, inverse_of: :student, foreign_key: :student_id, dependent: :destroy
+  has_many :submissions, inverse_of: :submitter, foreign_key: :submitter_id, dependent: :destroy
   has_many :verification_tokens, dependent: :delete_all
   has_many :reset_tokens, dependent: :delete_all
 
@@ -30,8 +30,28 @@ class User < ActiveRecord::Base
 
   def as_json(options={})
     super(except: [:password_digest],
-      methods: [:guc_id]
+      methods: [:guc_id, :full_name]
     )
+  end
+
+  def can_view?(object)
+    if object.is_a? Submission
+      can_view_submission? object
+    elsif object.is_a? Result
+      can_view_result? object
+    elsif object.is_a? TeamGrade
+      can_view_team_grade? object
+    elsif object.is_a? TestSuite
+      can_view_test_suite? object
+    else
+      true
+    end
+  end
+
+  def self.queriable_fields
+    un_permitted = [:created_at, :updated_at, :verified, :password_digest]
+    all_fields = User.attribute_names.map{|s| s.to_sym}
+    all_fields - un_permitted
   end
 
   # Generates a timed JWT
@@ -59,7 +79,7 @@ class User < ActiveRecord::Base
   # Raises AuthenticationError if incorrect authentication data supplied
   # returns User instance
   def self.find_by_token(token)
-    decoded = JWT.decode token, hmac_key, true, {leeway: 60, algorithm: 'HS512'}
+    decoded = JWT.decode token, hmac_key, true, {algorithm: 'HS512'}
     data = decoded.first['data']
     user = find data['id']
     raise AuthenticationError unless Rack::Utils.secure_compare(
@@ -96,6 +116,13 @@ class User < ActiveRecord::Base
     verification_token.token
   end
 
+  def can_resend_verify?
+    expirationTime = User.verification_resend_delay.ago
+    num_tokens = VerificationToken.where(user_id: id).where('created_at > ?', expirationTime).count
+    num_tokens == 0
+  end
+
+
   def verify(token)
     if !verified?
       with_lock("FOR SHARE") do
@@ -111,12 +138,18 @@ class User < ActiveRecord::Base
     verified?
   end
 
-  def reset_password(token, newPass)
+  def can_resend_reset?
+    expirationTime = User.pass_resend_delay.ago
+    num_tokens = ResetToken.where(user_id: id).where('created_at > ?', expirationTime).count
+    num_tokens == 0
+  end
+
+  def reset_password(token, new_pass)
     with_lock("FOR SHARE") do
       expirationTime = User.pass_reset_expiration.ago
       reset_tokens = ResetToken.where(user_id: id, token: token).where('created_at >= ?', expirationTime)
       if reset_tokens.count > 0
-        self.password = newPass
+        self.password = new_pass
         self.save!
         reset_tokens.delete_all
         return true
@@ -145,6 +178,22 @@ class User < ActiveRecord::Base
   end
 
   private
+
+  def can_view_submission?(submission)
+    teacher? || submission.submitter.team == team
+  end
+
+  def can_view_result?(result)
+    teacher? || (!result.hidden && result.submission.submitter.team == team)
+  end
+
+  def can_view_team_grade?(grade)
+    teacher? || grade.name == team
+  end
+
+  def can_view_test_suite?(suite)
+    teacher?
+  end
 
   def email_not_changed
     if email_changed?  && persisted?
@@ -184,6 +233,14 @@ class User < ActiveRecord::Base
 
   def self.verification_token_str_max_length
     Rails.application.config.verification_token_str_max_length
+  end
+
+  def self.verification_resend_delay
+    Rails.application.config.configurations[:user_verification_resend_delay]
+  end
+
+  def self.pass_resend_delay
+    Rails.application.config.configurations[:pass_reset_resend_delay]
   end
 
 

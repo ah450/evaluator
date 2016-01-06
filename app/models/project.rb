@@ -2,6 +2,7 @@ class Project < ActiveRecord::Base
   belongs_to :course, inverse_of: :projects
   has_many :submissions, inverse_of: :project, dependent: :destroy
   has_many :test_suites, inverse_of: :project, dependent: :destroy
+  has_many :results, inverse_of: :project
   has_many :team_grades
   validates :name, :due_date, :course, presence: true
   validate :unique_name_per_course

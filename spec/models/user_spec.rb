@@ -262,4 +262,85 @@ RSpec.describe User, type: :model do
     end
   end
 
+
+  context '.full_name' do
+    let(:user){FactoryGirl.create(:student, name: 'i am a student')}
+    it 'is capitalized' do
+      expect(user.full_name).to eql 'I Am A Student'
+    end
+  end
+
+  context '.guc_id' do
+    let(:user) {FactoryGirl.create(:student, guc_prefix: 1, guc_suffix: 12)}
+    it 'is properly formatted' do
+      expect(user.guc_id).to eql '1-12'
+    end
+  end
+
+  context '.guc_id=' do
+    let(:user) {FactoryGirl.create(:student, guc_prefix: 12, guc_suffix: 18)}
+    it 'is properly set' do
+      user.guc_id = '13-1800'
+      expect(user.guc_suffix).to eql 1800
+      expect(user.guc_prefix).to eql 13
+    end
+  end
+
+  context '.can_view?' do
+    context 'submissions' do
+      it 'can view a submission if teacher' do
+        subject = FactoryGirl.create(:teacher)
+        submission = FactoryGirl.create(:submission)
+        expect(subject.can_view?(submission)).to be true
+      end
+      it 'can view a submission if submitter' do
+        subject = FactoryGirl.create(:student)
+        submission = FactoryGirl.create(:submission, submitter: subject)
+        expect(subject.can_view?(submission)).to be true
+      end
+      it 'can not view a submission if unrelated student' do
+        subject = FactoryGirl.create(:student)
+        submission = FactoryGirl.create(:submission)
+        expect(subject.can_view?(submission)).to be false
+      end
+    end
+    context 'test suite' do
+      let(:suite) {FactoryGirl.create(:test_suite)}
+      it 'can view if a teacher' do
+        subject = FactoryGirl.create(:teacher)
+        expect(subject.can_view?(suite)).to be true
+      end
+      it 'can not view if a student' do
+        subject = FactoryGirl.create(:student)
+        expect(subject.can_view?(suite)).to be false
+      end
+    end
+    context 'result' do
+      let(:result) {FactoryGirl.create(:result)}
+      it 'can view if teacher' do
+        subject = FactoryGirl.create(:teacher)
+        expect(subject.can_view?(result)).to be true
+      end
+      it 'can view  if submitter' do
+        subject = result.submission.submitter
+        expect(subject.can_view?(result)).to be true
+      end
+      it 'can view if same team' do
+        subject = FactoryGirl.create(:student, team: result.submission.submitter.team)
+        expect(subject.can_view?(result)).to be true
+      end
+      it 'can not view a result if another student' do
+        subject = FactoryGirl.create(:student)
+        expect(subject.can_view?(result)).to be false
+      end
+    end
+    context 'other objects' do
+      let(:object) {FactoryGirl.create(:teacher)}
+      it 'can view other objects' do
+        subject = FactoryGirl.create(:student)
+        expect(subject.can_view?(object)).to be true
+      end
+    end
+  end
+
 end

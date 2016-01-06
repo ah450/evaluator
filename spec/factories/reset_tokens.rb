@@ -1,7 +1,6 @@
 FactoryGirl.define do
   factory :reset_token do
-    user nil
-token "MyString"
+    user {FactoryGirl.create(:student)}
+    token {SecureRandom.urlsafe_base64}
   end
-
 end

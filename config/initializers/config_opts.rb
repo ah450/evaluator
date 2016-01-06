@@ -12,7 +12,9 @@ Rails.application.config.configurations = {
             unverified_login: 'Must be verified to login',
             incorrect_reset_token: 'Incorrect reset token',
             incorrect_verification_token: 'Incorrect verification token',
-            too_soon: 'Please calm down'
+            too_soon: 'Please calm down',
+            bad_request: 'Bad Request',
+            internal_server_error: 'Internal Server error'
         },
         default_token_exp: 24.hours,
         messages: {

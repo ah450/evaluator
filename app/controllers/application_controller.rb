@@ -1,11 +1,15 @@
-class ApplicationController < ActionController::Base
+class ApplicationController < ActionController::API
   before_action :set_resource, except: [:index, :create]
   before_action :authenticate, :authorize, only: [:destroy, :update]
   after_filter :no_cache, only: [:create, :destroy, :update]
+  rescue_from StandardError, with: :unknown_server_error
   rescue_from AuthenticationError, with: :authentication_error
+  rescue_from ActionController::ParameterMissing, with: :bad_request_response
   rescue_from ForbiddenError, with: :forbidden_error
+  rescue_from JWT::DecodeError, with: :verification_error
   rescue_from JWT::ExpiredSignature, with: :expired_signature
   rescue_from JWT::VerificationError, with: :verification_error
+  rescue_from ActiveRecord::RecordNotFound, with: :not_found
 
   # POST /api/{plural}
   def create
@@ -20,15 +24,11 @@ class ApplicationController < ActionController::Base
   # GET /api/{plural_resource_variable}
   def index
     resources = base_index_query.where(query_params)
+                              .order(:created_at)
                               .page(page_params[:page])
                               .per(page_params[:page_size])
     instance_variable_set(plural_resource_variable, resources)
-    render json: {
-      page: resources.current_page,
-      total_pages: resources.total_pages,
-      page_size: resources.size,
-      "#{resource_name.pluralize}" => resources.as_json
-    }
+    render_multiple
   end
 
   # GET /api/{resource_name}/:id
@@ -53,6 +53,16 @@ class ApplicationController < ActionController::Base
 
 
   private
+
+  def render_multiple
+    resources = instance_variable_get(plural_resource_variable)
+    render json: {
+      page: resources.current_page,
+      total_pages: resources.total_pages,
+      page_size: resources.size,
+      "#{resource_name.pluralize}" => resources.as_json
+    }
+  end
 
   # By default it is resource_class
   # Override for special filtering
@@ -103,8 +113,7 @@ class ApplicationController < ActionController::Base
 
   # Returns an array of all model attributes except created_at and updated_at
   def model_attributes
-    resource_class.attribute_names.map{|s| s.to_sym}.reject{|e| [:created_at,
-      :updated_at].include? e}
+    resource_class.attribute_names.map{|s| s.to_sym} - [:created_at, :updated_at]
   end
 
   # To be overriden by subclasses
@@ -187,13 +196,28 @@ class ApplicationController < ActionController::Base
     if header && header.match(pattern)
       token = header.gsub(pattern, '')
       @current_user = User.find_by_token token
-      if @current_user.nil?
-        raise AuthenticationError
-      end
       raise ForbiddenError, error_messages[:unverified_login] unless @current_user.verified?
     else
       raise AuthenticationError
     end
+  end
+
+  def not_found
+    render json: {message: error_messages[:record_not_found]}, status: :not_found
+  end
+
+  def bad_request_response
+    render json: {message: error_messages[:bad_request]}, status: :bad_request
+  end
+
+  def unknown_server_error(e)
+    message = "#{e.class} \n #{e.message}\n"
+    message << e.annotated_source_code.to_s if e.respond_to?(:annotated_source_code)
+    message << "\n" << ActionDispatch::ExceptionWrapper.new(env, e)
+      .application_trace.join('\n')
+    logger.error "#{message}\n\n"
+    render json: {message: error_messages[:internal_server_error]},
+      status: :internal_server_error
   end
 
 end

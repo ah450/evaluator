@@ -31,6 +31,13 @@ module Request
     end
   end
 end
+module RequestSpec
+  module HeaderHelpers
+    def get_token(token)
+      {'AUTHORIZATION': "Bearer #{token}"}
+    end
+  end
+end
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
@@ -46,7 +53,8 @@ RSpec.configure do |config|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
   end
   config.include Request::JsonHelpers
-  config.include Request::HeaderHelpers
+  config.include Request::HeaderHelpers, type: :controller
+  config.include RequestSpec::HeaderHelpers, type: :request
   # rspec-mocks config goes here. You can use an alternate test double
   # library (such as bogus or mocha) by changing the `mock_with` option here.
   config.mock_with :rspec do |mocks|

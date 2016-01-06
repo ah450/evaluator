@@ -132,7 +132,7 @@ ActiveRecord::Schema.define(version: 20151231221819) do
   create_table "team_grades", force: :cascade do |t|
     t.string   "name",       null: false
     t.integer  "project_id"
-    t.boolean  "private",    null: false
+    t.boolean  "hidden",     null: false
     t.integer  "result_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

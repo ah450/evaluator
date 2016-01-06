@@ -18,7 +18,6 @@ RSpec.describe UserMailer, type: :mailer do
     end
     it 'includes confirm reset url' do
       url = confirm_reset_user_url user, token: user.gen_reset_token
-      # expect(mail).to have_body_text url
       expect(mail.text_part).to have_body_text url
     end
   end

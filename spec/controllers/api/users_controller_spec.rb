@@ -15,7 +15,7 @@ RSpec.describe Api::UsersController, type: :controller do
       get :index, format: :json
       expect(response).to be_success
     end
-    it 'have pagination' do
+    it 'has pagination' do
       set_token user.token
       get :index, format: :json, page: 1, page_size: students.length
       expect(json_response).to include(
@@ -117,7 +117,7 @@ RSpec.describe Api::UsersController, type: :controller do
     it 'allow a user to change its type' do
       set_token student_two.token
       put :update, id: student_two.id, format: :json, student: false
-      expect(response).to be_unprocessable
+      expect(response).to be_success
       student_two.reload
       expect(student_two.student?).to be true
     end
@@ -126,7 +126,7 @@ RSpec.describe Api::UsersController, type: :controller do
 
       set_token teacher_two.token
       put :update, id: teacher_two.id, format: :json, verified: false
-      expect(response).to be_unprocessable
+      expect(response).to be_success
       teacher_two.reload
       expect(teacher_two.verified?).to be true
     end
@@ -155,6 +155,11 @@ RSpec.describe Api::UsersController, type: :controller do
           user = User.find json_response[:id]
           expect(user.verified?).to be false
         end
+        it 'sends verification email' do
+          expect {
+            post :create, format: :json, **teacher_params
+          }.to change(VerificationToken, :count).by 1
+        end
       end
     end
     context 'with invalid params' do
@@ -179,6 +184,95 @@ RSpec.describe Api::UsersController, type: :controller do
         }.to change(User, :count).by 0
         expect(response).to be_unprocessable
       end
+    end
+  end
+
+
+  context 'reset_password' do
+    let(:user) {FactoryGirl.create(:teacher, verified: true)}
+    it 'should create a reset token' do
+      expect {
+        get :reset_password, id: user.id
+      }.to change(ResetToken, :count).by 1
+    end
+    it 'should confirm reset' do
+      token = user.gen_reset_token
+      old_digest = user.password_digest
+      new_pass = 'password'
+      expect {
+        put :confirm_reset, id: user.id, token: token, pass: new_pass
+      }.to change(ResetToken, :count).by -1
+      expect(response).to be_success
+      user.reload
+      expect(user.password_digest).to_not eql old_digest
+    end
+    it 'should not accept incorrect tokens' do
+      other_user = FactoryGirl.create(:student)
+      token = other_user.gen_reset_token
+      old_digest = user.password_digest
+      new_pass = 'password'
+      expect {
+        put :confirm_reset, id: user.id, token: token, pass: new_pass
+      }.to change(ResetToken, :count).by 0
+      expect(response).to be_unprocessable
+      user.reload
+      expect(user.password_digest).to eql old_digest
+    end
+    it 'throttles requests' do
+      expect {
+        get :reset_password, id: user.id
+      }.to change(ResetToken, :count).by 1
+      expect {
+        get :reset_password, id: user.id
+      }.to change(ResetToken, :count).by 0
+      expect(response.status).to eql 420
+    end
+  end
+
+  context 'verify' do
+    let(:user) {FactoryGirl.create(:teacher, verified: false)}
+    it 'accepts verification token' do
+      token = user.gen_verification_token
+      expect {
+        put :verify, id: user.id, token: token
+      }.to change(VerificationToken, :count).by -1
+      user.reload
+      expect(user.verified).to be true
+    end
+    it 'rejects invalid tokens' do
+      user.gen_verification_token
+      token = FactoryGirl.create(:teacher).token
+      expect {
+        put :verify, id: user.id, token: token
+      }.to change(VerificationToken, :count).by 0
+      user.reload
+      expect(user.verified).to be false
+    end
+  end
+
+  context 'resend_verify' do
+    let(:user) {FactoryGirl.create(:teacher, verified: false)}
+    it 'does not resend to verified users' do
+      user.verified = true
+      user.save!
+      expect {
+        get :resend_verify, id: user.id
+      }.to change(VerificationToken, :count).by 0
+      expect(response).to be_bad_request
+    end
+    it 'creates a verify token' do
+      expect {
+        get :resend_verify, id: user.id
+      }.to change(VerificationToken, :count).by 1
+    end
+    it 'throttles requests' do
+      expect {
+        get :resend_verify, id: user.id
+      }.to change(VerificationToken, :count).by 1
+      expect {
+        get :resend_verify, id: user.id
+      }.to change(VerificationToken, :count).by 0
+      expect(response.status).to eql 420
     end
   end
 

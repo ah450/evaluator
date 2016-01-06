@@ -16,18 +16,17 @@ class Api::ProjectsController < ApplicationController
     end
   end
 
+  def params_helper
+    attributes = model_attributes
+    attributes.delete :id
+    attributes.delete :course_id
+    permitted = params.permit attributes
+    permitted.merge!({course: @course}) unless @course.nil?
+    permitted
+  end
   
   def project_params
-    if @permitted_params.nil?
-      attributes = model_attributes
-      attributes.delete :id
-      attributes.delete :course_id
-      permitted = params.permit attributes
-      permitted.merge!({course: @course}) unless @course.nil?
-      @permitted_params = permitted
-    else
-      @permitted_params
-    end
+    @permitted_params ||= params_helper
   end
 
 
