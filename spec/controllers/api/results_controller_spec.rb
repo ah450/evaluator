@@ -4,18 +4,20 @@ RSpec.describe Api::ResultsController, type: :controller do
   before :each do
     @project = FactoryGirl.create(:project, published: true,
       course: FactoryGirl.create(:course, published: true))
-    @create_result = lambda do |team_name|
-      submitter = FactoryGirl.create(:student, verified: true, team: team_name)
+    @create_result = lambda do |team_name, submitter=nil|
+      submitter ||= FactoryGirl.create(:student, verified: true, team: team_name)
       submission = FactoryGirl.create(:submission, submitter: submitter,
         project: @project)
       FactoryGirl.create(:result, project: @project, submission: submission)
     end
     @default_team = 'Default__Results_Controller_SPEC_TEAM'
   end
-  describe 'index' do
+  context 'index' do
     let(:teacher) {FactoryGirl.create(:teacher)}
     before :each do
       2.times {@create_result.call @default_team}
+      @other_team = 'OTHER_TEAM_Results_Controller_SPEC_TEAM'
+      4.times {@create_result.call @other_team}
     end
     it 'does not allow unauthorized' do
       get :index, format: :json, project_id: @project.id
@@ -30,6 +32,7 @@ RSpec.describe Api::ResultsController, type: :controller do
       set_token teacher.token
       get :index, format: :json, project_id: @project.id
       expect(response).to be_success
+      expect(json_response[:results].size).to eql 6
     end
     it 'allows submitter' do
       student = FactoryGirl.create(:student, verified: true, team: @default_team)
@@ -39,5 +42,54 @@ RSpec.describe Api::ResultsController, type: :controller do
       expect(json_response[:results].size).to eql 2
     end
 
+    it 'can query by team_name' do
+      set_token teacher.token
+      get :index, format: :json, project_id: @project.id, submitter: {team: @default_team}
+      expect(response).to be_success
+      expect(json_response[:results].size).to eql 2
+    end
+  end
+
+  context 'show' do
+    let(:teacher) {FactoryGirl.create(:teacher)}
+    before :each do
+      @default_result = @create_result.call @default_team
+      @other_team = 'OTHER_TEAM_Results_Controller_SPEC_TEAM'
+      @other_result = @create_result.call @other_team
+    end
+
+    it 'teacher can view any result' do
+      set_token teacher.token
+      get :show, format: :json, id: @default_result.id
+      expect(response).to be_success
+      expect(json_response[:id]).to eql @default_result.id
+      get :show, format: :json, id: @other_result.id
+      expect(response).to be_success
+      expect(json_response[:id]).to eql @other_result.id
+    end
+
+    it 'student can view own result' do
+      student = FactoryGirl.create(:student, verified: true, team: @default_team)
+      result = @create_result.call @default_team, student
+      set_token student.token
+      get :show, format: :json, id: result.id
+      expect(response).to be_success
+    end
+    it 'student can view team belonging result' do
+      student = FactoryGirl.create(:student, verified: true, team: @default_team)
+      set_token student.token
+      get :show, format: :json, id: @default_result.id
+      expect(response).to be_success
+    end
+    it 'student can not view result belonging to another team' do
+      student = FactoryGirl.create(:student, verified: true, team: @default_team)
+      set_token student.token
+      get :show, format: :json, id: @other_result.id
+      expect(response).to be_forbidden
+    end
+    it 'does not allow unauthorized' do
+      get :show, format: :json, id: @default_result.id
+      expect(response).to be_unauthorized
+    end
   end
 end

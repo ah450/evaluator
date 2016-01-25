@@ -1,6 +1,6 @@
 class Api::ResultsController < ApplicationController
   prepend_before_action :authorize
-  prepend_before_action :set_parent, only: [:index, :show]
+  prepend_before_action :set_parent, only: [:index]
   prepend_before_action :authenticate
   before_action :can_view, only: [:show]
 
