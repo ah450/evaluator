@@ -3,6 +3,7 @@ module ZipFile
   included do
     validate :code_exists
     validate :file_type
+    before_save :sanitize_file_name
   end
 
   def code_exists
@@ -15,5 +16,9 @@ module ZipFile
     if File.extname(file_name) != '.zip'
       errors.add(:file_name, 'must be a zip file')
     end
+  end
+
+  def sanitize_file_name
+    self.file_name = file_name.gsub '/', '_'
   end
 end
