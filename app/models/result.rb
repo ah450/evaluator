@@ -16,6 +16,15 @@ class Result < ActiveRecord::Base
 
 
 
+  # Can not view hidden results
+  # Can view results that belong to a team's own submission
+  def self.viewable_by_user(user)
+    if user.student?
+      where(hidden: false).joins(submission: :submitter).where(users: {team: user.team})
+    else
+      self
+    end
+  end
 
   private
 
@@ -35,16 +44,6 @@ class Result < ActiveRecord::Base
     end
     if success.nil?
       errors.add(:success, "can not be blank")
-    end
-  end
-
-  # Can not view hidden results
-  # Can view results that belong to a team's own submission
-  def self.viewable_by_user(user)
-    if user.student?
-      where(hidden: false).joins(submission: :submitter).where(users: {team: user.team})
-    else
-      self
     end
   end
 end

@@ -7,5 +7,6 @@ class CreateSuiteCases < ActiveRecord::Migration
 
       t.timestamps null: false
     end
+    add_index :suite_cases, :name
   end
 end

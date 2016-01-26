@@ -116,6 +116,7 @@ ActiveRecord::Schema.define(version: 20151231221819) do
     t.datetime "updated_at",                null: false
   end
 
+  add_index "suite_cases", ["name"], name: "index_suite_cases_on_name", using: :btree
   add_index "suite_cases", ["test_suite_id"], name: "index_suite_cases_on_test_suite_id", using: :btree
 
   create_table "suite_codes", force: :cascade do |t|
@@ -161,6 +162,7 @@ ActiveRecord::Schema.define(version: 20151231221819) do
     t.integer  "project_id"
     t.boolean  "hidden",        default: true,  null: false
     t.boolean  "ready",         default: false, null: false
+    t.integer  "max_grade",     default: 0,     null: false
     t.string   "name",                          null: false
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false

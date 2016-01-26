@@ -99,7 +99,7 @@ class User < ActiveRecord::Base
 
 
   def gen_verification_token
-    verification_token = with_lock("FOR SHARE") do
+    verification_token = with_lock("FOR UPDATE") do
       expirationTime = User.verification_expiration.ago
       VerificationToken.where(user_id: id).where('created_at <= ?', expirationTime).delete_all
       VerificationToken.where(user_id: id).order(created_at: :desc).offset(1).each do |r|
@@ -125,7 +125,7 @@ class User < ActiveRecord::Base
 
   def verify(token)
     if !verified?
-      with_lock("FOR SHARE") do
+      with_lock("FOR UPDATE") do
         expirationTime = User.verification_expiration.ago
         verification_tokens = VerificationToken.where(user_id: id, token: token).where('created_at >= ?', expirationTime)
         if verification_tokens.count > 0
@@ -145,7 +145,7 @@ class User < ActiveRecord::Base
   end
 
   def reset_password(token, new_pass)
-    with_lock("FOR SHARE") do
+    with_lock("FOR UPDATE") do
       expirationTime = User.pass_reset_expiration.ago
       reset_tokens = ResetToken.where(user_id: id, token: token).where('created_at >= ?', expirationTime)
       if reset_tokens.count > 0
@@ -160,7 +160,7 @@ class User < ActiveRecord::Base
   end
 
   def gen_reset_token
-    reset_token = with_lock("FOR SHARE") do
+    reset_token = with_lock("FOR UPDATE") do
       expirationTime = User.pass_reset_expiration.ago
       ResetToken.where(user_id: id).where('created_at <= ?', expirationTime).delete_all
       ResetToken.where(user_id: id).order(created_at: :desc).offset(1).each do |r|

@@ -45,7 +45,7 @@ RSpec.describe Api::SubmissionsController, type: :controller do
     it 'can not submit to an unpublished project of a published course' do
       expect {
         set_token student.token
-        post :create, project_id: unpublished_project_published_course.id
+        post :create, project_id: unpublished_project_published_course.id, file: @file
       }.to change(Submission, :count).by(0).and change(Solution, :count).by(0)
       expect(response).to be_unprocessable
     end
@@ -53,7 +53,7 @@ RSpec.describe Api::SubmissionsController, type: :controller do
     it 'can not submit to a published project of an unpublished course' do
       expect {
         set_token student.token
-        post :create, project_id: published_project_unpublished_course.id
+        post :create, project_id: published_project_unpublished_course.id, file: @file
       }.to change(Submission, :count).by(0).and change(Solution, :count).by(0)
       expect(response).to be_unprocessable
     end
@@ -61,7 +61,7 @@ RSpec.describe Api::SubmissionsController, type: :controller do
     it 'can not submit to an unpublished project of an unpublished course' do
       expect {
         set_token student.token
-        post :create, project_id: unpublished_project_unpublished_course.id
+        post :create, project_id: unpublished_project_unpublished_course.id, file: @file
       }.to change(Submission, :count).by(0).and change(Solution, :count).by(0)
       expect(response).to be_unprocessable
     end
