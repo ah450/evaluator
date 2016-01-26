@@ -92,4 +92,21 @@ RSpec.describe Api::ResultsController, type: :controller do
       expect(response).to be_unauthorized
     end
   end
+
+  context 'update' do
+    it 'is not routable' do
+      expect(put: 'api/results/3').to_not be_routable
+      expect(patch: 'api/results/3').to_not be_routable
+    end
+  end
+  context 'destroy' do
+    it 'is not routable' do
+      expect(delete: '/api/results/3').to_not be_routable
+    end
+  end
+  context 'create' do
+    it 'is not routable' do
+      expect(post: '/api/projects/3/results').to_not be_routable
+    end
+  end
 end

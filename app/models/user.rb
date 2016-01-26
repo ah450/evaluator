@@ -43,6 +43,8 @@ class User < ActiveRecord::Base
       can_view_team_grade? object
     elsif object.is_a? TestSuite
       can_view_test_suite? object
+    elsif object.is_a? Project
+      can_view_project? object
     else
       true
     end
@@ -192,7 +194,11 @@ class User < ActiveRecord::Base
   end
 
   def can_view_test_suite?(suite)
-    teacher?
+    teacher? || (!suite.hidden && can_view_project?(suite.project))
+  end
+
+  def can_view_project?(project)
+    teacher? || (project.published && project.course.published)
   end
 
   def email_not_changed

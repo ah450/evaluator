@@ -102,7 +102,6 @@ ActiveRecord::Schema.define(version: 20151231221819) do
     t.integer  "submitter_id", null: false
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
-    t.integer  "solution_id"
   end
 
   add_index "submissions", ["project_id"], name: "index_submissions_on_project_id", using: :btree
@@ -160,13 +159,12 @@ ActiveRecord::Schema.define(version: 20151231221819) do
 
   create_table "test_suites", force: :cascade do |t|
     t.integer  "project_id"
-    t.boolean  "hidden",        default: true,  null: false
-    t.boolean  "ready",         default: false, null: false
-    t.integer  "max_grade",     default: 0,     null: false
-    t.string   "name",                          null: false
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
-    t.integer  "suite_code_id"
+    t.boolean  "hidden",     default: true,  null: false
+    t.boolean  "ready",      default: false, null: false
+    t.integer  "max_grade",  default: 0,     null: false
+    t.string   "name",                       null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
   end
 
   add_index "test_suites", ["hidden"], name: "index_test_suites_on_hidden", using: :btree
@@ -213,7 +211,6 @@ ActiveRecord::Schema.define(version: 20151231221819) do
   add_foreign_key "studentships", "courses"
   add_foreign_key "studentships", "users", column: "student_id"
   add_foreign_key "submissions", "projects"
-  add_foreign_key "submissions", "solutions"
   add_foreign_key "submissions", "users", column: "submitter_id"
   add_foreign_key "suite_cases", "test_suites"
   add_foreign_key "suite_codes", "test_suites"
@@ -221,6 +218,5 @@ ActiveRecord::Schema.define(version: 20151231221819) do
   add_foreign_key "team_grades", "results"
   add_foreign_key "test_cases", "results"
   add_foreign_key "test_suites", "projects"
-  add_foreign_key "test_suites", "suite_codes"
   add_foreign_key "verification_tokens", "users"
 end

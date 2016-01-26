@@ -1,7 +1,7 @@
 class Api::SubmissionsController < ApplicationController
   prepend_before_action :set_parent, only: [:create, :index]
   # Authenticate on all actions
-  prepend_before_action :authenticate
+  prepend_before_action :authenticate, :authorize
   before_action :can_view, only: [:show, :download]
 
   def create
@@ -17,14 +17,14 @@ class Api::SubmissionsController < ApplicationController
         }
         solution = Solution.new solution_params
         if solution.save
-          @submission.solution = solution
-          @submission.save!
           render json: @submission, status: :created
         else
           render json: solution.errors, status: :unprocessable_entity
+          raise ActiveRecord::Rollback
         end
       else
         render json: @submission.errors, status: :unprocessable_entity
+        raise ActiveRecord::Rollback
       end
     end
   end
@@ -49,7 +49,7 @@ class Api::SubmissionsController < ApplicationController
   end
 
   def params_helper
-    attributes = model_attributes << :code
+    attributes = model_attributes
     attributes.delete :id
     attributes.delete :project_id
     attributes.delete :solution_id

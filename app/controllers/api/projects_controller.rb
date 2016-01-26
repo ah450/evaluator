@@ -10,8 +10,7 @@ class Api::ProjectsController < ApplicationController
   # Prevent students from viewing unpublsihed projects
   # Or any projects belonging to an unpublished course
   def hide_unpublished_single
-    if @current_user.student? && ( !get_resource.published? ||
-      !get_resource.course.published?)
+    if not @current_user.can_view?(@project)
       raise ForbiddenError, error_messages[:forbidden_teacher_only]
     end
   end

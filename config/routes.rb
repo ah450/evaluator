@@ -20,6 +20,11 @@ Rails.application.routes.draw do
             get :download, action: :download
           end
         end
+        resources :test_suites, shallow: true, except: [:new, :update] do
+          member do
+            get :download, action: :download
+          end
+        end
       end
     end
     resources :tokens, only: [:create]

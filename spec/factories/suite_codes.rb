@@ -2,7 +2,7 @@ FactoryGirl.define do
   factory :suite_code do
   code do
     path = File.join(Rails.root.join('spec/fixtures/files'),
-      'submissions/csv_test_suite.zip')
+      'test_suites/csv_test_suite.zip')
     File.binread path
   end
   mime_type Rack::Mime.mime_type '.zip'

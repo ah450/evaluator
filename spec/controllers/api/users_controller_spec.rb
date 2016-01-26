@@ -277,7 +277,7 @@ RSpec.describe Api::UsersController, type: :controller do
   end
 
   describe 'destroy' do
-    it 'be routable' do
+    it 'is not routable' do
       expect( delete: 'api/users/1').to_not be_routable
     end
   end

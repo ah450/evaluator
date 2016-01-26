@@ -25,12 +25,12 @@ class SuitesProcessJob < ActiveJob::Base
           suite_case.test_suite = test_suite
           suite_case.name = name
           suite_case.grade = grade
-          suite_case.save
+          suite_case.save!
           test_suite.max_grade += suite_case.grade
         end
       end
       test_suite.ready = true
-      test_suite.save
+      test_suite.save!
     end
   end
 

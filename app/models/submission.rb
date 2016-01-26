@@ -1,7 +1,7 @@
 class Submission < ActiveRecord::Base
   belongs_to :project
   belongs_to :submitter, class_name: "User", inverse_of: :submissions
-  belongs_to :solution, dependent: :delete
+  has_one :solution, dependent: :delete
   validates :project, :submitter, presence: true
   has_many :results, dependent: :destroy
   validate :published_project_and_course
