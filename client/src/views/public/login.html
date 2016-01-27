@@ -18,7 +18,7 @@ novalidate
         This field is required.
       </span>
       <span class="form-field-error" data-ng-class="{hidden: !loginForm.email.$error.email}">
-        Must be a valid email.
+        Must be a valid GUC email.
       </span>
     </div>
     <div class="relative form-line">
@@ -31,8 +31,8 @@ novalidate
     </div>
   </fieldset>
   <fieldset class='links'>
-    <a class="link" href="#">Forgot password?</a>
-    <a class="link" href="#">Resend verification</a>
+    <a class="link" data-ui-sref="public.reset_send">Forgot password?</a>
+    <a class="link" data-ui-sref="public.verify_send">Resend verification</a>
   </fieldset>
   <fieldset>
     <label>Remember

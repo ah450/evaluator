@@ -192,7 +192,7 @@ RSpec.describe Api::UsersController, type: :controller do
     let(:user) {FactoryGirl.create(:teacher, verified: true)}
     it 'should create a reset token' do
       expect {
-        get :reset_password, email: user.email
+        get :reset_password, email: Base64.encode64(user.email)
       }.to change(ResetToken, :count).by 1
     end
     it 'should confirm reset' do
@@ -220,10 +220,10 @@ RSpec.describe Api::UsersController, type: :controller do
     end
     it 'throttles requests' do
       expect {
-        get :reset_password, email: user.email
+        get :reset_password, email: Base64.encode64(user.email)
       }.to change(ResetToken, :count).by 1
       expect {
-        get :reset_password, email: user.email
+        get :reset_password, email:  Base64.encode64(user.email)
       }.to change(ResetToken, :count).by 0
       expect(response.status).to eql 420
     end
@@ -256,21 +256,21 @@ RSpec.describe Api::UsersController, type: :controller do
       user.verified = true
       user.save!
       expect {
-        get :resend_verify, email: user.email
+        get :resend_verify, email: Base64.encode64(user.email)
       }.to change(VerificationToken, :count).by 0
       expect(response).to be_bad_request
     end
     it 'creates a verify token' do
       expect {
-        get :resend_verify, email: user.email
+        get :resend_verify, email: Base64.encode64(user.email)
       }.to change(VerificationToken, :count).by 1
     end
     it 'throttles requests' do
       expect {
-        get :resend_verify, email: user.email
+        get :resend_verify, email: Base64.encode64(user.email)
       }.to change(VerificationToken, :count).by 1
       expect {
-        get :resend_verify, email: user.email
+        get :resend_verify, email: Base64.encode64(user.email)
       }.to change(VerificationToken, :count).by 0
       expect(response.status).to eql 420
     end

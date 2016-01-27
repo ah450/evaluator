@@ -44,7 +44,7 @@ angular.module 'evaluator'
 
     verifyAccount =
       name: 'public.verify'
-      url: '/verify'
+      url: '/verify/:id?token'
       views:
         'pageContent':
           templateUrl: 'generic/wait_message.html'
@@ -60,7 +60,7 @@ angular.module 'evaluator'
 
     sendReset =
       name: 'public.reset_send'
-      url: '/send'
+      url: '/resetpass'
       views:
         'pageContent':
           templateUrl: 'public/reset_send.html'
@@ -68,7 +68,7 @@ angular.module 'evaluator'
 
     sendVerification =
       name: 'public.verify_send'
-      url: '/verify'
+      url: '/reverify'
       views:
         'pageContent':
           templateUrl: 'public/verify_send.html'

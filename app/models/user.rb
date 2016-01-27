@@ -10,6 +10,7 @@ class User < ActiveRecord::Base
   validate :email_not_changed
   validate :student_fields
   before_validation :set_subtype
+  before_validation :downcase_email
   scope :verified, -> { where verified: true }
   scope :students, -> { where student: true }
   scope :teachers, -> { where student: false }
@@ -252,6 +253,12 @@ class User < ActiveRecord::Base
 
   def set_subtype
     self.student = "#{STUDENT_EMAIL_REGEX === email}"
+  end
+
+  def downcase_email
+    if not email.nil?
+      self.email = email.downcase
+    end
   end
 
 end

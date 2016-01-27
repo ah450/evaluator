@@ -1,15 +1,15 @@
 angular.module 'evaluator'
-  .controller 'ResetController', ($scope, $stateParams, $timeout, $state, $http) ->
+  .controller 'SendResetController', ($scope,  $timeout, $state, configurations, $http) ->
+
     $scope.processing = false
     $scope.done = false
     $scope.userData = {}
 
-    
-    $scope.resetPassword = ->
+    $scope.confirm = ->
       return if $scope.processing
       $scope.processing = true
-      $http.put("/api/users/#{$stateParams.id}/confirm_reset.json",
-        {token: $stateParams.token, pass: $scope.userData.password}
+      $http.get(
+        "/api/users/#{encodeURIComponent(btoa($scope.userData.email))}/reset_password.json"
       ).then ->
         $scope.processing = false
         $scope.done = true
@@ -20,6 +20,10 @@ angular.module 'evaluator'
         if response.status is 404
           $scope.processing = false
           $scope.error = "User does not exist"
+        else if response.status is 420
+          configurations.then (config)->
+            $scope.processing = false
+            $scope.error = "Must wait #{config.pass_reset_expiration / 60} minutes between requests"
         else if response.status is 422
           $scope.processing = false
           $scope.error = response.data.message

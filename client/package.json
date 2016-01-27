@@ -4,8 +4,10 @@
   "description": "Evaluator frontend",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": "gulp production --dest /srv/www"
+    "deploy": "gulp production --dest /srv/www",
+    "test": "gulp test",
+    "dev": "gulp dev",
+    "dist": "gulp production"
   },
   "repository": {
     "type": "git",

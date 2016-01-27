@@ -1,14 +1,14 @@
 <form
-data-ng-submit="confirm()"
-id="resetForm"
-name="resetForm"
+data-ng-submit="verify()"
+id="verifyForm"
+name="verifyForm"
 class="contract-form"
 no-validate
 data-ng-if="!done"
 >
 
   <header>
-    <h2>Reset Password</h2>
+    <h2>Resend Verification</h2>
   </header>
 
   <fieldset>
@@ -20,28 +20,28 @@ data-ng-if="!done"
       >
       <label for="email">Email</label>
       <span class="form-field-error"
-      data-ng-class="{hidden: !resetForm.email.$error.required}"
+      data-ng-class="{hidden: !verifyForm.email.$error.required}"
       >This field is required</span>
-      <span class="form-field-error" data-ng-class="{hidden: !resetForm.email.$error.guc_email}">
-        Must be a valid guc email.
-      </span>
+    <span class="form-field-error error" data-ng-class="{hidden: !verifyForm.email.$error.guc_email}">
+      Must be a valid guc email.
+    </span>
     </div>
   </fieldset>
 
   <p class="error">{{error}}</p>
   <div class="flex-perfect-center-container">
     <button type="submit" class="contract-overlay"
-    data-ng-disabled="resetForm.$invalid"
+    data-ng-disabled="verifyForm.$invalid"
     data-ng-class="{loading: processing}"
     analytics-on="click"
-    analytics-event="reset-request"
+    analytics-event="verify-request"
     >
-    <span class="label">Request Reset</span>
+    <span class="label">Resend Verify</span>
     <i class="material-icons spinner">refresh</i>
     </button>
   </div>
 </form>
 
 <section class="flow-text" data-ng-if="done">
-  <p>Password reset email sent. Make sure to check spam folder.</p>
+  <p>Verification email sent. Make sure to check spam folder.</p>
 </section>

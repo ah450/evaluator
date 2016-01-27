@@ -81,7 +81,7 @@ class Api::UsersController < ApplicationController
   end
 
   def get_by_email
-    @user = User.find_by_email!(params[:email])
+    @user = User.find_by_email! Base64.decode64(params[:email]).downcase
   end
 
 end

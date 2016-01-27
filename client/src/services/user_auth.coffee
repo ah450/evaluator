@@ -12,7 +12,7 @@ angular.module 'evaluator'
         configurations.then (config) =>
           expiration ||= config.default_token_exp
           info.expiration = expiration
-          $auth.login info
+          $auth.login({token: info})
             .then (response) =>
               @currentUserData = response.data.user
               localStorageService.set 'currentUser', @currentUserData
