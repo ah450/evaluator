@@ -17,7 +17,7 @@ data-ng-if="!done"
       data-ng-model="userData.password" required>
       <label for="password">New Password</label>
       <span class="form-field-error"
-      data-ng-class="{hidden: !loginForm.password.$error.required}"
+      data-ng-class="{hidden: !resetForm.password.$error.required}"
       >This field is required</span>
     </div>
   </fieldset>
@@ -25,10 +25,10 @@ data-ng-if="!done"
   <p class="error">{{error}}</p>
   <div class="flex-perfect-center-container">
     <button type="submit" class="contract-overlay"
-    data-ng-disabled="loginForm.$invalid"
+    data-ng-disabled="resetForm.$invalid"
     data-ng-class="{loading: processing}"
     analytics-on="click"
-    analytics-event="login-try"
+    analytics-event="reset-confirm"
     >
     <span class="label">Confirm</span>
     <i class="material-icons spinner">refresh</i>
