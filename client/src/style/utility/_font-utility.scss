@@ -1,0 +1,43 @@
+
+// families
+
+.proxima {
+  font-family: $proxima-nova-stack;
+}
+
+.thin-weight {
+  font-weight: $thin-weight;
+}
+
+.light-weight {
+  font-weight: $light-weight;
+}
+
+.normal-weight {
+  font-weight: $normal-weight;
+}
+
+.bold-weight {
+  font-weight: $bold-weight;
+}
+
+.ultra-bold-weight {
+  font-weight: $ultra-bold-weight;
+}
+
+
+.flow-text {
+  font-weight: $normal-weight;
+  $i: 0;
+  @while $i <= $intervals {
+    @media only screen and (min-width : 360 + ($i * $interval-size)) {
+      font-size: 1.2rem * (1 + (.02 * $i));
+    }
+    $i: $i + 1;
+  }
+
+  // Handle below 360px screen
+  @media only screen and (max-width: 360px) {
+    font-size: 1.2rem;
+  }
+}

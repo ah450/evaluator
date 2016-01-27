@@ -17,7 +17,7 @@ RSpec.describe UserMailer, type: :mailer do
       expect(mail).to deliver_to(user.email)
     end
     it 'includes confirm reset url' do
-      url = confirm_reset_user_url user, token: user.gen_reset_token
+      url = 'http://evaluator.in/#/reset/' + "#{user.id}?token=#{user.gen_reset_token}"
       expect(mail.text_part).to have_body_text url
     end
   end
@@ -36,7 +36,7 @@ RSpec.describe UserMailer, type: :mailer do
       expect(mail).to deliver_to(user.email)
     end
     it 'includes verification url' do
-      url = verify_user_url user, token: user.gen_verification_token
+      url = 'http://evaluator.in/#/verify/' + "#{user.id}?token=#{user.gen_verification_token}"
       expect(mail).to have_body_text url
       expect(mail.text_part).to have_body_text url
     end

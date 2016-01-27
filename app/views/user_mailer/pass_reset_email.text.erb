@@ -3,7 +3,7 @@ Evaluator password reset!
 Hello, <%= @user.full_name %>.
 
 You have requested a password reset, click
-<%= confirm_reset_user_url(@user, token: @token) %> to reset your password.
+http://evaluator.in/#/reset/<%= @user.id %>?token=<%= @token %> to reset your password.
 
 
 

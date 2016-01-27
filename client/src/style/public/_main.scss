@@ -1,0 +1,12 @@
+#internalError {
+ 
+  color: $red;
+  a {
+    color: $blue;
+    text-decoration: underline;
+  }
+}
+
+
+@import 'login';
+@import 'about';

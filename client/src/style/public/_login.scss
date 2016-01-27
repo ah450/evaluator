@@ -1,0 +1,33 @@
+
+.login-form, .signup-form {
+
+  header {
+    margin-bottom: 2em;
+    text-align: center;
+  }
+  fieldset:last-of-type {
+    .form-line:last-child {
+      margin-bottom: 1em;
+    }
+  }
+  .form-field-error {
+    position: absolute;
+  }
+
+  .form-line {
+    margin-bottom: 4em;
+  }
+
+  .links .link {
+    display: block;
+    padding-top: 0.5em;
+    &:first-child {
+      padding-top: 0px;
+    }
+    &:last-child {
+      padding-bottom: 0.5em;
+    }
+  }
+
+}
+

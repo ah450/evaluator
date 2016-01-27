@@ -66,6 +66,12 @@ RSpec.describe Api::SubmissionsController, type: :controller do
       expect(response).to be_unprocessable
     end
 
+    it 'queues submission evaluation job' do
+      expect(SubmissionEvaluationJob).to receive(:perform_later).once
+      set_token student.token
+      post :create, project_id: published_project_published_course.id, file: @file
+    end
+
   end
 
   context 'download' do

@@ -30,12 +30,4 @@ Rails.application.routes.draw do
     resources :tokens, only: [:create]
     resources :configurations, only: [:index]
   end
-
-# For non api namespaced paths
-resources :users, only: [] do
-  member do
-    get :confirm_reset, action: :confirm_reset
-    get :verify, action: :verify
-  end
-end
 end

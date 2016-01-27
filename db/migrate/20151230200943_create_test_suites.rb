@@ -5,6 +5,7 @@ class CreateTestSuites < ActiveRecord::Migration
       t.boolean :hidden, index: true, null: false, default: true
       t.boolean :ready, null: false, default: false
       t.integer :max_grade, null: false, default: 0
+      t.integer :timeout, null: false, default: 60
       t.string :name, null: false
       t.timestamps null: false
     end

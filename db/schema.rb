@@ -144,15 +144,14 @@ ActiveRecord::Schema.define(version: 20151231221819) do
 
   create_table "test_cases", force: :cascade do |t|
     t.integer  "result_id"
-    t.string   "name",        null: false
+    t.string   "name",            null: false
     t.text     "detail"
-    t.text     "description"
-    t.boolean  "passed",      null: false
-    t.boolean  "private",     null: false
-    t.integer  "grade",       null: false
-    t.integer  "max_grade",   null: false
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.text     "java_klass_name"
+    t.boolean  "passed",          null: false
+    t.integer  "grade",           null: false
+    t.integer  "max_grade",       null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
   end
 
   add_index "test_cases", ["result_id"], name: "index_test_cases_on_result_id", using: :btree
@@ -162,6 +161,7 @@ ActiveRecord::Schema.define(version: 20151231221819) do
     t.boolean  "hidden",     default: true,  null: false
     t.boolean  "ready",      default: false, null: false
     t.integer  "max_grade",  default: 0,     null: false
+    t.integer  "timeout",    default: 60,    null: false
     t.string   "name",                       null: false
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false

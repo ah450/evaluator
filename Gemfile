@@ -30,6 +30,7 @@ gem 'kaminari'
 gem 'jwt'
 gem 'faye-rails'
 gem 'rails-api'
+gem 'nokogiri'
 
 group :test do
   gem 'simplecov', require: false

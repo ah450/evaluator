@@ -4,8 +4,10 @@
 You have used the email <%= @user.email %> to signup for an evaluator account.
 </p>
 
-<p>Please verify your account by clicking <%= link_to 'here', verify_user_url(@user, token: @token) %> </p>
-<p>Or if you are having trouble following that link just copy paste this URL <%= verify_user_url(@user, token: @token) %> </p>
+
+
+<p>Please verify your account by clicking <a href="http://evaluator.in/#/verify/<%= @user.id %>?token=<%= @token %>">here</a></p>
+<p>Or if you are having trouble following that link just copy paste this URL http://evaluator.in/#/verify/<%= @user.id %>?token=<%= @token %> </p>
 
 <% if @user.teacher? %>
   <p>Remember, it's the children that are wrong!</p>

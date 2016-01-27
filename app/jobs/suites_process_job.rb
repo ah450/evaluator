@@ -12,6 +12,7 @@ class SuitesProcessJob < ActiveJob::Base
     test_suite.with_lock("FOR UPDATE") do
       IO.binwrite(test_suite.suite_code.file_name, test_suite.suite_code.code)
       `unzip #{test_suite.suite_code.file_name}`
+      raise UnzipError, "suite #{suite.id}" if $?.exitstatus != 0
       FileUtils.remove test_suite.suite_code.file_name
       test_suite.max_grade = 0
       Dir.glob '**/*.java' do |filename|
