@@ -60,7 +60,7 @@ Run development version
 Make sure db is created and migrated.
 
 
-`rails s &`
+`bundle exec rails s &`
 
 
 `cd client`
