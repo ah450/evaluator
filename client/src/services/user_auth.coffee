@@ -11,10 +11,8 @@ angular.module 'evaluator'
         deferred = $q.defer()
         configurations.then (config) =>
           expiration ||= config.default_token_exp
-          data =
-            token: info
-            expiration: expiration
-          $auth.login data
+          info.expiration = expiration
+          $auth.login info
             .then (response) =>
               @currentUserData = response.data.user
               localStorageService.set 'currentUser', @currentUserData
@@ -26,9 +24,7 @@ angular.module 'evaluator'
           deferred.reject response
         return deferred.promise
 
-      signup: (user) ->
-        data =
-          user: user
+      signup: (data) ->
         $auth.signup data
           .then (response) =>
             @currentUserData = response.data.user

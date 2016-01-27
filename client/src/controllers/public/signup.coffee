@@ -1,6 +1,8 @@
 angular.module 'evaluator'
-  .controller 'SignupController', ($scope) ->
+  .controller 'SignupController', ($scope, UserAuth, $state) ->
     STUDENT_EMAIL_REGEX = /^[a-zA-Z\.\-]+@student.guc.edu.eg$/
+    GUC_ID_REGEX = /^([0-9]+)-([0-9]+)$/
+
     $scope.processing = false
     $scope.userData = {}
     $scope.isStudent = ->
@@ -9,6 +11,10 @@ angular.module 'evaluator'
     $scope.submit = ->
       return if $scope.processing
       $scope.processing = true
+      if $scope.isStudent()
+        match = GUC_ID_REGEX.exec $scope.userData.guc_id
+        $scope.userData.guc_prefix = match[1]
+        $scope.userData.guc_suffix = match[2]
       UserAuth.signup $scope.userData
         .then ->
           $state.go 'public.welcome'

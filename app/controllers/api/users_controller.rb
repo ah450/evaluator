@@ -3,6 +3,8 @@ class Api::UsersController < ApplicationController
   after_filter :no_cache, except: [:index, :show]
   after_filter :reload_resource, only: [:create]
   after_filter :send_verification, only: [:create]
+  skip_before_action :set_resource, only: [:reset_password, :resend_verify]
+  before_action :get_by_email, only: [:reset_password, :resend_verify]
 
 
   # Requests a password reset
@@ -76,6 +78,10 @@ class Api::UsersController < ApplicationController
 
   def user_authorized
     @current_user.id == @user.id
+  end
+
+  def get_by_email
+    @user = User.find_by_email!(params[:email])
   end
 
 end

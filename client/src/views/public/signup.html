@@ -2,7 +2,7 @@
 data-ng-submit="submit()"
 id="signupForm"
 name="signupForm"
-class="signup-form"
+class="contract-form"
 novalidate
 >
   <header>
@@ -22,6 +22,7 @@ novalidate
         Must be a valid guc email.
       </span>
     </div>
+    
     <div class="relative form-line">
       <input class="material-text" type="password" id="password" name="password"
       data-ng-model="userData.password" data-ng-minlength="2" required>
@@ -33,6 +34,18 @@ novalidate
       data-ng-class="{hidden: !signupForm.password.$error.minlength}"
       >Must be at least two characters long</span>
     </div>
+
+    <div class="relative form-line">
+      <input class="material-text" type="text" id="name" name="name" data-ng-model="userData.name"
+      required
+      >
+      <label for="name">Full Name (Mohamed Ayman)</label>
+      <span class="form-field-error" data-ng-class="{hidden: !signupForm.name.$error.required}">
+        This field is required.
+      </span>
+    </div>
+
+    
   </fieldset>
   <fieldset data-ng-if="isStudent()">
     <div class="relative form-line">

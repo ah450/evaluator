@@ -1,10 +1,14 @@
 Rails.application.routes.draw do
   namespace :api do
+    resources :users, param: :email, only: [] do
+      member do
+        get :resend_verify, action: :resend_verify
+        get :reset_password, action: :reset_password
+      end
+    end
     resources :users, except: [:destroy, :new] do
       member do
-        get :reset_password, action: :reset_password
         put :confirm_reset, action: :confirm_reset
-        get :resend_verify, action: :resend_verify
         put :verify, action: :verify
       end
     end

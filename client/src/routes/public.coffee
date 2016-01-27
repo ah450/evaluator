@@ -45,25 +45,33 @@ angular.module 'evaluator'
     verifyAccount =
       name: 'public.verify'
       url: '/verify'
+      views:
+        'pageContent':
+          templateUrl: 'generic/wait_message.html'
+          controller: 'VerifyController'
 
     resetPass =
       name: 'public.reset'
-      url: '/reset'
+      url: '/reset/:id?token'
+      views:
+        'pageContent':
+          templateUrl: 'public/reset.html'
+          controller: 'ResetController'
 
     sendReset =
-      name: 'public.reset.send'
+      name: 'public.reset_send'
       url: '/send'
       views:
         'pageContent':
-          templateUrl: 'generic/wait_message.html'
+          templateUrl: 'public/reset_send.html'
           controller: 'SendResetController'
 
     sendVerification =
-      name: 'public.verify.send'
+      name: 'public.verify_send'
       url: '/verify'
       views:
         'pageContent':
-          templateUrl: 'generic/wait_message.html'
+          templateUrl: 'public/verify_send.html'
           controller: 'SendVerifyController'
 
     internalErrorState =
@@ -90,6 +98,7 @@ angular.module 'evaluator'
       .state verifyAccount
       .state sendReset
       .state sendVerification
+      .state welcomeState
       
 
 
