@@ -1,0 +1,25 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  host: localhost
+  pool: 5
+
+development:
+  <<: *default
+  database: evaluator_development
+  username: evaluator
+  password: evaluator
+  min_messages: warning
+
+test:
+  <<: *default
+  database: evaluator_testing
+  username: evaluator
+  password: evaluator
+  min_messages: warning
+
+production:
+  <<: *default
+  database: <%= ENV['DB_NAME'] %>
+  username: <%= ENV['DB_USER'] %>
+  password: <%= ENV['DB_PASSWORD'] %>

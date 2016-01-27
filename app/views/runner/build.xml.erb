@@ -1,0 +1,43 @@
+<project>
+  <target name="clean">
+    <delete dir="<%= @build_directory %>"/>
+    <delete dir="<%= @src_directory %>" />
+    <delete dir="<%= @tests_directory %>" />
+  </target>
+
+  <target name="compile_src">
+      <mkdir dir="<%= @build_directory %>/classes"/>
+      <javac includeantruntime="true" failonerror="true"
+      srcdir="<%= @src_directory %>" destdir="<%= @build_directory %>/classes"/>
+  </target>
+
+  <target name="compile_tests">
+    <javac includeantruntime="true" srcdir="<%= @tests_directory %>" destdir="<%= @build_directory %>/classes"/>
+  </target>
+  
+  <target name="move_tests">
+    <move todir="<%= @build_directory %>/classes">
+      <fileset dir="<%= @tests_directory %>">
+        <include name="**/*.class"/>
+      </fileset>
+    </move>
+  </target>
+  
+  <target name="delete_test_source">
+    <delete dir="<%= @tests_directory %>" />
+  </target>
+
+  <target name="test">
+    <mkdir dir="<%= @build_directory %>/tests" />
+    <junit includeantruntime="true" haltonerror="no" haltonfailure="no" fork="yes" dir="<%= @src_directory %>">
+              <classpath>
+                      <pathelement location="<%= @build_directory %>/classes"/>
+                      <pathelement location="<%= @build_directory %>/tests"/>
+              </classpath>
+              <formatter type="xml"/>
+            <batchtest todir="<%= @build_directory %>/tests" fork="yes">
+              <fileset dir="<%= @build_directory %>/classes" includes="**/*Test.class" />
+            </batchtest>
+      </junit>
+    </target>
+</project>

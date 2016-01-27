@@ -1,0 +1,73 @@
+/*
+ * Main Layout
+ */
+@import 'vendor/include-media';
+@import 'vendor/material-color-prefixed';
+@import 'partials/variables';
+@import 'partials/reset';
+@import 'partials/mixins';
+
+
+body {
+  background-color: $main-background;
+  font-family: $proxima-nova-stack;
+  font-weight: $normal-weight;
+  position: relative;
+  min-height: 100%;
+  padding-bottom: 120px;
+  box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $proxima-nova-stack;
+  font-weight: $bold-weight;
+}
+
+.wrapper {
+  position: relative;
+  max-width: 98vw;
+  margin: 0px;
+  padding: 0px;
+}
+
+a.active {
+  pointer-events: none;
+  cursor: default;
+}
+
+a.link {
+  text-decoration: underline;
+  color: $blue;
+  display: inline-block;
+  cursor: pointer;
+}
+
+
+[data-ui-view='pageContent'] {
+  margin: 0 auto;
+  max-width: 700px;
+  width: 94%;
+  padding-top: 30vh;
+  @include media("height<=600px") {
+    padding-top: 15vh;
+  }
+}
+
+
+footer {
+  max-height: 80px;
+  position: absolute;
+  padding: 1rem;
+  text-align: center;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  border-top: 1px solid $md-clr-grey-200;
+}
+
+
+
+@import 'utility/main';
+@import 'animations/main';
+@import 'generic/main';
+@import 'public/main';
