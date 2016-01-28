@@ -28,6 +28,7 @@
     "ngInfiniteScroll": "~1.2.1",
     "ng-dialog": "~0.5.6",
     "angulartics": "~1.0.3",
-    "angulartics-google-analytics": "~0.1.4"
+    "angulartics-google-analytics": "~0.1.4",
+    "moment": "~2.11.1"
   }
 }

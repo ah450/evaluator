@@ -38,7 +38,16 @@ angular.module 'evaluator'
           templateUrl: 'private/course.html'
           controller: 'CourseController'
 
+    projectState =
+      name: 'private.project'
+      url: '/project/:id'
+      views:
+        'pageContent':
+          templateUrl: 'private/project.html'
+          controller: 'ProjectController'
+
     $stateProvider
       .state privateState
       .state coursesState
       .state courseState
+      .state projectState

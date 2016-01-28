@@ -8,4 +8,28 @@
   <button class='btn-green' data-ng-click="publish()">Publish</button>
 </div>
 <x-course data-data="course"></section>
+
+<ul class="course-projects"
+data-infinite-scroll='loadMore()'
+data-infinite-scroll-disabled='scrollDisabled'
+data-infinite-scroll-listen-for-event="projects:reflow"
+>
+  <li class="project-item btn-green"
+  data-ng-if="canAddProject"
+  data-ng-click="showAddDialog()"
+  ><i class="material-icons">add</i></li>
+
+  <li class="project-item"
+  data-ng-repeat="project in projects track by $index"
+  >
+    <a data-ui-sref="private.project({id: project.id})" data-project data-data="project"
+    data-ng-class="projectClasses[$index % projectClasses.length]"
+    ></a>
+  </li>
+  <li class="project-item flex-perfect-center-container"
+  data-ng-if="loadingProjects"
+  >
+    <i class="material-icons spinner">refresh</i>
+  </li>
+</ul>
 </section>

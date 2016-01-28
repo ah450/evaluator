@@ -25,6 +25,7 @@ angular.module 'evaluator'
 angular.module 'evaluator'
   .constant 'apiHost', '/api'
   .constant 'baseHost', '/'
+  .constant 'defaultPageSize', 5
 
 # Infinite scroll throttling
 angular.module 'infinite-scroll'

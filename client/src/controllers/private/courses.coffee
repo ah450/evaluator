@@ -1,12 +1,11 @@
 angular.module 'evaluator'
   .controller 'CoursesController', ($scope, $state, Pagination,
-    ngDialog, CoursesResource, UserAuth) ->
+    ngDialog, CoursesResource, UserAuth, defaultPageSize) ->
     $scope.courses = []
 
     $scope.courseClasses = ['course-accent-one', 'course-accent-two',
     'course-accent-three']
 
-    defaultPageSize = 5
     $scope.scrollDisabled = false
     $scope.loading = true
     $scope.newCourseData = {}

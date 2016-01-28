@@ -21,6 +21,6 @@
     <li class="course-item"
     data-ng-repeat="course in courses track by $index"
     ><a data-ui-sref="private.course({id: course.id})" data-course data-data="course"
-    data-ng-class="courseClasses[$index % roomClasses.length]"></a></li>
+    data-ng-class="courseClasses[$index % courseClasses.length]"></a></li>
   </ul>
 </section>
