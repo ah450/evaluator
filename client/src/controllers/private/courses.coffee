@@ -46,6 +46,8 @@ angular.module 'evaluator'
     $scope.showAddDialog = ->
       return if $scope.newCourseDialog && ngDialog.isOpen($scope.newCourseDialog.id)
       $scope.newCourseData = {}
+      $scope.courseCreateError = ''
+
       $scope.newCourseDialog = ngDialog.open
         template: 'private/create/course.html'
         scope: $scope

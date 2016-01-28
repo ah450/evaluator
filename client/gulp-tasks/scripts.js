@@ -32,6 +32,8 @@ function processDeps() {
       .pipe(order([
         'libs/jquery/**/*.js',
         'libs/angular/*.js',
+        'libs/moment/**/*.js',
+        'libs/moment-timezone/**/*.js',
         'libs/**/*.js',
         ], { base: './'}));
   var modernizrSrc = gulp.src('src/modernize.coffee')

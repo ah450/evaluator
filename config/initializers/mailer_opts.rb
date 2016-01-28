@@ -13,7 +13,7 @@ ActionMailer::Base.register_preview_interceptor SubjectTaggerEmailInterceptor
 if !Rails.env.test?
   Rails.application.config.action_mailer.delivery_method = :smtp
   Rails.application.config.action_mailer.smtp_settings = {
-    :address              => "localhost",
-    :port                 => 25,
+    address: "localhost",
+    port: 25,
   }
 end

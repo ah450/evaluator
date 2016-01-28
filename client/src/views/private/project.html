@@ -1,0 +1,13 @@
+<div class="spin-fullscreen-wrap" data-ng-if="loading">
+  <div class="spinner-wrap">
+  </div>
+  <i class="material-icons spinner">refresh</i>
+</div>
+
+<section id="projectWrapper" data-ng-if="!loading"
+>
+<div class="project-ctrls flex-perfect-center-container" data-ng-if="isTeacher">
+  <button class="btn-green" data-ng-if="!project.published" data-ng-click="publish()">Publish</button>
+</div>
+<x-project data-data="project"></x-project>
+</section>

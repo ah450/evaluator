@@ -1,7 +1,6 @@
 angular.module 'evaluator'
   .controller 'CourseController', ($scope, CoursesResource, $stateParams,
-    UserAuth, CourseProjectsResource, defaultPageSize, Pagination, ngDialog,
-    ProjectResource) ->
+    UserAuth, CourseProjectsResource, defaultPageSize, Pagination, ngDialog) ->
 
     $scope.isTeacher = UserAuth.user.teacher
     $scope.canAddProject = $scope.isTeacher
@@ -63,6 +62,7 @@ angular.module 'evaluator'
     $scope.showAddDialog = ->
       return if $scope.newProjectDialog && ngDialog.isOpen($scope.newProjectDialog.id)
       $scope.newProjectData = {}
+      $scope.projectCreateError = ''
       $scope.newProjectDialog = ngDialog.open
         template: 'private/create/project.html'
         scope: $scope
@@ -70,10 +70,12 @@ angular.module 'evaluator'
     $scope.submit = ->
       return if $scope.processingProject
       $scope.processingProject = true
-      project = new ProjectResource $scope.newProjectData
+      project = new CourseProjectsResource $scope.newProjectData
+      project.course_id = $stateParams.id
       success = (project) ->
         $scope.newProjectDialog.close()
         $scope.processingProject = false
+        addProjectsCallback [project], 0
       failure = (response) ->
         if response.status is 422
           $scope.projectCreateError = ("#{key.capitalize()} #{value}." for key, value of response.data)

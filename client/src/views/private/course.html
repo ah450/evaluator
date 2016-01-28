@@ -4,32 +4,38 @@
   <i class="material-icons spinner">refresh</i>
 </div>
 <section id="courseWrapper" data-ng-if="!loading">
-<div class="course-ctrls flex-perfect-center-container" data-ng-if="!course.published">
-  <button class='btn-green' data-ng-click="publish()">Publish</button>
+<div class="course-ctrls flex-perfect-center-container"
+data-ng-if="isTeacher">
+  <button class='btn-green' data-ng-if="!course.published" data-ng-click="publish()">Publish</button>
 </div>
-<x-course data-data="course"></section>
+<x-course data-data="course"></x-course>
 
-<ul class="course-projects"
-data-infinite-scroll='loadMore()'
-data-infinite-scroll-disabled='scrollDisabled'
-data-infinite-scroll-listen-for-event="projects:reflow"
->
-  <li class="project-item btn-green"
-  data-ng-if="canAddProject"
-  data-ng-click="showAddDialog()"
-  ><i class="material-icons">add</i></li>
+<div id="projectsWrapper">
+<header>
+  <h2>Projects</h2>
+</header>
+  <ul class="projects-list"
+  data-infinite-scroll='loadMore()'
+  data-infinite-scroll-disabled='scrollDisabled'
+  data-infinite-scroll-listen-for-event="projects:reflow"
+  >
+    <li class="project-item btn-green"
+    data-ng-if="canAddProject"
+    data-ng-click="showAddDialog()"
+    ><i class="material-icons">add</i></li>
 
-  <li class="project-item"
-  data-ng-repeat="project in projects track by $index"
-  >
-    <a data-ui-sref="private.project({id: project.id})" data-project data-data="project"
-    data-ng-class="projectClasses[$index % projectClasses.length]"
-    ></a>
-  </li>
-  <li class="project-item flex-perfect-center-container"
-  data-ng-if="loadingProjects"
-  >
-    <i class="material-icons spinner">refresh</i>
-  </li>
-</ul>
+    <li class="project-item"
+    data-ng-repeat="project in projects track by $index"
+    >
+      <a data-ui-sref="private.project({id: project.id})" data-project data-data="project"
+      data-ng-class="projectClasses[$index % projectClasses.length]"
+      ></a>
+    </li>
+    <li class="project-item flex-perfect-center-container max-width"
+    data-ng-if="loadingProjects"
+    >
+      <i class="material-icons spinner block">refresh</i>
+    </li>
+  </ul>
+</div>
 </section>
