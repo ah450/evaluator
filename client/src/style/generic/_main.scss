@@ -4,6 +4,31 @@
   font-size: 3em;
 }
 
+.spin-fullscreen-wrap {
+  transition: all .3s ease;
+  z-index: 10;
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  margin: auto;
+  background: transparent;
+  text-align: center;
+  .spinner-wrap {
+    font-size: 5em;
+    box-shadow: 0px 0px 0px 200000px rgba(0,0,0,0.8);
+  }
+  .spinner {
+    position: relative;
+    font-size: 5em;
+    color: white;
+    z-index: 2;
+    top: 45vh;
+  }
+
+}
+
 @import 'material_text';
 @import 'contract_overlay';
 @import 'top_nav';

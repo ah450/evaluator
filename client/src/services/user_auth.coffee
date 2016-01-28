@@ -44,7 +44,11 @@ angular.module 'evaluator'
         if not angular.isUndefined @currentUser
           return @currentUser
         else
-          return localStorageService.get 'currentUser'
+          @currentUser = new User localStorageService.get 'currentUser'
+
+      @property 'user',
+        get: ->
+          @getUser()
         
     return new UserService
     

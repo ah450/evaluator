@@ -31,6 +31,7 @@ gem 'jwt'
 gem 'faye-rails'
 gem 'rails-api'
 gem 'nokogiri'
+gem 'sidekiq'
 
 group :test do
   gem 'simplecov', require: false

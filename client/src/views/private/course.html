@@ -1,0 +1,11 @@
+<div class="spin-fullscreen-wrap" data-ng-if="loading">
+  <div class="spinner-wrap">
+  </div>
+  <i class="material-icons spinner">refresh</i>
+</div>
+<section id="courseWrapper" data-ng-if="!loading">
+<div class="course-ctrls flex-perfect-center-container" data-ng-if="!course.published">
+  <button class='btn-green' data-ng-click="publish()">Publish</button>
+</div>
+<x-course data-data="course"></section>
+</section>

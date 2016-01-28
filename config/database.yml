@@ -2,7 +2,7 @@ default: &default
   adapter: postgresql
   encoding: unicode
   host: localhost
-  pool: 5
+  pool: 30
 
 development:
   <<: *default

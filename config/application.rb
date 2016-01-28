@@ -31,5 +31,8 @@ module Evaluator
     end
     config.api_only = true
     
+    if !Rails.env.testing?
+      config.active_job.queue_adapter = :sidekiq
+    end
   end
 end

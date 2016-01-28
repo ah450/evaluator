@@ -5,3 +5,5 @@ angular.module 'evaluator'
         index: [apiHost, 'configurations.json'].join '/'
       users:
         resourceUrl: [apiHost, 'users', ':id.json'].join '/'
+      courses:
+        resourceUrl: [apiHost, 'courses', ':id.json'].join '/'
