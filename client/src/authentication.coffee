@@ -22,3 +22,19 @@ angular.module 'evaluator'
           params: toParams
         e.preventDefault()
         $state.go authStatus.to, authStatus.params
+
+angular.module 'evaluator'
+  .run ($rootScope, $state, UserAuth) ->
+    $rootScope.$on 'unauthorizedResponse',  ->
+      UserAuth.logout()
+      $state.go 'public.login'
+
+# HTTP Interceptor for 401s (expired)
+angular.module 'evaluator'
+  .config ($httpProvider) ->
+    $httpProvider.interceptors.push ($q, $rootScope) ->
+      interceptor =
+        responseError: (response) ->
+          if response.status is 401
+            $rootScope.$emit 'unauthorizedResponse'
+            $q.reject response
