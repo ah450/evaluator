@@ -70,10 +70,10 @@ angular.module 'evaluator'
       return if $scope.processingSuite
       $scope.processingSuite = true
       
-      success = (suite) ->
+      success = (response) ->
         $scope.newSuiteDialog.close()
         $scope.processingSuite = false
-        addSuitesCallback [suite], 0
+        addSuitesCallback [response.data], 0
       failure = (response) ->
         if response.status is 422
           $scope.suiteCreateError = ("#{key.capitalize()} #{value}." for key, value of response.data)

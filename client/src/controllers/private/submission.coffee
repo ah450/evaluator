@@ -71,8 +71,8 @@ angular.module 'evaluator'
     $scope.submit = ->
       return if $scope.processingSubmission
       $scope.processingSubmission = true
-      success = (data) ->
-        submission = new Submission data
+      success = (response) ->
+        submission = new Submission response.data
         $scope.newSubmissionDialog.close()
         $scope.processingSubmission = false
         addNewSubmission submission
