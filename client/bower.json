@@ -32,7 +32,9 @@
     "moment": "~2.11.1",
     "angular-datepicker": "~2.0.3",
     "moment-timezone": "~0.5.0",
-    "angularjs-datepicker": "~0.2.16"
+    "angularjs-datepicker": "~0.2.16",
+    "ng-file-upload": "~11.2.3",
+    "angular-file-saver": "~1.0.2"
   },
   "resolutions": {
     "angular": "1.4.9",

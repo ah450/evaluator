@@ -29,6 +29,14 @@
 
 }
 
+.clickable-icon {
+  cursor: pointer;
+  transition: all .3s ease;
+  &:hover {
+    transform: scale(1.3);
+  }
+}
+
 @import 'material_text';
 @import 'contract_overlay';
 @import 'top_nav';

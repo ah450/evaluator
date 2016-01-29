@@ -10,4 +10,34 @@
   <button class="btn-green" data-ng-if="!project.published" data-ng-click="publish()">Publish</button>
 </div>
 <x-project data-data="project"></x-project>
+
+<div id="suitesWrapper">
+<header>
+  <h2>Suites</h2>
+</header>
+  <ul class="suites-list"
+  data-infinite-scroll='loadMore()'
+  data-infinite-scroll-disabled='scrollDisabled'
+  data-infinite-scroll-listen-for-event='suites:reflow'
+  >
+    <li class="suite-item btn-green"
+    data-ng-if="canAddSuite"
+    data-ng-click="showAddDialog()"
+    ><i class="material-icons">add</i></li>
+    <li class="suite-item"
+    data-ng-repeat="suite in suites track by $index"
+    >
+    <div
+      data-suite data-data="suite"
+      data-ng-class="suitClasses[$index % suitClasses.length]"
+    ></div>
+    </li>
+
+    <li class="suite-item flex-perfect-center-container max-width"
+    data-ng-if="loadingSuites"
+    >
+      <i class="material-icons spinner block">refresh</i>
+    </li>
+  </ul>
+</div>
 </section>

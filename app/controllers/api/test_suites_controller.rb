@@ -15,7 +15,7 @@ class Api::TestSuitesController < ApplicationController
         File.extname(file.original_filename))
       if @test_suite.save
         code_params = {
-          code: IO.binread(file),
+          code: file.read,
           file_name: file.original_filename,
           mime_type: file.content_type,
           test_suite: @test_suite

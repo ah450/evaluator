@@ -10,7 +10,7 @@ class Api::SubmissionsController < ApplicationController
       if @submission.save
         file = params.require(:file)
         solution_params = {
-          code: IO.binread(file),
+          code: file.read,
           file_name: file.original_filename,
           mime_type: file.content_type,
           submission: @submission
