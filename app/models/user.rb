@@ -105,9 +105,7 @@ class User < ActiveRecord::Base
     verification_token = with_lock("FOR UPDATE") do
       expirationTime = User.verification_expiration.ago
       VerificationToken.where(user_id: id).where('created_at <= ?', expirationTime).delete_all
-      VerificationToken.where(user_id: id).order(created_at: :desc).offset(1).each do |r|
-        r.destroy
-      end
+      VerificationToken.where(user_id: id).order(created_at: :desc).offset(1).destroy_all
       token = VerificationToken.where(user_id: id).order(created_at: :desc).first
       tokenStr = SecureRandom.urlsafe_base64 User.verification_token_str_max_length
       if !token.nil? && token.created_at <= expirationTime
@@ -166,9 +164,7 @@ class User < ActiveRecord::Base
     reset_token = with_lock("FOR UPDATE") do
       expirationTime = User.pass_reset_expiration.ago
       ResetToken.where(user_id: id).where('created_at <= ?', expirationTime).delete_all
-      ResetToken.where(user_id: id).order(created_at: :desc).offset(1).each do |r|
-        r.destroy
-      end
+      ResetToken.where(user_id: id).order(created_at: :desc).offset(1).destroy_all
       token = ResetToken.where(user_id: id).order(created_at: :desc).first
       tokenStr = SecureRandom.urlsafe_base64 User.pass_reset_token_str_max_length
       if !token.nil? && token.created_at <= expirationTime
