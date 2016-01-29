@@ -10,6 +10,10 @@ class Api::ResultsController < ApplicationController
   def set_parent
     @project ||= Project.find params[:project_id]
   end
+  
+  def query_params
+    params.permit(:submission_id)
+  end
 
   def base_index_query
     query = Result.viewable_by_user(@current_user).where(project: @project)
