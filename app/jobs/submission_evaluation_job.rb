@@ -10,7 +10,6 @@ class SubmissionEvaluationJob < ActiveJob::Base
         @selinux_directory = Dir.mktmpdir "submit"
         begin
           Dir.chdir @working_directory
-          puts suite.suite_code.file_name
           test_suite submission, suite
         ensure
           Dir.chdir @old_working_directory
@@ -68,7 +67,7 @@ class SubmissionEvaluationJob < ActiveJob::Base
         exit_status = thread.value
         results_directory = File.join(@build_directory, 'tests')
         Dir.glob "#{results_directory}/**/*.xml" do |file_name|
-          document = File.open file_name {|f| Nokogiri::XML(f)}
+          document = File.open(file_name) {|f| Nokogiri::XML(f)}
           parse_result document, suite
         end
       end
@@ -82,20 +81,22 @@ class SubmissionEvaluationJob < ActiveJob::Base
       test_case.java_klass_name = test_case_node['classname']
       test_case.passed = true
       test_case.name = test_case_node['name']
+      test_case.max_grade = 0
       test_case.detail = ''
-      test_case.max_grade = suite.suite_cases.where(name: test_case.name).first
+      suite_case = suite.suite_cases.where(name: test_case.name).first
+      test_case.max_grade = suite_case.grade if !suite_case.nil?
       test_case.grade = test_case.max_grade
       test_case_node.css('failure').each do |failure|
         test_case.passed = false
         test_case.grade = 0
-        test_case.detail += failure.content + '\n'
+        test_case.detail += failure.content + '\n' + failure['type'] + '\n'
         @result.success &= false
       end
       test_case_node.css('error').each do |error|
         test_case.passed = false
         @result.success &=  false
         test_case.grade = 0
-        test_case.detail += failure.content + '\n'
+        test_case.detail += error.content + '\n'
       end
       @result.grade += test_case.grade
       test_case.save!
@@ -165,7 +166,6 @@ class SubmissionEvaluationJob < ActiveJob::Base
     IO.binwrite(suite.suite_code.file_name, suite.suite_code.code)
     `unzip -u #{suite.suite_code.file_name}`
     raise UnzipError, "suite #{suite.id}" if $?.exitstatus != 0
-    puts suite.suite_code.file_name
     # FileUtils.remove suite.suite_code.file_name
   end
 
