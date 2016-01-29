@@ -25,6 +25,14 @@
       transform: none;
     }
   }
+  &[disabled] {
+    background-color: $md-clr-grey-400;
+    border-color: transparent;
+    &:hover {
+      background-color: $md-clr-grey-400;
+      transform: none;
+    }
+  }
 }
 
 .btn-red {
@@ -45,5 +53,12 @@
   border-color: $blue;
   &:hover {
     background-color: $blue;
+  }
+}
+
+.btn-amber {
+  border-color: $amber;
+  &:hover {
+    background-color: $amber;
   }
 }

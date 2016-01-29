@@ -1,6 +1,7 @@
 angular.module 'evaluator'
   .controller 'SubmissionsController', ($scope, $stateParams, ProjectResource,
-    ProjectSubmissionsResource, Pagination, defaultPageSize, Submission, ngDialog) ->
+    ProjectSubmissionsResource, Pagination, defaultPageSize, Submission,
+    ngDialog, Upload, endpoints) ->
 
     $scope.loading = true
 
@@ -14,7 +15,7 @@ angular.module 'evaluator'
     submissionFactory = (data) ->
       new Submission data
 
-    submissionsPagination = new Pagination ProjectSubmissionsResource,
+    submissionsPagination = new Pagination ProjectSubmissionsResource, 'submissions',
       {project_id: $stateParams.project_id}, submissionFactory, defaultPageSize
     
     $scope.submissions = []
@@ -22,7 +23,7 @@ angular.module 'evaluator'
     'submission-accent-two', 'submission-accent-three']
 
     addSubmissionsCallback = (newSubmissions) ->
-      args = [0, $scope.submissions.length].concat submissions
+      args = [0, $scope.submissions.length].concat newSubmissions
       $scope.submissions.splice.apply $scope.submissions, args
 
     addNewSubmission = (submission) ->
@@ -44,10 +45,10 @@ angular.module 'evaluator'
     loadSubmissionsPage $scope.currentPage
 
     $scope.backDisabled = ->
-      $scope.currentPage > 1
+      $scope.currentPage == 1
 
     $scope.nextDisabled = ->
-      $scope.currentPage == submissionsPagination.totalPages
+      $scope.currentPage <= submissionsPagination.totalPages
 
 
     $scope.next = ->
@@ -87,6 +88,16 @@ angular.module 'evaluator'
         url: endpoints.projectSubmissions.resourceUrl.replace(':project_id', $stateParams.project_id)
         data: $scope.newSubmissionData
       ).then(success, failure)
+
+
+    $scope.showAddDialog = ->
+      return if $scope.newSubmissionDialog && ngDialog.isOpen($scope.newSubmissionDialog)
+      $scope.newSubmissionData = {}
+      $scope.submissionCreateError = ''
+      $scope.newSubmissionDialog = ngDialog.open
+        template: 'private/create/submission.html'
+        scope: $scope
+
 
 
 

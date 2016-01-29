@@ -10,7 +10,7 @@
   </header>
 
 
-  <section id="submission">
+  <section class="submissions-wrapper">
     <ul class="submissions-list">
       
       <li class="submission-item btn-green"
@@ -24,7 +24,7 @@
       data-ng-class="submissionClasses[$index %submissionClasses.length]"
       ></div>
       </li>
-      <li class="submission-item center-pseudo max-width"
+      <li class="submission-item center-pseudo"
       data-ng-if="loadingSubmissions"
       >
         <i class="material-icons spinner">refresh</i>
@@ -33,9 +33,11 @@
     <div class="pagination-controls" data-ng-hide="loadingSubmissions">
       <button data-ng-disabled="backDisabled()"
       data-ng-click="back()"
+      class="btn-amber"
       ><i class="material-icons">navigate_before</i></button>
       <button data-ng-disabled="nextDisabled()"
       data-ng-click="next()"
+      class="btn-amber"
       ><i class="material-icons">navigate_next</i></button>
     </div>
   </section>

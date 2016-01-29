@@ -23,7 +23,6 @@ class Api::TestSuitesController < ApplicationController
         code = SuiteCode.new code_params
         if code.save
           render json: @test_suite, status: :created
-          SuitesProcessJob.perform_later @test_suite
         else
           render json: code.errors, status: :unprocessable_entity
           raise ActiveRecord::Rollback
@@ -32,6 +31,9 @@ class Api::TestSuitesController < ApplicationController
         render json: @test_suite.errors, status: :unprocessable_entity
         raise ActiveRecord::Rollback
       end
+    end
+    if @test_suite.persisted?
+      SuitesProcessJob.perform_later @test_suite
     end
   end
 

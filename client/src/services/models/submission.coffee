@@ -14,7 +14,7 @@ angular.module 'evaluator'
 
       @property 'done',
         get: ->
-          @resource.results.length > 0
+          @resource.results && @resource.results.length > 0
 
       @property 'compiled',
         get: ->

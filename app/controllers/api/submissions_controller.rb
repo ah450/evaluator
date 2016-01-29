@@ -18,7 +18,6 @@ class Api::SubmissionsController < ApplicationController
         solution = Solution.new solution_params
         if solution.save
           render json: @submission, status: :created
-          SubmissionEvaluationJob.perform_later @submission
         else
           render json: solution.errors, status: :unprocessable_entity
           raise ActiveRecord::Rollback
@@ -27,6 +26,9 @@ class Api::SubmissionsController < ApplicationController
         render json: @submission.errors, status: :unprocessable_entity
         raise ActiveRecord::Rollback
       end
+    end
+    if @submission.persisted?
+      SubmissionEvaluationJob.perform_later @submission
     end
   end
 

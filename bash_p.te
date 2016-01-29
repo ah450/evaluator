@@ -1,0 +1,11 @@
+
+module bash_p 1.0;
+
+require {
+	type devlog_t;
+	type sandbox_t;
+	class lnk_file read;
+}
+
+#============= sandbox_t ==============
+allow sandbox_t devlog_t:lnk_file read;
