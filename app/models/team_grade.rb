@@ -10,6 +10,9 @@ class TeamGrade < ActiveRecord::Base
   validates :name, presence: true
   before_save :set_hidden
 
+  def as_json(options={})
+    super(include: [:result])
+  end
 
   private
   def set_hidden
