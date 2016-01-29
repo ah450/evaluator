@@ -5,7 +5,7 @@ angular.module 'evaluator'
       templateUrl: 'directives/suite.html'
       scope:
         suite: '=data'
-      controller: ($scope, FileSaver, UserAuth, endpoints, $http) ->
+      controller: [ '$scope', 'FileSaver', 'UserAuth', 'endpoints', '$http', ($scope, FileSaver, UserAuth, endpoints, $http) ->
         
         $scope.canDownload = UserAuth.user.teacher || !$scope.suite.hidden
         $scope.download = ->
@@ -15,4 +15,5 @@ angular.module 'evaluator'
             .then (response) ->
               filename = "#{$scope.suite.name}.zip"
               FileSaver.saveAs(response.data, filename)
+      ]
 
