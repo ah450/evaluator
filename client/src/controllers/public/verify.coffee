@@ -1,6 +1,7 @@
 angular.module 'evaluator'
   .controller 'VerifyController', ($scope, $stateParams, $timeout,
-    $state, $http, configurations) ->
+    $state, $http, configurations,
+    UserAuth, $auth, localStorageService, User) ->
 
     $scope.done = false
     $scope.message = "Account verified!"
@@ -8,11 +9,17 @@ angular.module 'evaluator'
     # Make request
     $http.put("/api/users/#{$stateParams.id}/verify.json",
       {token: $stateParams.token}
-    ).then ->
+    ).then (response)->
       $scope.success = true
       $scope.done = true
       $timeout ->
-        $state.go 'public.login'
+        # $state.go 'public.login'
+        data = response.data.data
+        $auth.setToken(data.token)
+        localStorageService.set 'currentUser', data.user
+        UserAuth.currentUserData = data
+        UserAuth.currentUser = new User data
+        $state.go 'private.courses'
       , 800
     .catch (response) ->
       $scope.success = false

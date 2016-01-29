@@ -50,7 +50,12 @@ class Api::UsersController < ApplicationController
   def verify
     token = params[:token]
     if @user.verify token
-      head :no_content
+      render json: {
+        data: {
+          token: @user.token(),
+          user: user
+        }
+      }
     else
       render json: { message: error_messages[:incorrect_verification_token] },
         status: :unprocessable_entity
