@@ -6,7 +6,7 @@ angular.module 'evaluator'
     $authProvider.storage = 'localStorage'
     $authProvider.baseUrl = apiHost
     $authProvider.signupUrl = 'users.json'
-    $authProvider.loginUrl = 'tokens.json'
+    $authProvider.loginUrl = 'login.json'
 
 angular.module 'evaluator'
   .run ($rootScope, $state, UserAuth, redirect) ->
