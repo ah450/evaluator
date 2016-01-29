@@ -94,4 +94,8 @@ class Api::SubmissionsController < ApplicationController
     end
   end
 
+  def order_args
+    {created_at: :desc}
+  end
+
 end

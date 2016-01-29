@@ -24,7 +24,7 @@ class ApplicationController < ActionController::API
   # GET /api/{plural_resource_variable}
   def index
     resources = base_index_query.where(query_params)
-                              .order(:created_at)
+                              .order(order_args)
                               .page(page_params[:page])
                               .per(page_params[:page_size])
     instance_variable_set(plural_resource_variable, resources)
@@ -218,6 +218,10 @@ class ApplicationController < ActionController::API
     logger.error "#{message}\n\n"
     render json: {message: error_messages[:internal_server_error]},
       status: :internal_server_error
+  end
+
+  def order_args
+    :created_at
   end
 
 end
