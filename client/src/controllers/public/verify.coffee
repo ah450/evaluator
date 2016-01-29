@@ -20,7 +20,7 @@ angular.module 'evaluator'
         UserAuth.currentUserData = data
         UserAuth.currentUser = new User data
         $state.go 'private.courses'
-      , 2000
+      , 10000
     .catch (response) ->
       $scope.success = false
       if response.status is 422
