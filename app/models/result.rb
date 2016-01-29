@@ -26,6 +26,10 @@ class Result < ActiveRecord::Base
     end
   end
 
+  def as_json(options={})
+    super(include: [:test_suite])
+  end
+
   private
 
   def grade_range
