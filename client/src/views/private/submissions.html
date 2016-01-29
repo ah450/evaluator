@@ -1,0 +1,42 @@
+<div class="spin-fullscreen-wrap" data-ng-if="loading">
+  <div class="spinner-wrap">
+  </div>
+  <i class="material-icons spinner">refresh</i>
+</div>
+
+<section id="submissionsWrapper" data-ng-if="!loading">
+  <header>
+    <h1>{{project.name}} Submissions</h1>
+  </header>
+
+
+  <section id="submission">
+    <ul class="submissions-list">
+      
+      <li class="submission-item btn-green"
+      data-ng-click="showAddDialog()"
+      ><i class="material-icons">add</i></li>
+      <li class="submission-item"
+      data-ng-repeat="submission in submissions track by $index"
+      >
+      <div
+      data-submission data-data="submission"
+      data-ng-class="submissionClasses[$index %submissionClasses.length]"
+      ></div>
+      </li>
+      <li class="submission-item center-pseudo max-width"
+      data-ng-if="loadingSubmissions"
+      >
+        <i class="material-icons spinner">refresh</i>
+      </li>
+    </ul>
+    <div class="pagination-controls" data-ng-hide="loadingSubmissions">
+      <button data-ng-disabled="backDisabled()"
+      data-ng-click="back()"
+      ><i class="material-icons">navigate_before</i></button>
+      <button data-ng-disabled="nextDisabled()"
+      data-ng-click="next()"
+      ><i class="material-icons">navigate_next</i></button>
+    </div>
+  </section>
+</section>

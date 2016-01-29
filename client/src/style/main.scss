@@ -47,10 +47,10 @@ a.link {
   margin: 0 auto;
   max-width: 700px;
   width: 94%;
-  padding-top: 30vh;
+  padding-top: 15vh;
   min-height: calc(100vh - 30vh);
   @include media("height<=600px") {
-    padding-top: 15vh;
+    padding-top: 5vh;
     min-height: calc(100vh - 15vh);
   }
 }
@@ -76,3 +76,4 @@ footer {
 @import 'courses/main';
 @import 'projects/main';
 @import 'suites/main';
+@import 'cases/main';

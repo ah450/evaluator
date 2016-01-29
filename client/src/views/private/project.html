@@ -8,6 +8,10 @@
 >
 <div class="project-ctrls flex-perfect-center-container" data-ng-if="isTeacher">
   <button class="btn-green" data-ng-if="!project.published" data-ng-click="publish()">Publish</button>
+  <button class="btn-green"
+  data-ng-if="project.published"><a
+  data-ui-sref="private.submissions({project_id: project.id})"
+  >Submit</a></button>
 </div>
 <x-project data-data="project"></x-project>
 

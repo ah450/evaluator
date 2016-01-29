@@ -1,0 +1,50 @@
+<div class="submission">
+
+  <div class="flex-perfect-center-container">
+      <div data-ng-if="!submission.done">
+        <p>Processing..</p>
+        <div class="flex-perfect-center-container">
+          <i class="material-icons spinner">refresh</i>
+        </div>
+      </div>
+      <div data-ng-if="submission.done">
+        <div data-ng-switch="submission.status">
+          <div data-ng-switch-when="submission.SUCCESS_STATE">
+            <div class="flex-perfect-center-container">
+              <i class="material-icons check">check</i>
+            </div>
+            <p class="grade">{{submission.grade}}/{{submission.max_grade}}</p>
+          </div>
+          <div data-ng-switch-when="submission.PARTIAL_STATE">
+            <div class="flex-perfect-center-container">
+              <i class="material-icons warning">warning</i>
+            </div>
+            <p class="grade">{{submission.grade}}/{{submission.max_grade}}</p>
+          </div>
+          <div data-ng-switch-when="submission.COMPILE_ERROR_STATE">
+            <div class="flex-perfect-center-container">
+              <i class="material-icons error">error_outline</i>
+            </div>
+          </div>
+        </div>
+        <div class="resultsWrapper">
+          <header>
+            <h3>Results</h3>
+          </header>
+          <ul class="results-list">
+            <li
+            class="result-item"
+            data-result
+            data-data="result"
+            data-ng-repeat="result in submission.results"></li>
+          </ul>
+        </div>
+      </div>
+  </div>
+  
+  <div class="float-wrapper">
+    <i data-ng-click="download()"
+    class="material-icons left clickable-icon"
+    >file_download</i>
+  </div>
+</div>

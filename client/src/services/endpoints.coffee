@@ -16,3 +16,8 @@ angular.module 'evaluator'
       suite:
         resourceUrl: [apiHost, 'test_suites', ':id.json'].join '/'
         downloadUrl: [apiHost, 'test_suites', ':id', 'download'].join '/'
+      projectSubmissions:
+        resourceUrl: [apiHost, 'projects', ':project_id', 'submissions.json'].join '/'
+      submission:
+        resourceUrl: [apiHost, 'submissions', ':id.json'].join '/'
+        downloadUrl: [apiHost, 'submissions', ':id', 'download'].join '/'

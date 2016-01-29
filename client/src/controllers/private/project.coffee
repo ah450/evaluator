@@ -78,7 +78,7 @@ angular.module 'evaluator'
         if response.status is 422
           $scope.suiteCreateError = ("#{key.capitalize()} #{value}." for key, value of response.data)
             .join ' '
-          $scope.processingSuite
+          $scope.processingSuite = false
         else
           $scope.suiteCreateError = response.data.message.capitalize
           $scope.processingSuite = false
