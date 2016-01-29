@@ -32,6 +32,7 @@ Rails.application.routes.draw do
       end
     end
     resources :tokens, only: [:create]
+    resource :login, only: [:create]
     resources :configurations, only: [:index]
   end
 end
