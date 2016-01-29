@@ -13,6 +13,23 @@
       </div>
     </div>
   </div>
+  <div class="suite-detail" data-ng-if="suite.ready">
+    <p>Max Grade: {{suite.max_grade}}</p>
+    <p>Test Timeout: {{suite.timeout}} seconds</p>
+    <p>Number of cases: {{suite.suite_cases.length}}</p>
+
+    <header>
+      <h4>Test Cases</h4>
+    </header>
+
+    <ul class="cases-list">
+      <li class="case-item" data-ng-repeat="case in suite.suite_cases">
+        <p class="case-name">Name: {{case.name}}</p>
+        <p class="case-grade">Grade: {{case.grade}}</p>
+      </li>
+    </ul>
+  </div>
+
   <div class="float-wrapper">
     <i class="material-icons right" data-ng-if="suite.hidden">visibility_off</i>
     <i class="material-icons right" data-ng-if="!suite.hidden">visibility_on</i>
