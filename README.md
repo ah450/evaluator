@@ -1,6 +1,6 @@
 Evaluator
 =========
-
+[![Build Status](https://travis-ci.org/ah450/evaluator.svg?branch=master)](https://travis-ci.org/ah450/evaluator)
 
 Node version `0.12.7`
 
