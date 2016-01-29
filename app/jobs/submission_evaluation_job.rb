@@ -25,6 +25,25 @@ class SubmissionEvaluationJob < ActiveJob::Base
     @result = Result.new submission: submission, suite: suite,
       project: submission.project, grade: 0, max_grade: suite.max_grade
     run_sandbox
+    if submission.submitter.student?
+      create_team_grade
+    end
+  end
+
+  def create_team_grade
+    TeamGrade.with_lock('FOR UPDATE') do
+      grades = TeamGrade.where(project: @results.project,
+        name: @result.submission.submitter.team).joins(:result).where(results: {
+          test_suite: @result.test_suite
+        }).order('results.grade DESC')
+      grades.offset(1).destroy_all
+      if grades.count == 0 || grades.first.result.grade <= @result.grade
+        grades.delete_all
+        @team_grade = TeamGrade.create(project: @result.project,
+          result: @result, name: @result.submission.submitter.team
+          )
+      end
+    end
   end
 
   def run_sandbox(suite)
