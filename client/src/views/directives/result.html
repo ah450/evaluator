@@ -1,3 +1,14 @@
 <div class="result">
   <p class="name">{{result.test_suite.name}}</p>
+  <p class="grade">{{result.grade}}/result.max_grade</p>
+  <div class="result-cases-wrapper">
+    <ul class="result-cases-list">
+      <li
+      data-result-case
+      data-data="case"
+      data-ng-repeat="case in result.cases"
+      class="result-case-item"
+      ></li>
+    </ul>
+  </div>
 </div>

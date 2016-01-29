@@ -27,7 +27,7 @@ class Result < ActiveRecord::Base
   end
 
   def as_json(options={})
-    super(include: [:test_suite])
+    super(include: [:test_suite, :test_cases])
   end
 
   private

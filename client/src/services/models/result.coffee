@@ -3,4 +3,9 @@ angular.module 'evaluator'
     class Result
       constructor: (data) ->
         _.assign @, data
+
+      @property 'cases',
+        get: ->
+          @test_cases
+
         

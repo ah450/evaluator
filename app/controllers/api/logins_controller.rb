@@ -1,4 +1,4 @@
-class Api::LoginController < ApplicationController
+class Api::LoginsController < ApplicationController
   skip_filter :authorize, :authenticate, only: [:create]
   
   def create
