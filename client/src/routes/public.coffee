@@ -35,12 +35,7 @@ angular.module 'evaluator'
           templateUrl: 'public/signup.html'
           controller: 'SignupController'
     
-    aboutState =
-      name: 'public.about'
-      url: '/about'
-      views:
-        'pageContent':
-          templateUrl: 'public/about.html'
+    
 
     verifyAccount =
       name: 'public.verify'
@@ -73,6 +68,14 @@ angular.module 'evaluator'
         'pageContent':
           templateUrl: 'public/verify_send.html'
           controller: 'SendVerifyController'
+
+
+    aboutState =
+      name: 'public.about'
+      url: '/about'
+      views:
+        'pageContent':
+          templateUrl: 'public/about.html'
 
     internalErrorState =
       name: 'public.internal_error'

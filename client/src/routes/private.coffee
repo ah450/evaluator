@@ -54,9 +54,25 @@ angular.module 'evaluator'
           templateUrl: 'private/submissions.html'
           controller: 'SubmissionsController'
 
+    aboutState =
+      name: 'private.about'
+      url: '/evaluator'
+      views:
+        'pageContent':
+          templateUrl: 'public/about.html'
+
+    internalErrorState =
+      name: 'private.internal_error'
+      url: '/ooops'
+      views:
+        'pageContent':
+          templateUrl: 'public/internal_error.html'
+
     $stateProvider
       .state privateState
       .state coursesState
       .state courseState
       .state projectState
       .state submissionsState
+      .state aboutState
+      .state internalErrorState

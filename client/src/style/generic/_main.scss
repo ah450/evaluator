@@ -41,6 +41,10 @@
   color: $green;
 }
 
+.error {
+  color: $red;
+}
+
 @import 'material_text';
 @import 'contract_overlay';
 @import 'top_nav';
