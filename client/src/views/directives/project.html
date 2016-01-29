@@ -2,7 +2,8 @@
   <p class="project-name">{{project.name}}</p>
   <p class="project-start">Starts {{moment(project.start_date).format('MMMM Do YYYY, h:mm:ss a')}}</p>
   <p class="project-end">Ends {{moment(project.due_date).format("MMMM Do YYYY, h:mm:ss a")}}</p>
-  <div class="visibility-wrapper" data-ng-if="!project.published">
-    <i class="material-icons right">visibility_off</i>
+  <div class="visibility-wrapper" >
+    <i class="material-icons right" data-ng-if="!project.published">visibility_off</i>
+    <i class="material-icons right" data-ng-if="project.published">visibility_on</i>
   </div>
 </div>

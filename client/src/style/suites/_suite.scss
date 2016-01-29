@@ -10,13 +10,17 @@
   .float-wrapper {
     clear: both;
     position: relative;
-    padding: 1em;
+    padding: 1.5em;
   }
   p {
     padding-bottom: 1em;
     &:last-child {
       padding-bottom: 0px;
     }
+  }
+
+  .processing-text {
+    vertical-align: middle;
   }
   
 }

@@ -1,7 +1,9 @@
 <div class="course">
   <p class="course-name">{{course.name}}</p>
   <p class="course-description">{{course.description}}</p>
-  <div class="visibility-wrapper" data-ng-if="!course.published">
-    <i class="material-icons right">visibility_off</i>
+  <div class="visibility-wrapper">
+    <i class="material-icons right" data-ng-if="!course.published">visibility_off</i>
+    <i class="material-icons right" data-ng-if="course.published">visibility_on</i>
+
   </div>
 </div>
