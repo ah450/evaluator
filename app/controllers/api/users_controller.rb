@@ -53,7 +53,7 @@ class Api::UsersController < ApplicationController
       render json: {
         data: {
           token: @user.token(),
-          user: user
+          user: @user
         }
       }
     else
