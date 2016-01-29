@@ -4,7 +4,7 @@ angular.module 'evaluator'
     UserAuth, $auth, localStorageService, User) ->
 
     $scope.done = false
-    $scope.message = "Account verified!"
+    $scope.message = "Account verified! Please wait you will be redirected soon."
     $scope.success = false
     # Make request
     $http.put("/api/users/#{$stateParams.id}/verify.json",
@@ -20,7 +20,7 @@ angular.module 'evaluator'
         UserAuth.currentUserData = data
         UserAuth.currentUser = new User data
         $state.go 'private.courses'
-      , 2000
+      , 4000
     .catch (response) ->
       $scope.success = false
       if response.status is 422
