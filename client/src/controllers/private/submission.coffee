@@ -48,7 +48,7 @@ angular.module 'evaluator'
       $scope.currentPage == 1
 
     $scope.nextDisabled = ->
-      $scope.currentPage <= submissionsPagination.totalPages
+      $scope.currentPage >= submissionsPagination.totalPages
 
 
     $scope.next = ->
