@@ -48,10 +48,10 @@ a.link {
   max-width: 700px;
   width: 94%;
   padding-top: 15vh;
-  min-height: calc(100vh - 30vh);
+  min-height: calc(100vh - 15vh);
   @include media("height<=600px") {
-    padding-top: 5vh;
-    min-height: calc(100vh - 15vh);
+    padding-top: 8vh;
+    min-height: calc(100vh - 8vh);
   }
 }
 
