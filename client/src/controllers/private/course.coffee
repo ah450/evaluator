@@ -1,6 +1,7 @@
 angular.module 'evaluator'
   .controller 'CourseController', ($scope, CoursesResource, $stateParams,
-    UserAuth, CourseProjectsResource, defaultPageSize, Pagination, ngDialog) ->
+    UserAuth, CourseProjectsResource, defaultPageSize, Pagination,
+    ngDialog, Project) ->
 
     $scope.isTeacher = UserAuth.user.teacher
     $scope.canAddProject = $scope.isTeacher
@@ -21,9 +22,11 @@ angular.module 'evaluator'
       $scope.course.$update().then ->
         $scope.loading = false
 
+    projectFactory = (data) ->
+      Project.fromData data
 
     projectsPagination = new Pagination CourseProjectsResource, 'projects',
-    {course_id: $stateParams.id}, _.identity, defaultPageSize
+    {course_id: $stateParams.id}, projectFactory, defaultPageSize
 
     ids = []
     $scope.projects = []
@@ -75,7 +78,7 @@ angular.module 'evaluator'
       success = (project) ->
         $scope.newProjectDialog.close()
         $scope.processingProject = false
-        addProjectsCallback [project], 0
+        addProjectsCallback [projectFactory project], 0
       failure = (response) ->
         if response.status is 422
           $scope.projectCreateError = ("#{key.capitalize()} #{value}." for key, value of response.data)
