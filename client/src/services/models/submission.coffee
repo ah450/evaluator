@@ -1,9 +1,16 @@
 angular.module 'evaluator'
-  .factory 'Submission', (SubmissionResource, endpoints, Result) ->
+  .factory 'Submission', (SubmissionResource, endpoints, Result,
+    ResultsResource, Pagination) ->
     class Submission
       constructor: (data) ->
         @resource = new SubmissionResource data
-
+        @results = []
+        resultFactory = (data) ->
+          new Result data
+        @resultsPagination = new Pagination ResultsResource, 'results',
+          {submission_id: @id}, resultFactory, 10000
+        @resultsPagination.page(1).then (results) ->
+          @results.push.apply @results, results
       @property 'downloadUrl',
         get: ->
           endpoints.submission.downloadUrl.replace(':id', @id)
@@ -14,11 +21,11 @@ angular.module 'evaluator'
 
       @property 'done',
         get: ->
-          @resource.results && @resource.results.length > 0
+          @results.length > 0
 
       @property 'compiled',
         get: ->
-          _.every @resource.results, 'compiled'
+          _.every @results, 'compiled'
 
       @property 'status',
         get: ->
@@ -32,22 +39,16 @@ angular.module 'evaluator'
 
       @property 'grade',
         get: ->
-          @resource.results.reduce (accum, result) ->
+          @results.reduce (accum, result) ->
             accum + result.grade
           , 0
 
 
       @property 'max_grade',
         get: ->
-          @resource.results.reduce (accum, result) ->
+          @results.reduce (accum, result) ->
             accum + result.max_grade
           , 0
-
-      @property 'results',
-        get: ->
-          factory = (result) ->
-            return new Result result
-          @resultsObjects ||= _.map @resource.results, factory
 
       @PARTIAL_STATE: 'PARTIAL_STATE'
       @SUCCESS_STATE: 'SUCCESS_STATE'
