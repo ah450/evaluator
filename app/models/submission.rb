@@ -10,6 +10,20 @@ class Submission < ActiveRecord::Base
     super(except: [:solution_id])
   end
 
+  def send_new_result_notification(result)
+    event = {
+      type: Rails.application.config.configurations[:notification_event_types][:submission_result_ready],
+      date: DateTime.now.utc,
+      payload: {
+        result: result.as_json
+      }
+    }
+    Notifications::SubmissionsController.publish(
+      "/notifications/submissions/#{id}",
+      event
+    )
+  end
+
   private
   def published_project_and_course
     if !project.nil?

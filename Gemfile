@@ -25,13 +25,14 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
-gem 'thin'
+gem 'thin', require: false
 gem 'kaminari'
 gem 'jwt'
 gem 'faye-rails'
 gem 'rails-api'
 gem 'nokogiri'
 gem 'sidekiq'
+gem 'faye-redis'
 
 group :test do
   gem 'simplecov', require: false

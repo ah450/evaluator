@@ -8,7 +8,7 @@ angular.module 'evaluator'
           (message['data'] ?= {})['ext'] = {
             token: $auth.getToken()
           }
-          callback message
+        callback message
 
     faye.addExtension authExtension
     return faye

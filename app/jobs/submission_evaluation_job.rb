@@ -13,7 +13,7 @@ class SubmissionEvaluationJob < ActiveJob::Base
           test_suite submission, suite
         ensure
           Dir.chdir @old_working_directory
-          # FileUtils.remove_entry_secure @working_directory
+          FileUtils.remove_entry_secure @working_directory
           FileUtils.remove_entry_secure @selinux_directory
         end
       end
@@ -25,18 +25,18 @@ class SubmissionEvaluationJob < ActiveJob::Base
     @result = Result.new submission: submission, test_suite: suite,
       project: submission.project, grade: 0, max_grade: suite.max_grade
     run_sandbox(suite)
+    submission.send_new_result_notification(@result)
     if submission.submitter.student?
-      create_team_grade
+      create_team_grade(suite)
     end
   end
 
-  def create_team_grade
-    TeamGrade.with_lock('FOR UPDATE') do
-      grades = TeamGrade.where(project: @results.project,
+  def create_team_grade(suite)
+    suite.with_lock('FOR UPDATE') do
+      grades = TeamGrade.where(project: @result.project,
         name: @result.submission.submitter.team).joins(:result).where(results: {
-          test_suite: @result.test_suite
+          test_suite_id: @result.test_suite.id
         }).order('results.grade DESC')
-      grades.offset(1).destroy_all
       if grades.count == 0 || grades.first.result.grade <= @result.grade
         grades.delete_all
         @team_grade = TeamGrade.create(project: @result.project,

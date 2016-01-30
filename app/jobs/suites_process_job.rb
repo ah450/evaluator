@@ -32,6 +32,7 @@ class SuitesProcessJob < ActiveJob::Base
       end
       test_suite.ready = true
       test_suite.save!
+      test_suite.send_processed_notification
     end
   end
 

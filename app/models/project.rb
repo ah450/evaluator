@@ -13,8 +13,6 @@ class Project < ActiveRecord::Base
   scope :not_due, -> { where "due_date > ?", DateTime.now.utc }
   scope :started, -> { where "start_date <= ?", DateTime.now.utc }
 
-
-
   private
 
   def unique_name_per_course

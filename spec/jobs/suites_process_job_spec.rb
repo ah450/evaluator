@@ -6,16 +6,14 @@ RSpec.describe SuitesProcessJob, type: :job do
       @suite = TestSuite.new
       @suite.project = FactoryGirl.create(:project)
       @suite.name = 'csv_test_suite'
-      @suite.save
+      @suite.save!
       code = SuiteCode.new
       code.code = IO.binread(File.join(Rails.root, 'spec', 'fixtures',
         '/files/test_suites/csv_test_suite.zip'))
       code.file_name = 'csv_test_suite.zip'
       code.mime_type = Rack::Mime.mime_type '.zip'
       code.test_suite = @suite
-      code.save
-      @suite.suite_code = code
-      @suite.save
+      code.save!
     end
     it 'should set max grade' do
       SuitesProcessJob.perform_now @suite
@@ -35,6 +33,11 @@ RSpec.describe SuitesProcessJob, type: :job do
       SuitesProcessJob.perform_now @suite
       @suite.reload
       expect(@suite.ready).to be true
+    end
+
+    it 'sends suite_processed notification' do
+      expect(@suite).to receive(:send_processed_notification).once
+      SuitesProcessJob.perform_now @suite
     end
   end
 
@@ -71,6 +74,10 @@ RSpec.describe SuitesProcessJob, type: :job do
       SuitesProcessJob.perform_now @suite
       @suite.reload
       expect(@suite.ready).to be true
+    end
+    it 'sends suite_processed notification' do
+      expect(@suite).to receive(:send_processed_notification).once
+      SuitesProcessJob.perform_now @suite
     end
   end
 end

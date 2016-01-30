@@ -2,7 +2,6 @@ angular.module 'evaluator'
   .factory 'Project', (moment, ProjectResource) ->
     class Project
       constructor: (@resource) ->
-        _.assign @, @resource
 
       @property 'due_date',
         get: ->
@@ -17,6 +16,18 @@ angular.module 'evaluator'
           @resource.published
         set: (value) ->
           @resource.published = value
+
+      @property 'name',
+        get: ->
+          @resource.name
+
+      @property 'quiz',
+        get: ->
+          @resource.quiz
+
+      @property 'id',
+        get: ->
+          @resource.id
 
       $update: (args...) ->
         @resource.$update(args)

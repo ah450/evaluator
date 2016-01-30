@@ -1,7 +1,7 @@
 angular.module 'evaluator'
   .controller 'ProjectController', ($scope, $stateParams, ProjectResource,
     UserAuth, ProjectSuitesResource, defaultPageSize, Pagination, ngDialog,
-    Upload, endpoints, Project) ->
+    Upload, endpoints, Project, Suite) ->
 
     $scope.isTeacher = UserAuth.user.teacher
     $scope.canAddSuite = $scope.isTeacher
@@ -22,8 +22,11 @@ angular.module 'evaluator'
       $scope.project.$update().then ->
         $scope.loading = false
 
+    suiteFactory = (data) ->
+      new Suite data
+
     suitesPagination = new Pagination ProjectSuitesResource, 'test_suites',
-    {project_id: $stateParams.id}, _.identity, defaultPageSize
+    {project_id: $stateParams.id}, suiteFactory, defaultPageSize
 
     ids = []
     $scope.suites = []
@@ -74,7 +77,8 @@ angular.module 'evaluator'
       success = (response) ->
         $scope.newSuiteDialog.close()
         $scope.processingSuite = false
-        addSuitesCallback [response.data], 0
+        suite = new Suite response.data
+        addSuitesCallback [suite], 0
       failure = (response) ->
         if response.status is 422
           $scope.suiteCreateError = ("#{key.capitalize()} #{value}." for key, value of response.data)
