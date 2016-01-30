@@ -104,6 +104,8 @@ class SubmissionEvaluationJob < ActiveJob::Base
   end
 
   def setup_directory(submission, suite)
+    lib_src = File.join(Rails.root, 'app', 'views', 'runner', 'lib')
+    `cp -r #{lib_src} #{@working_directory}`
     extract_tests(suite)
     in_use_names = Dir.entries Dir.pwd
     @tests_directory = File.basename(suite.suite_code.file_name,

@@ -33,4 +33,4 @@ angular.module 'evaluator'
           $scope.message = "Incorrect token. Please note tokens expire after #{config.verification_expiration / 60 / 60} hours."
           $scope.done = true
       else
-        $state.go 'internal_error'
+        $stage.go 'public.internal_error'

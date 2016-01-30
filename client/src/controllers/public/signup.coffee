@@ -24,4 +24,4 @@ angular.module 'evaluator'
             $scope.error = ("#{key.capitalize()} #{value}." for key, value of response.data)
               .join ' '
           else
-            $state.go 'internal_error'
+            $stage.go 'public.internal_error'
