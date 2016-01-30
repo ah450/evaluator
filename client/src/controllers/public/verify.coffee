@@ -15,12 +15,15 @@ angular.module 'evaluator'
       $timeout ->
         # $state.go 'public.login'
         data = response.data.data
+        console.log data.token
+        console.log data.user
+        console.log localStorageService.isSupported, localStorageService.getStorageType()
         $auth.setToken(data.token)
         localStorageService.set 'currentUser', data.user
         UserAuth.currentUserData = data
         UserAuth.currentUser = new User data
         $state.go 'private.courses'
-      , 10000
+      , 800
     .catch (response) ->
       $scope.success = false
       if response.status is 422

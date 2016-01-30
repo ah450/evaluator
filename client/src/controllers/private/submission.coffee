@@ -60,13 +60,6 @@ angular.module 'evaluator'
 
     $scope.newSubmissionData = {}
 
-    $scope.showSubmitDialog = ->
-      return if $scope.newSubmissionDialog && ngDialog.isOpen($scope.newSubmissionDialog)
-      $scope.newSubmissionData = {}
-      $scope.submissionCreateError = ''
-      $scope.newSubmissionDialog = ngDialog.open
-        template: 'private/create/submission.html'
-        scope: $scope
 
     $scope.submit = ->
       return if $scope.processingSubmission
