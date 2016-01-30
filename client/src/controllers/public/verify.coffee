@@ -14,10 +14,12 @@ angular.module 'evaluator'
       $scope.done = true
       $timeout ->
         # $state.go 'public.login'
+        console.log response
         data = response.data.data
         console.log data.token
         console.log data.user
         console.log localStorageService.isSupported, localStorageService.getStorageType()
+        localStorageService.set 'haha', '42'
         $auth.setToken(data.token)
         localStorageService.set 'currentUser', data.user
         UserAuth.currentUserData = data
