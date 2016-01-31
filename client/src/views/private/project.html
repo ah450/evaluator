@@ -31,10 +31,11 @@
     ><i class="material-icons">add</i></li>
     <li class="suite-item"
     data-ng-repeat="suite in suites track by $index"
+    data-ng-class="suitClasses[$index % suitClasses.length]"
+
     >
     <div
       data-suite data-data="suite"
-      data-ng-class="suitClasses[$index % suitClasses.length]"
     ></div>
     </li>
 

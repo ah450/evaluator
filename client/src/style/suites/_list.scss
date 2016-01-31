@@ -4,12 +4,8 @@
     padding: 0.6em;
     margin-bottom: 2em;
     border-radius: 0.8em;
-    border-style: solid;
-    border-width: 1px;
-    @media(min-resolution: 2dppx) {
-      border-width: 2px;
-    }
     transition: all .3s ease;
+    background: transparentize($suite-background-clr, 0.5);
     &:hover {
       transform: scale(1.1);
     }

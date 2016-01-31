@@ -26,9 +26,9 @@ data-ng-if="isTeacher">
 
     <li class="project-item"
     data-ng-repeat="project in projects track by $index"
+    data-ng-class="projectClasses[$index % projectClasses.length]"
     >
       <a data-ui-sref="private.project({id: project.id})" data-project data-data="project"
-      data-ng-class="projectClasses[$index % projectClasses.length]"
       ></a>
     </li>
     <li class="project-item center-pseudo"
