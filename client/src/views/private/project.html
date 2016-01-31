@@ -26,7 +26,7 @@
   data-infinite-scroll-listen-for-event='suites:reflow'
   >
     <li class="suite-item btn-green"
-    data-ng-if="canAddSuite"
+    data-ng-if="canAddSuite && !project.published"
     data-ng-click="showAddDialog()"
     ><i class="material-icons">add</i></li>
     <li class="suite-item"
