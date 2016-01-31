@@ -6,9 +6,9 @@
 
 <section id="projectWrapper" data-ng-if="!loading"
 >
-<div class="project-ctrls flex-perfect-center-container">
+<div class="project-ctrls flex-row-between">
   <button class="btn-green" data-ng-if="!project.published" data-ng-click="publish()">Publish</button>
-  <button class="btn-green" data-ng-if="project.published && isTeacher" data-ng-click="publish()">Unpublish</button>
+  <button class="btn-red" data-ng-if="project.published && isTeacher" data-ng-click="unpublish()">Unpublish</button>
   <button class="btn-green"
   data-ng-if="project.published"><a
   data-ui-sref="private.submissions({project_id: project.id})"

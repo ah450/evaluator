@@ -11,19 +11,29 @@
     &:hover {
       transform: scale(1.1);
     }
+
+    box-shadow: 0px 0px 0.2em 0px rgba(0, 0, 0, 0.3);
+
+    &.course-accent-one {
+      &:hover {
+        background: $list-accent-one;
+      }
+    }
+
+    &.course-accent-two {
+      &:hover {
+        background: $list-accent-two;
+      }
+    }
+
+    &.course-accent-three {
+      &:hover {
+        background: $list-accent-three;
+      }
+    }
   }
 
-  &.course-accent-one {
-
-  }
-
-  &.course-accent-two {
-
-  }
-
-  &.course-accent-three {
-
-  }
+  
 
 
 }

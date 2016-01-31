@@ -19,8 +19,9 @@
       <i class="material-icons">add</i>
     </li>
     <li class="course-item"
+    data-ng-class="courseClasses[$index % courseClasses.length]"
     data-ng-repeat="course in courses track by $index"
     ><a data-ui-sref="private.course({id: course.id})" data-course data-data="course"
-    data-ng-class="courseClasses[$index % courseClasses.length]"></a></li>
+    ></a></li>
   </ul>
 </section>
