@@ -68,6 +68,14 @@ angular.module 'evaluator'
         'pageContent':
           templateUrl: 'public/internal_error.html'
 
+    profileState =
+      name: 'private.profile'
+      url: '/profile'
+      views:
+        'pageContent':
+          templateUrl: 'private/profile.html'
+          controller: 'ProfileController'
+
     $stateProvider
       .state privateState
       .state coursesState
@@ -76,3 +84,4 @@ angular.module 'evaluator'
       .state submissionsState
       .state aboutState
       .state internalErrorState
+      .state profileState

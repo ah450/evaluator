@@ -1,6 +1,5 @@
 angular.module 'evaluator'
-  .directive 'gucId', ->
-    GUC_ID_REGEX = /^[0-9]+-[0-9]+$/
+  .directive 'gucId', (GUC_ID_REGEX) ->
     directive =
       require: 'ngModel'
       restrict: 'A'

@@ -26,6 +26,7 @@ angular.module 'evaluator'
   .constant 'apiHost', '/api'
   .constant 'baseHost', '/'
   .constant 'defaultPageSize', 15
+  .constant 'GUC_ID_REGEX', /^([0-9]+)-([0-9]+)$/
 
 # Infinite scroll throttling
 angular.module 'infinite-scroll'

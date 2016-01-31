@@ -62,3 +62,10 @@
     background-color: $amber;
   }
 }
+
+.btn-pink {
+  border-color: $md-clr-pink-500;
+  &:hover {
+    background-color: $md-clr-pink-500;
+  }
+}

@@ -73,3 +73,15 @@ form {
   padding-top: 2em;
 }
 
+#profileForm {
+  input.material-text[type="password"] {
+    &.ng-dirty ~ label {
+      top: -1em;
+      font-size: 1.4em;
+      transition: none;
+      @include media("height<=730px"){
+        font-size: 1.1em;
+      }
+    }
+  }
+}
