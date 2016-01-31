@@ -27,7 +27,12 @@ Rails.application.config.configurations = {
         pass_reset_resend_delay: 30.minutes,
         notification_event_types: {
             submission_result_ready: 'RESULT_READY',
-            test_suite_processed: 'SUITE_PROCESSED'
+            test_suite_processed: 'SUITE_PROCESSED',
+            course_created: 'COURSE_CREATED',
+            course_published: 'COURSE_PUBLISHED',
+            project_created: 'PROJECT_CREATED',
+            project_published: 'PROJECT_PUBLISHED',
+            suite_created: 'SUITE_CREATED'
         }
     }
 

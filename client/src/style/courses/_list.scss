@@ -7,15 +7,22 @@
     padding: 0.6em;
     margin-bottom: 1em;
     border-radius: 0.8em;
-    border-style: solid;
-    border-width: 1px;
-    @media(min-resolution: 2dppx) {
-      border-width: 2px;
-    }
     transition: all .3s ease;
     &:hover {
       transform: scale(1.1);
     }
+  }
+
+  &.course-accent-one {
+
+  }
+
+  &.course-accent-two {
+
+  }
+
+  &.course-accent-three {
+
   }
 
 

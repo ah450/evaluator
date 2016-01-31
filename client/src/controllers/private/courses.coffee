@@ -59,7 +59,7 @@ angular.module 'evaluator'
       success = (course) ->
         $scope.newCourseDialog.close()
         $scope.processingCourse = false
-        addCoursesCallback [course], 0
+        addCoursesCallback [course], $scope.courses.length
       failure = (response) ->
         if response.status is 422
           $scope.courseCreateError = ("#{key.capitalize()} #{value}." for key, value of response.data)

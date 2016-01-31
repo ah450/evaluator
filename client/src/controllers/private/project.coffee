@@ -22,6 +22,12 @@ angular.module 'evaluator'
       $scope.project.$update().then ->
         $scope.loading = false
 
+    $scope.unpublish = ->
+      $scope.loading = true
+      $scope.project.published = false
+      $scope.project.$update().then ->
+        $scope.loading = false
+
     suiteFactory = (data) ->
       new Suite data
 
