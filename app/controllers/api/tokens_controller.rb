@@ -2,7 +2,7 @@ class Api::TokensController < ApplicationController
   skip_filter :authorize, :authenticate, only: [:create]
   
   def create
-    user = User.find_by_email(token_params[:email])
+    user = User.find_by_email(token_params[:email].downcase)
     raise AuthenticationError if user.nil?
     raise AuthenticationError unless user.authenticate(token_params[:password])
     raise ForbiddenError, error_messages[:unverified_login] unless user.verified?
