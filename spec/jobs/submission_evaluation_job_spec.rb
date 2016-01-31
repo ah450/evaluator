@@ -185,4 +185,68 @@ RSpec.describe SubmissionEvaluationJob, type: :job do
       end
     end
   end
+
+  context 'zork' do
+    before :each do
+      @project = FactoryGirl.create(:project, published: true,
+        course: FactoryGirl.create(:course, published: true))
+      @publicSuite = TestSuite.new
+      @publicSuite.project = @project
+      @publicSuite.name = 'zorkPublic'
+      @publicSuite.save!
+      code = SuiteCode.new
+      code.code = IO.binread(File.join(Rails.root, 'spec', 'fixtures',
+        '/files/test_suites/zorkPublic.zip'))
+      code.file_name = 'zorkPublic.zip'
+      code.mime_type = Rack::Mime.mime_type '.zip'
+      code.test_suite = @publicSuite
+      code.save!
+      @privateSuite = TestSuite.new
+      @privateSuite.name = 'zorkPrivate'
+      @privateSuite.project = @project
+      @privateSuite.save!
+      privateCode = SuiteCode.new
+      privateCode.code = IO.binread(File.join(Rails.root, 'spec', 'fixtures',
+        '/files/test_suites/zorkPrivate.zip'))
+      privateCode.file_name = 'zorkPrivate.zip'
+      privateCode.mime_type = Rack::Mime.mime_type '.zip'
+      privateCode.test_suite = @privateSuite
+      privateCode.save!
+      SuitesProcessJob.perform_now @publicSuite
+      SuitesProcessJob.perform_now @privateSuite
+    end
+    context 'correct submission' do
+      before :each do
+        @submission = Submission.new
+        @submission.submitter = FactoryGirl.create(:student, verified: true)
+        @submission.project = @project
+        @submission.save!
+        solution = Solution.new
+        solution.file_name = 'zork_submission_correct.zip'
+        solution.mime_type = Rack::Mime.mime_type '.zip'
+        solution.submission = @submission
+        solution.code = IO.binread(File.join(Rails.root, 'spec', 'fixtures',
+          'files', 'submissions', 'zork_submission_correct.zip'))
+        solution.save!
+      end
+
+      it 'sends new result notification' do
+        expect(@submission).to receive(:send_new_result_notification).twice
+        SubmissionEvaluationJob.perform_now @submission
+      end
+
+      it 'creates two results and a TeamGrade' do
+        expect {
+          SubmissionEvaluationJob.perform_now @submission
+          }.to change(Result, :count).by(2).and change(TeamGrade, :count).by(2)
+      end
+
+      it 'sets correct grade' do
+        SubmissionEvaluationJob.perform_now @submission
+        results = @submission.results.to_a
+        ok = results.all? {|r| r.grade == r.max_grade}
+        expect(ok).to be true
+      end
+    end
+  end
 end

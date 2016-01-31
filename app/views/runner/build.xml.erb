@@ -12,17 +12,9 @@
   </target>
 
   <target name="compile_tests">
-    <javac includeantruntime="true" srcdir="<%= @tests_directory %>" destdir="<%= @build_directory %>/classes"
-    
+    <javac includeantruntime="true" srcdir="<%= @tests_directory %>"
+    destdir="<%= @build_directory %>/classes"
     />
-  </target>
-  
-  <target name="move_tests">
-    <move todir="<%= @build_directory %>/classes">
-      <fileset dir="<%= @tests_directory %>">
-        <include name="**/*.class"/>
-      </fileset>
-    </move>
   </target>
   
   <target name="delete_test_source">
@@ -36,7 +28,6 @@
                       <pathelement location="lib/hamcrest-junit-2.0.0.0.jar" />
                       <pathelement location="lib/java-hamcrest-2.0.0.0.jar" />
                       <pathelement location="<%= @build_directory %>/classes"/>
-                      <pathelement location="<%= @build_directory %>/tests"/>
               </classpath>
               <formatter type="xml"/>
             <batchtest todir="<%= @build_directory %>/tests" fork="yes">

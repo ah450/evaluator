@@ -9,8 +9,8 @@ class SubmissionEvaluationJob < ActiveJob::Base
         @old_working_directory = Dir.pwd
         @working_directory = Dir.mktmpdir "submit"
         @selinux_directory = Dir.mktmpdir "submit"
+        Dir.chdir @working_directory
         begin
-          Dir.chdir @working_directory
           test_suite submission, suite
           @newResults.push @result
         ensure
@@ -65,6 +65,9 @@ class SubmissionEvaluationJob < ActiveJob::Base
     @result.save!
     # Test
     if @result.compiled
+      Dir.glob "#{@build_directory}/**/*Test.class" do |file_name|
+        File.delete file_name
+      end
       Open3.popen3 test_command do |stdin, stdout, stderr, thread|
         exit_status = thread.value
         results_directory = File.join(@build_directory, 'tests')
@@ -75,6 +78,7 @@ class SubmissionEvaluationJob < ActiveJob::Base
       end
     else
       @result.success = false
+      @result.grade = 0
     end
     @result.save!
   end
@@ -159,7 +163,7 @@ class SubmissionEvaluationJob < ActiveJob::Base
     IO.binwrite(@submission_code_name_ext, submission.solution.code)
     `unzip -u #{@submission_code_name_ext}`
     raise UnzipError, "submission #{submission.id}" if $?.exitstatus != 0
-    # FileUtils.remove @submission_code_name_ext
+    FileUtils.remove @submission_code_name_ext
     newEntries = Dir.entries Dir.pwd
     newEntries.each do |entry|
       if File.directory?(entry) && !old.include?(entry)
@@ -172,7 +176,7 @@ class SubmissionEvaluationJob < ActiveJob::Base
     IO.binwrite(suite.suite_code.file_name, suite.suite_code.code)
     `unzip -u #{suite.suite_code.file_name}`
     raise UnzipError, "suite #{suite.id}" if $?.exitstatus != 0
-    # FileUtils.remove suite.suite_code.file_name
+    FileUtils.remove suite.suite_code.file_name
   end
 
 
