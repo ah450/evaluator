@@ -1,7 +1,7 @@
 # Faye configurations
 Rails.application.config.middleware.delete Rack::Lock
 
-unless Rails.const_defined?(:Server)
+unless Rails.const_defined?(:Server) || !ENV['IS_SERVER'].nil?
   Faye.logger = Rails.logger
   Faye.logger.debug "Ensure reactor running!"
   Faye.ensure_reactor_running!
