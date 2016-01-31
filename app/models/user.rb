@@ -183,7 +183,7 @@ class User < ActiveRecord::Base
   end
 
   def can_view_result?(result)
-    teacher? || (!result.hidden && result.submission.submitter.team == team)
+    teacher? || result.submission.submitter.team == team
   end
 
   def can_view_team_grade?(grade)
