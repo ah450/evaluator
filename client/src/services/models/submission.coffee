@@ -1,16 +1,33 @@
 angular.module 'evaluator'
   .factory 'Submission', (SubmissionResource, endpoints, Result,
-    ResultsResource, Pagination) ->
+    ResultsResource, Pagination, NotificationDispatcher, configurations) ->
     class Submission
       constructor: (data) ->
         @resource = new SubmissionResource data
         @results = []
+        @resultIds = []
         resultFactory = (data) ->
           new Result data
+        
+        NotificationDispatcher.subscribeSubmission @, (e) =>
+          configurations.then (config) =>
+            if e.type is config.notification_event_types.submission_result_ready
+              # Add result to results
+              if e.payload.result.id not in @resultIds
+                @resultIds.push e.payload.result.id
+                @results.push resultFactory e.payload.result
+
+
         @resultsPagination = new Pagination ResultsResource, 'results',
-          {submission_id: @id}, resultFactory, 10000
-        @resultsPagination.page(1).then (results) ->
+          {submission_id: @id,
+          project_id: @resource.project_id}, resultFactory, 10000
+        @resultsPagination.page(1).then (newResults) =>
+          results = _.filter newResults, (result) =>
+            result.id not in @resultIds
+          Array::push.apply @resultIds, _.map results, 'id'
           @results.push.apply @results, results
+
+
       @property 'downloadUrl',
         get: ->
           endpoints.submission.downloadUrl.replace(':id', @id)
@@ -29,7 +46,9 @@ angular.module 'evaluator'
 
       @property 'status',
         get: ->
-          if @compiled
+          if not @done
+            @PROCESSING_STATE
+          else if @compiled
             if @grade == @max_grade
               @SUCCESS_STATE
             else
@@ -50,8 +69,25 @@ angular.module 'evaluator'
             accum + result.max_grade
           , 0
 
-      @PARTIAL_STATE: 'PARTIAL_STATE'
-      @SUCCESS_STATE: 'SUCCESS_STATE'
-      @COMPILE_ERROR_STATE: 'COMPILE_ERROR_STATE'
+      @property 'success',
+        get: ->
+          @status is @SUCCESS_STATE
+      
+      @property 'partial',
+        get: ->
+          @status is @PARTIAL_STATE
+
+      @property 'failure',
+        get: ->
+          @status is @COMPILE_ERROR_STATE
+
+      @property 'processing',
+        get: ->
+          @status is @PROCESSING_STATE
+
+      PARTIAL_STATE: 'partial-submission'
+      SUCCESS_STATE: 'success-submission'
+      COMPILE_ERROR_STATE: 'error-submission'
+      PROCESSING_STATE: 'processing-submission'
       
     

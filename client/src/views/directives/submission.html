@@ -7,26 +7,24 @@
           <i class="material-icons spinner">refresh</i>
         </div>
       </div>
-      <div data-ng-if="submission.done">
-        <div data-ng-switch="submission.status">
-          <div data-ng-switch-when="submission.SUCCESS_STATE">
-            <div class="flex-perfect-center-container">
-              <i class="material-icons check">check</i>
+      <div data-ng-if="submission.done" class="max-width">
+        <div data-ng-if="submission.success">
+            <div class="flex-perfect-center-container flex-column">
+              <i class="material-icons">check</i>
+              <p class="grade">{{submission.grade}}/{{submission.max_grade}}</p>
             </div>
-            <p class="grade">{{submission.grade}}/{{submission.max_grade}}</p>
           </div>
-          <div data-ng-switch-when="submission.PARTIAL_STATE">
-            <div class="flex-perfect-center-container">
+          <div data-ng-if="submission.partial">
+            <div class="flex-perfect-center-container flex-column">
               <i class="material-icons warning">warning</i>
+              <p class="grade">{{submission.grade}}/{{submission.max_grade}}</p>
             </div>
-            <p class="grade">{{submission.grade}}/{{submission.max_grade}}</p>
           </div>
-          <div data-ng-switch-when="submission.COMPILE_ERROR_STATE">
+          <div data-ng-if="submission.failure">
             <div class="flex-perfect-center-container">
               <i class="material-icons error">error_outline</i>
             </div>
           </div>
-        </div>
         <div class="results-wrapper">
           <header>
             <h3>Results</h3>
@@ -34,6 +32,7 @@
           <ul class="results-list">
             <li
             class="result-item"
+            data-ng-class="result.state"
             data-result
             data-data="result"
             data-ng-repeat="result in submission.results"></li>

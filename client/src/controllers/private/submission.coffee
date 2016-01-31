@@ -64,11 +64,6 @@ angular.module 'evaluator'
     $scope.submit = ->
       return if $scope.processingSubmission
       $scope.processingSubmission = true
-      success = (response) ->
-        submission = new Submission response.data
-        $scope.newSubmissionDialog.close()
-        $scope.processingSubmission = false
-        addNewSubmission submission
       failure = (response) ->
         if response.status is not 422
           $scope.submissionCreateError = ("#{key.capitalize()} #{value}." for key, value of response.data)
@@ -77,6 +72,14 @@ angular.module 'evaluator'
         else
           $scope.submissionCreateError = response.data.message.capitalize
           $scope.processingSubmission = false
+        return response
+
+      success = (response) ->
+        submission = new Submission response.data
+        $scope.newSubmissionDialog.close()
+        $scope.processingSubmission = false
+        addNewSubmission submission
+      
       Upload.upload(
         url: endpoints.projectSubmissions.resourceUrl.replace(':project_id', $stateParams.project_id)
         data: $scope.newSubmissionData

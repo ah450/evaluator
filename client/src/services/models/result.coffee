@@ -41,6 +41,21 @@ angular.module 'evaluator'
         get: ->
           @resource.success
 
+      @property 'state',
+        get: ->
+          if @success
+            @SUCCESS_STATE
+          else if not @compiled
+            @ERROR_STATE
+          else
+            @FAILED_STATE
+
+      SUCCESS_STATE: 'success-result'
+      ERROR_STATE: 'error-result'
+      FAILED_STATE: 'failed-result'
+
+
+
 
 
         

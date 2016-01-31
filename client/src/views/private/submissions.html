@@ -17,6 +17,7 @@
       data-ng-click="showAddDialog()"
       ><i class="material-icons">add</i></li>
       <li class="submission-item"
+      data-ng-class="submission.status"
       data-ng-repeat="submission in submissions track by $index"
       >
       <div

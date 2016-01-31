@@ -1,17 +1,20 @@
 .results-list {
+  padding: 3em;
   .result-item {
     display: block;
     padding: 0.6em;
     margin-bottom: 1em;
     border-radius: 0.8em;
-    border-style: solid;
-    border-width: 1px;
-    @media(min-resolution: 2dppx) {
-      border-width: 2px;
-    }
     transition: all .3s ease;
-    &:hover {
-      transform: scale(1.1);
+    box-shadow: 0px 0px 2em 0px rgba(0, 0, 0, 0.6);
+    &.success-result {
+      background-color: transparentize($success-result-bg, 0.6);
+    }
+    &.error-result {
+      background-color: transparentize($error-submission-bg, 0.3);
+    }
+    &.failed-result {
+      background-color: transparentize($partial-submission-bg, 0.3);
     }
   }
 }

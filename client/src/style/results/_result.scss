@@ -1,10 +1,8 @@
 .result {
 
-  > p {
-    padding: 0.5em;
-  }
-
   .result-cases-wrapper {
-    margin-left: 0.8em;
+    max-height: 20em;
+    padding: 1.8em;
+    overflow: auto;
   }
 }

@@ -32,8 +32,8 @@ class SuitesProcessJob < ActiveJob::Base
       end
       test_suite.ready = true
       test_suite.save!
-      test_suite.send_processed_notification
     end
+    test_suite.send_processed_notification
   end
 
   around_perform do |job, block|

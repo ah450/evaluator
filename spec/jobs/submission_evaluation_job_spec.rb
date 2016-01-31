@@ -77,6 +77,60 @@ RSpec.describe SubmissionEvaluationJob, type: :job do
       end
     end
 
+    context 'csv_submission_error' do
+      before :each do
+        @submission = Submission.new
+        @submission.submitter = FactoryGirl.create(:student, verified: true)
+        @submission.project = @project
+        @submission.save!
+        solution = Solution.new
+        solution.file_name = 'csv_submission.zip'
+        solution.mime_type = Rack::Mime.mime_type '.zip'
+        solution.submission = @submission
+        solution.code = IO.binread(File.join(Rails.root, 'spec', 'fixtures',
+          'files', 'submissions', 'csv_submission_error.zip'))
+        solution.save!
+      end
+      it 'sends new result notification' do
+        expect(@submission).to receive(:send_new_result_notification).once
+        SubmissionEvaluationJob.perform_now @submission
+      end
+      it 'creates a result and TeamGrade' do
+        expect {
+          SubmissionEvaluationJob.perform_now @submission
+          }.to change(Result, :count).by(1).and change(TeamGrade, :count).by(1)
+      end
+      it 'sets correct grade' do
+        SubmissionEvaluationJob.perform_now @submission
+        result = @submission.results.first
+        expect(result.grade).to eql 0
+      end
+
+      it 'sets correct team grade' do
+        SubmissionEvaluationJob.perform_now @submission
+        result = @submission.results.first
+        expect(result.team_grade.nil?).to be false
+      end
+
+      it 'is not successfull' do
+        SubmissionEvaluationJob.perform_now @submission
+        result = @submission.results.first
+        expect(result.success).to be false
+      end
+
+      it 'did not compile' do
+        SubmissionEvaluationJob.perform_now @submission
+        result = @submission.results.first
+        expect(result.compiled).to be false
+      end
+
+      it 'has correct compiler output' do
+        SubmissionEvaluationJob.perform_now @submission
+        result = @submission.results.first
+        expect(result.compiler_stdout).to include('TestFileRead.java:15: error:')
+      end
+    end
+
     context 'csv_submission' do
       before :each do
         @submission = Submission.new

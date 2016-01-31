@@ -3,6 +3,7 @@ class SubmissionEvaluationJob < ActiveJob::Base
   queue_as :default
 
   def perform(submission)
+    @newResults = []
     submission.with_lock('FOR UPDATE') do
       submission.project.test_suites.each do |suite|
         @old_working_directory = Dir.pwd
@@ -11,6 +12,7 @@ class SubmissionEvaluationJob < ActiveJob::Base
         begin
           Dir.chdir @working_directory
           test_suite submission, suite
+          @newResults.push @result
         ensure
           Dir.chdir @old_working_directory
           FileUtils.remove_entry_secure @working_directory
@@ -18,6 +20,7 @@ class SubmissionEvaluationJob < ActiveJob::Base
         end
       end
     end
+    @newResults.each { |result| submission.send_new_result_notification(result) }
   end
 
   def test_suite(submission, suite)
@@ -25,7 +28,6 @@ class SubmissionEvaluationJob < ActiveJob::Base
     @result = Result.new submission: submission, test_suite: suite,
       project: submission.project, grade: 0, max_grade: suite.max_grade
     run_sandbox(suite)
-    submission.send_new_result_notification(@result)
     if submission.submitter.student?
       create_team_grade(suite)
     end
@@ -71,6 +73,8 @@ class SubmissionEvaluationJob < ActiveJob::Base
           parse_result document, suite
         end
       end
+    else
+      @result.success = false
     end
     @result.save!
   end
@@ -89,14 +93,14 @@ class SubmissionEvaluationJob < ActiveJob::Base
       test_case_node.css('failure').each do |failure|
         test_case.passed = false
         test_case.grade = 0
-        test_case.detail += failure.content + '\n' + failure['type'] + '\n'
+        test_case.detail += ' ' + failure['type'] + ' ' + failure.content
         @result.success &= false
       end
       test_case_node.css('error').each do |error|
         test_case.passed = false
         @result.success &=  false
         test_case.grade = 0
-        test_case.detail += error.content + '\n'
+        test_case.detail += error.content + ' '
       end
       @result.grade += test_case.grade
       test_case.save!
