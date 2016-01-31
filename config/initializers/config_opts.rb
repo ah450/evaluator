@@ -23,8 +23,8 @@ Rails.application.config.configurations = {
         },
         verification_expiration: 5.hours,
         pass_reset_expiration: 24.hours,
-        user_verification_resend_delay: 3.hours,
-        pass_reset_resend_delay: 30.minutes,
+        user_verification_resend_delay: 5.minutes,
+        pass_reset_resend_delay: 5.minutes,
         notification_event_types: {
             submission_result_ready: 'RESULT_READY',
             test_suite_processed: 'SUITE_PROCESSED',

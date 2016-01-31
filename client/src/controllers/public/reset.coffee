@@ -23,5 +23,9 @@ angular.module 'evaluator'
         else if response.status is 422
           $scope.processing = false
           $scope.error = response.data.message
+        else if response.status is 420
+          configurations.then (config) ->
+            $scope.message = "Can only reset once every #{config.pass_reset_resend_delay / 60} minutes"
+            $scope.done = true
         else
           $stage.go 'public.internal_error'

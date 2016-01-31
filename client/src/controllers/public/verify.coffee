@@ -24,8 +24,12 @@ angular.module 'evaluator'
     .catch (response) ->
       $scope.success = false
       if response.status is 422
+        $scope.message = "Incorrect token. Please note tokens expire after #{config.verification_expiration / 60 / 60} hours."
+        $scope.done = true
+          
+      else if response.status is 420
         configurations.then (config) ->
-          $scope.message = "Incorrect token. Please note tokens expire after #{config.verification_expiration / 60 / 60} hours."
+          $scope.message = "Can only send email once every #{config.user_verification_resend_delay / 60} minutes"
           $scope.done = true
       else
         $stage.go 'public.internal_error'
