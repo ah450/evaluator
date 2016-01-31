@@ -5,9 +5,11 @@
     margin-bottom: 2em;
     border-radius: 0.8em;
     transition: all .3s ease;
-    background: transparentize($suite-background-clr, 0.5);
     &:hover {
       transform: scale(1.1);
+    }
+    &:not(.pseudo-item) {
+      background: transparentize($suite-background-clr, 0.5);
     }
   }
 
