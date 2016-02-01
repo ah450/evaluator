@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160130154041) do
+ActiveRecord::Schema.define(version: 20160201193747) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -201,21 +201,21 @@ ActiveRecord::Schema.define(version: 20160130154041) do
   add_index "verification_tokens", ["user_id", "token"], name: "index_verification_tokens_on_user_id_and_token", using: :btree
   add_index "verification_tokens", ["user_id"], name: "index_verification_tokens_on_user_id", unique: true, using: :btree
 
-  add_foreign_key "projects", "courses"
-  add_foreign_key "reset_tokens", "users"
-  add_foreign_key "results", "projects"
-  add_foreign_key "results", "submissions"
-  add_foreign_key "results", "test_suites"
-  add_foreign_key "solutions", "submissions"
-  add_foreign_key "studentships", "courses"
-  add_foreign_key "studentships", "users", column: "student_id"
-  add_foreign_key "submissions", "projects"
-  add_foreign_key "submissions", "users", column: "submitter_id"
-  add_foreign_key "suite_cases", "test_suites"
-  add_foreign_key "suite_codes", "test_suites"
-  add_foreign_key "team_grades", "projects"
-  add_foreign_key "team_grades", "results"
-  add_foreign_key "test_cases", "results"
-  add_foreign_key "test_suites", "projects"
-  add_foreign_key "verification_tokens", "users"
+  add_foreign_key "projects", "courses", on_delete: :cascade
+  add_foreign_key "reset_tokens", "users", on_delete: :cascade
+  add_foreign_key "results", "projects", on_delete: :cascade
+  add_foreign_key "results", "submissions", on_delete: :cascade
+  add_foreign_key "results", "test_suites", on_delete: :cascade
+  add_foreign_key "solutions", "submissions", on_delete: :cascade
+  add_foreign_key "studentships", "courses", on_delete: :cascade
+  add_foreign_key "studentships", "users", column: "student_id", on_delete: :cascade
+  add_foreign_key "submissions", "projects", on_delete: :cascade
+  add_foreign_key "submissions", "users", column: "submitter_id", on_delete: :cascade
+  add_foreign_key "suite_cases", "test_suites", on_delete: :cascade
+  add_foreign_key "suite_codes", "test_suites", on_delete: :cascade
+  add_foreign_key "team_grades", "projects", on_delete: :cascade
+  add_foreign_key "team_grades", "results", on_delete: :cascade
+  add_foreign_key "test_cases", "results", on_delete: :cascade
+  add_foreign_key "test_suites", "projects", on_delete: :cascade
+  add_foreign_key "verification_tokens", "users", on_delete: :cascade
 end
