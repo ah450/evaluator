@@ -32,6 +32,7 @@ Rails.application.config.configurations = {
             course_published: 'COURSE_PUBLISHED',
             project_created: 'PROJECT_CREATED',
             project_published: 'PROJECT_PUBLISHED',
+            project_unpublished: 'PROJECT_UNPUBLISHED',
             suite_created: 'SUITE_CREATED'
         }
     }

@@ -24,11 +24,7 @@ class TestSuite < ActiveRecord::Base
   end
 
   def self.viewable_by_user(user)
-    if user.student?
-      where(hidden: false)
-    else
-      self
-    end
+    self
   end
 
   def destroyable?

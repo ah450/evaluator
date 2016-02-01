@@ -1,12 +1,11 @@
 /*
  * Main Layout
  */
-@import 'vendor/include-media';
-@import 'vendor/material-color-prefixed';
-@import 'partials/variables';
-@import 'partials/reset';
-@import 'partials/mixins';
-
+@import "vendor/include-media";
+@import "vendor/material-color-prefixed";
+@import "partials/variables";
+@import "partials/reset";
+@import "partials/mixins";
 
 body {
   background-color: $main-background;
@@ -42,19 +41,18 @@ a.link {
   cursor: pointer;
 }
 
-
 [data-ui-view='pageContent'] {
   margin: 0 auto;
   max-width: 700px;
   width: 94%;
-  padding-top: 15vh;
+  padding-top: 20vh;
   min-height: calc(100vh - 15vh);
+
   @include media("height<=600px") {
-    padding-top: 8vh;
+    padding-top: 15vh;
     min-height: calc(100vh - 8vh);
   }
 }
-
 
 footer {
   max-height: 80px;
@@ -67,15 +65,13 @@ footer {
   border-top: 1px solid $md-clr-grey-200;
 }
 
-
-
-@import 'utility/main';
-@import 'animations/main';
-@import 'generic/main';
-@import 'public/main';
-@import 'courses/main';
-@import 'projects/main';
-@import 'suites/main';
-@import 'cases/main';
-@import 'results/main';
-@import 'submissions/main';
+@import "utility/main";
+@import "animations/main";
+@import "generic/main";
+@import "public/main";
+@import "courses/main";
+@import "projects/main";
+@import "suites/main";
+@import "cases/main";
+@import "results/main";
+@import "submissions/main";
