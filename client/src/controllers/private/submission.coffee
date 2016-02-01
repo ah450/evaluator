@@ -1,7 +1,7 @@
 angular.module 'evaluator'
   .controller 'SubmissionsController', ($scope, $stateParams, ProjectResource,
     ProjectSubmissionsResource, Pagination, defaultPageSize, Submission,
-    ngDialog, Upload, endpoints) ->
+    ngDialog, Upload, endpoints, UserAuth) ->
 
     $scope.loading = true
 
@@ -16,7 +16,9 @@ angular.module 'evaluator'
       new Submission data
 
     submissionsPagination = new Pagination ProjectSubmissionsResource, 'submissions',
-      {project_id: $stateParams.project_id}, submissionFactory, defaultPageSize
+      {project_id: $stateParams.project_id,
+      submitter_id: UserAuth.user.id
+      }, submissionFactory, defaultPageSize
     
     $scope.submissions = []
     $scope.submissionClasses = ['submission-accent-one',
