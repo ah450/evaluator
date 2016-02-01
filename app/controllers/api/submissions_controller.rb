@@ -48,7 +48,7 @@ class Api::SubmissionsController < ApplicationController
 
 
   def query_params
-    params.permit(:student_id, :project_id)
+    params.permit(:submitter_id, :project_id)
   end
 
   def params_helper
@@ -56,7 +56,7 @@ class Api::SubmissionsController < ApplicationController
     attributes.delete :id
     attributes.delete :project_id
     attributes.delete :solution_id
-    attributes.delete :student_id
+    attributes.delete :submitter_id
     permitted = params.permit attributes
     inferred = {
       submitter: @current_user
