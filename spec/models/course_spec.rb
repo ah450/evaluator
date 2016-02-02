@@ -39,4 +39,28 @@ RSpec.describe Course, type: :model do
       end
     end
   end
+
+  context 'notifications' do
+    it 'sends created notification' do
+      expect(Notifications::CoursesController).to receive(:publish).once
+      FactoryGirl.create(:course)
+    end
+    it 'sends delted notification' do
+      course = FactoryGirl.create(:course)
+      expect(Notifications::CoursesController).to receive(:publish).once
+      course.destroy
+    end
+    it 'sends published notification' do
+      course = FactoryGirl.create(:course, published: false)
+      expect(Notifications::CoursesController).to receive(:publish).twice
+      course.published = true
+      course.save!
+    end
+    it 'sends unpublished notificiation' do
+      course = FactoryGirl.create(:course, published: true)
+      expect(Notifications::CoursesController).to receive(:publish).twice
+      course.published = false
+      course.save!
+    end
+  end
 end

@@ -125,12 +125,12 @@ RSpec.describe User, type: :model do
     let(:teachers) { FactoryGirl.create_list(:teacher, 10) }
     let(:students) { FactoryGirl.create_list(:student, 10) }
     it 'should query by teachers' do
-      are_teachers = User.teachers.reduce { |memo, user| memo && user.teacher? }
-      expect(are_teachers).to_not be true
+      are_teachers = User.teachers.reduce(true) { |memo, user| memo && user.teacher? }
+      expect(are_teachers).to be true
     end
     it 'should query by students' do
-      are_students = User.students.reduce { |memo, user| memo && user.student? }
-      expect(are_students).to_not be true
+      are_students = User.students.reduce(true) { |memo, user| memo && user.student? }
+      expect(are_students).to be true
     end
   end
 
@@ -330,7 +330,7 @@ RSpec.describe User, type: :model do
         expect(subject.can_view?(result)).to be true
       end
       it 'can not view a result if another student' do
-        subject = FactoryGirl.create(:student)
+        subject = FactoryGirl.create(:student, team: 'haha team')
         expect(subject.can_view?(result)).to be false
       end
     end

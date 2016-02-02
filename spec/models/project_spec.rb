@@ -38,36 +38,60 @@ RSpec.describe Project, type: :model do
         expect(other).to be_valid
       end
     end
-
-    context 'query by due date' do
-      it 'should select due only' do
-        FactoryGirl.create_list(:project, 5)
-        FactoryGirl.create_list(:project, 3, due_date: 5.days.ago)
-        projects = Project.due
-        expect(projects.count).to eql 3
-      end
-      it 'should select non due only' do
-        FactoryGirl.create_list(:project, 5)
-        FactoryGirl.create_list(:project, 3, due_date: 5.days.ago)
-        projects = Project.not_due
-        expect(projects.count).to eql 5
-      end
+  end
+  context 'query by due date' do
+    it 'should select due only' do
+      FactoryGirl.create_list(:project, 5)
+      FactoryGirl.create_list(:project, 3, due_date: 5.days.ago)
+      projects = Project.due
+      expect(projects.count).to eql 3
     end
-
-    context 'query by published' do
-      it 'should select published only' do
-        FactoryGirl.create_list(:project, 5)
-        FactoryGirl.create_list(:project, 3, published: true)
-        projects = Project.published
-        expect(projects.count).to eql 3
-      end
-      it 'should select non published only' do
-        FactoryGirl.create_list(:project, 5)
-        FactoryGirl.create_list(:project, 3, published: true)
-        projects = Project.not_published
-        expect(projects.count).to eql 5
-      end
+    it 'should select non due only' do
+      FactoryGirl.create_list(:project, 5)
+      FactoryGirl.create_list(:project, 3, due_date: 5.days.ago)
+      projects = Project.not_due
+      expect(projects.count).to eql 5
     end
+  end
+  context 'query by published' do
+    it 'should select published only' do
+      FactoryGirl.create_list(:project, 5)
+      FactoryGirl.create_list(:project, 3, published: true)
+      projects = Project.published
+      expect(projects.count).to eql 3
+    end
+    it 'should select non published only' do
+      FactoryGirl.create_list(:project, 5)
+      FactoryGirl.create_list(:project, 3, published: true)
+      projects = Project.not_published
+      expect(projects.count).to eql 5
+    end
+  end
 
+  context 'notification' do
+    it 'sends created notification' do
+      course = FactoryGirl.create(:course)
+      expect(Notifications::CoursesController).to receive(:publish).once
+      FactoryGirl.create(:project, course: course)
+    end
+    it 'sends published notification' do
+      project = FactoryGirl.create(:project, published: false)
+      expect(Notifications::ProjectsController).to receive(:publish).once
+      expect(Notifications::CoursesController).to receive(:publish).once
+      project.published = true
+      project.save!
+    end
+    it 'sends unpublished notification' do
+      project = FactoryGirl.create(:project, published: true)
+      expect(Notifications::ProjectsController).to receive(:publish).once
+      expect(Notifications::CoursesController).to receive(:publish).once
+      project.published = false
+      project.save!
+    end
+    it 'sends deleted notification' do
+      project = FactoryGirl.create(:project)
+      expect(Notifications::ProjectsController).to receive(:publish).once
+      project.destroy
+    end
   end
 end

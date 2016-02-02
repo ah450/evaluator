@@ -9,10 +9,13 @@ class Project < ActiveRecord::Base
   validate :unique_name_per_course
   before_save :due_date_to_utc, :default_start_date, :start_date_to_utc
   scope :published, -> { where published: true }
-  scope :not_published, -> {where published: false }
+  scope :not_published, -> { where published: false }
   scope :due, ->  { where "due_date <= ?", DateTime.now.utc }
   scope :not_due, -> { where "due_date > ?", DateTime.now.utc }
   scope :started, -> { where "start_date <= ?", DateTime.now.utc }
+  after_create :send_created_notification
+  after_save :send_published_notification
+  after_destroy :send_deleted_notification
 
   private
 
@@ -35,6 +38,57 @@ class Project < ActiveRecord::Base
 
   def start_date_to_utc
     self.start_date = start_date.utc
+  end
+
+  def send_created_notification
+    event = {
+      type: Rails.application.config.configurations[:notification_event_types][:project_created],
+      date: DateTime.now.utc,
+      payload: {
+        project: as_json
+      }
+    }
+    Notifications::CoursesController.publish(
+      "/notifications/courses/#{course.id}",
+      event
+    )
+  end
+
+  def send_published_notification
+    if published_changed?
+      types = Rails.application.config.configurations[:notification_event_types]
+      if published?
+        type = types[:project_published]
+      else
+        type = types[:project_unpublished]
+      end
+      event = {
+        type: type,
+        date: DateTime.now.utc,
+        payload: {
+          project: as_json
+        }
+      }
+      Notifications::CoursesController.publish(
+        "/notifications/courses/#{course.id}",
+        event
+      )
+      Notifications::ProjectsController.publish(
+        "/notifications/projects/#{id}",
+        event
+      )
+    end
+  end
+
+  def send_deleted_notification
+    event = {
+      type: Rails.application.config.configurations[:notification_event_types][:project_deleted],
+      date: DateTime.now.utc,
+    }
+    Notifications::ProjectsController.publish(
+      "/notifications/projects/#{id}",
+      event
+    )
   end
 
 end

@@ -5,4 +5,11 @@ RSpec.describe Submission, type: :model do
     submission = FactoryGirl.build(:submission)
     expect(submission).to be_valid
   end
+  context 'notifications' do
+    it 'sends deleted notification' do
+      submission = FactoryGirl.create(:submission)
+      expect(Notifications::SubmissionsController).to receive(:publish).once
+      submission.destroy
+    end
+  end
 end
