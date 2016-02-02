@@ -10,18 +10,22 @@ form {
     border: 2px solid $green;
     background-color: $green;
     position: relative;
+
     &.loading {
       width: 2em;
       height: 2em;
       border-radius: 50%;
+
       &, &:hover {
         background-color: $blue;
         border: none;
       }
     }
+
     &:hover {
       background-color: transparent;
     }
+
     &[disabled] {
       cursor: not-allowed;
       background: $md-clr-grey-300;
@@ -34,19 +38,18 @@ form {
   }
 }
 
-
-
 .contract-form {
-
   header {
     margin-bottom: 2em;
     text-align: center;
   }
+
   fieldset:last-of-type {
     .form-line:last-child {
       margin-bottom: 1em;
     }
   }
+
   .form-field-error {
     position: absolute;
   }
@@ -58,19 +61,26 @@ form {
   .links .link {
     display: block;
     padding-top: 0.5em;
+
     &:first-child {
       padding-top: 0px;
     }
+
     &:last-child {
       padding-bottom: 0.5em;
     }
   }
-
 }
 
 .creation-dialog-form {
   box-sizing: content-box;
   padding-top: 2em;
+
+  .date-input {
+    background: transparent;
+    border: 1px solid black;
+    padding: 0.3em;
+  }
 }
 
 #profileForm {
@@ -79,7 +89,8 @@ form {
       top: -1em;
       font-size: 1.4em;
       transition: none;
-      @include media("height<=730px"){
+
+      @include media("height<=730px") {
         font-size: 1.1em;
       }
     }

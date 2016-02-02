@@ -5,6 +5,7 @@ class TestSuite < ActiveRecord::Base
   has_many :results, dependent: :destroy
   validates :name, presence: true
   after_destroy :send_deleted_notification
+  after_create :send_created_notification
 
   def as_json(options={})
     super(include: [:suite_cases])
@@ -31,6 +32,20 @@ class TestSuite < ActiveRecord::Base
     }
     Notifications::TestSuitesController.publish(
       "/notifications/test_suites/#{id}",
+      event
+    )
+  end
+
+  def send_created_notification
+    event = {
+      type: Rails.application.config.configurations[:notification_event_types][:suite_created],
+      date: DateTime.now.utc,
+      payload: {
+        test_suite: as_json
+      }
+    }
+    Notifications::ProjectsController.publish(
+      "/notifications/projects/#{project.id}",
       event
     )
   end

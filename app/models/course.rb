@@ -7,7 +7,7 @@ class Course < ActiveRecord::Base
   scope :published, -> { where published: true }
   after_create :send_created_notification
   after_save :send_published_notification
-  after_destroy :send_delted_notification
+  after_destroy :send_deleted_notification
 
   def register(student)
     students << student
@@ -19,7 +19,7 @@ class Course < ActiveRecord::Base
 
   private
 
-  def send_delted_notification
+  def send_deleted_notification
     event = {
       type: Rails.application.config.configurations[:notification_event_types][:course_deleted],
       date: DateTime.now.utc,
@@ -42,7 +42,7 @@ class Course < ActiveRecord::Base
       }
     }
     Notifications::CoursesController.publish(
-      "/notifications/courses/new",
+      "/notifications/courses/all",
       event
     )
   end
@@ -63,7 +63,7 @@ class Course < ActiveRecord::Base
         }
       }
       Notifications::CoursesController.publish(
-        "/notifications/courses/new",
+        "/notifications/courses/all",
         event
       )
       Notifications::CoursesController.publish(

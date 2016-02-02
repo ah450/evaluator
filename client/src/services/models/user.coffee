@@ -6,7 +6,7 @@ angular.module 'evaluator'
         _.assign @, @resource
 
       $update: (args...) ->
-        @resource.$update(args)
+        @resource.$update(args...)
 
       @property 'id',
         get: ->

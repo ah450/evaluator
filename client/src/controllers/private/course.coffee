@@ -1,10 +1,14 @@
 angular.module 'evaluator'
   .controller 'CourseController', ($scope, CoursesResource, $stateParams,
     UserAuth, CourseProjectsResource, defaultPageSize, Pagination,
-    ngDialog, Project, Course) ->
+    ngDialog, Project, Course, NotificationDispatcher, configurations) ->
 
     $scope.isTeacher = UserAuth.user.teacher
     $scope.canAddProject = $scope.isTeacher
+    ids = []
+    $scope.projects = []
+    $scope.projectClasses = ['project-accent-one', 'project-accent-two',
+    'project-accent-three']
 
     coursePromise = CoursesResource.get(
       id: $stateParams.id
@@ -22,16 +26,30 @@ angular.module 'evaluator'
       $scope.course.$update().then ->
         $scope.loading = false
 
+    deletedProjectCallback = (projectID) ->
+      _.remove ids, (id) ->
+        id is projectID
+      _.remove $scope.projects, (project) ->
+        project.id is projectID
+
+    newProjectCallback = (project) ->
+      if $scope.isTeacher || project.published
+        $scope.addProjectsCallback [project], 0
+
+    publishedProjectCallback = (project) ->
+      if not $scope.isTeacher
+        $scope.addProjectsCallback [project], 0
+
+    unpublishedProjectCallback = (project) ->
+      if not $scope.isTeacher
+        deletedProjectCallback project.id
+
     projectFactory = (data) ->
-      Project.fromData data
+      Project.fromData data, unpublishedProjectCallback,
+        angular.noop, angular.noop, deletedProjectCallback
 
     projectsPagination = new Pagination CourseProjectsResource, 'projects',
     {course_id: $stateParams.id}, projectFactory, defaultPageSize
-
-    ids = []
-    $scope.projects = []
-    $scope.projectClasses = ['project-accent-one', 'project-accent-two',
-    'project-accent-three']
 
     # Add projects to $scope.projects at begin (index)
     addProjectsCallback = (newProjects, begin) ->
@@ -40,6 +58,17 @@ angular.module 'evaluator'
       Array::push.apply ids, _.map projects, 'id'
       args = [begin, 0].concat projects
       $scope.projects.splice.apply $scope.projects, args
+
+    $scope.addProjectsCallback = addProjectsCallback
+
+    NotificationDispatcher.subscribeCourse $stateParams, (e) ->
+      configurations.then (config) ->
+        if e.type is config.notification_event_types.project_published
+          project = projectFactory e.payload.project
+          publishedProjectCallback project
+        else if e.type is config.notification_event_types.project_created
+          project = projectFactory e.payload.project
+          newProjectCallback project
 
     $scope.loadingProjects = true
     # Load first page
@@ -73,6 +102,12 @@ angular.module 'evaluator'
     $scope.submit = ->
       return if $scope.processingProject
       $scope.processingProject = true
+      $scope.newProjectData.start_date.setHours(0)
+      $scope.newProjectData.start_date.setMinutes(0)
+      $scope.newProjectData.start_date.setSeconds(0)
+      $scope.newProjectData.due_date.setHours(0)
+      $scope.newProjectData.due_date.setMinutes(0)
+      $scope.newProjectData.due_date.setSeconds(0)
       project = new CourseProjectsResource $scope.newProjectData
       project.course_id = $stateParams.id
       success = (project) ->

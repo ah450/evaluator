@@ -22,10 +22,12 @@ novalidate
 
 <fieldset>
   <div class="relative form-line">
-    <input date-time data-ng-model="newProjectData.start_date">
+    <x-md-datepicker data-md-placeholder="Start Date" data-ng-model="newProjectData.start_date"
+    name="startDate" id="startDate" required></x-md-datepicker>
   </div>
   <div class="relative form-line">
-    <input date-time data-ng-model="newProjectData.due_date">
+     <x-md-datepicker data-md-placeholder="Due Date" data-ng-model="newProjectData.due_date"
+    name="startDate" id="startDate" required></x-md-datepicker>
   </div>
 </fieldset>
 

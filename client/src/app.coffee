@@ -2,7 +2,7 @@
 angular.module 'evaluator', ['ngResource', 'ui.router', 'ui.router.title',
   'evaluatorTemplates', 'satellizer', 'LocalStorageModule', 'ngAnimate',
   'angulartics', 'angulartics.google.analytics', 'infinite-scroll',
-  'ngDialog', 'datePicker', 'ngFileUpload', 'ngFileSaver'
+  'ngDialog', 'ngFileUpload', 'ngFileSaver', 'ngMaterial'
   ]
   
 

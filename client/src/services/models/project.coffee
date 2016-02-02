@@ -4,18 +4,21 @@ angular.module 'evaluator'
     class Project
       constructor: (@resource, @unpublishedCallback=angular.noop,
         @newSuiteCallback=angular.noop,
-        @processedSuiteCallback=angular.noop) ->
+        @processedSuiteCallback=angular.noop,
+        @deletedCallback=angular.noop) ->
         NotificationDispatcher.subscribeProject @, (e) =>
           configurations.then (config) =>
-            if e.type in config.notification_event_types.project_published
+            if e.type is config.notification_event_types.project_published
               _.assign @resource, e.payload.project
             else if e.type is config.notification_event_types.project_unpublished
               _.assign @resource, e.payload.project
-              @unpublishedCallback e.payload.project
+              @unpublishedCallback @
             else if e.type is config.notification_event_types.suite_created
               @newSuiteCallback e.payload.test_suite
             else if e.type is config.notification_event_types.test_suite_processed
               @processedSuiteCallback e.payload.test_suite
+            else if e.type is config.notification_event_types.project_deleted
+              @deletedCallback @id
 
 
       @property 'due_date',
@@ -45,7 +48,7 @@ angular.module 'evaluator'
           @resource.id
 
       $update: (args...) ->
-        @resource.$update(args)
+        @resource.$update(args...)
 
-      @fromData: (data) ->
-        new Project(new ProjectResource(data))
+      @fromData: (data, args...) ->
+        new Project(new ProjectResource(data), args...)

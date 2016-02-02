@@ -1,7 +1,7 @@
 angular.module 'evaluator'
   .controller 'ProjectController', ($scope, $stateParams, ProjectResource,
     UserAuth, ProjectSuitesResource, defaultPageSize, Pagination, ngDialog,
-    Upload, endpoints, Project, Suite) ->
+    Upload, endpoints, Project, Suite, $state) ->
 
     $scope.isTeacher = UserAuth.user.teacher
     $scope.canAddSuite = $scope.isTeacher
@@ -11,8 +11,12 @@ angular.module 'evaluator'
       ).$promise
 
     $scope.loading = true
+    unpublishedCallback = (project) ->
+      if not $scope.isTeacher
+        $state.go 'private.unpublished'
+    
     projectPromise.then (project) ->
-      $scope.project = new Project project
+      $scope.project = new Project project, unpublishedCallback
       $scope.canAddSuite &= !$scope.project.published
       $scope.loading = false
 

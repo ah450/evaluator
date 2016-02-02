@@ -28,14 +28,14 @@
 
   <target name="test">
     <mkdir dir="<%= @build_directory %>/tests" />
-    <junit includeantruntime="true" haltonerror="no" haltonfailure="no" fork="yes" dir="<%= @src_directory %>">
+    <junit includeantruntime="true" haltonerror="no" haltonfailure="no" fork="no" dir="<%= @src_directory %>">
               <classpath>
                       <pathelement location="lib/hamcrest-junit-2.0.0.0.jar" />
                       <pathelement location="lib/java-hamcrest-2.0.0.0.jar" />
                       <pathelement location="<%= @build_directory %>/classes"/>
               </classpath>
               <formatter type="xml"/>
-            <batchtest todir="<%= @build_directory %>/tests" fork="yes">
+            <batchtest todir="<%= @build_directory %>/tests" fork="no">
               <fileset dir="<%= @build_directory %>/classes" includes="**/*Test.class" />
             </batchtest>
       </junit>

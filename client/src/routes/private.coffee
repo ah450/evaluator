@@ -76,6 +76,13 @@ angular.module 'evaluator'
           templateUrl: 'private/profile.html'
           controller: 'ProfileController'
 
+    unpublishedState =
+      name: 'private.unpublished'
+      url: '/unpublished'
+      views:
+        'pageContent':
+          templateUrl: 'private/unpublished.html'
+
     $stateProvider
       .state privateState
       .state coursesState
@@ -85,3 +92,4 @@ angular.module 'evaluator'
       .state aboutState
       .state internalErrorState
       .state profileState
+      .state unpublishedState

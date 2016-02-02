@@ -191,13 +191,17 @@ class ApplicationController < ActionController::API
 
   # Attempts to set current user
   def authenticate
-    pattern = /^Bearer /
-    header  = request.headers["Authorization"]
-    if header && header.match(pattern)
-      token = header.gsub(pattern, '')
-      @current_user = User.find_by_token token
-      raise ForbiddenError, error_messages[:unverified_login] unless @current_user.verified?
-    else
+    begin
+      pattern = /^Bearer /
+      header  = request.headers["Authorization"]
+      if header && header.match(pattern)
+        token = header.gsub(pattern, '')
+        @current_user = User.find_by_token token
+        raise ForbiddenError, error_messages[:unverified_login] unless @current_user.verified?
+      else
+        raise AuthenticationError
+    end
+    rescue ActiveRecord::RecordNotFound
       raise AuthenticationError
     end
   end
