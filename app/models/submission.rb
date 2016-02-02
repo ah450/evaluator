@@ -5,6 +5,7 @@ class Submission < ActiveRecord::Base
   validates :project, :submitter, presence: true
   has_many :results, dependent: :destroy
   validate :published_project_and_course
+  after_destroy :send_deleted_notification
 
   def as_json(options={})
     super(except: [:solution_id])
@@ -17,6 +18,17 @@ class Submission < ActiveRecord::Base
       payload: {
         result: result.as_json
       }
+    }
+    Notifications::SubmissionsController.publish(
+      "/notifications/submissions/#{id}",
+      event
+    )
+  end
+
+  def send_deleted_notification
+    event = {
+      type: Rails.application.config.configurations[:notification_event_types][:submission_deleted],
+      date: DateTime.now.utc
     }
     Notifications::SubmissionsController.publish(
       "/notifications/submissions/#{id}",

@@ -21,6 +21,7 @@ Rails.application.config.configurations = {
             registration_success: "Registered to course",
             unregistration_success: "Unregistered from course"
         },
+        max_num_submissions: 10,
         verification_expiration: 5.hours,
         pass_reset_expiration: 24.hours,
         user_verification_resend_delay: 5.minutes,
@@ -33,7 +34,12 @@ Rails.application.config.configurations = {
             project_created: 'PROJECT_CREATED',
             project_published: 'PROJECT_PUBLISHED',
             project_unpublished: 'PROJECT_UNPUBLISHED',
-            suite_created: 'SUITE_CREATED'
+            suite_created: 'SUITE_CREATED',
+            submission_deleted: 'SUBMISSION_DELETED',
+            suite_deleted: 'SUITE_DELETED',
+            project_deleted: 'PROJECT_DElETED',
+            course_deleted: 'COURSE_DELETED',
+            
         }
     }
 

@@ -47,6 +47,11 @@ class Api::TestSuitesController < ApplicationController
     send_data code.code, **options
   end
 
+  def destroy
+    DestroyTestSuiteJob.perform_later @test_suite
+    head :no_content
+  end
+
   private
 
   def destroyable

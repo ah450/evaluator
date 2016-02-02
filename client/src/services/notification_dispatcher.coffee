@@ -28,6 +28,18 @@ angular.module 'evaluator'
         url = "/notifications/submissions/#{submission.id}"
         @subscribe url, callback
 
+      subscribeCourse: (course, callback) ->
+        url = "/notifications/courses/#{course.id}"
+        @subscribe url, callback
+
+      subscribeCourses: (callback) ->
+        url = "/notifications/courses/all"
+        @subscribe url, callback
+
+      subscribeProject: (project, callback) ->
+        url = "/notifications/projects/#{project.id}"
+        @subscribe url, callback
+
     new NotificationDispatcher
         
 

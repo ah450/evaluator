@@ -93,7 +93,7 @@ RSpec.describe Api::TestSuitesController, type: :controller do
       set_token student.token
       get :index, project_id: published_project.id
       expect(response).to be_success
-      expect(json_response[:test_suites].size).to eql 1
+      expect(json_response[:test_suites].size).to eql 2
     end
 
     it 'has pagination' do
@@ -225,6 +225,8 @@ RSpec.describe Api::TestSuitesController, type: :controller do
     before :each do
       @published = @create_suite.call published_project
       @unpublished = @create_suite.call unpublished_project
+      @unpublished.ready = true
+      @unpublished.save!
     end
     it 'does not allow unauthorized' do
       expect {
@@ -241,13 +243,19 @@ RSpec.describe Api::TestSuitesController, type: :controller do
       expect(response).to be_forbidden
     end
 
-    it 'allows a teacher' do
+    it 'can destroy' do
       expect {
         set_token teacher.token
         delete :destroy, id: @unpublished.id
       }.to change(TestSuite, :count).by(-1)
         .and change(SuiteCode, :count).by(-1)
       expect(response).to be_success
+    end
+
+    it 'queues a job' do
+      expect(DestroyTestSuiteJob).to receive(:perform_later).once
+      set_token teacher.token
+      delete :destroy, id: @unpublished.id
     end
 
     it 'can not destroy belonging to published project' do

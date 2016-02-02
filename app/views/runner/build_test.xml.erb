@@ -16,9 +16,14 @@
     destdir="<%= @build_directory %>/classes"
     />
   </target>
+
   
   <target name="delete_test_source">
     <delete dir="<%= @tests_directory %>" />
+  </target>
+
+  <target name="clear_test_results">
+    <delete dir="<%= @build_directory %>/tests"/>
   </target>
 
   <target name="test">

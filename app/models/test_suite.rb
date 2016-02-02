@@ -4,6 +4,7 @@ class TestSuite < ActiveRecord::Base
   has_many :suite_cases, dependent: :delete_all
   has_many :results, dependent: :destroy
   validates :name, presence: true
+  after_destroy :send_deleted_notification
 
   def as_json(options={})
     super(include: [:suite_cases])
@@ -23,12 +24,23 @@ class TestSuite < ActiveRecord::Base
     )
   end
 
+  def send_deleted_notification
+    event = {
+      type: Rails.application.config.configurations[:notification_event_types][:suite_deleted],
+      date: DateTime.now.utc
+    }
+    Notifications::TestSuitesController.publish(
+      "/notifications/test_suites/#{id}",
+      event
+    )
+  end
+
   def self.viewable_by_user(user)
     self
   end
 
   def destroyable?
-    !project.published?
+    !project.published? && ready?
   end
 
 end

@@ -1,6 +1,6 @@
 angular.module 'evaluator'
   .controller 'CoursesController', ($scope, $state, Pagination,
-    ngDialog, CoursesResource, UserAuth, defaultPageSize) ->
+    ngDialog, CoursesResource, UserAuth, defaultPageSize, Course) ->
     $scope.courses = []
 
     $scope.courseClasses = ['course-accent-one', 'course-accent-two',
@@ -12,7 +12,7 @@ angular.module 'evaluator'
     $scope.courseCreateError = ''
 
     courseFactory = (data) ->
-      new CoursesResource data
+      new Course new CoursesResource data
 
     coursesPagination = new Pagination CoursesResource, 'courses', {},
     courseFactory, defaultPageSize
@@ -56,9 +56,10 @@ angular.module 'evaluator'
       return if $scope.processingCourse
       $scope.processingCourse = true
       course = new CoursesResource $scope.newCourseData
-      success = (course) ->
+      success = (data) ->
         $scope.newCourseDialog.close()
         $scope.processingCourse = false
+        course = new Course data
         addCoursesCallback [course], $scope.courses.length
       failure = (response) ->
         if response.status is 422

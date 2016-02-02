@@ -38,3 +38,5 @@ angular.module 'evaluator'
           if response.status is 401
             $rootScope.$emit 'unauthorizedResponse'
             $q.reject response
+          else
+            $q.reject response

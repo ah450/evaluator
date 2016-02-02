@@ -1,0 +1,13 @@
+<project>
+  <target name="clean">
+      <delete dir="<%= @build_directory %>"/>
+      <delete dir="<%= @src_directory %>" />
+  </target>
+
+  <target name="compile_src">
+      <mkdir dir="<%= @build_directory %>/classes"/>
+      <javac includeantruntime="true" failonerror="true"
+      srcdir="<%= @src_directory %>" destdir="<%= @build_directory %>/classes"/>
+  </target>
+
+</project>

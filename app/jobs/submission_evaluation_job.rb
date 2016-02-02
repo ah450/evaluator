@@ -4,32 +4,56 @@ class SubmissionEvaluationJob < ActiveJob::Base
 
   def perform(submission)
     @newResults = []
+    suites = submission.project.test_suites.lock('FOR SHARE').to_a
     submission.with_lock('FOR UPDATE') do
-      submission.project.test_suites.each do |suite|
         @old_working_directory = Dir.pwd
         @working_directory = Dir.mktmpdir "submit"
         @selinux_directory = Dir.mktmpdir "submit"
+        @command =  "sandbox -M -H #{@working_directory} -T #{@selinux_directory} bash"
+        @compile_command = @command + " #{config[:ant_compile_file_name]} 2>&1"
+        @test_command = @command + " #{config[:ant_test_file_name]} 2>&1"
         Dir.chdir @working_directory
+        `chmod -R +x #{@working_directory}`
+        `chmod -R +x #{@selinux_directory}`
+        fetch_dependencies
+        prepare_src(submission)
         begin
-          test_suite submission, suite
-          @newResults.push @result
+          suites.each do |suite|
+            remove_old_tests
+            test_suite submission, suite
+            @newResults.push @result
+            if submission.submitter.student?
+              create_team_grade(suite)
+            end
+          end
         ensure
           Dir.chdir @old_working_directory
           FileUtils.remove_entry_secure @working_directory
           FileUtils.remove_entry_secure @selinux_directory
         end
-      end
     end
     @newResults.each { |result| submission.send_new_result_notification(result) }
   end
 
   def test_suite(submission, suite)
-    setup_directory(submission, suite)
     @result = Result.new submission: submission, test_suite: suite,
       project: submission.project, grade: 0, max_grade: suite.max_grade
-    run_sandbox(suite)
-    if submission.submitter.student?
-      create_team_grade(suite)
+    @result.success = @compiled
+    @result.compiled = @compiled
+    @result.compiler_stderr = @compiler_stderr
+    @result.compiler_stdout = @compiler_stdout
+    @result.save!
+    if @result.compiled
+      # Run tests
+      prepare_suite(suite)
+      generate_test_script(suite)
+      out = `#{@test_command}`
+      results_directory = File.join(@build_directory, 'tests')
+      Dir.glob "#{results_directory}/**/*.xml" do |file_name|
+        document = File.open(file_name) {|f| Nokogiri::XML(f)}
+        parse_result document, suite
+      end
+      @result.save!
     end
   end
 
@@ -38,49 +62,11 @@ class SubmissionEvaluationJob < ActiveJob::Base
       grades = TeamGrade.where(project: @result.project,
         name: @result.submission.submitter.team).joins(:result).where(results: {
           test_suite_id: @result.test_suite.id
-        }).order('results.grade DESC')
-      if grades.count == 0 || grades.first.result.grade <= @result.grade
-        grades.delete_all
-        @team_grade = TeamGrade.create(project: @result.project,
-          result: @result, name: @result.submission.submitter.team
-          )
-      end
+        }).order(created_at: :desc).delete_all
+      @team_grade = TeamGrade.create(project: @result.project,
+        result: @result, name: @result.submission.submitter.team
+      )
     end
-  end
-
-  def run_sandbox(suite)
-    command =  "sandbox -M -H #{@working_directory} -T #{@selinux_directory} bash"
-    compile_command = command + " #{config[:ant_compile_file_name]}"
-    test_command = command + " #{config[:ant_test_file_name]}"
-    # Compile
-    Open3.popen3 compile_command do |stdin, stdout, stderr, thread|
-      exit_status = thread.value
-      @result.compiler_stderr = stderr.read
-      @result.compiler_stdout = stdout.read
-      @result.compiler_stderr = '-' if @result.compiler_stderr.size == 0
-      @result.compiler_stdout = '-' if @result.compiler_stdout.size == 0
-      @result.compiled = exit_status == 0
-    end
-    @result.success = true
-    @result.save!
-    # Test
-    if @result.compiled
-      Dir.glob "#{@build_directory}/**/*Test.class" do |file_name|
-        File.delete file_name
-      end
-      Open3.popen3 test_command do |stdin, stdout, stderr, thread|
-        exit_status = thread.value
-        results_directory = File.join(@build_directory, 'tests')
-        Dir.glob "#{results_directory}/**/*.xml" do |file_name|
-          document = File.open(file_name) {|f| Nokogiri::XML(f)}
-          parse_result document, suite
-        end
-      end
-    else
-      @result.success = false
-      @result.grade = 0
-    end
-    @result.save!
   end
 
   def parse_result(document, suite)
@@ -111,53 +97,6 @@ class SubmissionEvaluationJob < ActiveJob::Base
     end
   end
 
-  def setup_directory(submission, suite)
-    lib_src = File.join(Rails.root, 'app', 'views', 'runner', 'lib')
-    `cp -r #{lib_src} #{@working_directory}`
-    extract_tests(suite)
-    in_use_names = Dir.entries Dir.pwd
-    @tests_directory = File.basename(suite.suite_code.file_name,
-      File.extname(suite.suite_code.file_name))
-    in_use_names << config[:ant_build_file_name] << config[:ant_compile_file_name]
-    in_use_names << config[:ant_build_dir_name] << config[:ant_test_file_name]
-    @enumerator = LowerCaseEnumerator.new in_use_names
-    # Check if submission name would overwrite
-    no_extension_name = File.basename(submission.solution.file_name,
-      File.extname(submission.solution.file_name)
-      )
-    if in_use_names.include? no_extension_name
-      @submission_code_name = @enumerator.get_token
-      @submission_code_name_ext = "#{submission_code_name}.zip"
-    else
-      @submission_code_name = no_extension_name
-      @submission_code_name_ext = submission.solution.file_name
-    end
-    extract_source(submission)
-    generate_ant_scripts(suite)
-  end
-
-  def generate_ant_scripts(suite)
-    # Generate build script
-    @build_directory = config[:ant_build_dir_name]
-    @build_template = ERB.new(File.read(File.join(
-      Rails.root, 'app', 'views', 'runner', 'build.xml.erb')))
-    result = @build_template.result(binding)
-    IO.write(config[:ant_build_file_name], result)
-    # Generate compile script
-    @buildfile_name = config[:ant_build_file_name]
-    @compile_template = ERB.new(File.read(File.join(
-      Rails.root, 'app', 'views', 'runner', 'compile.sh.erb')))
-    result = @compile_template.result(binding)
-    IO.write(config[:ant_compile_file_name], result)
-    # Generate test script
-    @test_timeout = suite.timeout
-    @test_template = ERB.new(File.read(File.join(
-      Rails.root, 'app', 'views', 'runner', 'test.sh.erb'
-      )))
-    result = @test_template.result(binding)
-    IO.write(config[:ant_test_file_name], result)
-  end
-
   def extract_source(submission)
     old = Dir.entries Dir.pwd
     IO.binwrite(@submission_code_name_ext, submission.solution.code)
@@ -179,6 +118,83 @@ class SubmissionEvaluationJob < ActiveJob::Base
     FileUtils.remove suite.suite_code.file_name
   end
 
+  def fetch_dependencies
+    lib_src = File.join(Rails.root, 'app', 'views', 'runner', 'lib')
+    `cp -r #{lib_src} #{@working_directory}`
+  end
+
+  def prepare_suite(suite)
+    extract_tests(suite)
+    @buildfile_name = config[:ant_build_tests_file_name]
+    @tests_directory = File.basename(suite.suite_code.file_name,
+      File.extname(suite.suite_code.file_name))
+    @test_build_template = ERB.new(File.read(File.join(
+      Rails.root, 'app', 'views', 'runner', 'build_test.xml.erb')))
+    result = @test_build_template.result(binding)
+    IO.write(@buildfile_name, result)
+    `chmod +x #{@buildfile_name}`
+  end
+  def generate_test_script(suite)
+    @test_timeout = suite.timeout
+    @test_script_name = config[:ant_test_file_name]
+    @test_template = ERB.new(File.read(File.join(
+      Rails.root, 'app', 'views', 'runner', 'test.sh.erb'
+    )))
+    result = @test_template.result(binding)
+    IO.write(@test_script_name, result)
+    `chmod +x #{@test_script_name}`
+  end
+
+  def prepare_src(submission)
+    in_use_names = Dir.entries Dir.pwd
+    in_use_names << config[:ant_build_tests_file_name]
+    in_use_names << config[:ant_build_src_file_name] << config[:ant_compile_file_name]
+    in_use_names << config[:ant_build_dir_name] << config[:ant_test_file_name]
+    @enumerator = LowerCaseEnumerator.new in_use_names
+    no_extension_name = File.basename(submission.solution.file_name,
+      File.extname(submission.solution.file_name)
+    )
+    if in_use_names.include? no_extension_name
+      @submission_code_name = @enumerator.get_token
+      @submission_code_name_ext = "#{submission_code_name}.zip"
+    else
+      @submission_code_name = no_extension_name
+      @submission_code_name_ext = submission.solution.file_name
+    end
+    extract_source(submission)
+    compile_src
+  end
+
+
+  def generate_compile_script
+    @compile_script_name = config[:ant_compile_file_name]
+    @compile_template = ERB.new(File.read(File.join(
+      Rails.root, 'app', 'views', 'runner', 'compile.sh.erb'
+    )))
+    result = @compile_template.result(binding)
+    IO.write(@compile_script_name, result)
+    `chmod +x #{@compile_script_name}`
+  end
+
+  def compile_src
+    @build_directory = config[:ant_build_dir_name]
+    @build_template = ERB.new(File.read(File.join(
+      Rails.root, 'app', 'views', 'runner', 'build_src.xml.erb')))
+    @buildfile_name = config[:ant_build_src_file_name]
+    result = @build_template.result(binding)
+    IO.write(@buildfile_name, result)
+    generate_compile_script
+    @compiler_stdout = `#{@compile_command}`
+    @compiled = $?.exitstatus == 0
+    @compiler_stderr = '-'
+    @compiler_stdout = '-' if @compiler_stdout.size == 0
+  end
+
+  def remove_old_tests
+    Dir.glob  "#{@build_directory}/**/*Test.class" do |file_name|
+      File.delete file_name
+    end
+  end
 
   def config
     Rails.application.config.runner

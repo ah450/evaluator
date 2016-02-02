@@ -1,7 +1,7 @@
 angular.module 'evaluator'
   .controller 'CourseController', ($scope, CoursesResource, $stateParams,
     UserAuth, CourseProjectsResource, defaultPageSize, Pagination,
-    ngDialog, Project) ->
+    ngDialog, Project, Course) ->
 
     $scope.isTeacher = UserAuth.user.teacher
     $scope.canAddProject = $scope.isTeacher
@@ -13,7 +13,7 @@ angular.module 'evaluator'
 
     $scope.loading = true
     coursePromise.then (course) ->
-      $scope.course = course
+      $scope.course = new Course course
       $scope.loading = false
 
     $scope.publish = ->

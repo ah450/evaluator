@@ -13,6 +13,8 @@
 /tmp
 erd.pdf
 coverage
+profiles
+profile
 *.sublime-workspace
 
 .rbenv-vars

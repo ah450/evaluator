@@ -28,16 +28,23 @@ angular.module 'evaluator'
       $scope.project.$update().then ->
         $scope.loading = false
 
-    suiteFactory = (data) ->
-      new Suite data
-
-    suitesPagination = new Pagination ProjectSuitesResource, 'test_suites',
-    {project_id: $stateParams.id}, suiteFactory, defaultPageSize
-
     ids = []
     $scope.suites = []
     $scope.suiteClasses = ['suite-accent-one', 'suite-accent-two',
     'suite-accent-three']
+
+    deletedSuiteCallback = (id) ->
+      _.remove $scope.suites, (suite) ->
+        suite.id is id
+
+    suiteFactory = (data) ->
+      new Suite data, deletedSuiteCallback
+
+
+    suitesPagination = new Pagination ProjectSuitesResource, 'test_suites',
+    {project_id: $stateParams.id}, suiteFactory, defaultPageSize
+
+    
 
     addSuitesCallback = (newSuites, begin) ->
       suites = _.filter newSuites, (suite) ->

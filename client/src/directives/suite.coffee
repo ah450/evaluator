@@ -6,7 +6,7 @@ angular.module 'evaluator'
       scope:
         suite: '=data'
       controller: [ '$scope', 'FileSaver', 'UserAuth', 'endpoints', '$http', ($scope, FileSaver, UserAuth, endpoints, $http) ->
-        
+        $scope.canDelete = UserAuth.user.teacher && $scope.suite.ready
         $scope.canDownload = UserAuth.user.teacher || !$scope.suite.hidden
         $scope.download = ->
           download_url = endpoints.suite.downloadUrl.replace(':id',
@@ -15,5 +15,10 @@ angular.module 'evaluator'
             .then (response) ->
               filename = "#{$scope.suite.name}.zip"
               FileSaver.saveAs(response.data, filename)
+        $scope.delete = ->
+          return if not $scope.canDelete
+          $scope.suite.$delete().catch (response) ->
+            $scope.suite.ready = true
+
       ]
 

@@ -2,7 +2,7 @@ angular.module 'evaluator'
   .factory 'Submission', (SubmissionResource, endpoints, Result,
     ResultsResource, Pagination, NotificationDispatcher, configurations) ->
     class Submission
-      constructor: (data) ->
+      constructor: (data, @deletedCallback=angular.noop) ->
         @resource = new SubmissionResource data
         @results = []
         @resultIds = []
@@ -16,6 +16,8 @@ angular.module 'evaluator'
               if e.payload.result.id not in @resultIds
                 @resultIds.push e.payload.result.id
                 @results.push resultFactory e.payload.result
+            else if e.type is config.notification_event_types.submission_deleted
+              @deletedCallback @id
 
 
         @resultsPagination = new Pagination ResultsResource, 'results',

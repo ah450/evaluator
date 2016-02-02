@@ -10,7 +10,9 @@
         "client/temp",
         "client/node_modules",
         "client/bower_components",
-        "coverage"
+        "coverage",
+        "profile",
+        "profiles"
       ],
       "path": ".",
       "follow_symlinks": true

@@ -36,6 +36,7 @@ gem 'faye-redis'
 
 group :test do
   gem 'simplecov', require: false
+  gem 'rspec-prof', git: 'https://github.com/sinisterchipmunk/rspec-prof.git'
 end
 
 group :development, :test do

@@ -12,17 +12,21 @@ angular.module 'evaluator'
       $scope.project = project
       $scope.loading = false
 
+    $scope.submissions = []
+    $scope.submissionClasses = ['submission-accent-one',
+    'submission-accent-two', 'submission-accent-three']
+
+    deletedSubmissionCallback = (id) ->
+      _.remove $scope.submissions, (submission) ->
+        submission.id is id
+
     submissionFactory = (data) ->
-      new Submission data
+      new Submission data, deletedSubmissionCallback
 
     submissionsPagination = new Pagination ProjectSubmissionsResource, 'submissions',
       {project_id: $stateParams.project_id,
       submitter_id: UserAuth.user.id
       }, submissionFactory, defaultPageSize
-    
-    $scope.submissions = []
-    $scope.submissionClasses = ['submission-accent-one',
-    'submission-accent-two', 'submission-accent-three']
 
     addSubmissionsCallback = (newSubmissions) ->
       args = [0, $scope.submissions.length].concat newSubmissions
@@ -67,7 +71,7 @@ angular.module 'evaluator'
       return if $scope.processingSubmission
       $scope.processingSubmission = true
       failure = (response) ->
-        if response.status is not 422
+        if response.status is 422
           $scope.submissionCreateError = ("#{key.capitalize()} #{value}." for key, value of response.data)
             .join ' '
           $scope.processingSubmission = false
