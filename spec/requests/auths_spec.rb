@@ -17,7 +17,7 @@ RSpec.describe "Auths", type: :request do
       token = user.token
       user.destroy
       get api_users_path, nil, get_token(token)
-      expect(response).to have_http_status 404
+      expect(response).to have_http_status 401
     end
     it 'does not accept nonsense tokens' do
       token = 'sdasdsad' + user.token + 'sadsad'
