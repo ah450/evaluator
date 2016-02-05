@@ -26,11 +26,7 @@ novalidate
   </fieldset>
 
   <fieldset>
-    <label>Private
-    <input type="checkbox" data-ng-model="newSuiteData.hidden" name="private" id="private"
-    data-ng-init="newSuiteData.hidden=false"
-    >
-    </label>
+    <md-checkbox data-ng-model="newSuiteData.hidden" name="private" id="private" data-ng-init="newSuiteData.hidden=false">Private</md-checkbox>
   </fieldset>
 
     <p class="error">{{suiteCreateError}}</p>
