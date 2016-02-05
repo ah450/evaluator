@@ -4,8 +4,8 @@ class SubmissionEvaluationJob < ActiveJob::Base
 
   def perform(submission)
     @newResults = []
-    suites = submission.project.test_suites.lock('FOR SHARE').to_a
     submission.with_lock('FOR UPDATE') do
+        suites = submission.project.test_suites.to_a
         @old_working_directory = Dir.pwd
         @working_directory = Dir.mktmpdir "submit"
         @selinux_directory = Dir.mktmpdir "submit"
@@ -58,7 +58,7 @@ class SubmissionEvaluationJob < ActiveJob::Base
   end
 
   def create_team_grade(suite)
-    suite.with_lock('FOR UPDATE') do
+    # suite.with_lock('FOR UPDATE') do
       grades = TeamGrade.where(project: @result.project,
         name: @result.submission.submitter.team).joins(:result).where(results: {
           test_suite_id: @result.test_suite.id
@@ -66,7 +66,7 @@ class SubmissionEvaluationJob < ActiveJob::Base
       @team_grade = TeamGrade.create(project: @result.project,
         result: @result, name: @result.submission.submitter.team
       )
-    end
+    # end
   end
 
   def parse_result(document, suite)

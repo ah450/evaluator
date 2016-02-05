@@ -29,6 +29,10 @@ class Api::SubmissionsController < ApplicationController
     end
     if @submission.persisted?
       SubmissionEvaluationJob.perform_later @submission
+      numSubs = Submission.where(submitter: @current_user,
+        project: @project).count
+      maxSubs = Rails.application.config.configurations[:max_num_submissions]
+      SubmissionCullingJob.perform_later(@current_user, @project) if numSubs > maxSubs
     end
   end
 
