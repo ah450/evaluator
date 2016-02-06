@@ -96,3 +96,11 @@ form {
     }
   }
 }
+
+#teamsForm {
+  .messages {
+    padding: 1em;
+    max-height: 10em;
+    overflow: auto;
+  }
+}

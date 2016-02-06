@@ -25,3 +25,5 @@ angular.module 'evaluator'
         resourceUrl: [apiHost, 'projects', ':project_id', 'results.json'].join '/'
       result:
         resourceUrl: [apiHost, 'results', ':id.json'].join '/'
+      teamsJob:
+        url: [apiHost, 'teams.json'].join '/'

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160201193747) do
+ActiveRecord::Schema.define(version: 20160205192808) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,11 @@ ActiveRecord::Schema.define(version: 20160201193747) do
 
   add_index "courses", ["name"], name: "index_courses_on_name", unique: true, using: :btree
   add_index "courses", ["published"], name: "index_courses_on_published", using: :btree
+
+  create_table "job_trackers", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "projects", force: :cascade do |t|
     t.datetime "due_date",                   null: false
@@ -141,6 +146,15 @@ ActiveRecord::Schema.define(version: 20160201193747) do
   add_index "team_grades", ["project_id"], name: "index_team_grades_on_project_id", using: :btree
   add_index "team_grades", ["result_id"], name: "index_team_grades_on_result_id", using: :btree
 
+  create_table "team_jobs", force: :cascade do |t|
+    t.integer  "user_id"
+    t.binary   "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "team_jobs", ["user_id"], name: "index_team_jobs_on_user_id", using: :btree
+
   create_table "test_cases", force: :cascade do |t|
     t.integer  "result_id"
     t.string   "name",            null: false
@@ -215,6 +229,7 @@ ActiveRecord::Schema.define(version: 20160201193747) do
   add_foreign_key "suite_codes", "test_suites", on_delete: :cascade
   add_foreign_key "team_grades", "projects", on_delete: :cascade
   add_foreign_key "team_grades", "results", on_delete: :cascade
+  add_foreign_key "team_jobs", "users"
   add_foreign_key "test_cases", "results", on_delete: :cascade
   add_foreign_key "test_suites", "projects", on_delete: :cascade
   add_foreign_key "verification_tokens", "users", on_delete: :cascade

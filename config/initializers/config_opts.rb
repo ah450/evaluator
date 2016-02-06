@@ -39,7 +39,7 @@ Rails.application.config.configurations = {
             suite_deleted: 'SUITE_DELETED',
             project_deleted: 'PROJECT_DElETED',
             course_deleted: 'COURSE_DELETED',
-            
+            team_job_status: 'TEAM_JOB_STATUS'
         }
     }
 

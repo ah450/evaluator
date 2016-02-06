@@ -12,6 +12,7 @@ Rails.application.routes.draw do
         put :verify, action: :verify
       end
     end
+    resources :teams, only: [:create]
     resources :courses, except: [:new] do
       member do
         post :registration, action: :register

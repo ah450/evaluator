@@ -9,6 +9,7 @@
   background-color: transparent;
   transition: all .3s ease;
   user-select: none;
+  text-transform: capitalize;
 
   &:hover {
     transform: scale(1.2);

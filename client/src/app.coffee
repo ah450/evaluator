@@ -31,3 +31,8 @@ angular.module 'evaluator'
 # Infinite scroll throttling
 angular.module 'infinite-scroll'
   .value 'THROTTLE_MILLISECONDS', 250
+
+angular.module 'evaluator'
+  .config (ngDialogProvider) ->
+    ngDialogProvider.setDefaults
+      closeByNavigation: true

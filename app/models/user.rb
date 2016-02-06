@@ -100,6 +100,11 @@ class User < ActiveRecord::Base
     self.guc_suffix = guc_suffix.to_i
   end
 
+  def self.find_by_guc_id(guc_id)
+    guc_prefix, guc_suffix = guc_id.split '-'
+    self.find_by({guc_suffix: guc_suffix, guc_prefix: guc_prefix})
+  end
+
 
   def gen_verification_token
     verification_token = with_lock("FOR UPDATE") do

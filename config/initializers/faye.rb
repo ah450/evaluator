@@ -17,5 +17,6 @@ Rails.application.config.middleware.use FayeRails::Middleware, mount: '/faye', e
     map '/notifications/test_suites/**': Notifications::TestSuitesController
     map '/notifications/projects/**': Notifications::ProjectsController
     map '/notifications/courses/**': Notifications::CoursesController
+    map '/notifications/team_jobs/**': Notifications::TeamJobsController
 end
 

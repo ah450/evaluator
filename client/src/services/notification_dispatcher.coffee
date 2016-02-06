@@ -40,6 +40,12 @@ angular.module 'evaluator'
         url = "/notifications/projects/#{project.id}"
         @subscribe url, callback
 
+      subscribeTeamJob: (job, callback) ->
+        url = "/notifications/team_jobs/#{job.id}"
+        @subscribe url, callback
+
+
+
     new NotificationDispatcher
         
 

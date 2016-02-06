@@ -5,6 +5,11 @@
     data-ui-sref-active="active">
     <a data-ui-sref="private.profile">Profile</a>
     </li>
+    <li class="btn-green" data-ui-sref-active="active"
+    data-ng-if="isTeacher"
+    >
+        <a data-ui-sref="private.teacher.portal">Teacher Portal</a>
+    </li>
     <li class="btn-blue" data-ui-sref-active="active"><a data-ui-sref="private.about">About</a></li>
     <li class="btn-red"
     data-ng-click="logout()"

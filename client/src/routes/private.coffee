@@ -83,6 +83,32 @@ angular.module 'evaluator'
         'pageContent':
           templateUrl: 'private/unpublished.html'
 
+    teacherState =
+      name: 'private.teacher'
+      url: '/teacher'
+      abstract: true
+      data:
+        authRule: (userAuth) ->
+          if userAuth.signedIn && userAuth.user.teacher
+            {
+              allowed: true
+            }
+          else
+            {
+              to: 'private.courses'
+              params: {}
+              allowed: false
+            }
+      
+
+    teacherPortal =
+      name: 'private.teacher.portal'
+      url: '/portal'
+      views:
+        'pageContent@private':
+          templateUrl: 'private/teacher/portal.html'
+          controller: 'PortalController'
+
     $stateProvider
       .state privateState
       .state coursesState
@@ -93,3 +119,5 @@ angular.module 'evaluator'
       .state internalErrorState
       .state profileState
       .state unpublishedState
+      .state teacherState
+      .state teacherPortal
