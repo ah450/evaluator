@@ -7,7 +7,7 @@ module ZipFile
   end
 
   def code_exists
-    if code.size == 0
+    if code.nil? || code.size == 0
       errors.add(:code, 'can not be blank')
     end
   end

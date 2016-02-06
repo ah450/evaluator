@@ -35,6 +35,7 @@ gem 'sidekiq'
 gem 'faye-redis'
 
 group :test do
+  gem 'shoulda-matchers'
   gem 'simplecov', require: false
   gem 'rspec-prof', git: 'https://github.com/sinisterchipmunk/rspec-prof.git'
 end

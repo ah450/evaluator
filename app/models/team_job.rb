@@ -23,8 +23,8 @@ class TeamJob < ActiveRecord::Base
   end
 
   def data_exists
-    if data.size == 0
-      errors.add(:code, 'can not be blank')
+    if data.nil? || data.size == 0
+      errors.add(:data, 'can not be blank')
     end
   end
 end
