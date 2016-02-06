@@ -3,6 +3,10 @@ angular.module 'evaluator'
     $scope.processing = false
     $scope.user = UserAuth.user
     $scope.userData = {}
+    $scope.loading = true
+    $scope.user.reload().then ->
+      $scope.loading = false
+
 
     $scope.update = ->
       return if $scope.processing

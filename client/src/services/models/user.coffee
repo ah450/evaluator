@@ -5,6 +5,11 @@ angular.module 'evaluator'
         @resource = new UsersResource(data)
         _.assign @, @resource
 
+      reload: ->
+        UsersResource.get({id: @resource.id}).$promise.then (resource) =>
+          @resource = resource
+          return @
+
       $update: (args...) ->
         @resource.$update(args...)
 
