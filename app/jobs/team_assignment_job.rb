@@ -10,6 +10,7 @@ class TeamAssignmentJob < ActiveJob::Base
       processed: 0,
       messages: []
     }
+    team_job.send_status status
     data.each do |row|
       guc_id = row.first.strip
       destination_team = row.second.strip

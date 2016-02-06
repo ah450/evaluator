@@ -1,5 +1,8 @@
 class TeamJob < ActiveRecord::Base
   belongs_to :user
+  validates :user, presence: true
+  validate :data_exists
+
 
   def as_json(options={})
     super(only: [:id])
@@ -17,5 +20,11 @@ class TeamJob < ActiveRecord::Base
       "/notifications/team_jobs/#{id}",
       event
     )
+  end
+
+  def data_exists
+    if data.size == 0
+      errors.add(:code, 'can not be blank')
+    end
   end
 end
