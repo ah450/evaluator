@@ -25,7 +25,9 @@ function processSass() {
 function minifyCss(src) {
   return src.pipe(gulpMinCss({
     keepSpecialComments: 0,
-    rebase: false
+    rebase: false,
+    zindex: false,
+    autoprefixer: false
   }));
 }
 
