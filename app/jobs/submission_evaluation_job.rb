@@ -2,6 +2,23 @@ require 'open3'
 class SubmissionEvaluationJob < ActiveJob::Base
   queue_as :default
 
+  rescue_from(UnzipError) do |ex|
+    submission = arguments[0]
+    submission.with_lock('FOR UPDATE') do
+      submission.results.destroy_all
+      submission.project.test_suites.each do |suite|
+        result = Result.new submission: submission, test_suite: suite,
+        project: submission.project, grade: 0, max_grade: suite.max_grade
+        result.compiler_stderr = 'Unzip Error.'
+        result.compiler_stdout = 'Unzip error.'
+        result.compiled = false
+        result.success = false
+        # Ignore exceptions
+        result.save
+      end
+    end
+  end
+
   def perform(submission)
     @newResults = []
     submission.with_lock('FOR UPDATE') do
@@ -11,6 +28,7 @@ class SubmissionEvaluationJob < ActiveJob::Base
         @selinux_directory = Dir.mktmpdir "submit"
         @command =  "sandbox -M -H #{@working_directory} -T #{@selinux_directory} bash"
         @compile_command = @command + " #{config[:ant_compile_file_name]} 2>&1"
+        @compile_test_command = @command + " #{config[:ant_compile_tests_file_name]} 2>&1"
         @test_command = @command + " #{config[:ant_test_file_name]} 2>&1"
         Dir.chdir @working_directory
         `chmod -R +x #{@working_directory}`
@@ -47,6 +65,17 @@ class SubmissionEvaluationJob < ActiveJob::Base
       # Run tests
       prepare_suite(suite)
       generate_test_script(suite)
+      # Compile tests
+      test_compile_out = `#{@compile_test_command}`
+      if $?.exitstatus != 0
+        # Test compilation failed
+        @result.compiled = false
+        @result.compiler_stdout = test_compile_out
+        @result.success = false
+        @result.save!
+        return
+      end
+      # Run tests
       out = `#{@test_command}`
       results_directory = File.join(@build_directory, 'tests')
       Dir.glob "#{results_directory}/**/*.xml" do |file_name|
@@ -58,15 +87,13 @@ class SubmissionEvaluationJob < ActiveJob::Base
   end
 
   def create_team_grade(suite)
-    # suite.with_lock('FOR UPDATE') do
-      grades = TeamGrade.where(project: @result.project,
-        name: @result.submission.submitter.team).joins(:result).where(results: {
-          test_suite_id: @result.test_suite.id
-        }).order(created_at: :desc).delete_all
-      @team_grade = TeamGrade.create(project: @result.project,
-        result: @result, name: @result.submission.submitter.team
-      )
-    # end
+    grades = TeamGrade.where(project: @result.project,
+      name: @result.submission.submitter.team).joins(:result).where(results: {
+        test_suite_id: @result.test_suite.id
+      }).order(created_at: :desc).delete_all
+    @team_grade = TeamGrade.create(project: @result.project,
+      result: @result, name: @result.submission.submitter.team
+    )
   end
 
   def parse_result(document, suite)
@@ -133,8 +160,10 @@ class SubmissionEvaluationJob < ActiveJob::Base
     result = @test_build_template.result(binding)
     IO.write(@buildfile_name, result)
     `chmod +x #{@buildfile_name}`
+
   end
   def generate_test_script(suite)
+    # Run tests scripts
     @test_timeout = suite.timeout
     @test_script_name = config[:ant_test_file_name]
     @test_template = ERB.new(File.read(File.join(
@@ -143,6 +172,14 @@ class SubmissionEvaluationJob < ActiveJob::Base
     result = @test_template.result(binding)
     IO.write(@test_script_name, result)
     `chmod +x #{@test_script_name}`
+    # Compile tests scripts
+    @compile_tests_script_name = config[:ant_compile_tests_file_name]
+    @compile_test_template = ERB.new(File.read(File.join(
+      Rails.root, 'app', 'views', 'runner', 'compile_test.sh.erb'
+      )))
+    result = @compile_test_template.result(binding)
+    IO.write(@compile_tests_script_name, result)
+    `chmod +x #{@compile_tests_script_name}`
   end
 
   def prepare_src(submission)
@@ -150,6 +187,7 @@ class SubmissionEvaluationJob < ActiveJob::Base
     in_use_names << config[:ant_build_tests_file_name]
     in_use_names << config[:ant_build_src_file_name] << config[:ant_compile_file_name]
     in_use_names << config[:ant_build_dir_name] << config[:ant_test_file_name]
+    in_use_names << config[:ant_compile_tests_file_name]
     @enumerator = LowerCaseEnumerator.new in_use_names
     no_extension_name = File.basename(submission.solution.file_name,
       File.extname(submission.solution.file_name)
@@ -183,6 +221,7 @@ class SubmissionEvaluationJob < ActiveJob::Base
     @buildfile_name = config[:ant_build_src_file_name]
     result = @build_template.result(binding)
     IO.write(@buildfile_name, result)
+    `chmod +x #{@buildfile_name}`
     generate_compile_script
     @compiler_stdout = `#{@compile_command}`
     @compiled = $?.exitstatus == 0

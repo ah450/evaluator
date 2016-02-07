@@ -16,5 +16,6 @@ coverage
 profiles
 profile
 *.sublime-workspace
+production_logs
 
 .rbenv-vars
