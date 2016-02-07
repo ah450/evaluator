@@ -5,8 +5,9 @@ angular.module 'evaluator'
       templateUrl: 'directives/suite.html'
       scope:
         suite: '=data'
+        project: '=parentProject'
       controller: [ '$scope', 'FileSaver', 'UserAuth', 'endpoints', '$http', ($scope, FileSaver, UserAuth, endpoints, $http) ->
-        $scope.canDelete = UserAuth.user.teacher && $scope.suite.ready
+        $scope.canDelete = UserAuth.user.teacher && $scope.suite.ready && !$scope.project.published
         $scope.canDownload = UserAuth.user.teacher || !$scope.suite.hidden
         $scope.download = ->
           download_url = endpoints.suite.downloadUrl.replace(':id',

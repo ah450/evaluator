@@ -5,4 +5,11 @@
     padding: 1.8em;
     overflow: auto;
   }
+  .result-compilation-error {
+    max-width: 100%;
+    word-wrap: break-word;
+  }
+  .message-container {
+    max-width: 80%;
+  }
 }

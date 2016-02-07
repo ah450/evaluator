@@ -4,6 +4,7 @@ angular.module 'evaluator'
       constructor: (data) ->
         @resource = new ResultResource data
         @test_suite = @resource.test_suite
+        @compiler_out_array = @resource.compiler_stdout.split('\n')
 
       @property 'cases',
         get: ->

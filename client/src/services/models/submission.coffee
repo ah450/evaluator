@@ -1,6 +1,7 @@
 angular.module 'evaluator'
   .factory 'Submission', (SubmissionResource, endpoints, Result,
-    ResultsResource, Pagination, NotificationDispatcher, configurations) ->
+    ResultsResource, Pagination, NotificationDispatcher,
+    configurations, moment) ->
     class Submission
       constructor: (data, @deletedCallback=angular.noop) ->
         @resource = new SubmissionResource data
@@ -86,6 +87,10 @@ angular.module 'evaluator'
       @property 'processing',
         get: ->
           @status is @PROCESSING_STATE
+
+      @property 'created_at',
+        get: ->
+          moment(@resource.created_at).format("MMMM Do YYYY, h:mm:ss a")
 
       PARTIAL_STATE: 'partial-submission'
       SUCCESS_STATE: 'success-submission'

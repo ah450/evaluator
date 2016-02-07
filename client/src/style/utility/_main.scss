@@ -54,6 +54,14 @@
   }
 }
 
+.break-word {
+  word-wrap: break-word;
+}
+
+.hypens {
+  hyphens: auto;
+}
+
 .relative {
   position: relative;
 }

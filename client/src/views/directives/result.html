@@ -4,7 +4,10 @@
 </header>
   <div class="flex-perfect-center-container flex-column">
     <p class="grade">{{result.grade}}/{{result.max_grade}}</p>
-    <p data-ng-if="!result.compiled" class="error">{{result.compiler_stdout}}</p>
+    <div data-ng-if="!result.compiled" class="message-container">
+      <p data-ng-repeat="message in result.compiler_out_array track by $index"
+      class="result-compilation-error">{{message}}</p>
+    </div>
   </div>
   <div class="result-cases-wrapper">
     <ul class="result-cases-list">
