@@ -8,6 +8,16 @@ class SuitesProcessJob < ActiveJob::Base
   GRADE_REGEX = /\/\*[^\/]*@grade\s+(?<grade>\w+)[^\/]*\*\//m
   REGEX = /#{GRADE_REGEX}?#{ANNOTATION_REGEX}#{METHOD_REGEX}/m
 
+  rescue_from(UnzipError) do |ex|
+    suite = arguments[0]
+    test_suite.with_lock('FOR UPDATE') do
+      test_suite.max_grade = 0
+      test_suite.ready = true
+      test_suite.name += " Failed to unzip"
+      test_suite.save!
+    end
+  end
+
   def perform(test_suite)
     test_suite.with_lock("FOR UPDATE") do
       IO.binwrite(test_suite.suite_code.file_name, test_suite.suite_code.code)
