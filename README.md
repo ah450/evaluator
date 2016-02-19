@@ -1,6 +1,6 @@
 Evaluator
 =========
-
+[![Issue Count](https://codeclimate.com/github/ah450/evaluator/badges/issue_count.svg)](https://codeclimate.com/github/ah450/evaluator) [![Build Status](https://travis-ci.org/ah450/evaluator.svg?branch=master)](https://travis-ci.org/ah450/evaluator)
 
 Node version `0.12.7`
 
