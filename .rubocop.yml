@@ -1,0 +1,16 @@
+inherit_from:
+  - .disabled.yml
+AllCops:
+  TargetRubyVersion: 2.2
+  Exclude:
+    - 'bin/**/*'
+    - 'tmp/**/*'
+    - 'client/**/*'
+    - 'db/**/*'
+    - 'spec/**/*'
+
+Metrics/AbcSize:
+  Max: 20
+
+Metrics/MethodLength:
+  Max: 30
