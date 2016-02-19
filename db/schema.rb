@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160205192808) do
+ActiveRecord::Schema.define(version: 20160219192706) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,10 +27,16 @@ ActiveRecord::Schema.define(version: 20160205192808) do
   add_index "courses", ["name"], name: "index_courses_on_name", unique: true, using: :btree
   add_index "courses", ["published"], name: "index_courses_on_published", using: :btree
 
-  create_table "job_trackers", force: :cascade do |t|
+  create_table "project_bundles", force: :cascade do |t|
+    t.integer  "project_id"
+    t.integer  "user_id"
+    t.binary   "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  add_index "project_bundles", ["project_id"], name: "index_project_bundles_on_project_id", using: :btree
+  add_index "project_bundles", ["user_id"], name: "index_project_bundles_on_user_id", using: :btree
 
   create_table "projects", force: :cascade do |t|
     t.datetime "due_date",                   null: false
@@ -108,6 +114,7 @@ ActiveRecord::Schema.define(version: 20160205192808) do
     t.datetime "updated_at",   null: false
   end
 
+  add_index "submissions", ["created_at"], name: "index_submissions_on_created_at", using: :btree
   add_index "submissions", ["project_id"], name: "index_submissions_on_project_id", using: :btree
   add_index "submissions", ["submitter_id"], name: "index_submissions_on_submitter_id", using: :btree
 
@@ -195,6 +202,7 @@ ActiveRecord::Schema.define(version: 20160205192808) do
     t.integer  "guc_prefix"
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
+    t.boolean  "super_user",      default: false, null: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
@@ -202,6 +210,7 @@ ActiveRecord::Schema.define(version: 20160205192808) do
   add_index "users", ["guc_suffix"], name: "index_users_on_guc_suffix", using: :btree
   add_index "users", ["name"], name: "index_users_on_name", using: :btree
   add_index "users", ["student"], name: "index_users_on_student", using: :btree
+  add_index "users", ["super_user"], name: "index_users_on_super_user", using: :btree
   add_index "users", ["team"], name: "index_users_on_team", using: :btree
 
   create_table "verification_tokens", force: :cascade do |t|
@@ -215,6 +224,8 @@ ActiveRecord::Schema.define(version: 20160205192808) do
   add_index "verification_tokens", ["user_id", "token"], name: "index_verification_tokens_on_user_id_and_token", using: :btree
   add_index "verification_tokens", ["user_id"], name: "index_verification_tokens_on_user_id", unique: true, using: :btree
 
+  add_foreign_key "project_bundles", "projects", on_delete: :cascade
+  add_foreign_key "project_bundles", "users", on_delete: :cascade
   add_foreign_key "projects", "courses", on_delete: :cascade
   add_foreign_key "reset_tokens", "users", on_delete: :cascade
   add_foreign_key "results", "projects", on_delete: :cascade
@@ -229,7 +240,7 @@ ActiveRecord::Schema.define(version: 20160205192808) do
   add_foreign_key "suite_codes", "test_suites", on_delete: :cascade
   add_foreign_key "team_grades", "projects", on_delete: :cascade
   add_foreign_key "team_grades", "results", on_delete: :cascade
-  add_foreign_key "team_jobs", "users"
+  add_foreign_key "team_jobs", "users", on_delete: :cascade
   add_foreign_key "test_cases", "results", on_delete: :cascade
   add_foreign_key "test_suites", "projects", on_delete: :cascade
   add_foreign_key "verification_tokens", "users", on_delete: :cascade

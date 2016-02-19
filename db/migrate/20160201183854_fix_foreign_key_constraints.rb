@@ -5,7 +5,7 @@ class FixForeignKeyConstraints < ActiveRecord::Migration
     remove_foreign_key 'reset_tokens', 'users'
     add_foreign_key 'reset_tokens', 'users', on_delete: :cascade
     remove_foreign_key 'results', 'projects'
-    add_foreign_key 'results', 'projects',  on_delete: :cascade
+    add_foreign_key 'results', 'projects', on_delete: :cascade
     remove_foreign_key 'results', 'submissions'
     add_foreign_key 'results', 'submissions', on_delete: :cascade
     remove_foreign_key 'results', 'test_suites'
