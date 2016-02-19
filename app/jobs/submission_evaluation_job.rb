@@ -127,7 +127,7 @@ class SubmissionEvaluationJob < ActiveJob::Base
   def extract_source(submission)
     old = Dir.entries Dir.pwd
     IO.binwrite(@submission_code_name_ext, submission.solution.code)
-    `unzip -u #{@submission_code_name_ext}`
+    `unzip -u '#{@submission_code_name_ext}'`
     raise UnzipError, "submission #{submission.id}" if $?.exitstatus != 0
     FileUtils.remove @submission_code_name_ext
     newEntries = Dir.entries Dir.pwd
@@ -140,7 +140,7 @@ class SubmissionEvaluationJob < ActiveJob::Base
 
   def extract_tests(suite)
     IO.binwrite(suite.suite_code.file_name, suite.suite_code.code)
-    `unzip -u #{suite.suite_code.file_name}`
+    `unzip -u '#{suite.suite_code.file_name}'`
     raise UnzipError, "suite #{suite.id}" if $?.exitstatus != 0
     FileUtils.remove suite.suite_code.file_name
   end
