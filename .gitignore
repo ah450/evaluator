@@ -17,5 +17,9 @@ profiles
 profile
 *.sublime-workspace
 production_logs
+.byebug_history
+*.pp
+*.te
+perf.data
 
 .rbenv-vars
