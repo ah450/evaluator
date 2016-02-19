@@ -64,6 +64,12 @@ class ApplicationController < ActionController::API
     }
   end
 
+  def wrap_in_transaction
+    resource_class.transaction do
+      yield
+    end
+  end
+
   # By default it is resource_class
   # Override for special filtering
   # Usage is base_index_query.where(...)...

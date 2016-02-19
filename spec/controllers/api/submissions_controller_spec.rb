@@ -2,67 +2,67 @@ require 'rails_helper'
 
 RSpec.describe Api::SubmissionsController, type: :controller do
   context 'create' do
-    let(:student) {FactoryGirl.create(:student)}
-    let(:teacher) {FactoryGirl.create(:teacher)}
-    let(:unpublished_course) {FactoryGirl.create(:course)}
-    let(:published_course) {FactoryGirl.create(:course, published: true)}
-    let(:published_project_published_course) {FactoryGirl.create(:project, course: published_course, published: true)}
-    let(:unpublished_project_published_course) {FactoryGirl.create(:project, course: published_course, published: false)}
-    let(:published_project_unpublished_course) {FactoryGirl.create(:project, course: unpublished_course, published: true)}
-    let(:unpublished_project_unpublished_course) {FactoryGirl.create(:project, course: unpublished_course, published: false)}
+    let(:student) { FactoryGirl.create(:student) }
+    let(:teacher) { FactoryGirl.create(:teacher) }
+    let(:unpublished_course) { FactoryGirl.create(:course) }
+    let(:published_course) { FactoryGirl.create(:course, published: true) }
+    let(:published_project_published_course) { FactoryGirl.create(:project, course: published_course, published: true) }
+    let(:unpublished_project_published_course) { FactoryGirl.create(:project, course: published_course, published: false) }
+    let(:published_project_unpublished_course) { FactoryGirl.create(:project, course: unpublished_course, published: true) }
+    let(:unpublished_project_unpublished_course) { FactoryGirl.create(:project, course: unpublished_course, published: false) }
     before :each do
       @file = fixture_file_upload('/files/submissions/csv_submission.zip', 'application/zip', true)
     end
     it 'does not allow unauthorized' do
-      expect {
+      expect do
         post :create, project_id: published_project_published_course.id, file: @file
-        }.to change(Submission, :count).by(0).and change(Solution, :count).by(0)
+      end.to change(Submission, :count).by(0).and change(Solution, :count).by(0)
       expect(response).to be_unauthorized
     end
     it 'allows student' do
-      expect {
+      expect do
         set_token student.token
         post :create, project_id: published_project_published_course.id, file: @file
-        }.to change(Submission, :count).by(1).and change(Solution, :count).by(1)
+      end.to change(Submission, :count).by(1).and change(Solution, :count).by(1)
       expect(response).to be_created
       expect(Submission.first.submitter.id).to eql student.id
     end
     it 'allows teacher' do
-      expect {
+      expect do
         set_token teacher.token
         post :create, project_id: published_project_published_course.id, file: @file
-        }.to change(Submission, :count).by(1).and change(Solution, :count).by(1)
+      end.to change(Submission, :count).by(1).and change(Solution, :count).by(1)
       expect(response).to be_created
       expect(Submission.first.submitter.id).to eql teacher.id
     end
     it 'requires a file' do
-      expect {
+      expect do
         set_token student.token
         post :create, project_id: published_project_published_course.id
-      }.to change(Submission, :count).by(0).and change(Solution, :count).by(0)
+      end.to change(Submission, :count).by(0).and change(Solution, :count).by(0)
       expect(response).to be_bad_request
     end
     it 'can not submit to an unpublished project of a published course' do
-      expect {
+      expect do
         set_token student.token
         post :create, project_id: unpublished_project_published_course.id, file: @file
-      }.to change(Submission, :count).by(0).and change(Solution, :count).by(0)
+      end.to change(Submission, :count).by(0).and change(Solution, :count).by(0)
       expect(response).to be_unprocessable
     end
 
     it 'can not submit to a published project of an unpublished course' do
-      expect {
+      expect do
         set_token student.token
         post :create, project_id: published_project_unpublished_course.id, file: @file
-      }.to change(Submission, :count).by(0).and change(Solution, :count).by(0)
+      end.to change(Submission, :count).by(0).and change(Solution, :count).by(0)
       expect(response).to be_unprocessable
     end
 
     it 'can not submit to an unpublished project of an unpublished course' do
-      expect {
+      expect do
         set_token student.token
         post :create, project_id: unpublished_project_unpublished_course.id, file: @file
-      }.to change(Submission, :count).by(0).and change(Solution, :count).by(0)
+      end.to change(Submission, :count).by(0).and change(Solution, :count).by(0)
       expect(response).to be_unprocessable
     end
 
@@ -71,7 +71,6 @@ RSpec.describe Api::SubmissionsController, type: :controller do
       set_token student.token
       post :create, project_id: published_project_published_course.id, file: @file
     end
-
   end
 
   context 'download' do
@@ -160,7 +159,7 @@ RSpec.describe Api::SubmissionsController, type: :controller do
 
   context 'index' do
     before :each do
-      @create_submission = lambda do |project, submitter=nil|
+      @create_submission = lambda do |project, submitter = nil|
         project ||= FactoryGirl.create(:project)
         submitter ||= FactoryGirl.create(:student)
         submission = FactoryGirl.create(:submission, project: project, submitter: submitter)
@@ -170,8 +169,8 @@ RSpec.describe Api::SubmissionsController, type: :controller do
         submission.solution = solution
         submission.save!
       end
-      @default_project = FactoryGirl.create(:project, published: true, course: FactoryGirl.create(:course, published: true) )
-      5.times {@create_submission.call @default_project}
+      @default_project = FactoryGirl.create(:project, published: true, course: FactoryGirl.create(:course, published: true))
+      5.times { @create_submission.call @default_project }
     end
     it 'does not allow unauthorized' do
       get :index, project_id: @default_project.id
@@ -197,7 +196,7 @@ RSpec.describe Api::SubmissionsController, type: :controller do
       expect(response).to be_success
       expect(json_response).to include(
         :submissions, :page, :page_size, :total_pages
-        )
+      )
     end
     it 'Student cant see other students submission' do
       student = FactoryGirl.create(:student, verified: true)
@@ -209,7 +208,7 @@ RSpec.describe Api::SubmissionsController, type: :controller do
 
     it 'student can see own submissions' do
       student = FactoryGirl.create(:student, verified: true)
-      3.times {@create_submission.call @default_project, student}
+      3.times { @create_submission.call @default_project, student }
       set_token student.token
       get :index, project_id: @default_project.id
       expect(response).to be_success
@@ -219,10 +218,10 @@ RSpec.describe Api::SubmissionsController, type: :controller do
       teacher = FactoryGirl.create(:teacher, verified: true)
       student = FactoryGirl.create(:student, verified: true)
       student_two = FactoryGirl.create(:student, verified: true, name: student.name)
-      4.times {@create_submission.call @default_project, student}
-      1.times {@create_submission.call @default_project, student_two}
+      4.times { @create_submission.call @default_project, student }
+      1.times { @create_submission.call @default_project, student_two }
       set_token teacher.token
-      get :index, project_id: @default_project.id, submitter: {name: student.name}
+      get :index, project_id: @default_project.id, submitter: { name: student.name }
       expect(response).to be_success
       expect(json_response[:submissions].size).to eql 5
       correct_ids = json_response[:submissions].reduce(true) do |memo, item|
@@ -235,10 +234,10 @@ RSpec.describe Api::SubmissionsController, type: :controller do
       teacher = FactoryGirl.create(:teacher, verified: true)
       student = FactoryGirl.create(:student, verified: true, team: 'Dat gap')
       student_two = FactoryGirl.create(:student, verified: true, team: student.team)
-      1.times {@create_submission.call @default_project, student}
-      1.times {@create_submission.call @default_project, student_two}
+      1.times { @create_submission.call @default_project, student }
+      1.times { @create_submission.call @default_project, student_two }
       set_token teacher.token
-      get :index, project_id: @default_project.id, submitter: {team: student.team}
+      get :index, project_id: @default_project.id, submitter: { team: student.team }
       expect(response).to be_success
       expect(json_response[:submissions].size).to eql 2
       correct_ids = json_response[:submissions].reduce(true) do |memo, item|
@@ -249,9 +248,9 @@ RSpec.describe Api::SubmissionsController, type: :controller do
     it 'teacher can query by team email' do
       teacher = FactoryGirl.create(:teacher, verified: true)
       student = FactoryGirl.create(:student, verified: true)
-      3.times {@create_submission.call @default_project, student}
+      3.times { @create_submission.call @default_project, student }
       set_token teacher.token
-      get :index, project_id: @default_project.id, submitter: {email: student.email}
+      get :index, project_id: @default_project.id, submitter: { email: student.email }
       expect(response).to be_success
       expect(json_response[:submissions].size).to eql 3
       correct_ids = json_response[:submissions].reduce(true) do |memo, item|
