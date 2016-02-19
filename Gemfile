@@ -38,6 +38,7 @@ gem 'activerecord', '~> 4.2', '>= 4.2.5.1'
 gem 'actionpack', '~> 4.2', '>= 4.2.5.1'
 gem 'activemodel', '~> 4.2', '>= 4.2.5.1'
 gem 'actionview', '~> 4.2', '>= 4.2.5.1'
+gem 'annotate'
 
 group :test do
   gem 'shoulda-matchers'
