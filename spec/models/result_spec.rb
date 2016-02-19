@@ -1,6 +1,19 @@
 require 'rails_helper'
 
 RSpec.describe Result, type: :model do
+  it { should belong_to :submission }
+  it { should belong_to :test_suite }
+  it { should belong_to :project }
+  it { should validate_presence_of :submission }
+  it { should validate_presence_of :test_suite }
+  it { should validate_presence_of :project }
+  it { should validate_presence_of :compiler_stderr }
+  it { should validate_presence_of :compiler_stdout }
+  it { should validate_presence_of :grade }
+  it { should validate_presence_of :max_grade }
+  it { should have_many :test_cases }
+  it { should have_one :team_grade }
+
   it 'has a valid factory' do
     result = FactoryGirl.build(:result)
     expect(result).to be_valid
@@ -55,10 +68,10 @@ RSpec.describe Result, type: :model do
   context 'hidden' do
     it 'is set to test suite value on save' do
       result = FactoryGirl.create(:result,
-        test_suite: FactoryGirl.create(:public_suite))
+                                  test_suite: FactoryGirl.create(:public_suite))
       expect(result.hidden).to be false
       result = FactoryGirl.create(:result,
-        test_suite: FactoryGirl.create(:private_suite))
+                                  test_suite: FactoryGirl.create(:private_suite))
       expect(result.hidden).to be true
     end
   end

@@ -1,26 +1,34 @@
 require 'rails_helper'
 
 RSpec.describe Course, type: :model do
+  let(:subject) { FactoryGirl.create(:course) }
+  it { should validate_presence_of :name }
+  it { should validate_presence_of :description }
+  it { should validate_uniqueness_of(:name).case_insensitive }
+  it { should have_many :projects }
+  it { should have_many :students }
+  it { should have_many :studentships }
+
   describe 'validations' do
-    let(:course) {FactoryGirl.build(:course)}
+    let(:course) { FactoryGirl.build(:course) }
     it 'has a valid factory' do
       expect(course).to be_valid
     end
     context 'name is nil' do
-      let(:course) {FactoryGirl.build(:course, name: nil)}
+      let(:course) { FactoryGirl.build(:course, name: nil) }
       it 'should not be valid' do
         expect(course).to_not be_valid
       end
     end
     context 'description is nil' do
-      let(:course) {FactoryGirl.build(:course, description: nil)}
+      let(:course) { FactoryGirl.build(:course, description: nil) }
       it 'should not be valid' do
         expect(course).to_not be_valid
       end
     end
     context 'unique names' do
-      let(:first) {FactoryGirl.build(:course)}
-      let(:second) {FactoryGirl.build(:course)}
+      let(:first) { FactoryGirl.build(:course) }
+      let(:second) { FactoryGirl.build(:course) }
       it 'should not allow duplicate names' do
         first.name = second.name.upcase
         first.save!
@@ -31,7 +39,7 @@ RSpec.describe Course, type: :model do
 
   describe 'default values' do
     context 'published' do
-      let(:course) {FactoryGirl.build(:course)}
+      let(:course) { FactoryGirl.build(:course) }
       it 'should be false by default' do
         expect(course).to be_valid
         course.save!

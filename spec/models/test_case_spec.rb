@@ -1,5 +1,5 @@
 require 'rails_helper'
 
 RSpec.describe TestCase, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it { should belong_to :result }
 end

@@ -1,8 +1,17 @@
 require 'rails_helper'
 
 RSpec.describe Project, type: :model do
+  it { should belong_to :course }
+  it { should have_many :submissions }
+  it { should have_many :test_suites }
+  it { should have_many :results }
+  it { should have_many :team_grades }
+  it { should validate_presence_of :name }
+  it { should validate_presence_of :due_date }
+  it { should validate_presence_of :course }
+
   describe 'validations' do
-    let(:project) {FactoryGirl.build(:project)}
+    let(:project) { FactoryGirl.build(:project) }
     it 'has a valid factory' do
       expect(project).to be_valid
     end
@@ -40,6 +49,7 @@ RSpec.describe Project, type: :model do
     end
   end
   context 'query by due date' do
+    before(:each) { Project.destroy_all }
     it 'should select due only' do
       FactoryGirl.create_list(:project, 5)
       FactoryGirl.create_list(:project, 3, due_date: 5.days.ago)
@@ -54,14 +64,15 @@ RSpec.describe Project, type: :model do
     end
   end
   context 'query by published' do
+    before(:each) { Project.destroy_all }
     it 'should select published only' do
-      FactoryGirl.create_list(:project, 5)
+      FactoryGirl.create_list(:project, 5, published: false)
       FactoryGirl.create_list(:project, 3, published: true)
       projects = Project.published
       expect(projects.count).to eql 3
     end
     it 'should select non published only' do
-      FactoryGirl.create_list(:project, 5)
+      FactoryGirl.create_list(:project, 5, published: false)
       FactoryGirl.create_list(:project, 3, published: true)
       projects = Project.not_published
       expect(projects.count).to eql 5

@@ -1,3 +1,38 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id              :integer          not null, primary key
+#  name            :string           not null
+#  password_digest :string           not null
+#  email           :string           not null
+#  student         :boolean          not null
+#  verified        :boolean          default(FALSE), not null
+#  major           :string
+#  team            :string
+#  guc_suffix      :integer
+#  guc_prefix      :integer
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  super_user      :boolean          default(FALSE), not null
+#
+# Indexes
+#
+#  index_users_on_email       (email) UNIQUE
+#  index_users_on_guc_prefix  (guc_prefix)
+#  index_users_on_guc_suffix  (guc_suffix)
+#  index_users_on_name        (name)
+#  index_users_on_student     (student)
+#  index_users_on_team        (team)
+#
+
+=begin
+This model represents any user
+The following types:
+1 - Student
+2 - Teacher
+3 - Super User
+=end
 class User < ActiveRecord::Base
   has_secure_password
   STUDENT_EMAIL_REGEX = /\A[a-zA-Z\.\-]+@student.guc.edu.eg\z/
@@ -9,6 +44,7 @@ class User < ActiveRecord::Base
   validates_format_of :email, with: GUC_EMAIL_REGEX, message: 'must be a GUC email'
   validate :email_not_changed
   validate :student_fields
+  validate :super_user_teacher
   before_validation :set_subtype
   before_validation :downcase_email
   scope :verified, -> { where verified: true }
@@ -21,17 +57,16 @@ class User < ActiveRecord::Base
   has_many :reset_tokens, dependent: :delete_all
 
   def teacher?
-    not student?
+    !student?
   end
 
   def full_name
-    name.split.map { |e| e.capitalize  }.join ' '
+    name.split.map(&:capitalize).join ' '
   end
 
-
-  def as_json(options={})
+  def as_json(_options = {})
     super(except: [:password_digest],
-      methods: [:guc_id, :full_name]
+          methods: [:guc_id, :full_name]
     )
   end
 
@@ -53,14 +88,14 @@ class User < ActiveRecord::Base
 
   def self.queriable_fields
     un_permitted = [:created_at, :updated_at, :verified, :password_digest]
-    all_fields = User.attribute_names.map{|s| s.to_sym}
+    all_fields = User.attribute_names.map(&:to_sym)
     all_fields - un_permitted
   end
 
   # Generates a timed JWT
   # expiration unit is hours
   # default is 1 hour
-  def token(expiration=nil)
+  def token(expiration = nil)
     expiration ||= 1
     payload = {
       data: {
@@ -82,12 +117,12 @@ class User < ActiveRecord::Base
   # Raises AuthenticationError if incorrect authentication data supplied
   # returns User instance
   def self.find_by_token(token)
-    decoded = JWT.decode token, hmac_key, true, {algorithm: 'HS512'}
+    decoded = JWT.decode token, hmac_key, true, algorithm: 'HS512'
     data = decoded.first['data']
     user = find data['id']
     raise AuthenticationError unless Rack::Utils.secure_compare(
       user.password_digest, data['discriminator'])
-    return user
+    user
   end
 
   def guc_id
@@ -102,12 +137,11 @@ class User < ActiveRecord::Base
 
   def self.find_by_guc_id(guc_id)
     guc_prefix, guc_suffix = guc_id.split '-'
-    self.find_by({guc_suffix: guc_suffix, guc_prefix: guc_prefix})
+    find_by(guc_suffix: guc_suffix, guc_prefix: guc_prefix)
   end
 
-
   def gen_verification_token
-    verification_token = with_lock("FOR UPDATE") do
+    verification_token = with_lock('FOR UPDATE') do
       expirationTime = User.verification_expiration.ago
       VerificationToken.where(user_id: id).where('created_at <= ?', expirationTime).delete_all
       VerificationToken.where(user_id: id).order(created_at: :desc).offset(1).destroy_all
@@ -128,15 +162,14 @@ class User < ActiveRecord::Base
     num_tokens == 0
   end
 
-
   def verify(token)
-    if !verified?
-      with_lock("FOR UPDATE") do
+    unless verified?
+      with_lock('FOR UPDATE') do
         expirationTime = User.verification_expiration.ago
         verification_tokens = VerificationToken.where(user_id: id, token: token).where('created_at >= ?', expirationTime)
         if verification_tokens.count > 0
           self.verified = true
-          self.save!
+          save!
           verification_tokens.delete_all
         end
       end
@@ -151,12 +184,12 @@ class User < ActiveRecord::Base
   end
 
   def reset_password(token, new_pass)
-    with_lock("FOR UPDATE") do
+    with_lock('FOR UPDATE') do
       expirationTime = User.pass_reset_expiration.ago
       reset_tokens = ResetToken.where(user_id: id, token: token).where('created_at >= ?', expirationTime)
       if reset_tokens.count > 0
         self.password = new_pass
-        self.save!
+        save!
         reset_tokens.delete_all
         return true
       else
@@ -166,7 +199,7 @@ class User < ActiveRecord::Base
   end
 
   def gen_reset_token
-    reset_token = with_lock("FOR UPDATE") do
+    reset_token = with_lock('FOR UPDATE') do
       expirationTime = User.pass_reset_expiration.ago
       ResetToken.where(user_id: id).where('created_at <= ?', expirationTime).delete_all
       ResetToken.where(user_id: id).order(created_at: :desc).offset(1).destroy_all
@@ -181,47 +214,6 @@ class User < ActiveRecord::Base
     reset_token.token
   end
 
-  private
-
-  def can_view_submission?(submission)
-    teacher? || submission.submitter.team == team
-  end
-
-  def can_view_result?(result)
-    teacher? || result.submission.submitter.team == team
-  end
-
-  def can_view_team_grade?(grade)
-    teacher? || grade.name == team
-  end
-
-  def can_view_test_suite?(suite)
-    teacher? || (!suite.hidden && can_view_project?(suite.project))
-  end
-
-  def can_view_project?(project)
-    teacher? || (project.published && project.course.published)
-  end
-
-  def email_not_changed
-    if email_changed?  && persisted?
-      errors.add(:email, "can not be changed")
-    end
-  end
-
-  def student_fields
-    if student?
-      if not major.kind_of? String
-        errors.add(:major, 'is required')
-      end
-      if not team.kind_of? String
-        errors.add(:team, 'is required')
-      end
-      if not guc_prefix.is_a?(Integer) && guc_suffix.is_a?(Integer)
-        errors.add('GUC id', 'is required')
-      end
-    end
-  end
 
   def self.hmac_key
     Rails.application.config.jwt_key
@@ -251,15 +243,54 @@ class User < ActiveRecord::Base
     Rails.application.config.configurations[:pass_reset_resend_delay]
   end
 
+  private
+
+  def can_view_submission?(submission)
+    teacher? || submission.submitter.team == team
+  end
+
+  def can_view_result?(result)
+    teacher? || result.submission.submitter.team == team
+  end
+
+  def can_view_team_grade?(grade)
+    teacher? || grade.name == team
+  end
+
+  def can_view_test_suite?(suite)
+    teacher? || (!suite.hidden && can_view_project?(suite.project))
+  end
+
+  def can_view_project?(project)
+    teacher? || (project.published && project.course.published)
+  end
+
+  def email_not_changed
+    errors.add(:email, 'can not be changed') if email_changed? && persisted?
+  end
+
+  def student_fields
+    if student?
+      errors.add(:major, 'is required') unless major.is_a? String
+      errors.add(:team, 'is required') unless team.is_a? String
+      unless guc_prefix.is_a?(Integer) && guc_suffix.is_a?(Integer)
+        errors.add('GUC id', 'is required')
+      end
+    end
+  end
+
+  def super_user_teacher
+    if student? && super_user?
+      errors.add(:super_user, 'Must be a teacher')
+    end
+  end
 
   def set_subtype
-    self.student = "#{STUDENT_EMAIL_REGEX === email}"
+    self.student = (STUDENT_EMAIL_REGEX === email).to_s
   end
 
   def downcase_email
-    if not email.nil?
-      self.email = email.downcase
-    end
+    self.email = email.downcase unless email.nil?
   end
 
 end

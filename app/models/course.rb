@@ -1,3 +1,20 @@
+# == Schema Information
+#
+# Table name: courses
+#
+#  id          :integer          not null, primary key
+#  name        :string           not null
+#  description :text             not null
+#  published   :boolean          default(FALSE), not null
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
+# Indexes
+#
+#  index_courses_on_name       (name) UNIQUE
+#  index_courses_on_published  (published)
+#
+
 class Course < ActiveRecord::Base
   validates :name, :description, presence: true
   validates :name, uniqueness: { case_sensitive: false }
@@ -32,7 +49,7 @@ class Course < ActiveRecord::Base
       event
     )
   end
-  
+
   def send_created_notification
     event = {
       type: Rails.application.config.configurations[:notification_event_types][:course_created],
@@ -42,7 +59,7 @@ class Course < ActiveRecord::Base
       }
     }
     Notifications::CoursesController.publish(
-      "/notifications/courses/all",
+      '/notifications/courses/all',
       event
     )
   end
@@ -50,11 +67,11 @@ class Course < ActiveRecord::Base
   def send_published_notification
     if published_changed?
       types = Rails.application.config.configurations[:notification_event_types]
-      if published?
-        type = types[:course_published]
-      else
-        type = types[:course_unpublished]
-      end
+      type = if published?
+               types[:course_published]
+             else
+               types[:course_unpublished]
+             end
       event = {
         type: type,
         date: DateTime.now.utc,
@@ -63,7 +80,7 @@ class Course < ActiveRecord::Base
         }
       }
       Notifications::CoursesController.publish(
-        "/notifications/courses/all",
+        '/notifications/courses/all',
         event
       )
       Notifications::CoursesController.publish(
@@ -72,5 +89,4 @@ class Course < ActiveRecord::Base
       )
     end
   end
-
 end

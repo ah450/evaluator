@@ -1,31 +1,36 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-
   it { should have_secure_password }
+  it { should have_many :studentships }
+  it { should have_many :courses }
+  it { should have_many :submissions }
+  it { should have_many :reset_tokens }
+  it { should have_many :verification_tokens }
+  it { should validate_presence_of :name }
+  it { should validate_presence_of :email }
 
   describe 'student' do
-    
     describe 'validation' do
-      let(:student) {FactoryGirl.build(:student)}
+      let(:student) { FactoryGirl.build(:student) }
       it 'has a valid factory' do
         expect(student).to be_valid
       end
       context 'email is nil' do
-        let(:student) {FactoryGirl.build(:student, email: nil)}
+        let(:student) { FactoryGirl.build(:student, email: nil) }
         it 'should not be valid' do
           expect(student).to_not be_valid
         end
       end
       context 'email is belongs to a non guc domain' do
-        let(:student) {FactoryGirl.build(:student, email: 'student@example.com')}
+        let(:student) { FactoryGirl.build(:student, email: 'student@example.com') }
         it 'should not be valid' do
           expect(student).to_not be_valid
         end
       end
       context 'unique email' do
-        let(:first) {FactoryGirl.create(:student)}
-        let(:second){FactoryGirl.build(:student)}
+        let(:first) { FactoryGirl.create(:student) }
+        let(:second) { FactoryGirl.build(:student) }
         it 'should not allow duplicate emails' do
           second.email = first.email.capitalize
           expect(second).to_not be_valid
@@ -33,35 +38,35 @@ RSpec.describe User, type: :model do
       end
 
       context 'name is nil' do
-        let(:student) {FactoryGirl.build(:student, name: nil)}
+        let(:student) { FactoryGirl.build(:student, name: nil) }
         it 'should not be valid' do
           expect(student).to_not be_valid
         end
       end
 
       context 'password is nil' do
-        let(:student) {FactoryGirl.build(:student, password: nil)}
+        let(:student) { FactoryGirl.build(:student, password: nil) }
         it 'should not be valid' do
           expect(student).to_not be_valid
         end
       end
 
       context 'password is less than 2 chatactes' do
-        let(:student) {FactoryGirl.build(:student, password: 's')}
+        let(:student) { FactoryGirl.build(:student, password: 's') }
         it 'should not be valid' do
           expect(student).to_not be_valid
         end
       end
 
       context 'major is nil' do
-        let(:student) {FactoryGirl.build(:student, major: nil)}
+        let(:student) { FactoryGirl.build(:student, major: nil) }
         it 'should not be valid' do
           expect(student).to_not be_valid
         end
       end
 
       context 'team is nil' do
-        let(:student) {FactoryGirl.build(:student, team:nil)}
+        let(:student) { FactoryGirl.build(:student, team: nil) }
         it 'should not be valid' do
           expect(student).to_not be_valid
         end
@@ -69,29 +74,28 @@ RSpec.describe User, type: :model do
 
       context 'GUC id' do
         context 'only suffix is nil' do
-          let(:student){FactoryGirl.build(:student, guc_suffix: nil)}
+          let(:student) { FactoryGirl.build(:student, guc_suffix: nil) }
           it 'should not be valid' do
             expect(student).to_not be_valid
           end
         end
         context 'only prefix is nil' do
-          let(:student) {FactoryGirl.build(:student, guc_prefix: nil)}
+          let(:student) { FactoryGirl.build(:student, guc_prefix: nil) }
           it 'should not be valid' do
             expect(student).to_not be_valid
           end
         end
         context 'suffix and prefix' do
-          let(:student){FactoryGirl.build(:student, guc_prefix: nil, guc_suffix: nil)}
+          let(:student) { FactoryGirl.build(:student, guc_prefix: nil, guc_suffix: nil) }
           it 'should not be valid' do
             expect(student).to_not be_valid
           end
         end
       end
-
     end # Validations
 
     describe 'type detection' do
-      let(:student) {FactoryGirl.build(:student)}
+      let(:student) { FactoryGirl.build(:student) }
       it "should know it's a student" do
         student.save!
         expect(student.student?).to be true
@@ -99,7 +103,7 @@ RSpec.describe User, type: :model do
     end
 
     describe 'Token generation' do
-      let(:student) {FactoryGirl.create(:student)}
+      let(:student) { FactoryGirl.create(:student) }
       it 'should be able to create a token' do
         expect(student.token).to be_a_kind_of String
       end
@@ -110,17 +114,16 @@ RSpec.describe User, type: :model do
     end
 
     describe 'GUC id attribute' do
-      let(:student) {FactoryGirl.create(:student)}
+      let(:student) { FactoryGirl.create(:student) }
       it 'should be constructed correctly from prefix and suffix' do
         expect(student.guc_id).to eql "#{student.guc_prefix}-#{student.guc_suffix}"
       end
       it 'should set prefix and suffix based on it' do
-        student.guc_id = "99-32"
+        student.guc_id = '99-32'
         expect(student.guc_prefix).to eql 99
         expect(student.guc_suffix).to eql 32
       end
     end
-
   end # Student specs
 
   describe 'type scope' do
@@ -137,27 +140,26 @@ RSpec.describe User, type: :model do
   end
 
   describe 'Teacher' do
-    
     describe 'validation' do
-      let(:teacher) {FactoryGirl.build(:teacher)}
+      let(:teacher) { FactoryGirl.build(:teacher) }
       it 'has a valid factory' do
         expect(teacher).to be_valid
       end
       context 'email is nil' do
-        let(:teacher) {FactoryGirl.build(:teacher, email: nil)}
+        let(:teacher) { FactoryGirl.build(:teacher, email: nil) }
         it 'should not be valid' do
           expect(teacher).to_not be_valid
         end
       end
       context 'email is belongs to a non guc domain' do
-        let(:teacher) {FactoryGirl.build(:teacher, email: 'teacher@example.com')}
+        let(:teacher) { FactoryGirl.build(:teacher, email: 'teacher@example.com') }
         it 'should not be valid' do
           expect(teacher).to_not be_valid
         end
       end
       context 'unique email' do
-        let(:first) {FactoryGirl.create(:teacher)}
-        let(:second){FactoryGirl.build(:teacher)}
+        let(:first) { FactoryGirl.create(:teacher) }
+        let(:second) { FactoryGirl.build(:teacher) }
         it 'should not allow duplicate emails' do
           second.email = first.email.capitalize
           expect(second).to_not be_valid
@@ -165,28 +167,28 @@ RSpec.describe User, type: :model do
       end
 
       context 'name is nil' do
-        let(:teacher) {FactoryGirl.build(:teacher, name: nil)}
+        let(:teacher) { FactoryGirl.build(:teacher, name: nil) }
         it 'should not be valid' do
           expect(teacher).to_not be_valid
         end
       end
 
       context 'password is nil' do
-        let(:teacher) {FactoryGirl.build(:teacher, password: nil)}
+        let(:teacher) { FactoryGirl.build(:teacher, password: nil) }
         it 'should not be valid' do
           expect(teacher).to_not be_valid
         end
       end
 
       context 'password is less than 2 chatactes' do
-        let(:teacher) {FactoryGirl.build(:teacher, password: 's')}
+        let(:teacher) { FactoryGirl.build(:teacher, password: 's') }
         it 'should not be valid' do
           expect(teacher).to_not be_valid
         end
       end
     end # Validations
     describe 'type detection' do
-      let(:teacher) {FactoryGirl.build(:teacher)}
+      let(:teacher) { FactoryGirl.build(:teacher) }
       it "should know it's a teacher" do
         teacher.save!
         expect(teacher.teacher?).to be true
@@ -194,7 +196,7 @@ RSpec.describe User, type: :model do
     end
 
     describe 'Token generation' do
-      let(:teacher) {FactoryGirl.create(:teacher)}
+      let(:teacher) { FactoryGirl.create(:teacher) }
       it 'should be able to create a token' do
         expect(teacher.token).to be_a_kind_of String
       end
@@ -203,12 +205,10 @@ RSpec.describe User, type: :model do
         expect(User.find_by_token(token)).to eql teacher
       end
     end
-
   end # Teacher specs
 
-
   describe 'Password reset' do
-    let(:student){FactoryGirl.create(:student, password: 'old password')}
+    let(:student) { FactoryGirl.create(:student, password: 'old password') }
     it 'should generate reset token' do
       expect(student).to respond_to :gen_reset_token
     end
@@ -223,7 +223,6 @@ RSpec.describe User, type: :model do
       token = student.gen_reset_token
       expect(student.reset_password(token, newPass)).to be true
       expect(student.authenticate(newPass)).to be_truthy
-
     end
 
     it 'should not reset password with another token' do
@@ -237,7 +236,7 @@ RSpec.describe User, type: :model do
   end
 
   describe 'verification' do
-    let(:teacher){FactoryGirl.create(:teacher, verified: false)}
+    let(:teacher) { FactoryGirl.create(:teacher, verified: false) }
     it 'should generate verification token' do
       expect(teacher).to respond_to :gen_verification_token
     end
@@ -264,23 +263,22 @@ RSpec.describe User, type: :model do
     end
   end
 
-
   context '.full_name' do
-    let(:user){FactoryGirl.create(:student, name: 'i am a student')}
+    let(:user) { FactoryGirl.create(:student, name: 'i am a student') }
     it 'is capitalized' do
       expect(user.full_name).to eql 'I Am A Student'
     end
   end
 
   context '.guc_id' do
-    let(:user) {FactoryGirl.create(:student, guc_prefix: 1, guc_suffix: 12)}
+    let(:user) { FactoryGirl.create(:student, guc_prefix: 1, guc_suffix: 12) }
     it 'is properly formatted' do
       expect(user.guc_id).to eql '1-12'
     end
   end
 
   context '.guc_id=' do
-    let(:user) {FactoryGirl.create(:student, guc_prefix: 12, guc_suffix: 18)}
+    let(:user) { FactoryGirl.create(:student, guc_prefix: 12, guc_suffix: 18) }
     it 'is properly set' do
       user.guc_id = '13-1800'
       expect(user.guc_suffix).to eql 1800
@@ -307,7 +305,7 @@ RSpec.describe User, type: :model do
       end
     end
     context 'test suite' do
-      let(:suite) {FactoryGirl.create(:test_suite)}
+      let(:suite) { FactoryGirl.create(:test_suite) }
       it 'can view if a teacher' do
         subject = FactoryGirl.create(:teacher)
         expect(subject.can_view?(suite)).to be true
@@ -318,7 +316,7 @@ RSpec.describe User, type: :model do
       end
     end
     context 'result' do
-      let(:result) {FactoryGirl.create(:result)}
+      let(:result) { FactoryGirl.create(:result) }
       it 'can view if teacher' do
         subject = FactoryGirl.create(:teacher)
         expect(subject.can_view?(result)).to be true
@@ -337,12 +335,11 @@ RSpec.describe User, type: :model do
       end
     end
     context 'other objects' do
-      let(:object) {FactoryGirl.create(:teacher)}
+      let(:object) { FactoryGirl.create(:teacher) }
       it 'can view other objects' do
         subject = FactoryGirl.create(:student)
         expect(subject.can_view?(object)).to be true
       end
     end
   end
-
 end

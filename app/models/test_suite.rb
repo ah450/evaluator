@@ -1,3 +1,27 @@
+# == Schema Information
+#
+# Table name: test_suites
+#
+#  id         :integer          not null, primary key
+#  project_id :integer
+#  hidden     :boolean          default(TRUE), not null
+#  ready      :boolean          default(FALSE), not null
+#  max_grade  :integer          default(0), not null
+#  timeout    :integer          default(60), not null
+#  name       :string           not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+# Indexes
+#
+#  index_test_suites_on_hidden      (hidden)
+#  index_test_suites_on_project_id  (project_id)
+#
+# Foreign Keys
+#
+#  fk_rails_fc9aa9fc18  (project_id => projects.id)
+#
+
 class TestSuite < ActiveRecord::Base
   belongs_to :project, inverse_of: :test_suites
   has_one :suite_code, dependent: :delete
@@ -7,7 +31,7 @@ class TestSuite < ActiveRecord::Base
   after_destroy :send_deleted_notification
   after_create :send_created_notification
 
-  def as_json(options={})
+  def as_json(_options = {})
     super(include: [:suite_cases])
   end
 
@@ -50,12 +74,11 @@ class TestSuite < ActiveRecord::Base
     )
   end
 
-  def self.viewable_by_user(user)
+  def self.viewable_by_user(_user)
     self
   end
 
   def destroyable?
     !project.published? && ready?
   end
-
 end
