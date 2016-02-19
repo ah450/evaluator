@@ -3,21 +3,21 @@ require 'rails_helper'
 RSpec.describe Api::ResultsController, type: :controller do
   before :each do
     @project = FactoryGirl.create(:project, published: true,
-      course: FactoryGirl.create(:course, published: true))
-    @create_result = lambda do |team_name, submitter=nil|
+                                            course: FactoryGirl.create(:course, published: true))
+    @create_result = lambda do |team_name, submitter = nil|
       submitter ||= FactoryGirl.create(:student, verified: true, team: team_name)
       submission = FactoryGirl.create(:submission, submitter: submitter,
-        project: @project)
+                                                   project: @project)
       FactoryGirl.create(:result, project: @project, submission: submission)
     end
     @default_team = 'Default__Results_Controller_SPEC_TEAM'
   end
   context 'index' do
-    let(:teacher) {FactoryGirl.create(:teacher)}
+    let(:teacher) { FactoryGirl.create(:teacher) }
     before :each do
-      2.times {@create_result.call @default_team}
+      2.times { @create_result.call @default_team }
       @other_team = 'OTHER_TEAM_Results_Controller_SPEC_TEAM'
-      4.times {@create_result.call @other_team}
+      4.times { @create_result.call @other_team }
     end
     it 'does not allow unauthorized' do
       get :index, format: :json, project_id: @project.id
@@ -44,14 +44,14 @@ RSpec.describe Api::ResultsController, type: :controller do
 
     it 'can query by team_name' do
       set_token teacher.token
-      get :index, format: :json, project_id: @project.id, submitter: {team: @default_team}
+      get :index, format: :json, project_id: @project.id, submitter: { team: @default_team }
       expect(response).to be_success
       expect(json_response[:results].size).to eql 2
     end
   end
 
   context 'show' do
-    let(:teacher) {FactoryGirl.create(:teacher)}
+    let(:teacher) { FactoryGirl.create(:teacher) }
     before :each do
       @default_result = @create_result.call @default_team
       @other_team = 'OTHER_TEAM_Results_Controller_SPEC_TEAM'
