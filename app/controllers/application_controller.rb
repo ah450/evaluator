@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::API
   before_action :set_resource, except: [:index, :create]
   before_action :authenticate, :authorize, only: [:destroy, :update]
-  after_filter :no_cache, only: [:create, :destroy, :update]
+  after_action :no_cache, only: [:create, :destroy, :update]
   rescue_from StandardError, with: :unknown_server_error
   rescue_from AuthenticationError, with: :authentication_error
   rescue_from ActionController::ParameterMissing, with: :bad_request_response
@@ -24,9 +24,9 @@ class ApplicationController < ActionController::API
   # GET /api/{plural_resource_variable}
   def index
     resources = base_index_query.where(query_params)
-                              .order(order_args)
-                              .page(page_params[:page])
-                              .per(page_params[:page_size])
+                                .order(order_args)
+                                .page(page_params[:page])
+                                .per(page_params[:page_size])
     instance_variable_set(plural_resource_variable, resources)
     render_multiple
   end
@@ -60,7 +60,7 @@ class ApplicationController < ActionController::API
       page: resources.current_page,
       total_pages: resources.total_pages,
       page_size: resources.size,
-      "#{resource_name.pluralize}" => resources.as_json
+      "#{resource_name.pluralize}": resources.as_json
     }
   end
 
@@ -72,9 +72,9 @@ class ApplicationController < ActionController::API
   end
 
   def no_cache
-    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate" # HTTP 1.1.
-    response.headers["Pragma"] = "no-cache" # HTTP 1.0.
-    response.headers["Expires"] = "0" # Proxies.
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate' # HTTP 1.1.
+    response.headers['Pragma'] = 'no-cache' # HTTP 1.0.
+    response.headers['Expires'] = '0' # Proxies.
   end
 
   # The resource class based on resource_name
@@ -91,7 +91,7 @@ class ApplicationController < ActionController::API
   # The singular resource name based on controller name
   # Override in controllers with non conventional names
   def resource_name
-    @resource_name ||= self.controller_name.singularize
+    @resource_name ||= controller_name.singularize
   end
 
   # Returns the resource from the created instance variable
@@ -113,7 +113,7 @@ class ApplicationController < ActionController::API
 
   # Returns an array of all model attributes except created_at and updated_at
   def model_attributes
-    resource_class.attribute_names.map{|s| s.to_sym} - [:created_at, :updated_at]
+    resource_class.attribute_names.map(&:to_sym) - [:created_at, :updated_at]
   end
 
   # To be overriden by subclasses
@@ -133,7 +133,7 @@ class ApplicationController < ActionController::API
   # parameters for the individual model.
   # Inorder to handle create/update methods.
   def resource_params
-    @resource_params ||= self.send("#{resource_name}_params")
+    @resource_params ||= send("#{resource_name}_params")
   end
 
   # Set Header and response
@@ -182,6 +182,12 @@ class ApplicationController < ActionController::API
       @current_user.teacher?
   end
 
+  # Optional super user only authorization
+  def authorize_super_user
+    raise ForbiddenError, error_messages[:forbidden_super_user_only] unless
+      @current_user.super_user?
+  end
+
   # Optional student only
   def authorize_student
     raise ForbiddenError, error_messages[:forbidden_student_only] unless
@@ -200,7 +206,7 @@ class ApplicationController < ActionController::API
         raise ForbiddenError, error_messages[:unverified_login] unless @current_user.verified?
       else
         raise AuthenticationError
-    end
+      end
     rescue ActiveRecord::RecordNotFound
       raise AuthenticationError
     end
@@ -218,7 +224,7 @@ class ApplicationController < ActionController::API
     message = "#{e.class} \n #{e.message}\n"
     message << e.annotated_source_code.to_s if e.respond_to?(:annotated_source_code)
     message << "\n" << ActionDispatch::ExceptionWrapper.new(env, e)
-      .application_trace.join('\n')
+                        .application_trace.join('\n')
     logger.error "#{message}\n\n"
     render json: {message: error_messages[:internal_server_error]},
       status: :internal_server_error
