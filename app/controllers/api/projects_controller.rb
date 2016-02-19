@@ -1,6 +1,7 @@
 class Api::ProjectsController < ApplicationController
   prepend_before_action :set_parent, only: [:create, :index]
-  prepend_before_action :authorize_teacher, only: [:destroy, :update, :create]
+  prepend_before_action :authorize_teacher, :authorize_super_user,
+    only: [:destroy, :update, :create]
   prepend_before_action :authenticate
   before_action :hide_unpublished, only: [:index]
   before_action :hide_unpublished_single, only: [:show]
@@ -10,7 +11,7 @@ class Api::ProjectsController < ApplicationController
   # Prevent students from viewing unpublsihed projects
   # Or any projects belonging to an unpublished course
   def hide_unpublished_single
-    if not @current_user.can_view?(@project)
+    unless @current_user.can_view?(@project)
       raise ForbiddenError, error_messages[:forbidden_teacher_only]
     end
   end
@@ -20,14 +21,13 @@ class Api::ProjectsController < ApplicationController
     attributes.delete :id
     attributes.delete :course_id
     permitted = params.permit attributes
-    permitted.merge!({course: @course}) unless @course.nil?
+    permitted[:course] = @course unless @course.nil?
     permitted
   end
-  
+
   def project_params
     @permitted_params ||= params_helper
   end
-
 
   def query_params
     params.permit(:name, :published)
@@ -48,12 +48,10 @@ class Api::ProjectsController < ApplicationController
 
   def base_index_query
     base = Project.where(course: @course)
-    if not params[:due].nil?
-      base = if params[:due] then base.due else base.not_due end
+    unless params[:due].nil?
+      base = params[:due] ? base.due : base.not_due
     end
-    if params[:started]
-      base = base.started
-    end
-    return base
+    base = base.started if params[:started]
+    base
   end
 end

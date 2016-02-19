@@ -1,13 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe Api::ProjectsController, type: :controller do
-  let(:student) {FactoryGirl.create(:student)}
-  let(:unpublished_course) {FactoryGirl.create(:course)}
-  let(:published_course) {FactoryGirl.create(:course, published: true)}
-  let(:teacher) {FactoryGirl.create(:teacher)}
-  describe "index" do
-    let(:projects) {FactoryGirl.create_list(:project, 3, course: published_course)}
-    let(:published_projects) {FactoryGirl.create_list(:project, 2, course: published_course, published: true)}
+  let(:student) { FactoryGirl.create(:student) }
+  let(:unpublished_course) { FactoryGirl.create(:course) }
+  let(:published_course) { FactoryGirl.create(:course, published: true) }
+  let(:teacher) { FactoryGirl.create(:teacher) }
+  let(:admin) { FactoryGirl.create(:super_user) }
+
+  context '.index' do
+    let(:projects) { FactoryGirl.create_list(:project, 3, course: published_course) }
+    let(:published_projects) { FactoryGirl.create_list(:project, 2, course: published_course, published: true) }
     it 'disallow unauthorized' do
       get :index, format: :json, course_id: published_course.id
       expect(response).to be_unauthorized
@@ -22,12 +24,17 @@ RSpec.describe Api::ProjectsController, type: :controller do
       get :index, format: :json, course_id: published_course.id
       expect(response).to be_success
     end
+    it 'allow an admin to index' do
+      set_token admin.token
+      get :index, format: :json, course_id: published_course.id
+      expect(response).to be_success
+    end
     it 'have pagination' do
       set_token teacher.token
       get :index, format: :json, course_id: published_course.id
       expect(json_response).to include(
         :projects, :page, :page_size, :total_pages
-        )
+      )
     end
     it 'not return unpublished projects to students' do
       projects
@@ -42,17 +49,24 @@ RSpec.describe Api::ProjectsController, type: :controller do
       expect(json_response).to_not include(:projects)
       expect(response).to be_forbidden
     end
-    it 'allow a teacher to index projects of a published course' do
+    it 'allow a teacher to index projects of an unpublished course' do
       projects = FactoryGirl.create(:project, course: unpublished_course)
       set_token teacher.token
       get :index, format: :json, course_id: unpublished_course.id
       expect(json_response).to include(:projects)
       expect(response).to be_success
     end
+    it 'allow an admin to index projects of a published course' do
+      projects = FactoryGirl.create(:project, course: unpublished_course)
+      set_token admin.token
+      get :index, format: :json, course_id: unpublished_course.id
+      expect(json_response).to include(:projects)
+      expect(response).to be_success
+    end
     context 'query' do
       context 'due' do
-        let(:due_project) {FactoryGirl.create(:project, course: published_course, due_date: 5.days.ago, published: true)}
-        let(:not_due_project) {FactoryGirl.create(:project, course: published_course, published: true, due_date: 5.days.from_now)}
+        let(:due_project) { FactoryGirl.create(:project, course: published_course, due_date: 5.days.ago, published: true) }
+        let(:not_due_project) { FactoryGirl.create(:project, course: published_course, published: true, due_date: 5.days.from_now) }
         it 'due only' do
           set_token student.token
           not_due_project # Force creation
@@ -87,6 +101,12 @@ RSpec.describe Api::ProjectsController, type: :controller do
         get :index, format: :json, course_id: published_course.id
         expect(json_response[:page_size]).to eql projects.size
       end
+      it 'not set default published param for admins' do
+        projects
+        set_token admin.token
+        get :index, format: :json, course_id: published_course.id
+        expect(json_response[:page_size]).to eql projects.size
+      end
       it 'by name' do
         project = FactoryGirl.create(:project, course: published_course, name: 'stupid name')
         set_token teacher.token
@@ -104,11 +124,11 @@ RSpec.describe Api::ProjectsController, type: :controller do
       end
     end
   end
-  describe 'show' do
-    let(:published_project_published_course) {FactoryGirl.create(:project, course: published_course, published: true)}
-    let(:unpublished_project_published_course) {FactoryGirl.create(:project, course: published_course, published: false)}
-    let(:published_project_unpublished_course) {FactoryGirl.create(:project, course: unpublished_course, published: true)}
-    let(:unpublished_project_unpublished_course) {FactoryGirl.create(:project, course: unpublished_course, published: false)}
+  context '.show' do
+    let(:published_project_published_course) { FactoryGirl.create(:project, course: published_course, published: true) }
+    let(:unpublished_project_published_course) { FactoryGirl.create(:project, course: published_course, published: false) }
+    let(:published_project_unpublished_course) { FactoryGirl.create(:project, course: unpublished_course, published: true) }
+    let(:unpublished_project_unpublished_course) { FactoryGirl.create(:project, course: unpublished_course, published: false) }
     it 'disallow unauthorized' do
       get :show, format: :json, id: published_project_published_course.id
       expect(response).to be_unauthorized
@@ -164,33 +184,41 @@ RSpec.describe Api::ProjectsController, type: :controller do
       expect(json_response[:id]).to eql unpublished_project_published_course.id
     end
   end
-  describe "create" do
-    let(:params) {FactoryGirl.attributes_for(:project)}
+  context '.create' do
+    let(:params) { FactoryGirl.attributes_for(:project) }
     it 'disallow unauthorized' do
-      expect {
+      expect do
         post :create, format: :json, course_id: published_course.id, **params
-      }.to change(Project, :count).by 0
+      end.to change(Project, :count).by 0
       expect(response).to be_unauthorized
     end
     it 'disallow student' do
-      expect {
+      expect do
         set_token student.token
         post :create, format: :json, course_id: published_course.id, **params
-      }.to change(Project, :count).by 0
+      end.to change(Project, :count).by 0
       expect(response).to be_forbidden
     end
-    it 'allow teacher' do
-      expect {
+    it 'disallow teacher' do
+      expect do
         set_token teacher.token
         post :create, format: :json, course_id: published_course.id, **params
-      }.to change(Project, :count).by 1
+      end.to change(Project, :count).by 0
+      expect(response).to be_forbidden
+    end
+
+    it 'allows an admin' do
+      expect do
+        set_token admin.token
+        post :create, format: :json, course_id: published_course.id, **params
+      end.to change(Project, :count).by 1
       expect(response).to be_created
       expect(json_response[:course_id]).to eql published_course.id
     end
   end
-  describe "update" do
-    let(:project) {FactoryGirl.create(:project, published: true, course: published_course)}
-    
+  context '.update' do
+    let(:project) { FactoryGirl.create(:project, published: true, course: published_course) }
+
     it 'disallow unauthorized' do
       project.reload
       original = project.as_json
@@ -199,7 +227,7 @@ RSpec.describe Api::ProjectsController, type: :controller do
       project.reload
       expect(original).to eql project.as_json
     end
-    
+
     it 'disallow student' do
       project.reload
       set_token student.token
@@ -210,9 +238,19 @@ RSpec.describe Api::ProjectsController, type: :controller do
       expect(original).to eql project.as_json
     end
 
-    it 'allow teacher' do
+    it 'disallow teacher' do
       project.reload
       set_token teacher.token
+      original = project.as_json
+      put :update, format: :json, id: project.id, quiz: true
+      expect(response).to be_forbidden
+      project.reload
+      expect(original).to eql project.as_json
+    end
+
+    it 'allows admin' do
+      project.reload
+      set_token admin.token
       original = project.as_json
       put :update, format: :json, id: project.id, quiz: true
       expect(response).to be_success
@@ -220,27 +258,43 @@ RSpec.describe Api::ProjectsController, type: :controller do
       expect(original).to_not eql project.as_json
     end
   end
-  describe "destroy" do
-    let(:project) {FactoryGirl.create(:project, published: true, course: published_course)}
+  context '.destroy' do
+    let(:project) { FactoryGirl.create(:project, published: true, course: published_course) }
     it 'disallow unauthorized' do
-      delete :destroy, format: :json, id: project.id
+      project
+      expect do
+        delete :destroy, format: :json, id: project.id
+      end.to change(Project, :count).by 0
       expect(response).to be_unauthorized
       expect(Project.exists?(project.id)).to be true
     end
 
     it 'disallow student' do
       set_token student.token
-      delete :destroy, format: :json, id: project.id
+      project
+      expect do
+        delete :destroy, format: :json, id: project.id
+      end.to change(Project, :count).by 0
       expect(response).to be_forbidden
       expect(Project.exists?(project.id)).to be true
     end
 
-    it 'allow teacher' do
+    it 'disallow teacher' do
       project
-      expect {
+      expect do
         set_token teacher.token
         delete :destroy, format: :json, id: project.id
-      }.to change(Project, :count).by -1
+      end.to change(Project, :count).by(0)
+      expect(response).to be_forbidden
+      expect(Project.exists?(project.id)).to be true
+    end
+
+    it 'allows admin' do
+      project
+      expect do
+        set_token admin.token
+        delete :destroy, format: :json, id: project.id
+      end.to change(Project, :count).by(-1)
       expect(response).to be_success
       expect(Project.exists?(project.id)).to be false
     end
