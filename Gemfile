@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 ruby '2.2.4'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.5'
+gem 'rails', '~> 4.2'
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.15'
 # Use SCSS for stylesheets
@@ -30,15 +30,20 @@ gem 'kaminari'
 gem 'jwt'
 gem 'faye-rails'
 gem 'rails-api'
-gem 'nokogiri'
+gem 'nokogiri', '>= 1.6.7.2'
 gem 'sidekiq'
 gem 'faye-redis'
 gem 'rubocop', require: false
+gem 'activerecord', '~> 4.2', '>= 4.2.5.1'
+gem 'actionpack', '~> 4.2', '>= 4.2.5.1'
+gem 'activemodel', '~> 4.2', '>= 4.2.5.1'
+gem 'actionview', '~> 4.2', '>= 4.2.5.1'
 
 group :test do
   gem 'shoulda-matchers'
   gem 'simplecov', require: false
   gem 'rspec-prof', git: 'https://github.com/sinisterchipmunk/rspec-prof.git'
+  gem "codeclimate-test-reporter", require: false
 end
 
 group :development, :test do
