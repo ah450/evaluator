@@ -1,11 +1,11 @@
 class Api::UsersController < ApplicationController
   prepend_before_action :authenticate, only: [:index, :show, :update, :destroy]
-  after_filter :no_cache, except: [:index, :show]
-  after_filter :reload_resource, only: [:create]
-  after_filter :send_verification, only: [:create]
+  before_action :authorize_super_user, only: [:destroy]
+  after_action :no_cache, except: [:index, :show]
+  after_action :reload_resource, only: [:create]
+  after_action :send_verification, only: [:create]
   skip_before_action :set_resource, only: [:reset_password, :resend_verify]
   before_action :get_by_email, only: [:reset_password, :resend_verify]
-
 
   # Requests a password reset
   def reset_password
@@ -13,7 +13,7 @@ class Api::UsersController < ApplicationController
       UserMailer.pass_reset_email(@user).deliver_later
       head :no_content
     else
-      render json: {message: error_messages[:too_soon]}, status: 420
+      render json: { message: error_messages[:too_soon] }, status: 420
     end
   end
 
@@ -26,10 +26,9 @@ class Api::UsersController < ApplicationController
       head :no_content
     else
       render json: { message: error_messages[:incorrect_reset_token] },
-       status: :unprocessable_entity
+             status: :unprocessable_entity
     end
   end
-
 
   def resend_verify
     if !@user.verified?
@@ -37,11 +36,11 @@ class Api::UsersController < ApplicationController
         send_verification
         head :no_content
       else
-        render json: {message: error_messages[:too_soon]}, status: 420
+        render json: { message: error_messages[:too_soon] }, status: 420
       end
     else
-      render json: {message: error_messages[:already_verified]},
-        status: :bad_request
+      render json: { message: error_messages[:already_verified] },
+             status: :bad_request
     end
   end
 
@@ -52,13 +51,13 @@ class Api::UsersController < ApplicationController
     if @user.verify token
       render json: {
         data: {
-          token: @user.token(),
+          token: @user.token,
           user: @user
         }
       }
     else
       render json: { message: error_messages[:incorrect_verification_token] },
-        status: :unprocessable_entity
+             status: :unprocessable_entity
     end
   end
 
@@ -70,7 +69,17 @@ class Api::UsersController < ApplicationController
     attributes.delete :verified
     attributes.delete :id
     attributes.delete :student
-    params.permit attributes << :password
+    attributes.delete :super_user
+    attributes.delete :team unless @current_user.present? &&
+      @current_user.super_user?
+    if @user.present? && !@current_user.super_user?
+      # This is an update
+      attributes.delete :guc_prefix
+      attributes.delete :guc_suffix
+    end
+    data = params.permit attributes << :password
+    data[:team] = '-1' if @user.nil?
+    data
   end
 
   def reload_resource
@@ -82,11 +91,10 @@ class Api::UsersController < ApplicationController
   end
 
   def user_authorized
-    @current_user.id == @user.id
+    @current_user.id == @user.id || @current_user.super_user?
   end
 
   def get_by_email
     @user = User.find_by_email! Base64.decode64(params[:email]).downcase
   end
-
 end
