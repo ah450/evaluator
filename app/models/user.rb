@@ -23,6 +23,7 @@
 #  index_users_on_guc_suffix  (guc_suffix)
 #  index_users_on_name        (name)
 #  index_users_on_student     (student)
+#  index_users_on_super_user  (super_user)
 #  index_users_on_team        (team)
 #
 
@@ -146,12 +147,12 @@ class User < ActiveRecord::Base
       VerificationToken.where(user_id: id).where('created_at <= ?', expirationTime).delete_all
       VerificationToken.where(user_id: id).order(created_at: :desc).offset(1).destroy_all
       token = VerificationToken.where(user_id: id).order(created_at: :desc).first
-      tokenStr = SecureRandom.urlsafe_base64 User.verification_token_str_max_length
+      token_str = SecureRandom.urlsafe_base64 User.verification_token_str_max_length
       if !token.nil? && token.created_at <= expirationTime
         token.destroy
         token = nil
       end
-      token ||= VerificationToken.create user: self, token: tokenStr
+      token || VerificationToken.create(user: self, token: token_str)
     end
     verification_token.token
   end
@@ -204,12 +205,12 @@ class User < ActiveRecord::Base
       ResetToken.where(user_id: id).where('created_at <= ?', expirationTime).delete_all
       ResetToken.where(user_id: id).order(created_at: :desc).offset(1).destroy_all
       token = ResetToken.where(user_id: id).order(created_at: :desc).first
-      tokenStr = SecureRandom.urlsafe_base64 User.pass_reset_token_str_max_length
+      token_str = SecureRandom.urlsafe_base64 User.pass_reset_token_str_max_length
       if !token.nil? && token.created_at <= expirationTime
         token.destroy
         token = nil
       end
-      token ||= ResetToken.create user: self, token: tokenStr
+      token || ResetToken.create(user: self, token: token_str)
     end
     reset_token.token
   end
