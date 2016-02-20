@@ -9,7 +9,7 @@ RSpec.describe SuitesProcessJob, type: :job do
       @suite.save!
       code = SuiteCode.new
       code.code = IO.binread(File.join(Rails.root, 'spec', 'fixtures',
-        '/files/test_suites/csv_test_suite.zip'))
+                                       '/files/test_suites/csv_test_suite.zip'))
       code.file_name = 'csv_test_suite.zip'
       code.mime_type = Rack::Mime.mime_type '.zip'
       code.test_suite = @suite
@@ -49,7 +49,7 @@ RSpec.describe SuitesProcessJob, type: :job do
       @suite.save
       code = SuiteCode.new
       code.code = IO.binread(File.join(Rails.root, 'spec', 'fixtures',
-        '/files/test_suites/PublicTests.zip'))
+                                       '/files/test_suites/PublicTests.zip'))
       code.file_name = 'PublicTests.zip'
       code.mime_type = Rack::Mime.mime_type '.zip'
       code.test_suite = @suite
