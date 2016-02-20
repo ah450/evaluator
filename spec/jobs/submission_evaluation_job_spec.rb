@@ -5,7 +5,7 @@ RSpec.describe SubmissionEvaluationJob, type: :job do
     before :each do
       # setup project
       @project = FactoryGirl.create(:project, published: true,
-        course: FactoryGirl.create(:course, published: true))
+                                              course: FactoryGirl.create(:course, published: true))
       # Setup test suite
       @suite = TestSuite.new
       @suite.project = @project
@@ -13,7 +13,7 @@ RSpec.describe SubmissionEvaluationJob, type: :job do
       @suite.save!
       code = SuiteCode.new
       code.code = IO.binread(File.join(Rails.root, 'spec', 'fixtures',
-        '/files/test_suites/csv_test_suite.zip'))
+                                       '/files/test_suites/csv_test_suite.zip'))
       code.file_name = 'csv_test_suite.zip'
       code.mime_type = Rack::Mime.mime_type '.zip'
       code.test_suite = @suite
@@ -22,18 +22,18 @@ RSpec.describe SubmissionEvaluationJob, type: :job do
       SuitesProcessJob.perform_now @suite
     end
 
-    context 'csv_submission_correct' do
+    context 'csv correct spaces' do
       before :each do
         @submission = Submission.new
         @submission.submitter = FactoryGirl.create(:student, verified: true)
         @submission.project = @project
         @submission.save!
         solution = Solution.new
-        solution.file_name = 'csv_submission_correct.zip'
+        solution.file_name = 'csv submission correct.zip'
         solution.mime_type = Rack::Mime.mime_type '.zip'
         solution.submission = @submission
         solution.code = IO.binread(File.join(Rails.root, 'spec', 'fixtures',
-          'files', 'submissions', 'csv_submission_correct.zip'))
+                                             'files', 'submissions', 'csv_submission_correct.zip'))
         solution.save!
       end
 
@@ -42,12 +42,10 @@ RSpec.describe SubmissionEvaluationJob, type: :job do
         SubmissionEvaluationJob.perform_now @submission
       end
 
-
-
       it 'creates a result and TeamGrade' do
-        expect {
+        expect do
           SubmissionEvaluationJob.perform_now @submission
-          }.to change(Result, :count).by(1).and change(TeamGrade, :count).by(1)
+        end.to change(Result, :count).by(1).and change(TeamGrade, :count).by(1)
       end
 
       it 'sets correct grade' do
@@ -62,6 +60,57 @@ RSpec.describe SubmissionEvaluationJob, type: :job do
         expect(result.team_grade.nil?).to be false
       end
 
+      it 'sets correct result attributes and cases' do
+        SubmissionEvaluationJob.perform_now @submission
+        result = @submission.results.first
+        expect(result.compiled).to be true
+        expect(result.success).to be true
+        result_case = result.test_cases.first
+        expect(result_case.grade).to eql 40
+        expect(result_case.java_klass_name).to eql 'TestFileReadTest'
+        expect(result_case.name).to eql 'countLines'
+        expect(result_case.max_grade).to eql 40
+        expect(result_case.passed).to be true
+      end
+    end
+
+    context 'csv_submission_correct' do
+      before :each do
+        @submission = Submission.new
+        @submission.submitter = FactoryGirl.create(:student, verified: true)
+        @submission.project = @project
+        @submission.save!
+        solution = Solution.new
+        solution.file_name = 'csv_submission_correct.zip'
+        solution.mime_type = Rack::Mime.mime_type '.zip'
+        solution.submission = @submission
+        solution.code = IO.binread(File.join(Rails.root, 'spec', 'fixtures',
+                                             'files', 'submissions', 'csv_submission_correct.zip'))
+        solution.save!
+      end
+
+      it 'sends new result notification' do
+        expect(@submission).to receive(:send_new_result_notification).once
+        SubmissionEvaluationJob.perform_now @submission
+      end
+
+      it 'creates a result and TeamGrade' do
+        expect do
+          SubmissionEvaluationJob.perform_now @submission
+        end.to change(Result, :count).by(1).and change(TeamGrade, :count).by(1)
+      end
+
+      it 'sets correct grade' do
+        SubmissionEvaluationJob.perform_now @submission
+        result = @submission.results.first
+        expect(result.grade).to eql @suite.max_grade
+      end
+
+      it 'sets correct team grade' do
+        SubmissionEvaluationJob.perform_now @submission
+        result = @submission.results.first
+        expect(result.team_grade.nil?).to be false
+      end
 
       it 'sets correct result attributes and cases' do
         SubmissionEvaluationJob.perform_now @submission
@@ -88,7 +137,7 @@ RSpec.describe SubmissionEvaluationJob, type: :job do
         solution.mime_type = Rack::Mime.mime_type '.zip'
         solution.submission = @submission
         solution.code = IO.binread(File.join(Rails.root, 'spec', 'fixtures',
-          'files', 'submissions', 'csv_submission_error.zip'))
+                                             'files', 'submissions', 'csv_submission_error.zip'))
         solution.save!
       end
       it 'sends new result notification' do
@@ -96,9 +145,9 @@ RSpec.describe SubmissionEvaluationJob, type: :job do
         SubmissionEvaluationJob.perform_now @submission
       end
       it 'creates a result and TeamGrade' do
-        expect {
+        expect do
           SubmissionEvaluationJob.perform_now @submission
-          }.to change(Result, :count).by(1).and change(TeamGrade, :count).by(1)
+        end.to change(Result, :count).by(1).and change(TeamGrade, :count).by(1)
       end
       it 'sets correct grade' do
         SubmissionEvaluationJob.perform_now @submission
@@ -142,7 +191,7 @@ RSpec.describe SubmissionEvaluationJob, type: :job do
         solution.mime_type = Rack::Mime.mime_type '.zip'
         solution.submission = @submission
         solution.code = IO.binread(File.join(Rails.root, 'spec', 'fixtures',
-          'files', 'submissions', 'csv_submission.zip'))
+                                             'files', 'submissions', 'csv_submission.zip'))
         solution.save!
       end
       it 'sends new result notification' do
@@ -150,12 +199,10 @@ RSpec.describe SubmissionEvaluationJob, type: :job do
         SubmissionEvaluationJob.perform_now @submission
       end
 
-
-
       it 'creates a result and TeamGrade' do
-        expect {
+        expect do
           SubmissionEvaluationJob.perform_now @submission
-          }.to change(Result, :count).by(1).and change(TeamGrade, :count).by(1)
+        end.to change(Result, :count).by(1).and change(TeamGrade, :count).by(1)
       end
 
       it 'sets correct grade' do
@@ -169,7 +216,6 @@ RSpec.describe SubmissionEvaluationJob, type: :job do
         result = @submission.results.first
         expect(result.team_grade.nil?).to be false
       end
-
 
       it 'sets correct result attributes and cases' do
         SubmissionEvaluationJob.perform_now @submission
@@ -189,14 +235,14 @@ RSpec.describe SubmissionEvaluationJob, type: :job do
   context 'zork' do
     before :each do
       @project = FactoryGirl.create(:project, published: true,
-        course: FactoryGirl.create(:course, published: true))
+                                              course: FactoryGirl.create(:course, published: true))
       @publicSuite = TestSuite.new
       @publicSuite.project = @project
       @publicSuite.name = 'zorkPublic'
       @publicSuite.save!
       code = SuiteCode.new
       code.code = IO.binread(File.join(Rails.root, 'spec', 'fixtures',
-        '/files/test_suites/zorkPublic.zip'))
+                                       '/files/test_suites/zorkPublic.zip'))
       code.file_name = 'zorkPublic.zip'
       code.mime_type = Rack::Mime.mime_type '.zip'
       code.test_suite = @publicSuite
@@ -207,7 +253,7 @@ RSpec.describe SubmissionEvaluationJob, type: :job do
       @privateSuite.save!
       privateCode = SuiteCode.new
       privateCode.code = IO.binread(File.join(Rails.root, 'spec', 'fixtures',
-        '/files/test_suites/zorkPrivate.zip'))
+                                              '/files/test_suites/zorkPrivate.zip'))
       privateCode.file_name = 'zorkPrivate.zip'
       privateCode.mime_type = Rack::Mime.mime_type '.zip'
       privateCode.test_suite = @privateSuite
@@ -226,7 +272,7 @@ RSpec.describe SubmissionEvaluationJob, type: :job do
         solution.mime_type = Rack::Mime.mime_type '.zip'
         solution.submission = @submission
         solution.code = IO.binread(File.join(Rails.root, 'spec', 'fixtures',
-          'files', 'submissions', 'zork_submission_correct.zip'))
+                                             'files', 'submissions', 'zork_submission_correct.zip'))
         solution.save!
       end
 
@@ -236,15 +282,15 @@ RSpec.describe SubmissionEvaluationJob, type: :job do
       end
 
       it 'creates two results and a TeamGrade' do
-        expect {
+        expect do
           SubmissionEvaluationJob.perform_now @submission
-          }.to change(Result, :count).by(2).and change(TeamGrade, :count).by(2)
+        end.to change(Result, :count).by(2).and change(TeamGrade, :count).by(2)
       end
 
       it 'sets correct grade' do
         SubmissionEvaluationJob.perform_now @submission
         results = @submission.results.to_a
-        ok = results.all? {|r| r.grade == r.max_grade}
+        ok = results.all? { |r| r.grade == r.max_grade }
         expect(ok).to be true
       end
     end
