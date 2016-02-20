@@ -109,6 +109,22 @@ angular.module 'evaluator'
           templateUrl: 'private/teacher/portal.html'
           controller: 'PortalController'
 
+    bundleDownload =
+      name: 'private.teacher.bundle'
+      url: '/bundle/:id'
+      views:
+        'pageContent@private':
+          templateUrl: 'private/teacher/bundle_download.html'
+          controller: 'BundleDownloadController'
+
+    contactState =
+      name: 'private.contact'
+      url: '/contact'
+      views:
+        'pageContent':
+          templateUrl: 'public/contact.html'
+          controller: 'ContactController'
+
     $stateProvider
       .state privateState
       .state coursesState
@@ -121,3 +137,5 @@ angular.module 'evaluator'
       .state unpublishedState
       .state teacherState
       .state teacherPortal
+      .state bundleDownload
+      .state contactState

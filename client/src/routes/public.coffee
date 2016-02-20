@@ -91,6 +91,14 @@ angular.module 'evaluator'
         'pageContent':
           templateUrl: 'public/welcome.html'
 
+    contactState =
+      name: 'public.contact'
+      url: '/contact'
+      views:
+        'pageContent':
+          templateUrl: 'public/contact.html'
+          controller: 'ContactController'
+
     $stateProvider
       .state publicState
       .state loginState
@@ -102,6 +110,7 @@ angular.module 'evaluator'
       .state sendReset
       .state sendVerification
       .state welcomeState
+      .state contactState
       
 
 
