@@ -8,22 +8,28 @@ angular.module 'evaluator'
       courses:
         resourceUrl: [apiHost, 'courses', ':id.json'].join '/'
       courseProjects:
-        resourceUrl: [apiHost, 'courses', ':course_id', 'projects.json'].join '/'
+        resourceUrl: [apiHost, 'courses', ':course_id',
+          'projects.json'].join '/'
       project:
         resourceUrl: [apiHost, 'projects', ':id.json'].join '/'
       projectSuites:
-        resourceUrl: [apiHost, 'projects', ':project_id', 'test_suites.json'].join '/'
+        resourceUrl: [apiHost, 'projects', ':project_id',
+          'test_suites.json'].join '/'
       suite:
         resourceUrl: [apiHost, 'test_suites', ':id.json'].join '/'
         downloadUrl: [apiHost, 'test_suites', ':id', 'download'].join '/'
       projectSubmissions:
-        resourceUrl: [apiHost, 'projects', ':project_id', 'submissions.json'].join '/'
+        resourceUrl: [apiHost, 'projects', ':project_id',
+          'submissions.json'].join '/'
       submission:
         resourceUrl: [apiHost, 'submissions', ':id.json'].join '/'
         downloadUrl: [apiHost, 'submissions', ':id', 'download'].join '/'
       projectResults:
-        resourceUrl: [apiHost, 'projects', ':project_id', 'results.json'].join '/'
+        resourceUrl: [apiHost, 'projects', ':project_id',
+          'results.json'].join '/'
       result:
         resourceUrl: [apiHost, 'results', ':id.json'].join '/'
       teamsJob:
         url: [apiHost, 'teams.json'].join '/'
+      contacts:
+        resourceUrl: [apiHost, 'contacts.json'].join '/'
