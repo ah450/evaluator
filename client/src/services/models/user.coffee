@@ -21,6 +21,10 @@ angular.module 'evaluator'
         get: ->
           @resource.student
 
+      @property 'admin',
+        get: ->
+          @resource.super_user
+
       @property 'teacher',
         get: ->
           !@resource.student
