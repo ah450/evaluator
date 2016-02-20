@@ -51,6 +51,7 @@ class User < ActiveRecord::Base
   scope :verified, -> { where verified: true }
   scope :students, -> { where student: true }
   scope :teachers, -> { where student: false }
+  scope :admins, -> { where super_user: true }
   has_many :studentships, inverse_of: :student, foreign_key: :student_id
   has_many :courses, through: :studentships, dependent: :delete_all
   has_many :submissions, inverse_of: :submitter, foreign_key: :submitter_id, dependent: :destroy
