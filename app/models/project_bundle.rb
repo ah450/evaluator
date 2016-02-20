@@ -30,6 +30,10 @@ class ProjectBundle < ActiveRecord::Base
     super(except: [:data])
   end
 
+  def filename
+    "#{DateTime.now.utc}-#{project.name}-#{user.name}.tar.gz"
+  end
+
   private
 
   def user_teacher
