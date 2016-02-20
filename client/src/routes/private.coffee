@@ -119,11 +119,18 @@ angular.module 'evaluator'
 
     contactState =
       name: 'private.contact'
-      url: '/contact'
+      url: '/feedback'
       views:
         'pageContent':
           templateUrl: 'public/contact.html'
           controller: 'ContactController'
+
+    thanksFeedbackState =
+      name: 'private.thanks_feedback'
+      url: '/thankyou'
+      views:
+        'pageContent':
+          templateUrl: 'public/thanks_feedback.html'
 
     $stateProvider
       .state privateState
@@ -139,3 +146,4 @@ angular.module 'evaluator'
       .state teacherPortal
       .state bundleDownload
       .state contactState
+      .state thanksFeedbackState

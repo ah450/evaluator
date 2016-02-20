@@ -105,6 +105,6 @@ angular.module 'evaluator'
               .join ' '
             $scope.processingCourse = false
           else
-            $scope.roomCreateError = response.data.message.capitalize
+            $scope.courseCreateError = response.data.message.capitalize
             $scope.processingCourse = false
         course.$save success, failure

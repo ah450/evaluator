@@ -99,6 +99,13 @@ angular.module 'evaluator'
           templateUrl: 'public/contact.html'
           controller: 'ContactController'
 
+    thanksFeedbackState =
+      name: 'public.thanks_feedback'
+      url: '/thanks'
+      views:
+        'pageContent':
+          templateUrl: 'public/thanks_feedback.html'
+
     $stateProvider
       .state publicState
       .state loginState
@@ -111,6 +118,7 @@ angular.module 'evaluator'
       .state sendVerification
       .state welcomeState
       .state contactState
+      .state thanksFeedbackState
       
 
 
