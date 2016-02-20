@@ -20,7 +20,7 @@ angular.module 'evaluator'
             $scope.processing = false
             $scope.error = "Invalid email or password"
           else if response.status is 403
-              $scope.processing = false
-              $scope.error = response.data.message
+            $scope.processing = false
+            $scope.error = response.data.message
           else
             $state.go 'public.internal_error'

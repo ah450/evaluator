@@ -15,11 +15,12 @@ angular.module 'evaluator'
         match = GUC_ID_REGEX.exec $scope.user.guc_id
         $scope.user.guc_prefix = match[1]
         $scope.user.guc_suffix = match[2]
-      passwordChanged = $scope.userData.password? && $scope.userData.password.length > 2
+      passwordChanged = $scope.userData.password? &&
+        $scope.userData.password.length > 2
       if passwordChanged
         console.log $scope.userData
         $scope.user.password = $scope.userData.password
-      $scope.user.$update().then =>
+      $scope.user.$update().then ->
         postUpdate = ->
           $scope.user = UserAuth.user if passwordChanged
           $scope.processing = false
@@ -36,7 +37,8 @@ angular.module 'evaluator'
       .catch (response) ->
         if response.status is 422
           $scope.processing = false
-          $scope.error = ("#{key.capitalize()} #{value}." for key, value of response.data)
+          $scope.error =
+            ("#{key.capitalize()} #{value}." for key, value of response.data)
             .join ' '
         else
           $stage.go 'public.internal_error'

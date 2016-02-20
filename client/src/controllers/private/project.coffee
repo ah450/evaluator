@@ -3,109 +3,112 @@ angular.module 'evaluator'
     UserAuth, ProjectSuitesResource, defaultPageSize, Pagination, ngDialog,
     Upload, endpoints, Project, Suite, $state) ->
 
-    $scope.isTeacher = UserAuth.user.teacher
-    $scope.canAddSuite = $scope.isTeacher
+      $scope.isTeacher = UserAuth.user.teacher
+      $scope.canAddSuite = $scope.isTeacher
 
-    projectPromise = ProjectResource.get(
+      projectPromise = ProjectResource.get(
         id: $stateParams.id
-      ).$promise
+        ).$promise
 
-    $scope.loading = true
-    unpublishedCallback = (project) ->
-      if not $scope.isTeacher
-        $state.go 'private.unpublished'
-    
-    projectPromise.then (project) ->
-      $scope.project = new Project project, unpublishedCallback
-      $scope.canAddSuite &= !$scope.project.published
-      $scope.loading = false
-
-    $scope.publish = ->
       $scope.loading = true
-      $scope.project.published = true
-      $scope.project.$update().then ->
-        $scope.loading = false
-
-    $scope.unpublish = ->
-      $scope.loading = true
-      $scope.project.published = false
-      $scope.project.$update().then ->
-        $scope.loading = false
-
-    ids = []
-    $scope.suites = []
-    $scope.suiteClasses = ['suite-accent-one', 'suite-accent-two',
-    'suite-accent-three']
-
-    deletedSuiteCallback = (id) ->
-      _.remove $scope.suites, (suite) ->
-        suite.id is id
-
-    suiteFactory = (data) ->
-      new Suite data, deletedSuiteCallback
-
-
-    suitesPagination = new Pagination ProjectSuitesResource, 'test_suites',
-    {project_id: $stateParams.id}, suiteFactory, defaultPageSize
-
-    
-
-    addSuitesCallback = (newSuites, begin) ->
-      suites = _.filter newSuites, (suite) ->
-        suite.id not in ids
-      Array::push.apply ids, _.map suites, 'id'
-      args = [begin, 0].concat suites
-      $scope.suites.splice.apply $scope.suites, args
-
-    $scope.loadingSuites = true
-
-    # Load first page
-    suitesPagination.page(1).then (data) ->
-      $scope.loadingSuites = false
-      addSuitesCallback data, $scope.suites.length
-
-    # Callback for infinite scroll
-    $scope.loadMore = ->
-      $scope.scrollDisabled = true
-      $scope.loadingSuites = true
-      page = if suitesPagination.pageSize < defaultPageSize then \
-        suitesPagination.currentPage else suitesPagination.currentPage + 1
-      suitesPagination.page(page)
-        .then (suites) ->
-          $scope.loadingSuites = false
-          addSuitesCallback suites, $scope.suites.length
-          $scope.scrollDisabled = false
-
-
-    $scope.newSuiteData = {}
-
-    $scope.showAddDialog = ->
-      return if $scope.newSuiteDialog && ngDialog.isOpen($scope.newSuiteDialog.id)
-      $scope.newSuiteData = {}
-      $scope.suiteCreateError = ''
-      $scope.newSuiteDialog = ngDialog.open
-        template: 'private/create/suite.html'
-        scope: $scope
-
-    $scope.submit = ->
-      return if $scope.processingSuite
-      $scope.processingSuite = true
+      unpublishedCallback = (project) ->
+        if not $scope.isTeacher
+          $state.go 'private.unpublished'
       
-      success = (response) ->
-        $scope.newSuiteDialog.close()
-        $scope.processingSuite = false
-        suite = new Suite response.data
-        addSuitesCallback [suite], 0
-      failure = (response) ->
-        if response.status is 422
-          $scope.suiteCreateError = ("#{key.capitalize()} #{value}." for key, value of response.data)
-            .join ' '
+      projectPromise.then (project) ->
+        $scope.project = new Project project, unpublishedCallback
+        $scope.canAddSuite &= !$scope.project.published
+        $scope.loading = false
+
+      $scope.publish = ->
+        $scope.loading = true
+        $scope.project.published = true
+        $scope.project.$update().then ->
+          $scope.loading = false
+
+      $scope.unpublish = ->
+        $scope.loading = true
+        $scope.project.published = false
+        $scope.project.$update().then ->
+          $scope.loading = false
+
+      ids = []
+      $scope.suites = []
+      $scope.suiteClasses = ['suite-accent-one', 'suite-accent-two',
+      'suite-accent-three']
+
+      deletedSuiteCallback = (id) ->
+        _.remove $scope.suites, (suite) ->
+          suite.id is id
+
+      suiteFactory = (data) ->
+        new Suite data, deletedSuiteCallback
+
+
+      suitesPagination = new Pagination ProjectSuitesResource, 'test_suites',
+      {project_id: $stateParams.id}, suiteFactory, defaultPageSize
+
+      
+
+      addSuitesCallback = (newSuites, begin) ->
+        suites = _.filter newSuites, (suite) ->
+          suite.id not in ids
+        Array::push.apply ids, _.map suites, 'id'
+        args = [begin, 0].concat suites
+        $scope.suites.splice.apply $scope.suites, args
+
+      $scope.loadingSuites = true
+
+      # Load first page
+      suitesPagination.page(1).then (data) ->
+        $scope.loadingSuites = false
+        addSuitesCallback data, $scope.suites.length
+
+      # Callback for infinite scroll
+      $scope.loadMore = ->
+        $scope.scrollDisabled = true
+        $scope.loadingSuites = true
+        page = if suitesPagination.pageSize < defaultPageSize then \
+          suitesPagination.currentPage else suitesPagination.currentPage + 1
+        suitesPagination.page(page)
+          .then (suites) ->
+            $scope.loadingSuites = false
+            addSuitesCallback suites, $scope.suites.length
+            $scope.scrollDisabled = false
+
+
+      $scope.newSuiteData = {}
+
+      $scope.showAddDialog = ->
+        return if $scope.newSuiteDialog &&
+          ngDialog.isOpen($scope.newSuiteDialog.id)
+        $scope.newSuiteData = {}
+        $scope.suiteCreateError = ''
+        $scope.newSuiteDialog = ngDialog.open
+          template: 'private/create/suite.html'
+          scope: $scope
+
+      $scope.submit = ->
+        return if $scope.processingSuite
+        $scope.processingSuite = true
+        
+        success = (response) ->
+          $scope.newSuiteDialog.close()
           $scope.processingSuite = false
-        else
-          $scope.suiteCreateError = response.data.message.capitalize
-          $scope.processingSuite = false
-      Upload.upload(
-        url: endpoints.projectSuites.resourceUrl.replace(':project_id', $stateParams.id)
-        data: $scope.newSuiteData
-      ).then(success, failure)
+          suite = new Suite response.data
+          addSuitesCallback [suite], 0
+        failure = (response) ->
+          if response.status is 422
+            $scope.suiteCreateError =
+              ("#{key.capitalize()} #{value}." for key, value of response.data)
+              .join ' '
+            $scope.processingSuite = false
+          else
+            $scope.suiteCreateError = response.data.message.capitalize
+            $scope.processingSuite = false
+        Upload.upload(
+          url: endpoints.projectSuites.resourceUrl.replace(':project_id',
+          $stateParams.id)
+          data: $scope.newSuiteData
+        ).then(success, failure)
 

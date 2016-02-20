@@ -7,10 +7,10 @@ angular.module 'evaluator'
     class Pagination
       constructor: (@resource, @pluralName, @params={}, @factory=_.identity,
         @pageSize=10) ->
-        @data = []
-        @loaded = false
-        @currentPage = 1
-        @totalPages = 0
+          @data = []
+          @loaded = false
+          @currentPage = 1
+          @totalPages = 0
 
       # Element Access
       at: (index, page=@currentPage) ->
