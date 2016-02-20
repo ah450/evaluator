@@ -15,9 +15,9 @@ class TeamAssignmentJob < ActiveJob::Base
       guc_id = row.first.strip
       destination_team = row.second.strip
       user = User.find_by_guc_id(guc_id)
-      if not user.nil?
+      if !user.nil?
         user.team = destination_team
-        if not user.save
+        unless user.save
           status[:messages] << "Could not set team #{destination_team} for user with GUC ID #{guc_id}"
         end
       else

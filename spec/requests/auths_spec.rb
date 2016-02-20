@@ -1,11 +1,10 @@
 require 'rails_helper'
 # Authentication testing
 
-
-RSpec.describe "Auths", type: :request do
-  describe "GET /api/users" do
-    let(:user) {FactoryGirl.create(:teacher)}
-    it "requires a token" do
+RSpec.describe 'Auths', type: :request do
+  describe 'GET /api/users' do
+    let(:user) { FactoryGirl.create(:teacher) }
+    it 'requires a token' do
       get api_users_path
       expect(response).to have_http_status 401
     end

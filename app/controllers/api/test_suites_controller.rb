@@ -6,13 +6,13 @@ class Api::TestSuitesController < ApplicationController
   before_action :project_filter, only: [:index]
   before_action :destroyable, only: [:destroy]
   before_action :unpublished_only, only: [:create]
-  
+
   def create
     TestSuite.transaction do
       @test_suite = TestSuite.new resource_params
       file = params.require(:file)
       @test_suite.name = File.basename(file.original_filename,
-        File.extname(file.original_filename))
+                                       File.extname(file.original_filename))
       if @test_suite.save
         code_params = {
           code: file.read,
@@ -32,9 +32,7 @@ class Api::TestSuitesController < ApplicationController
         raise ActiveRecord::Rollback
       end
     end
-    if @test_suite.persisted?
-      SuitesProcessJob.perform_later @test_suite
-    end
+    SuitesProcessJob.perform_later @test_suite if @test_suite.persisted?
   end
 
   def download
@@ -55,19 +53,17 @@ class Api::TestSuitesController < ApplicationController
   private
 
   def destroyable
-    if not @test_suite.destroyable?
+    unless @test_suite.destroyable?
       raise ForbiddenError, error_messages[:forbidden]
     end
   end
 
   def unpublished_only
-    if @project.published?
-      raise ForbiddenError, error_messages[:forbidden]
-    end
+    raise ForbiddenError, error_messages[:forbidden] if @project.published?
   end
 
   def project_filter
-    if not @current_user.can_view? @project
+    unless @current_user.can_view? @project
       raise ForbiddenError, error_messages[:forbidden_teacher_only]
     end
   end
@@ -80,7 +76,7 @@ class Api::TestSuitesController < ApplicationController
     attributes.delete :name
     permitted = params.permit attributes
     permitted[:project] = @project unless @project.nil?
-    return permitted
+    permitted
   end
 
   def test_suite_params
@@ -88,7 +84,7 @@ class Api::TestSuitesController < ApplicationController
   end
 
   def base_index_query
-    query = TestSuite.viewable_by_user(@current_user).where(project: @project)
+    TestSuite.viewable_by_user(@current_user).where(project: @project)
   end
 
   def set_parent
@@ -96,7 +92,7 @@ class Api::TestSuitesController < ApplicationController
   end
 
   def can_view
-    if !@current_user.can_view? @test_suite
+    unless @current_user.can_view? @test_suite
       raise ForbiddenError, error_messages[:forbidden]
     end
   end

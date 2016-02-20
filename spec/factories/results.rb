@@ -1,14 +1,16 @@
 FactoryGirl.define do
   factory :result do
     compiled true
-    compiler_stderr "stderr"
-    compiler_stdout "stdout"
+    compiler_stderr 'stderr'
+    compiler_stdout 'stdout'
     success true
     grade 10
     max_grade 30
-    test_suite {FactoryGirl.create(:public_suite)}
-    project {FactoryGirl.create(:project,
-    published: true, course: FactoryGirl.create(:course, published: true))}
+    test_suite { FactoryGirl.create(:public_suite) }
+    project do
+      FactoryGirl.create(:project,
+                         published: true, course: FactoryGirl.create(:course, published: true))
+    end
     after(:build) do |result|
       if result.submission.nil?
         result.submission = FactoryGirl.create(:submission, project: result.project)
@@ -16,9 +18,8 @@ FactoryGirl.define do
     end
     after(:create) do |result|
       result.team_grade = FactoryGirl.create(:team_grade, result: result,
-        project: result.project,
-        name: result.submission.submitter.team)
+                                                          project: result.project,
+                                                          name: result.submission.submitter.team)
     end
   end
-
 end

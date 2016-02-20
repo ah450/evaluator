@@ -11,10 +11,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160219192706) do
+ActiveRecord::Schema.define(version: 20160220074014) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "contacts", force: :cascade do |t|
+    t.integer  "user_id"
+    t.text     "text",        null: false
+    t.string   "title",       null: false
+    t.datetime "reported_at", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "contacts", ["reported_at"], name: "index_contacts_on_reported_at", using: :btree
+  add_index "contacts", ["user_id"], name: "index_contacts_on_user_id", using: :btree
 
   create_table "courses", force: :cascade do |t|
     t.string   "name",                        null: false
@@ -224,6 +236,7 @@ ActiveRecord::Schema.define(version: 20160219192706) do
   add_index "verification_tokens", ["user_id", "token"], name: "index_verification_tokens_on_user_id_and_token", using: :btree
   add_index "verification_tokens", ["user_id"], name: "index_verification_tokens_on_user_id", unique: true, using: :btree
 
+  add_foreign_key "contacts", "users", on_delete: :nullify
   add_foreign_key "project_bundles", "projects", on_delete: :cascade
   add_foreign_key "project_bundles", "users", on_delete: :cascade
   add_foreign_key "projects", "courses", on_delete: :cascade

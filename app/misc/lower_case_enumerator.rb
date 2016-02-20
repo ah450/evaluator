@@ -2,7 +2,7 @@ require 'set'
 class LowerCaseEnumerator
   def initialize(banned_words)
     @symbol_table = Set.new
-    banned_words.each {|word| @symbol_table.add word}
+    banned_words.each { |word| @symbol_table.add word }
     @token = 'a'
   end
 
@@ -17,7 +17,7 @@ class LowerCaseEnumerator
       @token[-1] = (@token[-1].ord + 1).chr
     else
       # All chars are z or a one further back can be
-      if @token.chars.all? {|c| c == 'z'}
+      if @token.chars.all? { |c| c == 'z' }
         @token = 'a' * (@token.size + 1)
       else
         # Go back recursively
@@ -27,9 +27,7 @@ class LowerCaseEnumerator
     end
   end
 
-  def token
-    @token
-  end
+  attr_reader :token
 
   def table
     @symbol_table

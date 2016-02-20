@@ -3,5 +3,4 @@ FactoryGirl.define do
     association :student
     association :course
   end
-
 end

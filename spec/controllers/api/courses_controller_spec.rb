@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Api::CoursesController, type: :controller, focus: true do
+RSpec.describe Api::CoursesController, type: :controller do
 
   context '.index' do
     let(:student) { FactoryGirl.create(:student) }
