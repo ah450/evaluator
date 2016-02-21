@@ -31,6 +31,7 @@ angular.module 'evaluator'
           @data = (@factory item for item in page[@pluralName])
           @currentPage = page['page']
           @totalPages = page['total_pages']
+          @pageSize = page['page_size']
           @loaded = true
           if index
             resolve @data[index]
