@@ -1,6 +1,6 @@
 Evaluator
 =========
-[![Issue Count](https://codeclimate.com/github/ah450/evaluator/badges/issue_count.svg)](https://codeclimate.com/github/ah450/evaluator) [![Build Status](https://travis-ci.org/ah450/evaluator.svg?branch=master)](https://travis-ci.org/ah450/evaluator) [![Test Coverage](https://codeclimate.com/github/ah450/evaluator/badges/coverage.svg)](https://codeclimate.com/github/ah450/evaluator/coverage)
+[![Code Climate](https://codeclimate.com/github/ah450/evaluator/badges/gpa.svg)](https://codeclimate.com/github/ah450/evaluator) [![Build Status](https://travis-ci.org/ah450/evaluator.svg?branch=master)](https://travis-ci.org/ah450/evaluator) [![Test Coverage](https://codeclimate.com/github/ah450/evaluator/badges/coverage.svg)](https://codeclimate.com/github/ah450/evaluator/coverage)
 
 Node version `0.12.7`
 
