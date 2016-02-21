@@ -6,6 +6,7 @@ RSpec.describe Api::TestSuitesController, type: :controller do
   let(:unpublished_project) { FactoryGirl.create(:project, course: published_course, published: false) }
   let(:student) { FactoryGirl.create(:student) }
   let(:teacher) { FactoryGirl.create(:teacher) }
+  let(:admin) { FactoryGirl.create(:super_user) }
 
   before :each do
     @create_suite = lambda do |project, hidden = false|
@@ -36,16 +37,25 @@ RSpec.describe Api::TestSuitesController, type: :controller do
       expect(response).to be_forbidden
     end
 
-    it 'allows teacher' do
+    it 'does not allow teacher' do
       expect do
         set_token teacher.token
         post :create, project_id: unpublished_project.id, file: @file
-      end.to change(TestSuite, :count).by(1).and change(SuiteCode, :count).by(1)
-      expect(response).to be_success
+      end.to change(TestSuite, :count).by(0).and change(SuiteCode, :count).by(0)
+      expect(response).to be_forbidden
     end
+
+    it 'allows admin' do
+      expect do
+        set_token admin.token
+        post :create, project_id: unpublished_project.id, file: @file
+      end.to change(TestSuite, :count).by(1).and change(SuiteCode, :count).by(1)
+      expect(response).to be_created
+    end
+
     it 'can not add to published project' do
       expect do
-        set_token teacher.token
+        set_token admin.token
         post :create, project_id: published_project.id, file: @file
       end.to change(TestSuite, :count).by(0).and change(SuiteCode, :count).by(0)
       expect(response).to be_forbidden
@@ -53,7 +63,7 @@ RSpec.describe Api::TestSuitesController, type: :controller do
 
     it 'queues suite process job' do
       expect(SuitesProcessJob).to receive(:perform_later).once
-      set_token teacher.token
+      set_token admin.token
       post :create, project_id: unpublished_project.id, file: @file
     end
   end
@@ -243,9 +253,18 @@ RSpec.describe Api::TestSuitesController, type: :controller do
       expect(response).to be_forbidden
     end
 
-    it 'can destroy' do
+    it 'does not allow teacher' do
       expect do
         set_token teacher.token
+        delete :destroy, id: @unpublished.id
+      end.to change(TestSuite, :count).by(0)
+        .and change(SuiteCode, :count).by(0)
+      expect(response).to be_forbidden
+    end
+
+    it 'allows admin' do
+      expect do
+        set_token admin.token
         delete :destroy, id: @unpublished.id
       end.to change(TestSuite, :count).by(-1)
         .and change(SuiteCode, :count).by(-1)
@@ -254,13 +273,13 @@ RSpec.describe Api::TestSuitesController, type: :controller do
 
     it 'queues a job' do
       expect(DestroyTestSuiteJob).to receive(:perform_later).once
-      set_token teacher.token
+      set_token admin.token
       delete :destroy, id: @unpublished.id
     end
 
     it 'can not destroy belonging to published project' do
       expect do
-        set_token teacher.token
+        set_token admin.token
         delete :destroy, id: @published.id
       end.to change(TestSuite, :count).by(0)
         .and change(SuiteCode, :count).by(0)

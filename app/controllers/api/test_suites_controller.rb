@@ -1,7 +1,8 @@
 class Api::TestSuitesController < ApplicationController
   prepend_before_action :set_parent, only: [:create, :index]
   before_action :can_view, only: [:show, :download]
-  prepend_before_action :authorize_teacher, only: [:create, :destroy]
+  prepend_before_action :authorize_teacher, :authorize_super_user,
+    only: [:create, :destroy]
   prepend_before_action :authenticate, :authorize
   before_action :project_filter, only: [:index]
   before_action :destroyable, only: [:destroy]

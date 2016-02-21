@@ -5,7 +5,7 @@ angular.module 'evaluator'
 
       $scope.isTeacher = UserAuth.user.teacher
       $scope.isAdmin = UserAuth.user.admin
-      $scope.canAddSuite = $scope.isTeacher
+      $scope.canAddSuite = $scope.isTeacher && $scope.isAdmin
 
       projectPromise = ProjectResource.get(
         id: $stateParams.id
