@@ -112,9 +112,10 @@ RSpec.describe SubmissionEvaluationJob, type: :job do
         expect(result.team_grade.nil?).to be false
       end
 
-      it 'sets correct result attributes and cases' do
+      it 'sets correct result attributes and cases', focus: true do
         SubmissionEvaluationJob.perform_now @submission
         result = @submission.results.first
+        puts result.compiler_stdout
         expect(result.compiled).to be true
         expect(result.success).to be true
         result_case = result.test_cases.first
