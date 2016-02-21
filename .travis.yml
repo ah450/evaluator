@@ -6,9 +6,8 @@ before_script:
   - psql -U postgres -c 'create database travis_ci_test;' -U postgres
   - cp config/database.travis.yml config/database.yml
   - bundle exec rake db:migrate
-  - export CLASSPATH=/usr/share/java
+  - export CLASSPATH=/usr/share/java:`pwd`/extra
   - echo $CLASSPATH
-  - ls /usr/share/java
 
 services:
   - postgresql
