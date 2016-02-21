@@ -1,3 +1,8 @@
+<div class="spin-fullscreen-wrap" data-ng-if="globalLoading">
+    <div class="spinner-wrap">
+    </div>
+    <i class="material-icons spinner">refresh</i>
+  </div>
 <section class="actions">
   <md-button data-ng-if="isAdmin" data-ng-click="showSetTeamsDialog()" class="card action-card">
     <header>
@@ -5,6 +10,13 @@
     </header>
     <img src="images/csv_example.png">
     <p>With CSV file (first row must be headers)</p>
+  </md-button>
+  <md-button data-ng-click="downloadTeams()" class="card action-card">
+    <header>
+      <h2>Download Teams</h2>
+    </header>
+    <img src="images/csv_example.png">
+    <p>Download CSV file (this is expensive)</p>
   </md-button>
 
   <md-button data-ng-click="showCreateBundleDialog()" class="card action-card">
@@ -23,4 +35,5 @@
   <p>If you previously requested a submission dowload</p>
   <p>you can access them here until deleted (after 24 hours)</p>
   </md-button>
+
 </section>

@@ -1,10 +1,11 @@
 angular.module 'evaluator'
   .controller 'PortalController', ($scope, ngDialog, NotificationDispatcher,
     Upload, $state, endpoints, configurations, UserAuth, CoursesResource,
-    CourseProjectsResource, $http) ->
+    CourseProjectsResource, $http, FileSaver) ->
       $scope.teamData = {}
       $scope.bundleData = {}
       $scope.isAdmin = UserAuth.user.admin
+      $scope.globalLoading = false
 
       resetBundleData = ->
         $scope.bundleData.processing = false
@@ -108,5 +109,16 @@ angular.module 'evaluator'
         $http.post(endpoints.project.bundle.resourceUrl, {
           project_id: $scope.bundleData.selectedProject.id
         }).then(success, failure)
+
+      $scope.downloadTeams = ->
+        return if $scope.globalLoading
+        $scope.globalLoading = true
+        $http.get(endpoints.teamsJob.url,
+          {responseType: 'blob'}
+          ).then (response) ->
+            $scope.globalLoading = false
+            filename = "students.csv"
+            FileSaver.saveAs(response.data, filename)
+
 
 

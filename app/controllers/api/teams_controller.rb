@@ -1,3 +1,4 @@
+require 'csv'
 class Api::TeamsController < ApplicationController
   before_action :authenticate, :authorize
   before_action :authorize_super_user, only: [:create]
