@@ -1,5 +1,5 @@
 angular.module 'evaluator'
-  .factory 'User', (UsersResource) ->
+  .factory 'User', (UsersResource, moment) ->
     class User
       constructor: (data) ->
         @resource = new UsersResource(data)
@@ -34,6 +34,14 @@ angular.module 'evaluator'
           @resource.name
         set: (value) ->
           @resource.name = value
+
+      @property 'full_name',
+        get: ->
+          @resource.full_name
+
+      @property 'created_at',
+        get: ->
+          moment(@resource.created_at).format("MMMM Do YYYY, h:mm:ss a")
 
       @property 'email',
         get: ->

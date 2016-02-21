@@ -63,6 +63,10 @@ class Api::UsersController < ApplicationController
 
   private
 
+  def query_params
+    params.permit(:student, :super_user)
+  end
+
   def user_params
     attributes = model_attributes
     attributes.delete :password_digest

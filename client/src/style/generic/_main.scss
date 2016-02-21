@@ -49,6 +49,16 @@
   color: $amber;
 }
 
+.pagination-controls {
+  width: 80%;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  button[disabled] {
+    cursor: not-allowed;
+  }
+}
+
 @import 'material_text';
 @import 'contract_overlay';
 @import 'top_nav';

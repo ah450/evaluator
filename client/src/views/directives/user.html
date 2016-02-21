@@ -1,3 +1,9 @@
 <section class="user">
-  
+  <p class="name">{{user.full_name}}</p>
+  <p class="email">{{user.email}}</p>
+  <p data-ng-if="user.student">{{user.guc_id}}</p>
+  <p data-ng-if="user.student">Team: {{user.team}}</p>
+  <p data-ng-if="user.student">Major: {{user.major}}</p>
+  <p data-ng-if="user.admin">This is an admin</p>
+  <p class="created_at">Created {{user.created_at}}</p>
 </section>

@@ -1,0 +1,45 @@
+<section id="usersWrapper">
+  <div class="spin-fullscreen-wrap" data-ng-if="loading">
+    <div class="spinner-wrap">
+    </div>
+    <i class="material-icons spinner">refresh</i>
+  </div>
+
+  <header>
+    <h1>Users</h1>
+  </header>
+
+<section class="search-controls">
+  <div class="flex-row-between checkboxes">
+    <md-checkbox data-ng-disabled="loadingUsers" ng-model="studentsOnly">Students Only</md-checkbox>
+    <md-checkbox data-ng-disabled="loadingUsers" ng-model="teachersOnly">Teachers Only</md-checkbox>
+  </div>
+</section>
+
+<ul class="users-list">
+  <li class="user-item"
+  data-ng-repeat="user in users track by $index"
+  >
+  <x-user data-data="user"></x-user>
+  </li>
+  <li class="user-item center-pseudo"
+  data-ng-if="loadingUsers"
+  >
+    <i class="material-icons spinner">refresh</i>
+  </li>
+</ul>
+
+<div class="pagination-controls"
+data-ng-hide="loadingUsers"
+>
+  <button data-ng-disabled="backDisabled()"
+  data-ng-click="back()"
+  class="btn-amber"
+  ><i class="material-icons">navigate_before</i></button>
+  <button data-ng-disabled="nextDisabled()"
+  data-ng-click="next()" class="btn-amber">
+  <i class="material-icons">navigate_next</i></button>
+</div>
+
+
+</section>
