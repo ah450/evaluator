@@ -21,6 +21,8 @@ addons:
       junit4
       default-jdk
       default-jre
+      default-jre-headless
+      
       unzip
 
 

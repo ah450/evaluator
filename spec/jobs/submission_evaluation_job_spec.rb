@@ -63,7 +63,6 @@ RSpec.describe SubmissionEvaluationJob, type: :job do
       it 'sets correct result attributes and cases' do
         SubmissionEvaluationJob.perform_now @submission
         result = @submission.results.first
-        puts result.compiler_stdout
         expect(result.compiled).to be true
         expect(result.success).to be true
         result_case = result.test_cases.first
