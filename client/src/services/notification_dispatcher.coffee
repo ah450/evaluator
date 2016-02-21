@@ -1,7 +1,7 @@
 angular.module 'evaluator'
   .factory 'NotificationDispatcher', (FayeClient) ->
     class NotificationDispatcher
-      constructor: () ->
+      constructor: ->
         @subscribers = {}
         @listeners = {}
 
@@ -43,6 +43,7 @@ angular.module 'evaluator'
       subscribeTeamJob: (job, callback) ->
         url = "/notifications/team_jobs/#{job.id}"
         @subscribe url, callback
+
 
 
 

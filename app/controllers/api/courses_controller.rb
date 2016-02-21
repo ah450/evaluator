@@ -38,6 +38,24 @@ class Api::CoursesController < ApplicationController
     params.permit(:name, :published)
   end
 
+  def apply_query(base, query_params)
+    if query_params[:name].present?
+      base = base.where('name ILIKE ?', "%#{query_params[:name]}%")
+    end
+    if query_params[:published].present?
+      base = base.where(published: query_params[:published])
+    end
+    base
+  end
+
+  def order_args
+    if query_params[:name].present?
+      'length(courses.name) ASC'
+    else
+      :created_at
+    end
+  end
+
   def course_params
     attributes = model_attributes
     attributes.delete :id

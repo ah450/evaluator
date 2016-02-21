@@ -4,7 +4,8 @@ angular.module 'evaluator'
     ngDialog, Project, Course, NotificationDispatcher, configurations) ->
 
       $scope.isTeacher = UserAuth.user.teacher
-      $scope.canAddProject = $scope.isTeacher
+      $scope.isAdmin = UserAuth.user.admin
+      $scope.canAddProject = $scope.isTeacher && $scope.isAdmin
       ids = []
       $scope.projects = []
       $scope.projectClasses = ['project-accent-one', 'project-accent-two',

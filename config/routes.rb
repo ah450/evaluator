@@ -35,7 +35,7 @@ Rails.application.routes.draw do
     end
     resources :tokens, only: [:create]
     resources :configurations, only: [:index]
-    resources :project_bundles, only: [:create] do
+    resources :project_bundles, only: [:create, :index] do
       member do
         get :download, action: :download
       end

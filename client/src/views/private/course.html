@@ -5,7 +5,7 @@
 </div>
 <section id="courseWrapper" data-ng-if="!loading">
 <div class="course-ctrls flex-perfect-center-container"
-data-ng-if="isTeacher">
+data-ng-if="isTeacher && isAdmin">
   <button class='btn-green' data-ng-if="!course.published" data-ng-click="publish()">Publish</button>
 </div>
 <x-course data-data="course"></x-course>

@@ -23,7 +23,7 @@ class ApplicationController < ActionController::API
 
   # GET /api/{plural_resource_variable}
   def index
-    resources = base_index_query.where(query_params)
+    resources = apply_query(base_index_query, query_params)
                                 .order(order_args)
                                 .page(page_params[:page])
                                 .per(page_params[:page_size])
@@ -198,6 +198,10 @@ class ApplicationController < ActionController::API
   def authorize_student
     raise ForbiddenError, error_messages[:forbidden_student_only] unless
       @current_user.student?
+  end
+
+  def apply_query(base, query_params)
+    base.where(query_params)
   end
 
 

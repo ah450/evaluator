@@ -59,12 +59,12 @@ class Project < ActiveRecord::Base
     )
   end
 
-  def notify_bundle_ready(_project_bundle)
+  def notify_bundle_ready(project_bundle)
     event = {
       type: Rails.application.config.configurations[:notification_event_types][:project_bundle_ready],
       date: DateTime.now.utc,
       payload: {
-        bundle: bundle.as_json
+        bundle: project_bundle.as_json
       }
     }
     Notifications::ProjectsController.publish(

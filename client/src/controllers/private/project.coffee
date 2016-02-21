@@ -4,6 +4,7 @@ angular.module 'evaluator'
     Upload, endpoints, Project, Suite, $state) ->
 
       $scope.isTeacher = UserAuth.user.teacher
+      $scope.isAdmin = UserAuth.user.admin
       $scope.canAddSuite = $scope.isTeacher
 
       projectPromise = ProjectResource.get(

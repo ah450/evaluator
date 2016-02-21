@@ -1,22 +1,30 @@
 .actions {
 
-}
 
 
-.card {
+.action-card {
   cursor: pointer;
   position: relative;
   display: inline-block;
   transition: all .4s ease;
   box-shadow: 0px 0px 0.3em 0px rgba(0, 0, 0, 0.5);
   transform-origin: 50% 50%;
-  padding: 2em;
+  padding: 1em;
   color: $md-clr-indigo-A100;
+  margin: 0.5em;
+
   header {
     color: $md-clr-indigo-500;
     margin-bottom: 1em;
+
   }
   &:hover {
     transform: scale(1.3);
   }
+  img {
+    width: 40%;
+    height: auto;
+  }
+}
+
 }

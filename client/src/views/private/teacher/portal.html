@@ -1,5 +1,5 @@
 <section class="actions">
-  <md-button data-ng-click="showSetTeamsDialog()" class="card">
+  <md-button data-ng-if="isAdmin" data-ng-click="showSetTeamsDialog()" class="card action-card">
     <header>
       <h2>Set Teams</h2>
     </header>
@@ -7,11 +7,20 @@
     <p>With CSV file (first row must be headers)</p>
   </md-button>
 
-  <md-button data-ng-click="showCreateBundleDialog()" class="card">
+  <md-button data-ng-click="showCreateBundleDialog()" class="card action-card">
   <header>
     <h2>Download Latest submissions of a project</h2>
   </header>
   <img src="images/edna.jpg">
   <p>Time to for paperwork! it's better because it's digital...</p>
+  </md-button>
+
+  <md-button data-ui-sref="private.teacher.bundles" class="card action-card">
+  <header>
+    <h2>View bundled submissions</h2>
+  </header>
+  <img src="images/edna.jpg">
+  <p>If you previously requested a submission dowload</p>
+  <p>you can access them here until deleted (after 24 hours)</p>
   </md-button>
 </section>

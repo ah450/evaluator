@@ -27,8 +27,19 @@ class ProjectBundle < ActiveRecord::Base
   validate :user_teacher
 
   def as_json(_options = {})
-    super(except: [:data])
+    super(except: [:data],
+      methods: [:ready, :project_name]
+      )
   end
+
+  def ready
+    data.present? && data.size != 0
+  end
+
+  def project_name
+    project.name
+  end
+
 
   def filename
     "#{DateTime.now.utc}-#{project.name}-#{user.name}.tar.gz"

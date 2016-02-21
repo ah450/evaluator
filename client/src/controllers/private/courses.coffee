@@ -13,8 +13,9 @@ angular.module 'evaluator'
       $scope.newCourseData = {}
       $scope.courseCreateError = ''
 
-      $scope.canAddCourses = UserAuth.user.teacher
+      $scope.canAddCourses = UserAuth.user.teacher && UserAuth.user.admin
       $scope.isTeacher = UserAuth.user.teacher
+      $scope.isAdmin = UserAuth.user.admin
 
 
       publishedCourseCallback = (course) ->
@@ -39,7 +40,7 @@ angular.module 'evaluator'
         )
 
       coursesPagination = new Pagination CoursesResource, 'courses', {},
-      courseFactory, defaultPageSize
+        courseFactory, defaultPageSize
 
 
       # Add courses to $scope.courses at begin (index)

@@ -132,6 +132,14 @@ angular.module 'evaluator'
         'pageContent':
           templateUrl: 'public/thanks_feedback.html'
 
+    bundlesState =
+      name: 'private.teacher.bundles'
+      url: '/bundles'
+      views:
+        'pageContent@private':
+          templateUrl: 'private/teacher/bundles.html'
+          controller: 'BundlesController'
+
     $stateProvider
       .state privateState
       .state coursesState
@@ -147,3 +155,4 @@ angular.module 'evaluator'
       .state bundleDownload
       .state contactState
       .state thanksFeedbackState
+      .state bundlesState

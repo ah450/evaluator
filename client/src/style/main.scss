@@ -65,6 +65,10 @@ footer {
   z-index: 100001;
 }
 
+.md-virtual-repeat-container.md-autocomplete-suggestions-container {
+  z-index: 100001;
+}
+
 
 @import "utility/main";
 @import "animations/main";
@@ -76,3 +80,4 @@ footer {
 @import "cases/main";
 @import "results/main";
 @import "submissions/main";
+@import "bundles/main";
