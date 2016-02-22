@@ -7,4 +7,8 @@ angular.module 'evaluator'
         user: '=data'
       controller: ['$scope', 'UserAuth', ($scope, UserAuth) ->
         $scope.canEdit = UserAuth.user.admin
+        $scope.canDelete = UserAuth.user.admin
+        $scope.delete = ->
+          return if not $scope.canDelete
+          $scope.user.$delete()
       ]

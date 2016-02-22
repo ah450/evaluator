@@ -84,13 +84,21 @@ angular.module 'evaluator'
             $scope.reload()
    
       $scope.users = []
+      deletedIds = []
 
-      addUsersCallback = (users) ->
+      addUsersCallback = (newUsers) ->
+        users = newUsers.filter (user) ->
+          user.id not in deletedIds
         args = [0, $scope.users.length].concat users
         $scope.users.splice.apply $scope.users, args
 
+      userDeletedCallback = (user) ->
+        deletedIds.push user.id
+        _.remove $scope.users, (e) ->
+          e.id is user.id
+
       userFactory = (data) ->
-        new User(data)
+        new User(data, userDeletedCallback)
 
       usersPagination = new Pagination UsersResource, 'users', $scope.params,
         userFactory, defaultPageSize

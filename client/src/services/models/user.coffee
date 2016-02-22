@@ -1,7 +1,7 @@
 angular.module 'evaluator'
   .factory 'User', (UsersResource, moment) ->
     class User
-      constructor: (data) ->
+      constructor: (data, @deletedCallback=angular.noop) ->
         @resource = new UsersResource(data)
         _.assign @, @resource
 
@@ -14,7 +14,9 @@ angular.module 'evaluator'
         @resource.$update(args...)
 
       $delete: (args...) ->
-        @resource.$delete(args...)
+        @resource.$delete(args...).then (response) =>
+          @deletedCallback(@)
+          return response
 
       @property 'verified',
         get: ->
