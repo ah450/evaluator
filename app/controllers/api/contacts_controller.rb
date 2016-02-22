@@ -1,5 +1,5 @@
 class Api::ContactsController < ApplicationController
-
+  before_action :authenticate_optional
 
 
 

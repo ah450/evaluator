@@ -222,6 +222,10 @@ class ApplicationController < ActionController::API
     end
   end
 
+  def authenticate_optional
+    authenticate rescue false
+  end
+
   def not_found
     render json: {message: error_messages[:record_not_found]}, status: :not_found
   end
