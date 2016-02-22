@@ -10,11 +10,15 @@ RSpec.describe User, type: :model do
   it { should validate_presence_of :name }
   it { should validate_presence_of :email }
 
-  describe 'student' do
-    describe 'validation' do
+  context 'student' do
+    context 'validation' do
       let(:student) { FactoryGirl.build(:student) }
       it 'has a valid factory' do
         expect(student).to be_valid
+      end
+      it 'can not be super_user' do
+        student.super_user = true
+        expect(student).to_not be_valid
       end
       context 'email is nil' do
         let(:student) { FactoryGirl.build(:student, email: nil) }
@@ -94,7 +98,7 @@ RSpec.describe User, type: :model do
       end
     end # Validations
 
-    describe 'type detection' do
+    context 'type detection' do
       let(:student) { FactoryGirl.build(:student) }
       it "should know it's a student" do
         student.save!
@@ -102,7 +106,7 @@ RSpec.describe User, type: :model do
       end
     end
 
-    describe 'Token generation' do
+    context 'Token generation' do
       let(:student) { FactoryGirl.create(:student) }
       it 'should be able to create a token' do
         expect(student.token).to be_a_kind_of String
@@ -113,7 +117,7 @@ RSpec.describe User, type: :model do
       end
     end
 
-    describe 'GUC id attribute' do
+    context 'GUC id attribute' do
       let(:student) { FactoryGirl.create(:student) }
       it 'should be constructed correctly from prefix and suffix' do
         expect(student.guc_id).to eql "#{student.guc_prefix}-#{student.guc_suffix}"
@@ -126,7 +130,7 @@ RSpec.describe User, type: :model do
     end
   end # Student specs
 
-  describe 'type scope' do
+  context 'type scope' do
     let(:teachers) { FactoryGirl.create_list(:teacher, 10) }
     let(:students) { FactoryGirl.create_list(:student, 10) }
     it 'should query by teachers' do
@@ -139,8 +143,8 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe 'Teacher' do
-    describe 'validation' do
+  context 'Teacher' do
+    context 'validation' do
       let(:teacher) { FactoryGirl.build(:teacher) }
       it 'has a valid factory' do
         expect(teacher).to be_valid
@@ -187,7 +191,7 @@ RSpec.describe User, type: :model do
         end
       end
     end # Validations
-    describe 'type detection' do
+    context 'type detection' do
       let(:teacher) { FactoryGirl.build(:teacher) }
       it "should know it's a teacher" do
         teacher.save!
@@ -195,7 +199,7 @@ RSpec.describe User, type: :model do
       end
     end
 
-    describe 'Token generation' do
+    context 'Token generation' do
       let(:teacher) { FactoryGirl.create(:teacher) }
       it 'should be able to create a token' do
         expect(teacher.token).to be_a_kind_of String
@@ -207,7 +211,7 @@ RSpec.describe User, type: :model do
     end
   end # Teacher specs
 
-  describe 'Password reset' do
+  context 'Password reset' do
     let(:student) { FactoryGirl.create(:student, password: 'old password') }
     it 'should generate reset token' do
       expect(student).to respond_to :gen_reset_token
@@ -235,7 +239,7 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe 'verification' do
+  context 'verification' do
     let(:teacher) { FactoryGirl.create(:teacher, verified: false) }
     it 'should generate verification token' do
       expect(teacher).to respond_to :gen_verification_token
