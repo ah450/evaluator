@@ -73,8 +73,8 @@ angular.module 'evaluator'
       # Callback for infinite scroll
       $scope.loadMore = ->
         $scope.scrollDisabled = true
-        page = if coursesPagination.pageSize < defaultPageSize then \
-          coursesPagination.currentPage else coursesPagination.currentPage + 1
+        page = if coursesPagination.hasPages() then \
+          coursesPagination.currentPage + 1 else coursesPagination.currentPage
         coursesPagination.page(page)
           .then (courses) ->
             addCoursesCallback courses, $scope.courses.length

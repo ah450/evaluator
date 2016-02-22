@@ -64,7 +64,30 @@ class Api::UsersController < ApplicationController
   private
 
   def query_params
-    params.permit(:student, :super_user)
+    params.permit(:student, :super_user, :name, :email, :guc_suffix,
+      :guc_prefix)
+  end
+
+  def apply_query(base, query_params)
+    if query_params[:name].present?
+      base = base.where('name ILIKE ?', "%#{query_params[:name]}%")
+    end
+    if query_params[:email].present?
+      base = base.where('email ILIKE ? ', "%#{query_params[:email]}%")
+    end
+    query_params.delete :email
+    query_params.delete :name
+    base.where(query_params)
+  end
+
+  def order_args
+    if query_params[:name].present?
+      'length(users.name) ASC'
+    elsif query_params[:email].present?
+      'length(users.email) ASC'
+    else
+      :created_at
+    end
   end
 
   def user_params

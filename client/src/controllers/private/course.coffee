@@ -81,8 +81,8 @@ angular.module 'evaluator'
       $scope.loadMore = ->
         $scope.scrollDisabled = true
         $scope.loadingProjects = true
-        page = if projectsPagination.pageSize < defaultPageSize then \
-          projectsPagination.currentPage else projectsPagination.currentPage + 1
+        page = if projectsPagination.hasPages() then \
+          projectsPagination.currentPage + 1 else projectsPagination.currentPage
         projectsPagination.page(page)
           .then (projects) ->
             $scope.loadingProjects = false

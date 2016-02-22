@@ -2,6 +2,7 @@ angular.module 'evaluator'
   .controller 'BundlesController', ($scope, Pagination, BundlesResource,
     defaultPageSize, Bundle) ->
       $scope.bundles = []
+      ids = []
       $scope.bundleClasses = ['bundle-accent-one', 'bundle-accent-two',
       'bundle-accent-three']
 
@@ -15,7 +16,10 @@ angular.module 'evaluator'
         bundleFactory, defaultPageSize
 
       addBundlesCallback = (newBundles, begin) ->
-        args = [begin, 0].concat newBundles
+        bundles = _.filter newBundles, (bundle) ->
+          bundle.id not in ids
+        Array::push.apply ids, _.map bundles, 'id'
+        args = [begin, 0].concat bundles
         $scope.bundles.splice.apply $scope.bundles, args
 
       $scope.addBundlesCallback = addBundlesCallback
@@ -28,8 +32,8 @@ angular.module 'evaluator'
       # Callback for infinite scroll
       $scope.loadMore = ->
         $scope.scrollDisabled = true
-        page = if bundlesPagination.pageSize < defaultPageSize then \
-          bundlesPagination.currentPage else bundlesPagination.currentPage + 1
+        page = if bundlesPagination.hasPages() then \
+          bundlesPagination.currentPage + 1 else bundlesPagination.currentPage
         bundlesPagination.page(page)
           .then (bundles) ->
             addBundlesCallback bundles, $scope.bundles.length

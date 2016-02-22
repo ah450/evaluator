@@ -69,8 +69,8 @@ angular.module 'evaluator'
       $scope.loadMore = ->
         $scope.scrollDisabled = true
         $scope.loadingSuites = true
-        page = if suitesPagination.pageSize < defaultPageSize then \
-          suitesPagination.currentPage else suitesPagination.currentPage + 1
+        page = if suitesPagination.hasPages() then \
+          suitesPagination.currentPage + 1 else suitesPagination.currentPage
         suitesPagination.page(page)
           .then (suites) ->
             $scope.loadingSuites = false

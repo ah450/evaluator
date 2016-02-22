@@ -31,7 +31,6 @@ angular.module 'evaluator'
           @data = (@factory item for item in page[@pluralName])
           @currentPage = page['page']
           @totalPages = page['total_pages']
-          @pageSize = page['page_size']
           @loaded = true
           if index
             resolve @data[index]
@@ -57,6 +56,9 @@ angular.module 'evaluator'
             @load pageNum, resolve, reject
           else
             resolve @data
+
+      hasPages: ->
+        @currentPage < @totalPages
 
       # Force reload of currentPage
       reload: ->
