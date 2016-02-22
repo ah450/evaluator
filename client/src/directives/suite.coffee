@@ -7,7 +7,8 @@ angular.module 'evaluator'
         suite: '=data'
         project: '=parentProject'
       controller: [ '$scope', 'FileSaver', 'UserAuth', 'endpoints', '$http',
-        ($scope, FileSaver, UserAuth, endpoints, $http) ->
+        '$mdDialog',
+        ($scope, FileSaver, UserAuth, endpoints, $http, $mdDialog) ->
           $scope.canDelete = UserAuth.user.teacher && $scope.suite.ready &&
             !$scope.project.published && UserAuth.user.admin
           $scope.canDownload = UserAuth.user.teacher || !$scope.suite.hidden
@@ -18,10 +19,22 @@ angular.module 'evaluator'
               .then (response) ->
                 filename = "#{$scope.suite.name}.zip"
                 FileSaver.saveAs(response.data, filename)
-          $scope.delete = ->
+          deleteSuite = ->
             return if not $scope.canDelete
             $scope.suite.$delete().catch (response) ->
               $scope.suite.ready = true
+
+          $scope.showDeleteDialog = (event) ->
+            confirm = $mdDialog.confirm()
+              .title('Confirm Delete')
+              .textContent(
+                "Are you sure you want to delete #{$scope.suite.name}." +
+                ' This action is irreversible and all associated results' +
+                ' will be deleted as well.'
+                ).ok('delete')
+                .cancel('no!')
+                .targetEvent(event)
+            $mdDialog.show(confirm).then(deleteSuite, angular.noop)
 
       ]
 

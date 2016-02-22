@@ -10,10 +10,10 @@
       <p>Ready</p>
       <div class="flex-perfect-center-container flex-column">
         <i class="material-icons check">check</i>
-        <button data-ng-click="delete()"
-        data-ng-if="canDelete"
-        class="btn-red"
-        ><i class="material-icons">delete</i></button>
+        <md-button class="md-fab md-mini" data-ng-if="canDelete"
+        data-ng-click="showDeleteDialog($event)" aria-label="delete">
+          <md-icon md-font-set="material-icons">delete_forever</md-icon>
+        </md-button>
       </div>
     </div>
   </div>
