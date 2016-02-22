@@ -1,6 +1,6 @@
 angular.module 'evaluator'
   .controller 'UsersController', ($scope, Pagination, defaultPageSize,
-    UsersResource, User) ->
+    UsersResource, User, deletedUserIds) ->
       $scope.studentsOnly = false
       $scope.teachersOnly = false
       $scope.superUser = false
@@ -84,16 +84,15 @@ angular.module 'evaluator'
             $scope.reload()
    
       $scope.users = []
-      deletedIds = []
 
       addUsersCallback = (newUsers) ->
         users = newUsers.filter (user) ->
-          user.id not in deletedIds
+          user.id not in deletedUserIds
         args = [0, $scope.users.length].concat users
         $scope.users.splice.apply $scope.users, args
 
       userDeletedCallback = (user) ->
-        deletedIds.push user.id
+        deletedUserIds.push user.id
         _.remove $scope.users, (e) ->
           e.id is user.id
 
