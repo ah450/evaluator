@@ -14,6 +14,22 @@
     <md-checkbox data-ng-disabled="loadingUsers" ng-model="studentsOnly">Students Only</md-checkbox>
     <md-checkbox data-ng-disabled="loadingUsers" ng-model="teachersOnly">Teachers Only</md-checkbox>
   </div>
+
+  <form novalidate>
+
+    <fieldset>
+      <div class="relative form-line">
+        <input class="material-text" type="text" data-ng-model="searchData.name" id="name" name="name">
+        <label for="name">Name</label>
+      </div>
+
+      <div class="relative form-line">
+        <input class="material-text" type="text" data-ng-model="searchData.email" id="email" name="email">
+        <label for="email">Email</label>
+      </div>
+    </fieldset>
+  </form>
+
 </section>
 
 <ul class="users-list">

@@ -36,12 +36,9 @@ form {
   .error {
     padding-bottom: 1em;
   }
-}
 
-.contract-form {
-  header {
-    margin-bottom: 2em;
-    text-align: center;
+  .form-line {
+    margin-bottom: 4em;
   }
 
   fieldset:last-of-type {
@@ -50,12 +47,19 @@ form {
     }
   }
 
-  .form-field-error {
-    position: absolute;
+}
+
+
+
+.contract-form {
+  header {
+    margin-bottom: 2em;
+    text-align: center;
   }
 
-  .form-line {
-    margin-bottom: 4em;
+
+  .form-field-error {
+    position: absolute;
   }
 
   .links .link {

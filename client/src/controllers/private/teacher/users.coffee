@@ -5,14 +5,35 @@ angular.module 'evaluator'
       $scope.teachersOnly = false
       $scope.loading = true
       $scope.loadingUsers = false
-      $scope.params = {
-        name: null,
-        email: null,
-        guc_suffix: null,
-        guc_prefix: null,
-        student: null,
+      $scope.searchData =
+        name: ''
+        email: ''
+      
+      $scope.params =
+        name: null
+        email: null
+        guc_suffix: null
+        guc_prefix: null
+        student: null
         super_user: null
-      }
+
+      $scope.$watch 'searchData.email', (newValue, oldValue) ->
+        if newValue != oldValue
+          if newValue.length > 0
+            $scope.params.email = newValue
+            $scope.reload()
+          else
+            $scope.params.email = null
+            $scope.reload()
+      
+      $scope.$watch 'searchData.name', (newValue, oldValue) ->
+        if newValue != oldValue
+          if newValue.length > 0
+            $scope.params.name = newValue
+            $scope.reload()
+          else
+            $scope.params.name = null
+            $scope.reload()
 
       $scope.$watch 'teachersOnly', (newValue, oldValue) ->
         if newValue
