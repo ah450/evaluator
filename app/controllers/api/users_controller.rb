@@ -93,7 +93,8 @@ class Api::UsersController < ApplicationController
   def user_params
     attributes = model_attributes
     attributes.delete :password_digest
-    attributes.delete :verified
+    attributes.delete :verified unless @current_user.present? &&
+      @current_user.super_user?
     attributes.delete :id
     attributes.delete :student
     attributes.delete :super_user

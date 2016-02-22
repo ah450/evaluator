@@ -15,6 +15,10 @@ angular.module 'evaluator'
         method: 'POST'
         isArray: false
         cache: false
+      delete:
+        method: 'DELETE'
+        isArray: false
+        cache: false
 
     $resource endpoints.users.resourceUrl, usersResourceDefaultParams,
       usersResourceActions

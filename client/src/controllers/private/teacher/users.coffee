@@ -32,11 +32,7 @@ angular.module 'evaluator'
           if !$scope.teachersOnly
             $scope.params.student = null
             $scope.reload()
-
-
-
-
-      
+   
       $scope.users = []
 
       addUsersCallback = (users) ->

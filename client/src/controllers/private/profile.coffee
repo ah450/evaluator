@@ -18,7 +18,6 @@ angular.module 'evaluator'
       passwordChanged = $scope.userData.password? &&
         $scope.userData.password.length > 2
       if passwordChanged
-        console.log $scope.userData
         $scope.user.password = $scope.userData.password
       $scope.user.$update().then ->
         postUpdate = ->
@@ -41,4 +40,4 @@ angular.module 'evaluator'
             ("#{key.capitalize()} #{value}." for key, value of response.data)
             .join ' '
         else
-          $stage.go 'public.internal_error'
+          $stage.go '^.internal_error'

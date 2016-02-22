@@ -13,6 +13,15 @@ angular.module 'evaluator'
       $update: (args...) ->
         @resource.$update(args...)
 
+      $delete: (args...) ->
+        @resource.$delete(args...)
+
+      @property 'verified',
+        get: ->
+          @resource.verified
+        set: (value) ->
+          @resource.verified = value
+
       @property 'id',
         get: ->
           @resource.id

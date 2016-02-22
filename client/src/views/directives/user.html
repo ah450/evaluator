@@ -6,4 +6,7 @@
   <p data-ng-if="user.student">Major: {{user.major}}</p>
   <p data-ng-if="user.admin">This is an admin</p>
   <p class="created_at">Created {{user.created_at}}</p>
+  <a data-ng-if="canEdit" data-ui-sref="private.teacher.user({id: user.id})">
+    <i class="material-icons clickable-icon">mode_edit</i>
+  </a>
 </section>
