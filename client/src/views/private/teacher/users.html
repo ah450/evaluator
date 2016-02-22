@@ -13,19 +13,38 @@
   <div class="flex-row-between checkboxes">
     <md-checkbox data-ng-disabled="loadingUsers" ng-model="studentsOnly">Students Only</md-checkbox>
     <md-checkbox data-ng-disabled="loadingUsers" ng-model="teachersOnly">Teachers Only</md-checkbox>
+    <md-checkbox ng-model="superUser">Admins Only</md-checkbox>
   </div>
 
   <form novalidate>
 
     <fieldset>
       <div class="relative form-line">
-        <input class="material-text" type="text" data-ng-model="searchData.name" id="name" name="name">
+        <input class="material-text" type="text" data-ng-model="searchData.name" id="name" name="name" required>
         <label for="name">Name</label>
       </div>
 
       <div class="relative form-line">
-        <input class="material-text" type="text" data-ng-model="searchData.email" id="email" name="email">
+        <input class="material-text" type="text" data-ng-model="searchData.email" id="email" name="email" required>
         <label for="email">Email</label>
+      </div>
+    </fieldset>
+
+    <fieldset data-ng-hide="teachersOnly || superUser">
+      <div class="relative form-line">
+        <input class="material-text" type="text" data-ng-model="searchData.team" id="team" name="team" required>
+        <label for="team">Team</label>
+      </div>
+      <div class="relative form-line">
+        <input class="material-text" type="text"
+        data-ng-model="searchData.guc_prefix"
+        id="guc_prefix" name="guc_prefix" required
+        >
+        <label for="guc_prefix">GUC ID Prefix (before dash)</label>
+      </div>
+      <div class="relative form-line">
+        <input class="material-text" type="text" data-ng-model="searchData.guc_suffix" id="guc_suffix" name="guc_suffix" required>
+        <label for="guc_suffix">GUC ID Suffix (after dash)</label>
       </div>
     </fieldset>
   </form>

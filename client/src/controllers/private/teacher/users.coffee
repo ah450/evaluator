@@ -3,11 +3,15 @@ angular.module 'evaluator'
     UsersResource, User) ->
       $scope.studentsOnly = false
       $scope.teachersOnly = false
+      $scope.superUser = false
       $scope.loading = true
       $scope.loadingUsers = false
       $scope.searchData =
         name: ''
         email: ''
+        team: ''
+        guc_prefix: ''
+        guc_suffix: ''
       
       $scope.params =
         name: null
@@ -16,34 +20,59 @@ angular.module 'evaluator'
         guc_prefix: null
         student: null
         super_user: null
+        team: null
 
-      $scope.$watch 'searchData.email', (newValue, oldValue) ->
-        if newValue != oldValue
-          if newValue.length > 0
-            $scope.params.email = newValue
-            $scope.reload()
-          else
-            $scope.params.email = null
-            $scope.reload()
-      
-      $scope.$watch 'searchData.name', (newValue, oldValue) ->
-        if newValue != oldValue
-          if newValue.length > 0
-            $scope.params.name = newValue
-            $scope.reload()
-          else
-            $scope.params.name = null
-            $scope.reload()
+      studentKeys = ['guc_prefix', 'guc_suffix',
+      'team']
+      studentsDisabled = false
+
+      setIfValid = (value, key)->
+        if value && value.length > 0
+          $scope.params[key] = value
+
+      disableStudentOnlyParams = ->
+        studentsDisabled = true
+        $scope.params[key] = null for key in studentKeys
+        return
+
+      enableStudentOnlyParams = ->
+        studentsDisabled = false
+        setIfValid($scope.searchData[key], key) for key in studentKeys
+        return
+
+      $scope.$watch 'searchData', (newValue) ->
+        changed = false
+        for key, value of newValue
+          if !studentsDisabled or key not in studentKeys
+            oldParamValue = $scope.params[key]
+            if value && value.length > 0
+              $scope.params[key] = value
+            else
+              $scope.params[key] = null
+            changed |= oldParamValue != $scope.params[key]
+        $scope.reload() if changed
+        return
+      , true
+
+      $scope.$watch 'superUser', (newValue) ->
+        if newValue
+          $scope.params.super_user = true
+        else
+          $scope.params.super_user = null
+        $scope.reload()
 
       $scope.$watch 'teachersOnly', (newValue, oldValue) ->
         if newValue
           $scope.params.student = false
+          disableStudentOnlyParams()
           $scope.reload()
           $scope.studentsOnly = false
         else
+          enableStudentOnlyParams()
           if !$scope.studentsOnly
             $scope.params.student = null
             $scope.reload()
+
       $scope.$watch 'studentsOnly', (newValue, oldValue) ->
         if newValue
           $scope.params.student = true

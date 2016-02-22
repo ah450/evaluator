@@ -65,7 +65,7 @@ class Api::UsersController < ApplicationController
 
   def query_params
     params.permit(:student, :super_user, :name, :email, :guc_suffix,
-      :guc_prefix)
+      :guc_prefix, :team)
   end
 
   def apply_query(base, query_params)
@@ -75,8 +75,12 @@ class Api::UsersController < ApplicationController
     if query_params[:email].present?
       base = base.where('email ILIKE ? ', "%#{query_params[:email]}%")
     end
+    if query_params[:team].present?
+      base = base.where('team ILIKE ? ', "%#{query_params[:team]}%")
+    end
     query_params.delete :email
     query_params.delete :name
+    query_params.delete :team
     base.where(query_params)
   end
 
@@ -85,6 +89,8 @@ class Api::UsersController < ApplicationController
       'length(users.name) ASC'
     elsif query_params[:email].present?
       'length(users.email) ASC'
+    elsif query_params[:team].present?
+      'length(users.team) ASC'
     else
       :created_at
     end
