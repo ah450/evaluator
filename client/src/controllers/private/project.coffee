@@ -1,7 +1,7 @@
 angular.module 'evaluator'
   .controller 'ProjectController', ($scope, $stateParams, ProjectResource,
     UserAuth, ProjectSuitesResource, defaultPageSize, Pagination, ngDialog,
-    Upload, endpoints, Project, Suite, $state) ->
+    Upload, endpoints, Project, Suite, $state, deletedSuiteIds) ->
 
       $scope.isTeacher = UserAuth.user.teacher
       $scope.isAdmin = UserAuth.user.admin
@@ -39,6 +39,7 @@ angular.module 'evaluator'
       'suite-accent-three']
 
       deletedSuiteCallback = (id) ->
+        deletedSuiteIds.push id
         _.remove $scope.suites, (suite) ->
           suite.id is id
 
@@ -53,7 +54,7 @@ angular.module 'evaluator'
 
       addSuitesCallback = (newSuites, begin) ->
         suites = _.filter newSuites, (suite) ->
-          suite.id not in ids
+          suite.id not in ids and suite.id not in deletedSuiteIds
         Array::push.apply ids, _.map suites, 'id'
         args = [begin, 0].concat suites
         $scope.suites.splice.apply $scope.suites, args
