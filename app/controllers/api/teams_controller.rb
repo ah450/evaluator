@@ -7,9 +7,9 @@ class Api::TeamsController < ApplicationController
   def index
     file = Tempfile.new 'teams'
     CSV.open(file, "w") do |csv|
-      csv << ["ID", "TEAM", "EMAIL"]
+      csv << ['ID', 'TEAM', 'EMAIL', 'MAJOR']
       User.students.each do |student|
-        csv << [student.guc_id, student.team, student.email]
+        csv << [student.guc_id, student.team, student.email, student.major]
       end
     end
 
