@@ -65,8 +65,30 @@
       </div>
     </fieldset>
 
-    <fieldset>
-      
+    <fieldset data-ng-show="formData.selectedProject">
+      <div class="relative form-line">
+        <input class="material-text" type="text" data-ng-model="searchData.name" id="name" name="name" required>
+        <label for="name">Name</label>
+      </div>
+
+      <div class="relative form-line">
+        <input class="material-text" type="text" data-ng-model="searchData.email" id="email" name="email" required>
+        <label for="email">Email</label>
+      </div>
+
+      <div class="relative form-line">
+        <input class="material-text" type="text"
+        data-ng-model="searchData.guc_prefix"
+        id="guc_prefix" name="guc_prefix" required
+        >
+        <label for="guc_prefix">GUC ID Prefix (before dash)</label>
+      </div>
+
+      <div class="relative form-line">
+        <input class="material-text" type="text" data-ng-model="searchData.guc_suffix" id="guc_suffix" name="guc_suffix" required>
+        <label for="guc_suffix">GUC ID Suffix (after dash)</label>
+      </div>
+
     </fieldset>
   </form>
 
@@ -77,15 +99,16 @@
     <li class="submission-item btn-green"
     data-ng-class="submission.status"
     data-ng-repeat="submission in submissions track by $index"
+    data-ng-class="submissionClasses[$index % submissionClasses.length]"
     >
       <div
       data-submission data-data="submission"
-      data-ng-class="submissionClasses[$index %submissionClasses.length]"
+      data-include-submitter="true"
       >
       </div>
     </li>
     <li class="submission-item center-pseudo"
-    data-ng-if="loadingSubmissions"
+    data-ng-show="loadingSubmissions"
     >
       <i class="material-icons spinner">refresh</i>
     </li>

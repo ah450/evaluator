@@ -12,6 +12,27 @@
     &:hover {
       background-color: $md-clr-green-200;
     }
+
+    &.user-accent-one {
+      &:hover {
+        background: $list-accent-one;
+      }
+      background: transparentize($list-accent-one, 0.4);
+    }
+
+    &.user-accent-two {
+      &:hover {
+        background: $list-accent-two;
+      }
+      background: transparentize($list-accent-two, 0.4);
+    }
+
+    &.user-accent-three {
+      &:hover {
+        background: $list-accent-three;
+      }
+      background: transparentize($list-accent-three, 0.4);
+    }
   }
 }
 

@@ -37,7 +37,7 @@ angular.module 'evaluator'
           else
             resolve @data
         # Failure callback
-        failure =  _.partial @loadFailure, reject
+        failure =  _.bind @loadFailure, @, reject
         queryOpts =
           page: page
           page_size: @pageSize

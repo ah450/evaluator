@@ -5,6 +5,7 @@ angular.module 'evaluator'
       templateUrl: 'directives/user.html'
       scope:
         user: '=data'
+        noControls: '@?'
       controller: ['$scope', 'UserAuth', '$mdDialog',
         ($scope, UserAuth, $mdDialog) ->
           $scope.canEdit = UserAuth.user.admin

@@ -77,14 +77,15 @@ class Api::SubmissionsController < ApplicationController
     possible_user_fields = User.queriable_fields
     # A query based on user fields
     if params.key?(:submitter) &&
-       possible_user_fields.any? { |e| params[:submitter].key? e }
-      user_query = {}
-      for user_field in possible_user_fields do
-        if params[:submitter].key? user_field
-          user_query[user_field] = params[:submitter][user_field]
+      user_params = params[:submitter].permit(possible_user_fields)
+      query = query.joins(:submitter) unless user_params.empty?
+      user_params.symbolize_keys.keys.each do |key|
+        if key.in? [:email, :name]
+          query = query.where("users.#{key} ILIKE ?", "%#{user_params[key]}%")
+        else
+          query = query.where(users: {key => user_params[key]})
         end
       end
-      query = query.joins(:submitter).where(users: user_query)
     end
     query
   end

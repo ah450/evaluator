@@ -7,7 +7,7 @@
   <p data-ng-if="user.admin">This is an admin</p>
   <p class="created_at">Created {{user.created_at}}</p>
 
-  <div class="user-controls-container">
+  <div data-ng-if="!noControls" class="user-controls-container">
     <md-button class="md-fab md-mini md-primary" data-ng-if="canEdit" data-ui-sref="private.teacher.user({id: user.id})">
       <md-icon md-font-set="material-icons">mode_edit</md-icon>
     </md-button>

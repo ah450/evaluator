@@ -5,6 +5,7 @@ angular.module 'evaluator'
       templateUrl: 'directives/submission.html'
       scope:
         submission: '=data'
+        includeSubmitter: '@?'
       controller: ['$scope', 'FileSaver', '$http',
         ($scope, FileSaver, $http) ->
           $scope.download = ->

@@ -5,10 +5,32 @@ angular.module 'evaluator'
       $scope.loadingSubmissions = false
       # Data used by the search form
       $scope.formData = {}
+      $scope.searchData =
+        name: ''
+        email: ''
+        guc_prefix: ''
+        guc_suffix: ''
 
       # data used for searching for submissions
+      $scope.submitterParams =
+        name: null
+        email: null
+        guc_prefix: null
+        guc_suffix: null
+
       $scope.submissionParams =
         project_id: null
+        "submitter[name]": null
+        "submitter[email]": null
+        "submitter[guc_prefix]": null
+        "submitter[guc_suffix]": null
+        
+        
+      updateSubmitterParams = ->
+        for key, value of $scope.submitterParams
+          translatedKey = "submitter[#{key}]"
+          $scope.submissionParams[translatedKey] = value
+        return
 
       $scope.submissionClasses = ['submission-accent-one',
         'submission-accent-two', 'submission-accent-three']
@@ -19,6 +41,21 @@ angular.module 'evaluator'
         deletedSubmissionIds.push id
         _.remove $scope.submissions, (submission) ->
           submission.id is id
+
+      $scope.$watch 'searchData', (newValue) ->
+        changed = false
+        for key, value of newValue
+          oldParamValue = $scope.submitterParams[key]
+          if value && value.length > 0
+            $scope.submitterParams[key] = value
+          else
+            $scope.submitterParams[key] = null
+          changed |= oldParamValue != $scope.submitterParams[key]
+        updateSubmitterParams()
+        $scope.reload() if changed
+        return
+      , true
+
 
       $scope.courseSearch = (nameQuery) ->
         CoursesResource.query({

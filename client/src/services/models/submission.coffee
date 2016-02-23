@@ -1,7 +1,7 @@
 angular.module 'evaluator'
   .factory 'Submission', (SubmissionResource, endpoints, Result,
     ResultsResource, Pagination, NotificationDispatcher,
-    configurations, moment) ->
+    configurations, moment, User) ->
       class Submission
         constructor: (data, @deletedCallback=angular.noop) ->
           @resource = new SubmissionResource data
@@ -40,6 +40,10 @@ angular.module 'evaluator'
         @property 'id',
           get: ->
             @resource.id
+
+        @property 'submitter',
+          get: ->
+            @submitterInstance ||= new User @resource.submitter
 
         @property 'done',
           get: ->

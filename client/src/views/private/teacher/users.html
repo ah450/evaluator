@@ -55,11 +55,12 @@
 <ul class="users-list">
   <li class="user-item"
   data-ng-repeat="user in users track by $index"
+  data-ng-class="userClasses[$index % userClasses.length]"
   >
   <x-user data-data="user"></x-user>
   </li>
   <li class="user-item center-pseudo"
-  data-ng-if="loadingUsers"
+  data-ng-show="loadingUsers"
   >
     <i class="material-icons spinner">refresh</i>
   </li>

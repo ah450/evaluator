@@ -26,6 +26,9 @@ angular.module 'evaluator'
       'team']
       studentsDisabled = false
 
+      $scope.userClasses = ['user-accent-one',
+        'user-accent-two', 'user-accent-three']
+
       setIfValid = (value, key)->
         if value && value.length > 0
           $scope.params[key] = value
