@@ -11,7 +11,7 @@ angular.module 'evaluator', ['ngResource', 'ui.router', 'ui.router.title',
 
 angular.module 'evaluator'
   .config ($compileProvider) ->
-    $compileProvider.debugInfoEnabled true
+    $compileProvider.debugInfoEnabled false
 
 angular.module 'evaluator'
   .config (localStorageServiceProvider) ->
