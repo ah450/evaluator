@@ -11,13 +11,14 @@ novalidate
   <fieldset>
     <div class="relative form-line">
       <input class="material-text" type="email" id="email" name="email" data-ng-model="userData.email"
+      data-guc-email
       required
       >
       <label for="email">Email</label>
       <span class="form-field-error" data-ng-class="{hidden: !loginForm.email.$error.required}">
         This field is required.
       </span>
-      <span class="form-field-error" data-ng-class="{hidden: !loginForm.email.$error.email}">
+      <span class="form-field-error" data-ng-class="{hidden: !loginForm.email.$error.guc_email}">
         Must be a valid GUC email.
       </span>
     </div>

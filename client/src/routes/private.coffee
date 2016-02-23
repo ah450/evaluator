@@ -156,6 +156,14 @@ angular.module 'evaluator'
           templateUrl: 'private/teacher/user.html'
           controller: 'UserController'
 
+    resultsState =
+      name: 'private.teacher.results'
+      url: '/results'
+      views:
+        'pageContent@private':
+          templateUrl: 'private/teacher/results.html'
+          controller: 'TeacherResultsController'
+
     $stateProvider
       .state privateState
       .state coursesState
@@ -174,4 +182,5 @@ angular.module 'evaluator'
       .state bundlesState
       .state usersState
       .state userState
+      .state resultsState
       

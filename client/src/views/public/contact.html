@@ -28,6 +28,22 @@ novalidate
     </div>
 
     <div class="relative form-line">
+      <input class="material-text" type="text" id="email"
+      name="email"
+      data-ng-model="contactData.email"
+      data-guc-email
+      required
+      ></input>
+      <label for="email">GUC Email</label>
+      <span class="form-field-error"
+      data-ng-class="{hidden: !contactForm.email.$error.required}"
+      >This field is required</span>
+      <span class="form-field-error"
+      data-ng-class="{hidden: !contactForm.email.$error.guc_email}"
+      >Must be a valid GUC email.</span>
+    </div>
+
+    <div class="relative form-line">
       <md-input-container class="md-block">
         <label>Text</label>
         <textarea data-ng-model="contactData.text"

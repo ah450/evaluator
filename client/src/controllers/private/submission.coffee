@@ -13,7 +13,7 @@ angular.module 'evaluator'
 
       $scope.submissions = []
       $scope.submissionClasses = ['submission-accent-one',
-      'submission-accent-two', 'submission-accent-three']
+        'submission-accent-two', 'submission-accent-three']
 
       deletedSubmissionCallback = (id) ->
         _.remove $scope.submissions, (submission) ->

@@ -1,0 +1,108 @@
+<section id="submissionsWrapper" class="submissions-wrapper">
+  <header>
+    <h1>Submissions</h1>
+  </header>
+
+  <form class="search-controls"
+  name="submissionsSearchForm"
+  id="submissionsSearchForm"
+  class="contract-form"
+  novalidate>
+    <fieldset>
+      <div class="relative form-line">
+        <md-autocomplete
+        ng-required="true"
+        md-input-name="course"
+        md-input-id="course"
+        md-selected-item="formData.selectedCourse"
+        md-search-text="formData.courseSearchText"
+        md-items="course in courseSearch(formData.courseSearchText)"
+        md-item-text="course.name"
+        md-min-length="0"
+        placeholder="Course by name"
+        >
+
+        <md-item-template>
+          <span md-highlight-text="formData.courseSearchText"
+          md-highlight-flags="^i">{{course.name}}</span>
+        </md-item-template>
+        <md-not-found>
+        No courses found matching "{{formData.courseSearchText}}"
+        </md-not-found>
+        </md-autocomplete>
+        <div ng-messages="submissionsSearchForm.course.$error" role="alert">
+          <div ng-message="required" class="error">
+          This field is required</div>
+        </div>
+      </div>
+
+      <div class="relative form-line">
+        <md-autocomplete
+        ng-required="true"
+        md-input-name="project"
+        md-input-id="project"
+        data-ng-disabled="!formData.selectedCourse"
+        md-selected-item="formData.selectedProject"
+        md-search-text="formData.projectSearchText"
+        md-items="project in projectSearch(formData.projectSearchText, formData.selectedCourse)"
+        md-item-text="project.name"
+        md-min-length="0"
+        md-selected-item-change="selectProject(project)"
+        placeholder="Project by name"
+        >
+        <md-item-template>
+          <span md-highlight-text="formData.projectSearchText"
+          md-highlight-flags="^i">{{project.name}}</span>
+        </md-item-template>
+        <md-not-found>
+        No Projects found matching "{{formData.projectSearchText}}"
+        </md-not-found>
+        </md-autocomplete>
+        <div data-ng-show="formData.selectedCourse" ng-messages="submissionsSearchForm.project.$error" role="alert">
+          <div ng-message="required" class="error">
+          This field is required</div>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      
+    </fieldset>
+  </form>
+
+
+<section data-ng-show="formData.selectedProject">
+
+  <ul class="submissions-list">
+    <li class="submission-item btn-green"
+    data-ng-class="submission.status"
+    data-ng-repeat="submission in submissions track by $index"
+    >
+      <div
+      data-submission data-data="submission"
+      data-ng-class="submissionClasses[$index %submissionClasses.length]"
+      >
+      </div>
+    </li>
+    <li class="submission-item center-pseudo"
+    data-ng-if="loadingSubmissions"
+    >
+      <i class="material-icons spinner">refresh</i>
+    </li>
+  </ul>
+
+  <div class="pagination-controls"
+  data-ng-hide="loadingSubmissions"
+  >
+    <button data-ng-disabled="backDisabled()"
+    data-ng-click="back()"
+    class="btn-amber"
+    ><i class="material-icons">navigate_before</i></button>
+    <button data-ng-disabled="nextDisabled()"
+    data-ng-click="next()" class="btn-amber">
+    <i class="material-icons">navigate_next</i></button>
+
+  </div>
+
+</section>
+</section>

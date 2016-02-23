@@ -22,8 +22,9 @@
 
 .results-wrapper {
   margin-top: 1em;
-  header {
+  & > header {
     text-align: center;
     margin-bottom: 1em;
   }
 }
+

@@ -8,6 +8,7 @@ angular.module 'evaluator'
       $scope.processing = true
       $scope.error = ''
       $scope.contactData.reported_at = moment().format()
+      $scope.contactData.title += " by #{$scope.contactData.email}"
       contact = new ContactsResource $scope.contactData
       success = ->
         $scope.error = ''
