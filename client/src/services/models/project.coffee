@@ -28,11 +28,29 @@ angular.module 'evaluator'
 
         @property 'due_date',
           get: ->
-            moment(@resource.due_date).format("MMMM Do YYYY, h:mm:ss a")
+            @dueDateCache ||=
+              moment(@resource.due_date).format("MMMM Do YYYY, h:mm:ss a")
+          set: (value) ->
+            @resource.due_date = value
 
         @property 'start_date',
           get: ->
-            moment(@resource.start_date).format("MMMM Do YYYY, h:mm:ss a")
+            @startDateCache ||=
+              moment(@resource.start_date).format("MMMM Do YYYY, h:mm:ss a")
+          set: (value) ->
+            @$resource.start_date = value
+
+        @property 'due_date_as_date',
+          get: ->
+            @dueDateAsDateCache ||= moment(@resource.due_date).toDate()
+          set: (value) ->
+            @resource.due_date = value
+
+        @property 'start_date_as_date',
+          get: ->
+            @startDateAsDateCache ||= moment(@resource.start_date).toDate()
+          set: (value) ->
+            @$resource.start_date = value
 
         @property 'published',
           get: ->

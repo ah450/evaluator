@@ -60,7 +60,7 @@ class Api::ProjectsController < ApplicationController
     if query_params[:name].present?
       'length(projects.name) ASC'
     else
-      :created_at
+      {created_at: :desc}
     end
   end
 

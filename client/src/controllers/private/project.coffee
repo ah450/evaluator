@@ -6,6 +6,7 @@ angular.module 'evaluator'
       $scope.isTeacher = UserAuth.user.teacher
       $scope.isAdmin = UserAuth.user.admin
       $scope.canAddSuite = $scope.isTeacher && $scope.isAdmin
+      $scope.canEdit = $scope.isAdmin
 
       projectPromise = ProjectResource.get(
         id: $stateParams.id
@@ -19,17 +20,20 @@ angular.module 'evaluator'
       projectPromise.then (project) ->
         $scope.project = new Project project, unpublishedCallback
         $scope.canAddSuite &= !$scope.project.published
+        $scope.canEdit &= !$scope.project.published
         $scope.loading = false
 
       $scope.publish = ->
         $scope.loading = true
         $scope.project.published = true
+        $scope.canEdit = false
         $scope.project.$update().then ->
           $scope.loading = false
 
       $scope.unpublish = ->
         $scope.loading = true
         $scope.project.published = false
+        $scope.canEdit = UserAuth.user.admin
         $scope.project.$update().then ->
           $scope.loading = false
 
@@ -77,6 +81,33 @@ angular.module 'evaluator'
             $scope.loadingSuites = false
             addSuitesCallback suites, $scope.suites.length
             $scope.scrollDisabled = false
+
+
+      $scope.showEditDialog = ->
+        $return if $scope.editProjectDialog &&
+          ngDialog.isOpen($scope.editProjectDialog.id)
+        $scope.projectEditError = ''
+        $scope.editProjectDialog = ngDialog.open
+          template: 'edit/project.html'
+          scope: $scope
+
+
+      $scope.update = ->
+        return if $scope.processingProject
+        $scope.processingProject = true
+        success = (response) ->
+          $scope.editProjectDialog.close()
+          $scope.processingProject = false
+        failure = (response) ->
+          if response.status is 422
+            $scope.projectEditError =
+              ("#{key.capitalize()} #{value}." for key, value of response.data)
+              .join ' '
+            $scope.processingProject = false
+          else
+            $scope.suiteCreateError = response.data.message.capitalize
+            $scope.processingProject = false
+        $project.update().then success, failure
 
 
       $scope.newSuiteData = {}

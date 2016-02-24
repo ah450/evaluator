@@ -103,9 +103,10 @@ class Api::UsersController < ApplicationController
       @current_user.super_user?
     attributes.delete :id
     attributes.delete :student
-    attributes.delete :super_user
-    attributes.delete :team unless @current_user.present? &&
-      @current_user.super_user?
+    unless @current_user.present? && @current_user.super_user?
+      attributes.delete :super_user
+      attributes.delete :team
+    end
     if @user.present? && !@current_user.super_user?
       # This is an update
       attributes.delete :guc_prefix
