@@ -9,6 +9,17 @@ angular.module 'evaluator'
     $authProvider.loginUrl = 'tokens.json'
 
 angular.module 'evaluator'
+  .run ($rootScope, UserAuth, $analytics) ->
+    $rootScope.userAuth = UserAuth
+    $rootScope.$watch 'userAuth.signedIn', (newValue) ->
+      if newValue
+        $analytics.setUserProperties {
+          email: user.email,
+          name: user.full_name
+        }
+        $analytics.setUsername UserAuth.user.id
+
+angular.module 'evaluator'
   .run ($rootScope, $state, UserAuth, redirect) ->
     # Authorization checks
     # applies to states that provide authRule method in their data object
