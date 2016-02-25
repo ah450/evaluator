@@ -14,8 +14,8 @@ angular.module 'evaluator'
     $rootScope.$watch 'userAuth.signedIn', (newValue) ->
       if newValue
         $analytics.setUserProperties {
-          email: user.email,
-          name: user.full_name
+          email: UserAuth.user.email,
+          name: UserAuth.user.full_name
         }
         $analytics.setUsername UserAuth.user.id
 
