@@ -26,6 +26,9 @@ angular.module 'evaluator'
         'pageContent':
           templateUrl: 'public/login.html'
           controller: 'LoginController'
+      resolve:
+        $title: ->
+          'Evaluator| Login'
 
     signupState =
       name: 'public.signup'
@@ -34,6 +37,9 @@ angular.module 'evaluator'
         'pageContent':
           templateUrl: 'public/signup.html'
           controller: 'SignupController'
+      resolve:
+        $title: ->
+          'Evaluator| Signup'
     
     
 
@@ -60,6 +66,9 @@ angular.module 'evaluator'
         'pageContent':
           templateUrl: 'public/reset_send.html'
           controller: 'SendResetController'
+      resolve:
+        $title: ->
+          'Reset Password'
 
     sendVerification =
       name: 'public.verify_send'
@@ -76,6 +85,9 @@ angular.module 'evaluator'
       views:
         'pageContent':
           templateUrl: 'public/about.html'
+      resolve:
+        $title: ->
+          'Evaluator| About'
 
     internalErrorState =
       name: 'public.internal_error'
@@ -98,6 +110,9 @@ angular.module 'evaluator'
         'pageContent':
           templateUrl: 'public/contact.html'
           controller: 'ContactController'
+      resolve:
+        $title: ->
+          'Evaluator| Contact'
 
     thanksFeedbackState =
       name: 'public.thanks_feedback'
@@ -105,6 +120,9 @@ angular.module 'evaluator'
       views:
         'pageContent':
           templateUrl: 'public/thanks_feedback.html'
+      resolve:
+        $title: ->
+          'Thanks'
 
     $stateProvider
       .state publicState

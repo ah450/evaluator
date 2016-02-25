@@ -60,6 +60,9 @@ angular.module 'evaluator'
       views:
         'pageContent':
           templateUrl: 'public/about.html'
+      resolve:
+        $title: ->
+          'Evaluator| About'
 
     internalErrorState =
       name: 'private.internal_error'
@@ -67,6 +70,9 @@ angular.module 'evaluator'
       views:
         'pageContent':
           templateUrl: 'public/internal_error.html'
+      resolve:
+        $title: ->
+          'Oopsy'
 
     profileState =
       name: 'private.profile'
@@ -75,6 +81,9 @@ angular.module 'evaluator'
         'pageContent':
           templateUrl: 'private/profile.html'
           controller: 'ProfileController'
+      resolve:
+        $title: ->
+          'Evaluator| Profile'
 
     unpublishedState =
       name: 'private.unpublished'
@@ -108,6 +117,9 @@ angular.module 'evaluator'
         'pageContent@private':
           templateUrl: 'private/teacher/portal.html'
           controller: 'PortalController'
+      resolve:
+        $title: ->
+          'Evaluator| Teacher Portal'
 
     bundleDownload =
       name: 'private.teacher.bundle'
@@ -124,6 +136,9 @@ angular.module 'evaluator'
         'pageContent':
           templateUrl: 'public/contact.html'
           controller: 'ContactController'
+      resolve:
+        $title: ->
+          'Evaluator| Feedback'
 
     thanksFeedbackState =
       name: 'private.thanks_feedback'
@@ -131,6 +146,9 @@ angular.module 'evaluator'
       views:
         'pageContent':
           templateUrl: 'public/thanks_feedback.html'
+      resolve:
+        $title: ->
+          'Thanks'
 
     bundlesState =
       name: 'private.teacher.bundles'
@@ -139,6 +157,9 @@ angular.module 'evaluator'
         'pageContent@private':
           templateUrl: 'private/teacher/bundles.html'
           controller: 'BundlesController'
+      resolve:
+        $title: ->
+          'Paperwork'
 
     usersState =
       name: 'private.teacher.users'
@@ -147,6 +168,9 @@ angular.module 'evaluator'
         'pageContent@private':
           templateUrl: 'private/teacher/users.html'
           controller: 'UsersController'
+      resolve:
+        $title: ->
+          'Evaluator| Users'
 
     userState =
       name: 'private.teacher.user'
@@ -163,6 +187,9 @@ angular.module 'evaluator'
         'pageContent@private':
           templateUrl: 'private/teacher/results.html'
           controller: 'TeacherResultsController'
+      resolve:
+        $title: ->
+          'Evaluator| Results'
 
     $stateProvider
       .state privateState

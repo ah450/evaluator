@@ -11,6 +11,8 @@
       <div class="flex-perfect-center-container flex-column">
         <i class="material-icons check">check</i>
         <md-button class="md-fab md-mini" data-ng-if="canDelete"
+        analytics-on="click"
+        analytics-event="suite-delete"
         data-ng-click="showDeleteDialog($event)" aria-label="delete">
           <md-icon md-font-set="material-icons">delete_forever</md-icon>
         </md-button>
@@ -37,6 +39,9 @@
   <div class="float-wrapper">
     <i class="material-icons right" data-ng-if="suite.hidden">visibility_off</i>
     <i class="material-icons right" data-ng-if="!suite.hidden">visibility_on</i>
-    <i data-ng-click="download()" data-ng-if="canDownload" class="material-icons left clickable-icon">file_download</i>
+    <i data-ng-click="download()" data-ng-if="canDownload"
+    analytics-on="click"
+    analytics-event="suite-download"
+    class="material-icons left clickable-icon">file_download</i>
   </div>
 </div>

@@ -12,7 +12,10 @@
       <md-icon md-font-set="material-icons">mode_edit</md-icon>
     </md-button>
     <md-button class="md-fab md-mini" data-ng-if="canDelete"
-    data-ng-click="showDeleteDialog($event)" aria-label="delete">
+    data-ng-click="showDeleteDialog($event)"
+    analytics-on="click"
+    analytucs-event="user-delete"
+    aria-label="delete">
       <md-icon md-font-set="material-icons">delete_forever</md-icon>
     </md-button>
   </div>
