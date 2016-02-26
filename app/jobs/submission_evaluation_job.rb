@@ -19,6 +19,10 @@ class SubmissionEvaluationJob < ActiveJob::Base
     end
   end
 
+  rescue_from(ActiveJob::DeserializationError) do |exception|
+    logger.info exception.backtrace
+  end
+
   def perform(submission)
     @newResults = []
     submission.with_lock('FOR UPDATE') do
