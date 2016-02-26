@@ -44,7 +44,8 @@ class User < ActiveRecord::Base
   validates :password, length: { minimum: 2 }, allow_nil: true
   validates :name, presence: true
   validates :email, presence: true, uniqueness: { case_sensitive: false }
-  validates_format_of :email, with: GUC_EMAIL_REGEX, message: 'must be a GUC email'
+  validates_format_of :email, with: GUC_EMAIL_REGEX,
+    message: 'must be a GUC email'
   validate :email_not_changed
   validate :student_fields
   validate :super_user_teacher

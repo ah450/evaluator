@@ -36,3 +36,5 @@ exclude_paths:
 - test/
 - vendor/
 - client/polyfills/
+- client/src/style/vendor/
+- client/src/services/wrappers/
