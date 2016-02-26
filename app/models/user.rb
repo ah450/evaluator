@@ -27,13 +27,11 @@
 #  index_users_on_team        (team)
 #
 
-=begin
-This model represents any user
-The following types:
-1 - Student
-2 - Teacher
-3 - Super User
-=end
+# This model represents any user
+# The following types:
+# 1 - Student
+# 2 - Teacher
+# 3 - Super User
 class User < ActiveRecord::Base
   has_secure_password
   include JwtAuthenticatable
@@ -147,9 +145,7 @@ class User < ActiveRecord::Base
   end
 
   def super_user_teacher
-    if student? && super_user?
-      errors.add(:super_user, 'Must be a teacher')
-    end
+    errors.add(:super_user, 'Must be a teacher') if student? && super_user?
   end
 
   def set_subtype
@@ -173,5 +169,4 @@ class User < ActiveRecord::Base
       cached = Marshal.load(cached)
     end
   end
-
 end

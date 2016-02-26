@@ -1,6 +1,4 @@
-=begin
-Concern for User email verification
-=end
+# Concern for User email verification
 module EmailVerifiable
   extend ActiveSupport::Concern
 
@@ -16,7 +14,6 @@ module EmailVerifiable
     def verification_resend_delay
       Rails.application.config.configurations[:user_verification_resend_delay]
     end
-
   end
 
   included do
@@ -24,16 +21,21 @@ module EmailVerifiable
   end
 
   def can_resend_verify?
-    expirationTime = User.verification_resend_delay.ago
-    num_tokens = VerificationToken.where(user_id: id).where('created_at > ?', expirationTime).count
+    expiration_time = User.verification_resend_delay.ago
+    num_tokens = VerificationToken.where(user_id: id).where('created_at > ?',
+                                                            expiration_time)
+                                  .count
     num_tokens == 0
   end
 
   def verify(token)
     unless verified?
       with_lock('FOR UPDATE') do
-        expirationTime = User.verification_expiration.ago
-        verification_tokens = VerificationToken.where(user_id: id, token: token).where('created_at >= ?', expirationTime)
+        expiration_time = User.verification_expiration.ago
+        verification_tokens = VerificationToken.where(user_id: id,
+                                                      token: token).where(
+                                                        'created_at >= ?',
+                                                        expiration_time)
         if verification_tokens.count > 0
           self.verified = true
           save!
@@ -46,12 +48,16 @@ module EmailVerifiable
 
   def gen_verification_token
     verification_token = with_lock('FOR UPDATE') do
-      expirationTime = User.verification_expiration.ago
-      VerificationToken.where(user_id: id).where('created_at <= ?', expirationTime).delete_all
-      VerificationToken.where(user_id: id).order(created_at: :desc).offset(1).destroy_all
-      token = VerificationToken.where(user_id: id).order(created_at: :desc).first
-      token_str = SecureRandom.urlsafe_base64 User.verification_token_str_max_length
-      if !token.nil? && token.created_at <= expirationTime
+      expiration_time = User.verification_expiration.ago
+      VerificationToken.where(user_id: id).where('created_at <= ?',
+                                                 expiration_time).delete_all
+      VerificationToken.where(user_id: id).order(
+        created_at: :desc).offset(1).destroy_all
+      token = VerificationToken.where(user_id: id).order(
+        created_at: :desc).first
+      token_str = SecureRandom.urlsafe_base64(
+        User.verification_token_str_max_length)
+      if !token.nil? && token.created_at <= expiration_time
         token.destroy
         token = nil
       end
@@ -59,5 +65,4 @@ module EmailVerifiable
     end
     verification_token.token
   end
-
 end

@@ -31,9 +31,7 @@ class Submission < ActiveRecord::Base
 
   def as_json(_options = {})
     super(except: [:solution_id])
-      .merge({
-        submitter: submitter.as_json
-      })
+      .merge(submitter: submitter.as_json)
   end
 
   def send_new_result_notification(result)

@@ -29,7 +29,7 @@ class TeamJob < ActiveRecord::Base
   def send_status(status)
     event = {
       type: Rails.application.config
-        .configurations[:notification_event_types][:team_job_status],
+                 .configurations[:notification_event_types][:team_job_status],
       date: DateTime.now.utc,
       payload: {
         status: status

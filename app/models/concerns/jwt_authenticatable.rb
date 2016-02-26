@@ -1,15 +1,8 @@
-=begin
-Concern for User class JWT authentication.
-=end
+# Concern for User class JWT authentication.
 module JwtAuthenticatable
   extend ActiveSupport::Concern
 
-
   module ClassMethods
-
-
-
-
     def decode_token(token)
       decoded = JWT.decode token, hmac_key, true, algorithm: 'HS512'
       data = decoded.first['data']
@@ -18,7 +11,6 @@ module JwtAuthenticatable
         user.password_digest, data['discriminator'])
       [user, data['exp']]
     end
-
 
     # Retrieve user based on token
     # Raises JWT::VerificationError if key missmatch or signature corrupted
@@ -32,21 +24,20 @@ module JwtAuthenticatable
       if cached.nil?
         record, exp = decode_token(token)
         return record if exp.nil?
-        exp = exp - Time.now.to_i
+        exp -= Time.now.to_i
         unless exp < 0
           $redis.set token, Marshal.dump(self)
           $redis.expire token, exp
         end
         record
       else
-        cached = Marshal.load(cached)
+        Marshal.load(cached)
       end
     end
 
     def hmac_key
       Rails.application.config.jwt_key
     end
-
   end
 
   included do
@@ -73,5 +64,4 @@ module JwtAuthenticatable
     self.class.add_related_cache(id, token)
     token
   end
-
 end

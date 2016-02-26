@@ -25,8 +25,8 @@ class Contact < ActiveRecord::Base
   validates :text, :title, :reported_at, presence: true
   after_create :send_email
 
-
   private
+
   def send_email
     UserMailer.contact_report(self).deliver_later
   end

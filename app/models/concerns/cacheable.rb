@@ -1,9 +1,9 @@
+# Implements basic find caching and cache utility methods
+# Caches in redis
 module Cacheable
   extend ActiveSupport::Concern
 
   module ClassMethods
-
-
     def related_set_name(id)
       "#{table_name.singularize}_#{id}_related_keys"
     end
@@ -21,21 +21,19 @@ module Cacheable
     end
 
     def find_one_cache(id)
-      if ActiveRecord::Base === id
-        id = id.id
-      end
+      id = id.id if ActiveRecord::Base === id
       cached = $redis.get cache_key(id)
       if cached.nil?
-        record =  method(:find).super_method.call id
+        record = method(:find).super_method.call id
         $redis.set cache_key(id), Marshal.dump(record)
-        cached = record
+        record
       else
-        cached = Marshal.load(cached)
+        Marshal.load(cached)
       end
     end
 
     def find_helper(*ids)
-      expects_array = ids.first.kind_of?(Array)
+      expects_array = ids.first.is_a?(Array)
       return ids.first if expects_array && ids.first.empty?
 
       ids = ids.flatten.compact.uniq
@@ -45,7 +43,7 @@ module Cacheable
         raise RecordNotFound, "Couldn't find #{@klass.name} without an ID"
       when 1
         result = find_one_cache(ids.first)
-        expects_array ? [ result ] : result
+        expects_array ? [result] : result
       else
         method(:find).super_method.call ids
       end
@@ -65,7 +63,7 @@ module Cacheable
     keys = $redis.smembers self.class.related_set_name(id)
     return if keys.nil?
     $redis.pipelined do
-      keys.each { |k| $redis.del k}
+      keys.each { |k| $redis.del k }
     end
     $redis.del self.class.related_set_name(id)
   end
@@ -73,6 +71,4 @@ module Cacheable
   def destroy_id_cache
     $redis.del self.class.cache_key(id)
   end
-
-
 end

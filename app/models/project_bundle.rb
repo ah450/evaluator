@@ -28,7 +28,7 @@ class ProjectBundle < ActiveRecord::Base
 
   def as_json(_options = {})
     super(except: [:data],
-      methods: [:ready, :project_name]
+          methods: [:ready, :project_name]
       )
   end
 
@@ -39,7 +39,6 @@ class ProjectBundle < ActiveRecord::Base
   def project_name
     project.name
   end
-
 
   def filename
     "#{DateTime.now.utc}-#{project.name}-#{user.name}.tar.gz"

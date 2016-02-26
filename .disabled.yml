@@ -6,3 +6,12 @@ Metrics/ClassLength:
 
 Metrics/ModuleLength:
   Enabled: false
+
+Documentation:
+  Enabled: false
+
+Style/GlobalVars:
+  Enabled: false
+
+Style/CaseEquality:
+  Enabled: false

@@ -10,7 +10,7 @@ AllCops:
     - 'spec/**/*'
 
 Metrics/AbcSize:
-  Max: 20
+  Max: 30
 
 Metrics/MethodLength:
   Max: 30
