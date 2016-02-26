@@ -35,6 +35,8 @@ angular.module 'evaluator'
       @property 'admin',
         get: ->
           @resource.super_user
+        set: (value) ->
+          @resource.super_user = value
 
       @property 'teacher',
         get: ->

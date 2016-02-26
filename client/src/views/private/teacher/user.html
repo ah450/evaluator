@@ -93,6 +93,7 @@ novalidate
 
   <fieldset>
     <md-checkbox data-ng-model="user.verified" name="verified">Verified</md-checkbox>
+    <md-checkbox data-ng-if="user.teacher" data-ng-model="user.admin" name="superuser">Admin></md-checkbox>
   </fieldset>
 
   <p class="error">{{error}}</p>

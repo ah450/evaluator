@@ -10,6 +10,7 @@ angular.module 'evaluator'
         email: ''
         guc_prefix: ''
         guc_suffix: ''
+        team: ''
 
       # data used for searching for submissions
       $scope.submitterParams =
@@ -17,6 +18,7 @@ angular.module 'evaluator'
         email: null
         guc_prefix: null
         guc_suffix: null
+        team: null
 
       $scope.submissionParams =
         project_id: null
@@ -24,6 +26,7 @@ angular.module 'evaluator'
         "submitter[email]": null
         "submitter[guc_prefix]": null
         "submitter[guc_suffix]": null
+        "submitter[team]": null
         
         
       updateSubmitterParams = ->
@@ -125,5 +128,6 @@ angular.module 'evaluator'
       $scope.back = ->
         if not $scope.backDisabled()
           loadSubmissionsPage($scope.currentPage - 1)
+
 
 
