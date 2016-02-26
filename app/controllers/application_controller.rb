@@ -33,7 +33,7 @@ class ApplicationController < ActionController::API
 
   # GET /api/{resource_name}/:id
   def show
-    render json: get_resource
+    render json: get_resource if stale?(get_resource, template: false)
   end
 
   # DELETE /api/{resource_name}/:id
