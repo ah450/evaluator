@@ -25,6 +25,7 @@ RSpec.describe 'Auths', type: :request do
     end
     it 'does not accept expired tokens' do
       token = user.token 0
+      sleep 1
       get api_users_path, nil, get_token(token)
       expect(response).to have_http_status 401
     end

@@ -16,6 +16,7 @@
 #
 
 class Course < ActiveRecord::Base
+  include Cacheable
   validates :name, :description, presence: true
   validates :name, uniqueness: { case_sensitive: false }
   has_many :studentships, inverse_of: :course

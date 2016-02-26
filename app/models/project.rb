@@ -27,6 +27,7 @@
 #
 
 class Project < ActiveRecord::Base
+  include Cacheable
   belongs_to :course, inverse_of: :projects
   has_many :submissions, inverse_of: :project, dependent: :destroy
   has_many :test_suites, inverse_of: :project, dependent: :destroy
