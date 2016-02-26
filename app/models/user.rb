@@ -165,9 +165,9 @@ class User < ActiveRecord::Base
       return nil if record.nil?
       $redis.set key, Marshal.dump(record)
       add_related_cache(record.id, key)
-      cached = record
+      record
     else
-      cached = Marshal.load(cached)
+      Marshal.load(cached)
     end
   end
 end
