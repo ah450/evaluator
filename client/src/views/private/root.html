@@ -1,5 +1,7 @@
 <nav id="privateNavbar" class="top-nav">
-  <ul class="flex-row-between" data-ng-controller="PrivateNavController">
+  <div class="burger-menu" data-click-toggle="open" data-prevent-default="true"
+  data-click-toggle-target=".top-nav"></div>
+  <ul data-ng-controller="PrivateNavController">
     <li class="btn-green" data-ui-sref-active="active"><a data-ui-sref="private.courses">courses</a></li>
     <li class="btn-pink"
     data-ui-sref-active="active">
