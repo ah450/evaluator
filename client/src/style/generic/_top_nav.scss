@@ -31,6 +31,12 @@
     background: transparent;
     width: 2em;
 
+    .burger-wrap {
+      cursor: pointer;
+      width: 2em;
+      height: 2em;
+    }
+
     .burger-menu {
       display: block;
       position: relative;
