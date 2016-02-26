@@ -41,4 +41,9 @@ Rails.application.configure do
   config.assets.cache_store = :null_store
   config.sass.cache = false
   config.debug_exception_response_format = :api
+  config.cache_store = :redis_store, { host: "localhost",
+                                       port: 6379,
+                                       db: 2,
+                                       namespace: "evaluator_development_cache",
+                                       expires_in: 90.minutes }
 end

@@ -39,6 +39,10 @@ gem 'actionpack', '~> 4.2', '>= 4.2.5.1'
 gem 'activemodel', '~> 4.2', '>= 4.2.5.1'
 gem 'actionview', '~> 4.2', '>= 4.2.5.1'
 gem 'annotate'
+gem 'redis-rails'
+gem 'redis'
+gem "hiredis"
+gem 'redis-namespace'
 
 group :test do
   gem 'shoulda-matchers'
