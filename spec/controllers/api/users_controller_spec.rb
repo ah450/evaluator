@@ -67,6 +67,20 @@ RSpec.describe Api::UsersController, type: :controller do
     let(:teacher_two) { FactoryGirl.create(:teacher) }
     let(:admin) { FactoryGirl.create(:super_user) }
 
+    it 'allows a super user to set another teacher as a super user' do
+      set_token admin.token
+      put :update, id: teacher_one.id, format: :json, super_user: true
+      expect(response).to be_success
+      teacher_one.reload
+      expect(teacher_one.super_user?).to be true
+    end
+    it 'does not allow a super user to set a student as a super user' do
+      set_token admin.token
+      put :update, id: student_one.id, format: :json, super_user: true
+      expect(response).to be_unprocessable
+      student_one.reload
+      expect(student_one.super_user?).to be false
+    end
     it 'disallow unauthorized updates' do
       old_digest = student_one.password_digest
       put :update, id: student_one.id, format: :json, password: 'new password!'
