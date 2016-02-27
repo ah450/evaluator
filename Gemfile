@@ -41,14 +41,14 @@ gem 'actionview', '~> 4.2', '>= 4.2.5.1'
 gem 'annotate'
 gem 'redis-rails'
 gem 'redis'
-gem "hiredis"
+gem 'hiredis'
 gem 'redis-namespace'
 
 group :test do
   gem 'shoulda-matchers'
   gem 'simplecov', require: false
   gem 'rspec-prof', git: 'https://github.com/sinisterchipmunk/rspec-prof.git'
-  gem "codeclimate-test-reporter", require: false
+  gem 'codeclimate-test-reporter', require: false
 end
 
 group :development, :test do

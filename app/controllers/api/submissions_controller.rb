@@ -29,7 +29,7 @@ class Api::SubmissionsController < ApplicationController
     if @submission.persisted?
       SubmissionEvaluationJob.perform_later @submission
       num_subs = Submission.where(submitter: @current_user,
-                                 project: @project).count
+                                  project: @project).count
       max_subs = Rails.application.config.configurations[:max_num_submissions]
       if num_subs > max_subs
         SubmissionCullingJob.perform_later(@current_user, @project)
@@ -77,14 +77,14 @@ class Api::SubmissionsController < ApplicationController
     possible_user_fields = User.queriable_fields
     # A query based on user fields
     if params.key?(:submitter) &&
-      user_params = params[:submitter].permit(possible_user_fields)
+       user_params = params[:submitter].permit(possible_user_fields)
       query = query.joins(:submitter) unless user_params.empty?
       user_params.symbolize_keys.keys.each do |key|
-        if key.in? [:email, :name]
-          query = query.where("users.#{key} ILIKE ?", "%#{user_params[key]}%")
-        else
-          query = query.where(users: {key => user_params[key]})
-        end
+        query = if key.in? [:email, :name]
+                  query.where("users.#{key} ILIKE ?", "%#{user_params[key]}%")
+                else
+                  query.where(users: { key => user_params[key] })
+                end
       end
     end
     query
@@ -103,5 +103,4 @@ class Api::SubmissionsController < ApplicationController
   def order_args
     { created_at: :desc }
   end
-
 end

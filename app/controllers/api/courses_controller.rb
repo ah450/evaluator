@@ -1,6 +1,6 @@
 class Api::CoursesController < ApplicationController
   prepend_before_action :authorize_teacher, :authorize_super_user,
-    only: [:destroy, :update, :create]
+                        only: [:destroy, :update, :create]
   prepend_before_action :authenticate
   before_action :hide_unpublished, only: [:index]
   before_action :hide_unpublished_single, only: [:show]

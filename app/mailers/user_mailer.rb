@@ -22,7 +22,7 @@ class UserMailer < ApplicationMailer
   def contact_report(report)
     @report = report
     mail(to: User.admins.pluck(:email),
-      cc: 'ahm3d.hisham@gmail.com',
-      subject: 'Issue reported')
+         cc: 'ahm3d.hisham@gmail.com',
+         subject: 'Issue reported')
   end
 end

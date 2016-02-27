@@ -65,7 +65,7 @@ class Api::UsersController < ApplicationController
 
   def query_params
     params.permit(:student, :super_user, :name, :email, :guc_suffix,
-      :guc_prefix, :team)
+                  :guc_prefix, :team)
   end
 
   def apply_query(base, query_params)
@@ -100,7 +100,7 @@ class Api::UsersController < ApplicationController
     attributes = model_attributes
     attributes.delete :password_digest
     attributes.delete :verified unless @current_user.present? &&
-      @current_user.super_user?
+                                       @current_user.super_user?
     attributes.delete :id
     attributes.delete :student
     unless @current_user.present? && @current_user.super_user?

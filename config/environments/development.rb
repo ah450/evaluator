@@ -40,9 +40,10 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
   config.assets.cache_store = :null_store
   config.debug_exception_response_format = :api
-  config.cache_store = :redis_store, { host: "localhost",
+  config.cache_store = :redis_store, { host: 'localhost',
                                        port: 6379,
+                                       driver: 'hiredis',
                                        db: 2,
-                                       namespace: "evaluator_development_cache",
+                                       namespace: 'evaluator_development_cache',
                                        expires_in: 90.minutes }
 end

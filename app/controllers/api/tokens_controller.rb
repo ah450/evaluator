@@ -19,7 +19,6 @@ class Api::TokensController < ApplicationController
       user.verified?
   end
 
-
   def token_params
     params.require(:token).permit([:email, :password, :expiration])
   end

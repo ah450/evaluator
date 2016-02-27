@@ -24,9 +24,9 @@ class ApplicationController < ActionController::API
   # GET /api/{plural_resource_variable}
   def index
     resources = apply_query(base_index_query, query_params)
-                                .order(order_args)
-                                .page(page_params[:page])
-                                .per(page_params[:page_size])
+                .order(order_args)
+                .page(page_params[:page])
+                .per(page_params[:page_size])
     instance_variable_set(plural_resource_variable, resources)
     render_multiple
   end
@@ -50,7 +50,6 @@ class ApplicationController < ActionController::API
       render json: get_resource.errors, status: :unprocessable_entity
     end
   end
-
 
   private
 
@@ -151,19 +150,19 @@ class ApplicationController < ActionController::API
   # Rescue from AuthenticationError
   def authentication_error
     prepare_unauthorized_response
-    render json: {message: error_messages[:authentication_error]}
+    render json: { message: error_messages[:authentication_error] }
   end
 
   # Rescue from JWT::ExpiredSignature
   def expired_signature
     prepare_unauthorized_response
-    render json: {message: error_messages[:expired_token]}
+    render json: { message: error_messages[:expired_token] }
   end
 
   # Rescue from JWT::VerificationError
   def verification_error
     prepare_unauthorized_response
-    render json: {message: error_messages[:token_verification]}
+    render json: { message: error_messages[:token_verification] }
   end
 
   def error_messages
@@ -175,7 +174,7 @@ class ApplicationController < ActionController::API
   end
 
   def forbidden_error(error)
-    render json: {message: error.message}, status: :forbidden
+    render json: { message: error.message }, status: :forbidden
   end
 
   def authorize
@@ -204,48 +203,46 @@ class ApplicationController < ActionController::API
     base.where(query_params)
   end
 
-
   # Attempts to set current user
   def authenticate
-    begin
-      pattern = /^Bearer /
-      header  = request.headers["Authorization"]
-      if header && header.match(pattern)
-        token = header.gsub(pattern, '')
-        @current_user = User.find_by_token token
-        raise ForbiddenError, error_messages[:unverified_login] unless @current_user.verified?
-      else
-        raise AuthenticationError
-      end
-    rescue ActiveRecord::RecordNotFound
+    pattern = /^Bearer /
+    header  = request.headers['Authorization']
+    if header && header.match(pattern)
+      token = header.gsub(pattern, '')
+      @current_user = User.find_by_token token
+      raise ForbiddenError, error_messages[:unverified_login] unless @current_user.verified?
+    else
       raise AuthenticationError
     end
+  rescue ActiveRecord::RecordNotFound
+    raise AuthenticationError
   end
 
   def authenticate_optional
-    authenticate rescue false
+    authenticate
+  rescue
+    false
   end
 
   def not_found
-    render json: {message: error_messages[:record_not_found]}, status: :not_found
+    render json: { message: error_messages[:record_not_found] }, status: :not_found
   end
 
   def bad_request_response
-    render json: {message: error_messages[:bad_request]}, status: :bad_request
+    render json: { message: error_messages[:bad_request] }, status: :bad_request
   end
 
   def unknown_server_error(e)
     message = "#{e.class} \n #{e.message}\n"
     message << e.annotated_source_code.to_s if e.respond_to?(:annotated_source_code)
     message << "\n" << ActionDispatch::ExceptionWrapper.new(env, e)
-                        .application_trace.join('\n')
+                       .application_trace.join('\n')
     logger.error "#{message}\n\n"
-    render json: {message: error_messages[:internal_server_error]},
-      status: :internal_server_error
+    render json: { message: error_messages[:internal_server_error] },
+           status: :internal_server_error
   end
 
   def order_args
     :created_at
   end
-
 end

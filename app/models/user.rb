@@ -45,7 +45,7 @@ class User < ActiveRecord::Base
   validates :name, presence: true
   validates :email, presence: true, uniqueness: { case_sensitive: false }
   validates_format_of :email, with: GUC_EMAIL_REGEX,
-    message: 'must be a GUC email'
+                              message: 'must be a GUC email'
   validate :email_not_changed
   validate :student_fields
   validate :super_user_teacher
@@ -57,7 +57,7 @@ class User < ActiveRecord::Base
   has_many :studentships, inverse_of: :student, foreign_key: :student_id
   has_many :courses, through: :studentships, dependent: :delete_all
   has_many :submissions, inverse_of: :submitter, foreign_key: :submitter_id,
-    dependent: :destroy
+                         dependent: :destroy
 
   def teacher?
     !student?

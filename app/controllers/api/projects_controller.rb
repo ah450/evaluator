@@ -1,7 +1,7 @@
 class Api::ProjectsController < ApplicationController
   prepend_before_action :set_parent, only: [:create, :index]
   prepend_before_action :authorize_teacher, :authorize_super_user,
-    only: [:destroy, :update, :create]
+                        only: [:destroy, :update, :create]
   prepend_before_action :authenticate
   before_action :hide_unpublished, only: [:index]
   before_action :hide_unpublished_single, only: [:show]
@@ -60,15 +60,13 @@ class Api::ProjectsController < ApplicationController
     if query_params[:name].present?
       'length(projects.name) ASC'
     else
-      {created_at: :desc}
+      { created_at: :desc }
     end
   end
 
   def base_index_query
     base = Project.where(course: @course)
-    unless params[:due].nil?
-      base = params[:due] ? base.due : base.not_due
-    end
+    base = params[:due] ? base.due : base.not_due unless params[:due].nil?
     base = base.started if params[:started]
     base
   end
