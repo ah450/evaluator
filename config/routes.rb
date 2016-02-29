@@ -20,6 +20,11 @@ Rails.application.routes.draw do
         delete :registration, action: :unregister
       end
       resources :projects, shallow: true, except: [:new] do
+        resources :team_grades, shallow: true, only: [] do
+          member do
+            get :latest, action: :latest
+          end
+        end
         resources :results, shallow: true, only: [:index, :show]
         resources :submissions, shallow: true, except: [:destroy, :new, :update] do
           member do

@@ -3,29 +3,9 @@ class Api::SubmissionsController < ApplicationController
   # Authenticate on all actions
   prepend_before_action :authenticate, :authorize
   before_action :can_view, only: [:show, :download]
-  around_action :wrap_in_transaction, only: [:create]
 
   def create
-    @submission = Submission.new resource_params
-    if @submission.save
-      file = params.require(:file)
-      solution_params = {
-        code: file.read,
-        file_name: file.original_filename,
-        mime_type: file.content_type,
-        submission: @submission
-      }
-      solution = Solution.new solution_params
-      if solution.save
-        render json: @submission, status: :created
-      else
-        render json: solution.errors, status: :unprocessable_entity
-        raise ActiveRecord::Rollback
-      end
-    else
-      render json: @submission.errors, status: :unprocessable_entity
-      raise ActiveRecord::Rollback
-    end
+    create_helper
     if @submission.persisted?
       SubmissionEvaluationJob.perform_later @submission
       num_subs = Submission.where(submitter: @current_user,
@@ -36,6 +16,7 @@ class Api::SubmissionsController < ApplicationController
       end
     end
   end
+
 
   # Returns code
   def download
@@ -49,6 +30,31 @@ class Api::SubmissionsController < ApplicationController
   end
 
   private
+
+  def create_helper
+    Submission.transaction do
+      @submission = Submission.new resource_params
+      if @submission.save
+        file = params.require(:file)
+        solution_params = {
+          code: file.read,
+          file_name: file.original_filename,
+          mime_type: file.content_type,
+          submission: @submission
+        }
+        solution = Solution.new solution_params
+        if solution.save
+          render json: @submission, status: :created
+        else
+          render json: solution.errors, status: :unprocessable_entity
+          raise ActiveRecord::Rollback
+        end
+      else
+        render json: @submission.errors, status: :unprocessable_entity
+        raise ActiveRecord::Rollback
+      end
+    end
+  end
 
   def query_params
     params.permit(:submitter_id, :project_id)

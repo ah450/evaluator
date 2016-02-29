@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe TeamGrade, type: :model do
   it { should belong_to :project }
   it { should belong_to :result }
+  it { should belong_to :user }
   it { should validate_presence_of :result }
   it { should validate_presence_of :project }
   it { should validate_presence_of :name }

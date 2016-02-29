@@ -1,6 +1,7 @@
 require 'open3'
 class SubmissionEvaluationJob < ActiveJob::Base
   queue_as :default
+  include ERB::Util
 
   rescue_from(UnzipError) do |_ex|
     submission = arguments[0]

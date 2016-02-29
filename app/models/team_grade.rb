@@ -25,6 +25,7 @@
 # Represents a grade for an entire team
 # References the best submission result for that team.
 class TeamGrade < ActiveRecord::Base
+  belongs_to :user, primary_key: 'team', foreign_key: 'name'
   belongs_to :project
   belongs_to :result
   validates :result, presence: true
