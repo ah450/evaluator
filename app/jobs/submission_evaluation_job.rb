@@ -74,6 +74,7 @@ class SubmissionEvaluationJob < ActiveJob::Base
       prepare_suite(suite)
       generate_test_script(suite)
       # Compile tests
+      `find . -exec touch {} \\;`
       test_compile_out = `#{@compile_test_command}`
       if $CHILD_STATUS.exitstatus != 0
         # Test compilation failed
