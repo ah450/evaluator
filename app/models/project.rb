@@ -37,6 +37,7 @@ class Project < ActiveRecord::Base
   validates :name, :due_date, :course, presence: true
   validate :unique_name_per_course
   before_save :due_date_to_utc, :default_start_date, :start_date_to_utc
+  before_save :due_start_dates_times
   scope :published, -> { where published: true }
   scope :not_published, -> { where published: false }
   scope :due, ->  { where 'due_date <= ?', DateTime.now.utc }
@@ -119,6 +120,11 @@ class Project < ActiveRecord::Base
         errors.add(:name, 'must be unique per course')
       end
     end
+  end
+
+  def due_start_dates_times
+    self.due_date = due_date.utc.change(hour: 21, minute: 59)
+    self.start_date = start_date.utc.change(hour: 0, minute: 0)
   end
 
   def due_date_to_utc

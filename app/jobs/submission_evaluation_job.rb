@@ -42,6 +42,7 @@ class SubmissionEvaluationJob < ActiveJob::Base
       Dir.chdir @working_directory
       `chmod -R +x #{@working_directory}`
       `chmod -R +x #{@selinux_directory}`
+      raise "Incorrect working directory" unless @working_directory == Dir.pwd
       fetch_dependencies
       prepare_src(submission)
       begin
