@@ -62,6 +62,7 @@ class SubmissionEvaluationJob < ActiveJob::Base
   end
 
   def test_suite(submission, suite)
+    Result.where(submission: submission, test_suite: suite).destroy_all
     @result = Result.new submission: submission, test_suite: suite,
                          project: submission.project, grade: 0, max_grade: suite.max_grade
     @result.success = @compiled
