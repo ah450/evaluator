@@ -92,7 +92,7 @@ class SubmissionEvaluationJob < ActiveJob::Base
     end
   end
 
-  def create_team_grade                                                                                           }).order(created_at: :desc).delete_all
+  def create_team_grade
     @team_grade = TeamGrade.create(project: @result.project,
                                    result: @result, name: @result.submission.submitter.team
                                   )
