@@ -48,7 +48,7 @@ class SubmissionEvaluationJob < ActiveJob::Base
           remove_old_tests
           test_suite submission, suite
           @newResults.push @result
-          create_team_grade(suite) if submission.submitter.student?
+          create_team_grade if submission.submitter.student?
         end
       ensure
         Dir.chdir @old_working_directory
@@ -92,11 +92,7 @@ class SubmissionEvaluationJob < ActiveJob::Base
     end
   end
 
-  def create_team_grade(_suite)
-    grades = TeamGrade.where(project: @result.project,
-                             name: @result.submission.submitter.team).joins(:result).where(results: {
-                                                                                             test_suite_id: @result.test_suite.id
-                                                                                           }).order(created_at: :desc).delete_all
+  def create_team_grade                                                                                           }).order(created_at: :desc).delete_all
     @team_grade = TeamGrade.create(project: @result.project,
                                    result: @result, name: @result.submission.submitter.team
                                   )
