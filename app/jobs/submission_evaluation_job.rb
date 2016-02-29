@@ -224,6 +224,7 @@ class SubmissionEvaluationJob < ActiveJob::Base
     IO.write(@buildfile_name, result)
     `chmod +x #{@buildfile_name}`
     generate_compile_script
+    `find . -exec touch {} \\;`
     @compiler_stdout = `#{@compile_command}`
     @compiled = $CHILD_STATUS.exitstatus == 0
     @compiler_stderr = '-'
