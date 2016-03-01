@@ -61,7 +61,7 @@ class Submission < ActiveRecord::Base
 
   def self.viewable_by_user(user)
     if user.student?
-      joins(:submitter).where(users: { team: user.team })
+      where(submitter: @user)
     else
       self
     end

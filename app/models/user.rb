@@ -114,11 +114,11 @@ class User < ActiveRecord::Base
   private
 
   def can_view_submission?(submission)
-    teacher? || submission.submitter.team == team
+    teacher? || submission.submitter == self
   end
 
   def can_view_result?(result)
-    teacher? || result.submission.submitter.team == team
+    teacher? || result.submission.submitter == self
   end
 
   def can_view_team_grade?(grade)

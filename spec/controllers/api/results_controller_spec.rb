@@ -75,11 +75,11 @@ RSpec.describe Api::ResultsController, type: :controller do
       get :show, format: :json, id: result.id
       expect(response).to be_success
     end
-    it 'student can view team belonging result' do
+    it 'student can not view team belonging result' do
       student = FactoryGirl.create(:student, verified: true, team: @default_team)
       set_token student.token
       get :show, format: :json, id: @default_result.id
-      expect(response).to be_success
+      expect(response).to be_forbidden
     end
     it 'student can not view result belonging to another team' do
       student = FactoryGirl.create(:student, verified: true, team: @default_team)

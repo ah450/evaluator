@@ -47,7 +47,8 @@ class Result < ActiveRecord::Base
   # Can view results that belong to a team's own submission
   def self.viewable_by_user(user)
     if user.student?
-      joins(submission: :submitter).where(users: { team: user.team })
+      Result.joins(:submission).where(submissions: {
+        submitter_id: us.id})
     else
       self
     end

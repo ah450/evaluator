@@ -109,10 +109,10 @@ RSpec.describe Api::SubmissionsController, type: :controller do
       get :download, id: @submission.id
       expect(response).to be_forbidden
     end
-    it 'allows student of same team to download' do
+    it 'does not allow student of same team to download' do
       set_token FactoryGirl.create(:student, team: @submission.submitter.team).token
       get :download, id: @submission.id
-      expect(response).to be_success
+      expect(response).to be_forbidden
     end
   end
 
@@ -138,6 +138,12 @@ RSpec.describe Api::SubmissionsController, type: :controller do
       expect(json_response).to include(
         :id, :submitter_id, :project_id, :created_at, :updated_at
       )
+    end
+
+    it 'does not allow student of same team show' do
+      set_token FactoryGirl.create(:student, team: @submission.submitter.team).token
+      get :show, id: @submission.id
+      expect(response).to be_forbidden
     end
 
     it 'allows a teacher to download' do
@@ -206,6 +212,22 @@ RSpec.describe Api::SubmissionsController, type: :controller do
       expect(json_response[:submissions].size).to eql 0
     end
 
+    it 'student cant query by team' do
+      team = Submission.first.submitter.team
+      student = FactoryGirl.create(:student, verified: true)
+      get :index, project_id: @default_project.id
+      expect(response).to be_success
+      expect(json_response[:submissions].size).to eql 0
+    end
+
+    it 'students can not see own team submissions' do
+      team = Submission.first.submitter.team
+      student = FactoryGirl.create(:student, verified: true)
+      get :index, project_id: @default_project.id, submitter: { team: team }
+      expect(response).to be_success
+      expect(json_response[:submissions].size).to eql 0
+    end
+
     it 'student can see own submissions' do
       student = FactoryGirl.create(:student, verified: true)
       3.times { @create_submission.call @default_project, student }
@@ -214,6 +236,8 @@ RSpec.describe Api::SubmissionsController, type: :controller do
       expect(response).to be_success
       expect(json_response[:submissions].size).to eql 3
     end
+
+
     it 'teacher can query by name' do
       teacher = FactoryGirl.create(:teacher, verified: true)
       student = FactoryGirl.create(:student, verified: true)
