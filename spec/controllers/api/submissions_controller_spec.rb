@@ -215,6 +215,7 @@ RSpec.describe Api::SubmissionsController, type: :controller do
     it 'student cant query by team' do
       team = Submission.first.submitter.team
       student = FactoryGirl.create(:student, verified: true)
+      set_token student.token
       get :index, project_id: @default_project.id
       expect(response).to be_success
       expect(json_response[:submissions].size).to eql 0
@@ -223,6 +224,7 @@ RSpec.describe Api::SubmissionsController, type: :controller do
     it 'students can not see own team submissions' do
       team = Submission.first.submitter.team
       student = FactoryGirl.create(:student, verified: true)
+      set_token student.token
       get :index, project_id: @default_project.id, submitter: { team: team }
       expect(response).to be_success
       expect(json_response[:submissions].size).to eql 0

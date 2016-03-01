@@ -61,7 +61,7 @@ class Submission < ActiveRecord::Base
 
   def self.viewable_by_user(user)
     if user.student?
-      where(submitter: @user)
+      user.submissions
     else
       self
     end
