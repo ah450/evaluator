@@ -48,7 +48,7 @@ class Result < ActiveRecord::Base
   def self.viewable_by_user(user)
     if user.student?
       Result.joins(:submission).where(submissions: {
-        submitter_id: us.id})
+        submitter_id: user.id})
     else
       self
     end

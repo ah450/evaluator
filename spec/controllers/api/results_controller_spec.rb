@@ -34,12 +34,21 @@ RSpec.describe Api::ResultsController, type: :controller do
       expect(response).to be_success
       expect(json_response[:results].size).to eql 6
     end
-    it 'allows submitter' do
+    it 'does not allow a student by team' do
       student = FactoryGirl.create(:student, verified: true, team: @default_team)
       set_token student.token
       get :index, format: :json, project_id: @project.id
       expect(response).to be_success
-      expect(json_response[:results].size).to eql 2
+      expect(json_response[:results].size).to eql 0
+    end
+
+    it 'allows a student' do
+      student = FactoryGirl.create(:student, verified: true, team: @default_team)
+      @create_result.call(@default_team, student)
+      set_token student.token
+      get :index, format: :json, project_id: @project.id
+      expect(response).to be_success
+      expect(json_response[:results].size).to eql 1
     end
 
     it 'can query by team_name' do
