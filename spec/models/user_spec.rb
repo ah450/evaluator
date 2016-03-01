@@ -330,9 +330,9 @@ RSpec.describe User, type: :model do
         subject = result.submission.submitter
         expect(subject.can_view?(result)).to be true
       end
-      it 'can view if same team' do
+      it 'can not view if same team' do
         subject = FactoryGirl.create(:student, team: result.submission.submitter.team)
-        expect(subject.can_view?(result)).to be true
+        expect(subject.can_view?(result)).to be false
       end
       it 'can not view a result if another student' do
         subject = FactoryGirl.create(:student, team: 'haha team')
