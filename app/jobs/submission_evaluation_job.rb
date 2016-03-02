@@ -32,6 +32,9 @@ class SubmissionEvaluationJob < ActiveJob::Base
 
   def perform(submission)
     @newResults = []
+    unless Dir.pwd == Rails.root
+      Dir.chdir Rails.root
+    end
     submission.with_lock('FOR UPDATE') do
       suites = submission.project.test_suites.to_a
       @old_working_directory = Dir.pwd
