@@ -1,9 +1,7 @@
 {
-  "folders":
-  [
+  "folders": [
     {
-      "folder_exclude_patterns":
-      [
+      "folder_exclude_patterns": [
         "client/build",
         "client/dist",
         "client/libs",
@@ -18,12 +16,9 @@
       "follow_symlinks": true
     }
   ],
-  "settings":
-  {
-    "FuzzyFilePath":
-        {
-        },
-        "tab_size": 2,
-        "translate_tabs_to_spaces": true
+  "settings": {
+    "FuzzyFilePath": {},
+    "tab_size": 2,
+    "translate_tabs_to_spaces": true
   }
 }
