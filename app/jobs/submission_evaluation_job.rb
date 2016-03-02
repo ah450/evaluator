@@ -18,12 +18,14 @@ class SubmissionEvaluationJob < ActiveJob::Base
         result.save
       end
     end
+    Dir.chdir @old_working_directory unless @old_working_directory.nil?
     FileUtils.remove_entry_secure(@working_directory) unless @working_directory.nil?
     FileUtils.remove_entry_secure(@selinux_directory) unless @selinux_directory.nil?
   end
 
   rescue_from(ActiveJob::DeserializationError) do |exception|
     logger.info exception.backtrace
+    Dir.chdir @old_working_directory unless @old_working_directory.nil?
     FileUtils.remove_entry_secure(@working_directory) unless @working_directory.nil?
     FileUtils.remove_entry_secure(@selinux_directory) unless @selinux_directory.nil?
   end
