@@ -43,8 +43,10 @@ RSpec.configure do |config|
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
   config.formatter = :documentation
-  config.filter_run focus: true
-  config.run_all_when_everything_filtered = true
+  unless ENV['TRAVIS']
+    config.filter_run focus: true
+    config.run_all_when_everything_filtered = true
+  end
   config.expect_with :rspec do |expectations|
     # This option will default to `true` in RSpec 4. It makes the `description`
     # and `failure_message` of custom matchers include text for helper methods
