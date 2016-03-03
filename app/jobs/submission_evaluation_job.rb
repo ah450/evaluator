@@ -9,7 +9,8 @@ class SubmissionEvaluationJob < ActiveJob::Base
       submission.results.destroy_all
       submission.project.test_suites.each do |suite|
         result = Result.new submission: submission, test_suite: suite,
-                            project: submission.project, grade: 0, max_grade: suite.max_grade
+                            project: submission.project, grade: 0,
+                            max_grade: suite.max_grade
         result.compiler_stderr = 'Unzip Error.'
         result.compiler_stdout = 'Unzip error.'
         result.compiled = false
@@ -19,8 +20,10 @@ class SubmissionEvaluationJob < ActiveJob::Base
       end
     end
     Dir.chdir @old_working_directory unless @old_working_directory.nil?
-    FileUtils.remove_entry_secure(@working_directory) unless @working_directory.nil?
-    FileUtils.remove_entry_secure(@selinux_directory) unless @selinux_directory.nil?
+    FileUtils.remove_entry_secure(@working_directory) unless
+      @working_directory.nil?
+    FileUtils.remove_entry_secure(@selinux_directory) unless
+      @selinux_directory.nil?
   end
 
   rescue_from(ActiveJob::DeserializationError) do |exception|
@@ -31,20 +34,15 @@ class SubmissionEvaluationJob < ActiveJob::Base
   end
 
   def perform(submission)
-    @newResults = []
-    unless Dir.pwd == Rails.root
-      Dir.chdir Rails.root
-    end
+    @new_results = []
+    Dir.chdir Rails.root unless Dir.pwd == Rails.root
     submission.with_lock('FOR UPDATE') do
       suites = submission.project.test_suites.to_a
       @old_working_directory = Dir.pwd
       @working_directory = Dir.mktmpdir 'submit'
       @selinux_directory = Dir.mktmpdir 'submit'
       @command = "sandbox -M -H #{@working_directory} -T #{@selinux_directory} bash"
-      if Rails.env.test?
-        # Disable SELinux in test environments
-        @command = 'bash'
-      end
+      @command = 'bash'  if Rails.env.test?
       @compile_command = @command + " #{config[:ant_compile_file_name]} 2>&1"
       @compile_test_command = @command + " #{config[:ant_compile_tests_file_name]} 2>&1"
       @test_command = @command + " #{config[:ant_test_file_name]} 2>&1"
@@ -58,7 +56,7 @@ class SubmissionEvaluationJob < ActiveJob::Base
         suites.each do |suite|
           remove_old_tests
           test_suite submission, suite
-          @newResults.push @result
+          @new_results.push @result
           create_team_grade if submission.submitter.student?
         end
       ensure
@@ -67,13 +65,14 @@ class SubmissionEvaluationJob < ActiveJob::Base
         FileUtils.remove_entry_secure @selinux_directory
       end
     end
-    @newResults.each { |result| submission.send_new_result_notification(result) }
+    @new_results.each { |result| submission.send_new_result_notification(result) }
   end
 
   def test_suite(submission, suite)
     Result.where(submission: submission, test_suite: suite).destroy_all
     @result = Result.new submission: submission, test_suite: suite,
-                         project: submission.project, grade: 0, max_grade: suite.max_grade
+                         project: submission.project, grade: 0,
+                         max_grade: suite.max_grade
     @result.success = @compiled
     @result.compiled = @compiled
     @result.compiler_stderr = @compiler_stderr
@@ -95,7 +94,7 @@ class SubmissionEvaluationJob < ActiveJob::Base
         return
       end
       # Run tests
-      out = `#{@test_command}`
+      `#{@test_command}`
       results_directory = File.join(@build_directory, 'tests')
       Dir.glob "#{results_directory}/**/*.xml" do |file_name|
         document = File.open(file_name) { |f| Nokogiri::XML(f) }
@@ -107,7 +106,8 @@ class SubmissionEvaluationJob < ActiveJob::Base
 
   def create_team_grade
     @team_grade = TeamGrade.create(project: @result.project,
-                                   result: @result, name: @result.submission.submitter.team
+                                   result: @result,
+                                   name: @result.submission.submitter.team
                                   )
   end
 
