@@ -1,37 +1,45 @@
 .submissions-list {
+
   .submission-item {
     display: block;
-    padding: 0.6em;
+    padding: .6em;
     margin-bottom: 1em;
-    border-radius: 0.8em;
+    border-radius: .8em;
     transition: all .3s ease;
 
     &.success-submission {
-      background-color: transparentize($success-submission-bg, 0.3);
+      background-color: transparentize($success-submission-bg, .3);
+
       &:hover {
         background-color: $success-submission-bg;
       }
     }
 
     &.partial-submission {
-      background-color: transparentize($partial-submission-bg, 0.3);
+      background-color: transparentize($partial-submission-bg, .3);
+
       &:hover {
         background-color: $partial-submission-bg;
       }
+
     }
 
     &.error-submission {
-      background-color: transparentize($error-submission-bg, 0.3);
+      background-color: transparentize($error-submission-bg, .3);
+
       &:hover {
         background-color: $error-submission-bg;
       }
+
     }
 
     &.processing-submission {
-      background-color: transparentize($processing-submission-bg, 0.3);
+      background-color: transparentize($processing-submission-bg, .3);
+
       &:hover {
         background-color: $processing-submission-bg;
       }
+
     }
 
   }
@@ -40,10 +48,12 @@
 
 .submissions-wrapper {
   margin-top: 1em;
+
   header {
     text-align: center;
     margin-bottom: 1em;
   }
+
 }
 
 #submissionsWrapper > header {
@@ -52,10 +62,12 @@
 }
 
 #submissionsWrapper {
-  margin-bottom: 0.5;
+  margin-bottom: .5;
+
   .search-controls {
     width: 100%;
     margin-top: 1em;
     margin-bottom: 4em;
   }
+
 }
