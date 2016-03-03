@@ -1,9 +1,9 @@
 .result-cases-list {
   .result-case-item {
     display: block;
-    padding: 0.6em;
+    padding: .6em;
     margin-bottom: 1em;
-    border-radius: 0.8em;
+    border-radius: .8em;
     border-style: solid;
     border-width: 1px;
     @media(min-resolution: 2dppx) {
@@ -14,10 +14,10 @@
 }
 
 
-.result-cases-wrapper {
-  margin-top: 1em;
-  header {
-    text-align: center;
-    margin-bottom: 1em;
-  }
-}
+// .result-cases-wrapper {
+//   margin-top: 1em;
+//   header {
+//     text-align: center;
+//     margin-bottom: 1em;
+//   }
+// }

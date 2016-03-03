@@ -40,8 +40,5 @@ rules:
         - margin
       ignore-custom-properties: true
   variable-for-property:
-    - 2
-    -
-      properties:
-        - margin
-        - content
+    - 0
+    

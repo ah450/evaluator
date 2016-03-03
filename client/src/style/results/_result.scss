@@ -1,15 +1,43 @@
 .result {
   text-transform: none;
+
   .result-cases-wrapper {
     max-height: 20em;
     padding: 1.8em;
     overflow: auto;
+
   }
+
+  .result-expand-wrapper {
+
+    .more-icon {
+      display: none;
+    }
+
+    &:not(.expand) {
+      .less-icon {
+        display: none;
+      }
+
+      .more-icon {
+        display: inline-block;
+      }
+    }
+
+    &:not(.expand) .result-expandable {
+      max-height: 0;
+      overflow: hidden;
+      padding: 0;
+    }
+  }
+
   .result-compilation-error {
     max-width: 100%;
     word-wrap: break-word;
   }
+
   .message-container {
     max-width: 80%;
   }
+
 }
