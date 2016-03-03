@@ -33,32 +33,33 @@ class SubmissionEvaluationJob < ActiveJob::Base
     FileUtils.remove_entry_secure(@selinux_directory) unless @selinux_directory.nil?
   end
 
+
   def perform(submission)
     @new_results = []
     Dir.chdir Rails.root unless Dir.pwd == Rails.root
     submission.with_lock('FOR UPDATE') do
       suites = submission.project.test_suites.to_a
       @old_working_directory = Dir.pwd
-      @working_directory = Dir.mktmpdir 'submit'
-      @selinux_directory = Dir.mktmpdir 'submit'
-      @command = "sandbox -M -H #{@working_directory} -T #{@selinux_directory} bash"
-      @command = 'bash'  if Rails.env.test?
-      @compile_command = @command + " #{config[:ant_compile_file_name]} 2>&1"
-      @compile_test_command = @command + " #{config[:ant_compile_tests_file_name]} 2>&1"
-      @test_command = @command + " #{config[:ant_test_file_name]} 2>&1"
-      Dir.chdir @working_directory
-      `chmod -R +x #{@working_directory}`
-      `chmod -R +x #{@selinux_directory}`
-      raise "Incorrect working directory" unless @working_directory == Dir.pwd
-      fetch_dependencies
-      prepare_src(submission)
+      @working_directory = Dir.mktmpdir "submit-#{submission.submitter.id}"
+      @selinux_directory = Dir.mktmpdir "submit-#{submission.submitter.id}"
       begin
-        suites.each do |suite|
-          remove_old_tests
-          test_suite submission, suite
-          @new_results.push @result
-          create_team_grade if submission.submitter.student?
-        end
+        @command = "sandbox -M -H #{@working_directory} -T #{@selinux_directory} bash"
+        @command = 'bash'  if Rails.env.test?
+        @compile_command = @command + " #{config[:ant_compile_file_name]} 2>&1"
+        @compile_test_command = @command + " #{config[:ant_compile_tests_file_name]} 2>&1"
+        @test_command = @command + " #{config[:ant_test_file_name]} 2>&1"
+        Dir.chdir @working_directory
+        `chmod -R +x #{@working_directory}`
+        `chmod -R +x #{@selinux_directory}`
+        raise "Incorrect working directory" unless @working_directory == Dir.pwd
+        fetch_dependencies
+        prepare_src(submission)
+          suites.each do |suite|
+            remove_old_tests
+            test_suite submission, suite
+            @new_results.push @result
+            create_team_grade if submission.submitter.student?
+          end
       ensure
         Dir.chdir @old_working_directory
         FileUtils.remove_entry_secure @working_directory
