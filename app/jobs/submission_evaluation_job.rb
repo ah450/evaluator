@@ -40,30 +40,30 @@ class SubmissionEvaluationJob < ActiveJob::Base
     submission.with_lock('FOR UPDATE') do
       suites = submission.project.test_suites.to_a
       @old_working_directory = Dir.pwd
-      @working_directory = Dir.mktmpdir "submit-#{submission.submitter.id}"
-      @selinux_directory = Dir.mktmpdir "submit-#{submission.submitter.id}"
+      @working_directory = `mktemp -d`.chomp
+      @selinux_directory = `mktemp -d`.chomp
       begin
         @command = "sandbox -M -H #{@working_directory} -T #{@selinux_directory} bash"
         @command = 'bash'  if Rails.env.test?
-        @compile_command = @command + " #{config[:ant_compile_file_name]} 2>&1"
-        @compile_test_command = @command + " #{config[:ant_compile_tests_file_name]} 2>&1"
-        @test_command = @command + " #{config[:ant_test_file_name]} 2>&1"
+        @compile_command = @command + " -c \" echo && ./#{config[:ant_compile_file_name]} \" 2>&1"
+        @compile_test_command = @command + " -c \" echo && ./#{config[:ant_compile_tests_file_name]} \" 2>&1"
+        @test_command = @command + " -c \" echo && ./#{config[:ant_test_file_name]} \" 2>&1"
         Dir.chdir @working_directory
         `chmod -R +x #{@working_directory}`
         `chmod -R +x #{@selinux_directory}`
         raise "Incorrect working directory" unless @working_directory == Dir.pwd
         fetch_dependencies
         prepare_src(submission)
-          suites.each do |suite|
-            remove_old_tests
-            test_suite submission, suite
-            @new_results.push @result
-            create_team_grade if submission.submitter.student?
-          end
+        suites.each do |suite|
+          remove_old_tests
+          test_suite submission, suite
+          @new_results.push @result
+          create_team_grade if submission.submitter.student?
+        end
       ensure
         Dir.chdir @old_working_directory
-        FileUtils.remove_entry_secure @working_directory
-        FileUtils.remove_entry_secure @selinux_directory
+        `yes | rm -r #{@working_directory}`
+        `yes | rm -r #{@selinux_directory}`
       end
     end
     @new_results.each { |result| submission.send_new_result_notification(result) }
@@ -86,7 +86,7 @@ class SubmissionEvaluationJob < ActiveJob::Base
       # Compile tests
       `find . -exec touch {} \\;`
       test_compile_out = `#{@compile_test_command}`
-      if $CHILD_STATUS.exitstatus != 0
+      if $?.exitstatus != 0
         # Test compilation failed
         @result.compiled = false
         @result.compiler_stdout = test_compile_out
@@ -144,7 +144,7 @@ class SubmissionEvaluationJob < ActiveJob::Base
     old = Dir.entries Dir.pwd
     IO.binwrite(@submission_code_name_ext, submission.solution.code)
     `unzip -u '#{@submission_code_name_ext}'`
-    raise UnzipError, "submission #{submission.id}" if $CHILD_STATUS.exitstatus != 0
+    raise UnzipError, "submission #{submission.id}" if $?.exitstatus != 0
     FileUtils.remove @submission_code_name_ext
     newEntries = Dir.entries Dir.pwd
     newEntries.each do |entry|
@@ -155,7 +155,7 @@ class SubmissionEvaluationJob < ActiveJob::Base
   def extract_tests(suite)
     IO.binwrite(suite.suite_code.file_name, suite.suite_code.code)
     `unzip -u '#{suite.suite_code.file_name}'`
-    raise UnzipError, "suite #{suite.id}" if $CHILD_STATUS.exitstatus != 0
+    raise UnzipError, "suite #{suite.id}" if $?.exitstatus != 0
     FileUtils.remove suite.suite_code.file_name
   end
 
@@ -238,7 +238,7 @@ class SubmissionEvaluationJob < ActiveJob::Base
     generate_compile_script
     `find . -exec touch {} \\;`
     @compiler_stdout = `#{@compile_command}`
-    @compiled = $CHILD_STATUS.exitstatus == 0
+    @compiled = $?.exitstatus == 0
     @compiler_stderr = '-'
     @compiler_stdout = '-' if @compiler_stdout.size == 0
   end
