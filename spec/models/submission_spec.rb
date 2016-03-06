@@ -8,6 +8,16 @@ RSpec.describe Submission, type: :model do
   it { should validate_presence_of :project }
   it { should validate_presence_of :submitter }
 
+  it 'does not submit to a due project' do
+    project = FactoryGirl.create(:project, published: true,
+    due_date: DateTime.now.utc,
+    course: FactoryGirl.create(:course, published: true)
+    )
+    submission = FactoryGirl.build(:submission, project: project)
+    expect(submission).to_not be_valid
+    expect(submission.errors[:project]).to contain_exactly('Must be before deadline')
+  end
+
   it 'has a valid factory' do
     submission = FactoryGirl.build(:submission)
     expect(submission).to be_valid

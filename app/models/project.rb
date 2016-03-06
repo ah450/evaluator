@@ -112,6 +112,10 @@ class Project < ActiveRecord::Base
     )
   end
 
+  def can_submit?
+    due_date.utc < DateTime.now.utc
+  end
+
   private
 
   def unique_name_per_course
