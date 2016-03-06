@@ -21,6 +21,7 @@
 #
 
 class Submission < ActiveRecord::Base
+  include Cacheable
   belongs_to :project
   belongs_to :submitter, class_name: 'User', inverse_of: :submissions
   has_one :solution, dependent: :delete

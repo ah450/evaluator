@@ -40,6 +40,7 @@ class Project < ActiveRecord::Base
   validate :rerun_due_only
   before_save :due_date_to_utc, :default_start_date, :start_date_to_utc
   before_save :due_start_dates_times
+  after_save :rerun_submissions_check
   scope :published, -> { where published: true }
   scope :not_published, -> { where published: false }
   scope :due, ->  { where 'due_date <= ?', DateTime.now.utc }
@@ -119,6 +120,12 @@ class Project < ActiveRecord::Base
   end
 
   private
+
+  def rerun_submissions_check
+    if reruning_submissions_changed? && reruning_submissions?
+      RerunSubmissionsJob.perform_later(self)
+    end
+  end
 
   def rerun_due_only
     return if due_date.nil? || reruning_submissions.nil?

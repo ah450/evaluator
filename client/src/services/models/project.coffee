@@ -33,6 +33,13 @@ angular.module 'evaluator'
           set: (value) ->
             @resource.due_date = value
 
+        @property 'reruning_submissions',
+          get: ->
+            @resource.reruning_submissions
+          set: (value) ->
+            @resource.reruning_submissions = value
+
+
         @property 'start_date',
           get: ->
             @startDateCache ||=

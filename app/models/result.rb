@@ -32,6 +32,7 @@
 # Represents results for an individual submission.
 # This is different than team results
 class Result < ActiveRecord::Base
+  include Cacheable
   belongs_to :submission
   belongs_to :test_suite
   belongs_to :project

@@ -1,7 +1,7 @@
 angular.module 'evaluator'
   .controller 'ProjectController', ($scope, $stateParams, ProjectResource,
     UserAuth, ProjectSuitesResource, defaultPageSize, Pagination, ngDialog,
-    Upload, endpoints, Project, Suite, $state, deletedSuiteIds) ->
+    Upload, endpoints, Project, Suite, $state, deletedSuiteIds, $mdDialog) ->
 
       $scope.isTeacher = UserAuth.user.teacher
       $scope.isAdmin = UserAuth.user.admin
@@ -16,12 +16,38 @@ angular.module 'evaluator'
       unpublishedCallback = (project) ->
         if not $scope.isTeacher
           $state.go 'private.unpublished'
-      
+
       projectPromise.then (project) ->
         $scope.project = new Project project, unpublishedCallback
         $scope.canAddSuite &= !$scope.project.published
         $scope.canEdit &= !$scope.project.published
         $scope.loading = false
+
+      $scope.rerunSubmissions = ->
+        $scope.loading = true
+        $scope.project.reruning_submissions = true
+        $scope.project.$update().then ->
+          $scope.loading = false
+          alert = $mdDialog.alert()
+            .clickOutsideToClose(true)
+            .title('Rerun Submissions')
+            .textContent('All admins will be alerted when the job is done')
+            .ariaLabel('Rerun Submissions')
+            .ok('Okay')
+          $mdDialog.show(alert)
+        , (response) ->
+          data = ''
+          if response.status is 500
+            $state.go '^.internal_error'
+          else if response.status is 422
+            data =
+              ("#{key.capitalize()} #{value}." for key, value of response.data)
+              .join ' '
+          else
+            data = response.data.message.capitalize
+          $scope.loading = false
+
+
 
       $scope.publish = ->
         $scope.loading = true
@@ -54,7 +80,7 @@ angular.module 'evaluator'
       suitesPagination = new Pagination ProjectSuitesResource, 'test_suites',
       {project_id: $stateParams.id}, suiteFactory, defaultPageSize
 
-      
+
 
       addSuitesCallback = (newSuites, begin) ->
         suites = _.filter newSuites, (suite) ->
@@ -124,7 +150,7 @@ angular.module 'evaluator'
       $scope.submit = ->
         return if $scope.processingSuite
         $scope.processingSuite = true
-        
+
         success = (response) ->
           $scope.newSuiteDialog.close()
           $scope.processingSuite = false
@@ -144,4 +170,3 @@ angular.module 'evaluator'
           $stateParams.id)
           data: $scope.newSuiteData
         ).then(success, failure)
-
