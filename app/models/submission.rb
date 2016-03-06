@@ -82,7 +82,7 @@ class Submission < ActiveRecord::Base
 
   def project_not_due
     errors.add(:project, 'Must be before deadline') unless
-      project.nil? && project.can_submit?
+      project.nil? || project.can_submit?
   end
 
   def published_project_and_course

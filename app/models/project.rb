@@ -113,7 +113,7 @@ class Project < ActiveRecord::Base
   end
 
   def can_submit?
-    due_date.utc < DateTime.now.utc
+    due_date.utc > DateTime.now.utc
   end
 
   private
