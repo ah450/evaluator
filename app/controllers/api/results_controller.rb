@@ -1,8 +1,56 @@
+require 'csv'
 class Api::ResultsController < ApplicationController
+  before_action :set_resource, except: [:index, :create, :csv]
   prepend_before_action :authorize
-  prepend_before_action :set_parent, only: [:index]
+  prepend_before_action :set_parent, only: [:index, :csv]
   prepend_before_action :authenticate
   before_action :can_view, only: [:show]
+  before_action :authorize_teacher, only: [:csv]
+
+  def csv
+    file = Tempfile.new 'results'
+    CSV.open(file, 'w') do |csv|
+      headers = %w(ID TEAM EMAIL MAJOR SUBMISSION_DATE)
+      suites = @project.test_suites.order(:created_at)
+      suites.each do |suite|
+        headers << "#{suite.name.upcase}_GRADE"
+        headers << "#{suite.name.upcase}_COMPILED"
+      end
+      headers << %w(TOTAL_GRADE ALL_COMPILED)
+      csv << headers
+      @project.submissions.each do |submission|
+        next unless submission.submitter.student?
+        data = [submission.submitter.guc_id,
+                submission.submitter.team,
+                submission.submitter.email,
+                submission.submitter.major,
+                submission.created_at
+        ]
+        # Total Grade
+        suites.each do |suite|
+          submission_suite = submission.results.where(test_suite_id: suite.id).take
+          if submission_suite.nil?
+            data << 'NO_RESULT' << 'NO_RESULT'
+          else
+            data << suite.grade << suite.compiled
+          end
+        end
+        data << submission.results.reduce(0) { |a, e| a + e.grade }
+        # All Compiled
+        data << submission.results.reduce(true) { |a, e| a && e.compiled }
+        csv << data
+      end
+    end
+    options = {
+      type: Rack::Mime.mime_type('.csv'),
+      disposition: 'attachment',
+      filename: "#{DateTime.now.utc}-#{@project.name}-results.csv"
+    }
+    file.rewind
+    send_data file.read, **options
+    file.close
+    file.unlink
+  end
 
   private
 

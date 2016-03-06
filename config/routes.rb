@@ -21,14 +21,18 @@ Rails.application.routes.draw do
       end
       resources :projects, shallow: true, except: [:new] do
         resources :team_grades, shallow: true, only: [] do
-          member do
-            get :latest, action: :latest
+          collection do
+            get :latest
           end
         end
-        resources :results, shallow: true, only: [:index, :show]
+        resources :results, shallow: true, only: [:index, :show] do
+          collection do
+            get :csv
+          end
+        end
         resources :submissions, shallow: true, except: [:destroy, :new, :update] do
           member do
-            get :download, action: :download
+            get :download
           end
         end
         resources :test_suites, shallow: true, except: [:new, :update] do
@@ -42,7 +46,7 @@ Rails.application.routes.draw do
     resources :configurations, only: [:index]
     resources :project_bundles, only: [:create, :index] do
       member do
-        get :download, action: :download
+        get :download
       end
     end
   end

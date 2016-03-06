@@ -10,7 +10,7 @@ RSpec.describe Submission, type: :model do
 
   it 'does not submit to a due project' do
     project = FactoryGirl.create(:project, published: true,
-    due_date: DateTime.now.utc,
+    due_date: DateTime.now.utc - 1.day,
     course: FactoryGirl.create(:course, published: true)
     )
     submission = FactoryGirl.build(:submission, project: project)

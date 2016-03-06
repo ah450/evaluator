@@ -102,6 +102,25 @@ RSpec.describe Api::ResultsController, type: :controller do
     end
   end
 
+  context 'csv' do
+    it 'does not allow unauthorized' do
+      get :csv, project_id: @project.id
+      expect(response).to be_unauthorized
+    end
+    it 'does not allow student' do
+      student = FactoryGirl.create(:student, verified: true)
+      set_token student.token
+      get :csv, project_id: @project.id
+      expect(response).to be_forbidden
+    end
+    it 'allows teacher' do
+      teacher = FactoryGirl.create(:teacher, verified: true)
+      set_token teacher.token
+      get :csv, project_id: @project.id
+      expect(response).to be_success
+    end
+  end
+
   context 'update' do
     it 'is not routable' do
       expect(put: 'api/results/3').to_not be_routable
