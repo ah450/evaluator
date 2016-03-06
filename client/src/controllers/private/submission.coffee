@@ -11,6 +11,10 @@ angular.module 'evaluator'
         $scope.project = project
         $scope.loading = false
 
+      $scope.canSubmit = ->
+        false unless $scope.project && not $scope.project.is_due
+
+
       $scope.submissions = []
       $scope.submissionClasses = ['submission-accent-one',
         'submission-accent-two', 'submission-accent-three']
@@ -37,7 +41,7 @@ angular.module 'evaluator'
 
       $scope.loadingSubmissions = true
 
-      
+
 
       $scope.currentPage = 1
 
@@ -86,7 +90,7 @@ angular.module 'evaluator'
           $scope.newSubmissionDialog.close()
           $scope.processingSubmission = false
           addNewSubmission submission
-        
+
         Upload.upload(
           url: endpoints.projectSubmissions.resourceUrl.replace(':project_id',
           $stateParams.project_id)
@@ -102,8 +106,3 @@ angular.module 'evaluator'
         $scope.newSubmissionDialog = ngDialog.open
           template: 'private/create/submission.html'
           scope: $scope
-
-
-
-
-

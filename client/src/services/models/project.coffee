@@ -66,6 +66,10 @@ angular.module 'evaluator'
           get: ->
             @resource.quiz
 
+        @property 'is_due',
+          get: ->
+            due_date_as_date < new Date()
+
         @property 'id',
           get: ->
             @resource.id

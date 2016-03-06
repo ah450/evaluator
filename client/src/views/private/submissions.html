@@ -12,9 +12,10 @@
 
   <section class="submissions-wrapper">
     <ul class="submissions-list">
-      
+
       <li class="submission-item btn-green"
       analytics-on="click"
+      data-ng-if="canSubmit()"
       analytics-event="submission-submit"
       data-ng-click="showAddDialog()"
       ><i class="material-icons">add</i></li>
