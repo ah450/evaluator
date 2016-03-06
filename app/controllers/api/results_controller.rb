@@ -16,7 +16,7 @@ class Api::ResultsController < ApplicationController
         headers << "#{suite.name.upcase}_GRADE"
         headers << "#{suite.name.upcase}_COMPILED"
       end
-      headers << %w(TOTAL_GRADE ALL_COMPILED)
+      headers << 'TOTAL_GRADE' << 'ALL_COMPILED'
       csv << headers
       @project.submissions.each do |submission|
         next unless submission.submitter.student?
@@ -28,11 +28,11 @@ class Api::ResultsController < ApplicationController
         ]
         # Total Grade
         suites.each do |suite|
-          submission_suite = submission.results.where(test_suite_id: suite.id).take
-          if submission_suite.nil?
+          submission_result = submission.results.where(test_suite_id: suite.id).take
+          if submission_result.nil?
             data << 'NO_RESULT' << 'NO_RESULT'
           else
-            data << suite.grade << suite.compiled
+            data << submission_result.grade << submission_result.compiled
           end
         end
         data << submission.results.reduce(0) { |a, e| a + e.grade }
@@ -44,7 +44,7 @@ class Api::ResultsController < ApplicationController
     options = {
       type: Rack::Mime.mime_type('.csv'),
       disposition: 'attachment',
-      filename: "#{DateTime.now.utc}-#{@project.name}-results.csv"
+      filename: "#{@project.name}-results.csv"
     }
     file.rewind
     send_data file.read, **options

@@ -19,7 +19,7 @@
     <div data-ng-if="!result.compiled" class="message-container result-expandable"
     >
       <p data-ng-repeat="message in result.compiler_out_array track by $index"
-      class="result-compilation-error">{{message}}</p>
+      class="result-compilation-error" data-highlight>{{message}}</p>
     </div>
 
     <div data-ng-if="result.compiled" class="result-cases-wrapper result-expandable">

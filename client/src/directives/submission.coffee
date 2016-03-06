@@ -13,6 +13,10 @@ angular.module 'evaluator'
               $scope.submission.id),
               {responseType: 'blob'})
               .then (response) ->
-                filename = "submission_#{$scope.submission.id}.zip"
+              try
+                filename = response.headers('content-Disposition').split(';')[1].split("=")[1]
+                filename = filename.substr(1, filename.length - 2)
+              finally
+                filename or= "submission_#{$scope.submission.id}.zip"
                 FileSaver.saveAs(response.data, filename)
         ]

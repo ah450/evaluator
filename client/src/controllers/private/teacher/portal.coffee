@@ -6,6 +6,15 @@ angular.module 'evaluator'
       $scope.bundleData = {}
       $scope.isAdmin = UserAuth.user.admin
       $scope.globalLoading = false
+      $scope.downloadResultsData = {}
+
+      resetResultData = ->
+        $scope.downloadResultsData.loading = false
+        $scope.downloadResultsData.error = ''
+        $scope.downloadResultsData.selectedCourse = undefined
+        $scope.downloadResultsData.courseSearchText = undefined
+        $scope.downloadResultsData.selectedProject = undefined
+        $scope.downloadResultsData.projectSearchText = undefined
 
       resetBundleData = ->
         $scope.bundleData.processing = false
@@ -24,7 +33,7 @@ angular.module 'evaluator'
         $scope.teamData.processed = 0
         $scope.teamData.total = 0
         $scope.teamData.messages = []
-        
+
       $scope.showSetTeamsDialog = ->
         return if $scope.setTeamDialog && ngDialog.isOpen($scope.setTeamDialog)
         resetTeamData()
@@ -50,7 +59,7 @@ angular.module 'evaluator'
 
         failure = (response) ->
           $state.go 'private.internal_error'
-        
+
         Upload.upload(
           url: endpoints.teamsJob.url
           data: {file: $scope.teamData.file}
@@ -62,6 +71,13 @@ angular.module 'evaluator'
         resetBundleData()
         $scope.createBundleDialog = ngDialog.open
           template: 'private/teacher/bundle.html'
+          scope: $scope
+
+      $scope.showDownloadResultsDialog = ->
+        return if $scope.downloadResultsDialog &&
+        resetResultData()
+        $scope.downloadResultsDialog = ngDialog.open
+          template: 'private/teacher/download_results.html'
           scope: $scope
 
       $scope.courseSearch = (nameQuery) ->
@@ -102,13 +118,38 @@ angular.module 'evaluator'
               ("#{key.capitalize()} #{value}." for key, value of response.data)
               .join ' '
           else if response.status is 500
-            $state.go '^.internal_error'
+            $state.go '^.^.internal_error'
           else
             $scope.bundleData.error = response.data.message.capitalize
 
         $http.post(endpoints.project.bundle.resourceUrl, {
           project_id: $scope.bundleData.selectedProject.id
         }).then(success, failure)
+
+      $scope.downloadResults = ->
+        return if $scope.downloadResultsData.loading
+        $scope.downloadResultsData.loading = true
+        $http.get(endpoints.projectResults.csv.replace(':project_id',
+        $scope.downloadResultsData.selectedProject.id),
+        {responseType: 'blob'}
+        ).then (response) ->
+          $scope.downloadResultsData.loading = false
+          try
+            filename = response.headers('content-Disposition').split(';')[1].split("=")[1]
+            filename = filename.substr(1, filename.length - 2)
+          finally
+            filename or= "results.csv"
+          FileSaver.saveAs(response.data, filename)
+        , (response) ->
+          $scope.downloadResultsData.loading = false
+          if response.status is 422
+            $scope.downloadResultsData.error =
+              ("#{key.capitalize()} #{value}." for key, value of response.data)
+              .join ' '
+          else if response.status is 500
+            $state.go '^.^.internal_error'
+          else
+            $scope.downloadResultsData = response.data.message.capitalize
 
       $scope.downloadTeams = ->
         return if $scope.globalLoading
@@ -117,8 +158,9 @@ angular.module 'evaluator'
           {responseType: 'blob'}
           ).then (response) ->
             $scope.globalLoading = false
-            filename = "students.csv"
+            try
+              filename = response.headers('content-Disposition').split(';')[1].split("=")[1]
+              filename = filename.substr(1, filename.length - 2)
+            finally
+              filename or= "students.csv"
             FileSaver.saveAs(response.data, filename)
-
-
-

@@ -7,6 +7,9 @@ angular.module 'evaluator'
         {responseType: 'blob'}
         ).then (response) ->
           $scope.processing = false
-          filename = "bundle_#{$stateParams.id}.tar.gz"
+          try
+            filename = response.headers('content-Disposition').split(';')[1].split("=")[1]
+            filename = filename.substr(1, filename.length - 2)
+          finally
+            filename or= "bundle_#{$stateParams.id}.tar.gz"
           FileSaver.saveAs(response.data, filename)
-
