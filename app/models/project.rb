@@ -2,15 +2,16 @@
 #
 # Table name: projects
 #
-#  id         :integer          not null, primary key
-#  due_date   :datetime         not null
-#  start_date :datetime         not null
-#  name       :string           not null
-#  course_id  :integer
-#  quiz       :boolean          default(FALSE), not null
-#  published  :boolean          default(FALSE), not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id                   :integer          not null, primary key
+#  due_date             :datetime         not null
+#  start_date           :datetime         not null
+#  name                 :string           not null
+#  course_id            :integer
+#  quiz                 :boolean          default(FALSE), not null
+#  published            :boolean          default(FALSE), not null
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#  reruning_submissions :boolean          default(FALSE), not null
 #
 # Indexes
 #
@@ -36,6 +37,7 @@ class Project < ActiveRecord::Base
   has_many :team_grades, dependent: :destroy
   validates :name, :due_date, :course, presence: true
   validate :unique_name_per_course
+  validate :rerun_due_only
   before_save :due_date_to_utc, :default_start_date, :start_date_to_utc
   before_save :due_start_dates_times
   scope :published, -> { where published: true }
@@ -117,6 +119,13 @@ class Project < ActiveRecord::Base
   end
 
   private
+
+  def rerun_due_only
+    return if due_date.nil? || reruning_submissions.nil?
+    if can_submit? && reruning_submissions?
+      errors.add(:reruning_submissions, 'Must be past due to rerun submissions')
+    end
+  end
 
   def unique_name_per_course
     if !course.nil? && !name.nil? && !persisted?

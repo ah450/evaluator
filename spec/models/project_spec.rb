@@ -15,6 +15,18 @@ RSpec.describe Project, type: :model do
     it 'has a valid factory' do
       expect(project).to be_valid
     end
+    context 'reruning_submissions' do
+      it 'is valid if due' do
+        project.due_date = DateTime.now - 4.days
+        project.reruning_submissions = true
+        expect(project).to be_valid
+      end
+      it 'is not valid if not due' do
+        project.due_date = DateTime.now + 4.days
+        project.reruning_submissions = true
+        expect(project).to_not be_valid
+      end
+    end
     context 'name is nil' do
       it 'should not be valid' do
         project.name = nil
