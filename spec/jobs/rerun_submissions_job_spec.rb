@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe RerunSubmissionsJob type: :job do
+RSpec.describe RerunSubmissionsJob, type: :job do
   let(:project) do
     FactoryGirl.create(:project, published: true,
       course: FactoryGirl.create(:course, published: true))
