@@ -17,7 +17,7 @@ angular.module 'evaluator'
       failure = (response) ->
         if response.status is 422
           $scope.courseCreateError =
-            ("#{key.capitalize()} #{value}." for key, value of response.data)
+            ("#{key.split('_').join(' ').capitalize()} #{value}." for key, value of response.data)
             .join ' '
           $scope.processing = false
         else if response.status is 500

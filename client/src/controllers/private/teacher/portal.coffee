@@ -115,7 +115,7 @@ angular.module 'evaluator'
           $scope.bundleData.processing = false
           if response.status is 422
             $scope.bundleData.error =
-              ("#{key.capitalize()} #{value}." for key, value of response.data)
+              ("#{key.split('_').join(' ').capitalize()} #{value}." for key, value of response.data)
               .join ' '
           else if response.status is 500
             $state.go '^.^.internal_error'
@@ -144,7 +144,7 @@ angular.module 'evaluator'
           $scope.downloadResultsData.loading = false
           if response.status is 422
             $scope.downloadResultsData.error =
-              ("#{key.capitalize()} #{value}." for key, value of response.data)
+              ("#{key.split('_').join(' ').capitalize()} #{value}." for key, value of response.data)
               .join ' '
           else if response.status is 500
             $state.go '^.^.internal_error'

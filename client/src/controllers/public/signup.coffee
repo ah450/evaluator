@@ -22,7 +22,7 @@ angular.module 'evaluator'
           if response.status is 422
             $scope.processing = false
             $scope.error =
-              ("#{key.capitalize()} #{value}." for key, value of response.data)
+              ("#{key.split('_').join(' ').capitalize()} #{value}." for key, value of response.data)
               .join ' '
           else
             $stage.go 'public.internal_error'

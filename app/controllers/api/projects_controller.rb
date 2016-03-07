@@ -20,6 +20,8 @@ class Api::ProjectsController < ApplicationController
     attributes = model_attributes
     attributes.delete :id
     attributes.delete :course_id
+    attributes.delete :reruning_submissions unless
+      @current_user.present? && @current_user.super_user?
     permitted = params.permit attributes
     permitted[:course] = @course unless @course.nil?
     permitted

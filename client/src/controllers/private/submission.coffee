@@ -77,7 +77,7 @@ angular.module 'evaluator'
         failure = (response) ->
           if response.status is 422
             $scope.submissionCreateError =
-              ("#{key.capitalize()} #{value}." for key, value of response.data)
+              ("#{key.split('_').join(' ').capitalize()} #{value}." for key, value of response.data)
               .join ' '
             $scope.processingSubmission = false
           else

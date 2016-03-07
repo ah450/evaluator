@@ -84,5 +84,6 @@ angular.module 'evaluator'
         $update: (args...) ->
           @resource.$update(args...)
 
+
         @fromData: (data, args...) ->
           new Project(new ProjectResource(data), args...)
