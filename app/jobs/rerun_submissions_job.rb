@@ -3,8 +3,9 @@ class RerunSubmissionsJob < ActiveJob::Base
 
   def perform(project)
     submissions = Submission.newest_per_submitter_of_project(project)
-    track_key = 'key'
-    $redis.set key, submissions.count
+    enumerator = LowerCaseEnumerator.new([])
+    track_key = enumerator.get_token until $redis.setnx(track_key,
+                                                        submissions.count)
     submissions.each do |s|
       RerunEvaluationWrapperJob.perform_later(s, track_key, project)
     end
