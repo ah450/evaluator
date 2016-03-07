@@ -31,7 +31,7 @@ angular.module 'evaluator'
           alert = $mdDialog.alert()
             .clickOutsideToClose(true)
             .title('Rerun Submissions')
-            .textContent('All admins will be alerted when the job is done')
+            .textContent('Button will be available again when done')
             .ariaLabel('Rerun Submissions')
             .ok('Okay')
           $mdDialog.show(alert)
