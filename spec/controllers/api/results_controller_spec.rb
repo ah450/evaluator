@@ -119,6 +119,13 @@ RSpec.describe Api::ResultsController, type: :controller do
       get :csv, project_id: @project.id
       expect(response).to be_success
     end
+
+    it 'allows teams only filter' do
+      teacher = FactoryGirl.create(:teacher, verified: true)
+      set_token teacher.token
+      get :csv, project_id: @project.id, teams_only: true
+      expect(response).to be_success
+    end
   end
 
   context 'update' do

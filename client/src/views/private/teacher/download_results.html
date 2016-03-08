@@ -71,6 +71,14 @@
     </div>
   </fieldset>
 
+  <fieldset>
+    <div class="relative form-line">
+      <md-switch data-ng-model="downloadResultsData.teams_only">
+        Teams Only: {{downloadResultsData.teams_only ? "Yes" : "No"}}
+      </md-switch>
+    </div>
+  </fieldset>
+
   <p class="error" role="alert">
     {{downloadResultsData.error}}
   </p>

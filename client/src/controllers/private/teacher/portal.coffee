@@ -15,6 +15,7 @@ angular.module 'evaluator'
         $scope.downloadResultsData.courseSearchText = undefined
         $scope.downloadResultsData.selectedProject = undefined
         $scope.downloadResultsData.projectSearchText = undefined
+        $scope.downloadResultsData.teams_only = false
 
       resetBundleData = ->
         $scope.bundleData.processing = false
@@ -139,7 +140,10 @@ angular.module 'evaluator'
         $scope.downloadResultsData.loading = true
         $http.get(endpoints.projectResults.csv.replace(':project_id',
         $scope.downloadResultsData.selectedProject.id),
-        {responseType: 'blob'}
+        {
+          responseType: 'blob',
+          params: {teams_only: $scope.downloadResultsData.teams_only}
+        }
         ).then (response) ->
           $scope.downloadResultsData.loading = false
           try
