@@ -1,5 +1,5 @@
 angular.module 'evaluator'
-  .controller 'PortalController', ($scope, ngDialog, NotificationDispatcher,
+  .controller 'PortalController', ($scope, $mdDialog, NotificationDispatcher,
     Upload, $state, endpoints, configurations, UserAuth, CoursesResource,
     CourseProjectsResource, $http, FileSaver) ->
       $scope.teamData = {}
@@ -34,12 +34,15 @@ angular.module 'evaluator'
         $scope.teamData.total = 0
         $scope.teamData.messages = []
 
-      $scope.showSetTeamsDialog = ->
-        return if $scope.setTeamDialog && ngDialog.isOpen($scope.setTeamDialog)
+      $scope.showSetTeamsDialog = ($event) ->
         resetTeamData()
-        $scope.setTeamDialog = ngDialog.open
-          template: 'private/teacher/set_team.html'
+        $mdDialog.show
+          targetEvent: $event
           scope: $scope
+          preserveScope: true
+          clickOutsideToClose: true
+          parent: angular.element(document.body)
+          templateUrl: 'private/teacher/set_team.html'
 
 
       $scope.processTeams = ->
@@ -65,20 +68,25 @@ angular.module 'evaluator'
           data: {file: $scope.teamData.file}
         ).then(success, failure)
 
-      $scope.showCreateBundleDialog = ->
-        return if $scope.createBundleDialog &&
-          ngDialog.isOpen($scope.createBundleDialog)
+      $scope.showCreateBundleDialog = ($event) ->
         resetBundleData()
-        $scope.createBundleDialog = ngDialog.open
-          template: 'private/teacher/bundle.html'
+        $mdDialog.show
+          targetEvent: $event
+          clickOutsideToClose: true
           scope: $scope
+          parent: angular.element(document.body)
+          preserveScope: true
+          templateUrl: 'private/teacher/bundle.html'
 
-      $scope.showDownloadResultsDialog = ->
-        return if $scope.downloadResultsDialog &&
+      $scope.showDownloadResultsDialog = ($event) ->
         resetResultData()
-        $scope.downloadResultsDialog = ngDialog.open
-          template: 'private/teacher/download_results.html'
+        $mdDialog.show
+          targetEvent: $event
+          clickOutsideToClose: true
           scope: $scope
+          preserveScope: true
+          parent: angular.element(document.body)
+          templateUrl: 'private/teacher/download_results.html'
 
       $scope.courseSearch = (nameQuery) ->
         CoursesResource.query({

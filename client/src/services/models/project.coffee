@@ -76,6 +76,9 @@ angular.module 'evaluator'
         @property 'is_due',
           get: ->
             due_date_as_date < new Date()
+        @property 'started',
+          get: ->
+            start_date_as_date > new Date()
 
         @property 'id',
           get: ->

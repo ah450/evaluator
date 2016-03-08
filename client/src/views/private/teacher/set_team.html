@@ -1,3 +1,5 @@
+<md-dialog aria-label="Set Teams" ng-cloak>
+<md-dialog-content>
 <form
 class="creation-dialog-form contract-form"
 data-ng-submit="processTeams()"
@@ -29,7 +31,7 @@ novalidate
   >Upload
   </button>
 </div>
-  
+
   <fieldset data-ng-if="teamData.processing" class="max-width form-line">
     <div class="max-width flex-perfect-center-container flex-column">
       <md-progress-circular md-mode="determinate"
@@ -45,3 +47,5 @@ novalidate
   </fieldset>
 
 </form>
+</md-dialog-content>
+</md-dialog>

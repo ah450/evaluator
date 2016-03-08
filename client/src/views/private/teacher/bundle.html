@@ -1,4 +1,5 @@
-<md-content data-ng-if="!bundleData.waiting" class="md-padding">
+<md-dialog aria-label="Download Submissions" ng-cloak>
+<md-dialog-content data-ng-if="!bundleData.waiting" class="md-padding">
 <form
 name="bundleForm"
 class="creation-dialog-form contract-form"
@@ -90,3 +91,6 @@ novalidate>
   <p>An email will be sent to you when ready</p>
   <p data-ng-if="bundleData.ready">Click <a class="link" data-ui-sref="private.teacher.bundle({id: bundleData.bundle.id})">here</a> to download</p>
 </div>
+
+</md-dialog-content>
+</md-dialog>

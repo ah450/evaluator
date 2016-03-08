@@ -1,7 +1,7 @@
 angular.module 'evaluator'
   .controller 'SubmissionsController', ($scope, $stateParams, ProjectResource,
     ProjectSubmissionsResource, Pagination, defaultPageSize, Submission,
-    ngDialog, Upload, endpoints, UserAuth) ->
+    $mdDialog, Upload, endpoints, UserAuth) ->
 
       $scope.loading = true
       projectPromise = ProjectResource.get(
@@ -12,7 +12,8 @@ angular.module 'evaluator'
         $scope.loading = false
 
       $scope.canSubmit = ->
-        false unless $scope.project && not $scope.project.is_due
+        false unless $scope.project && !$scope.project.is_due &&
+          $scope.project.started
 
 
       $scope.submissions = []
@@ -87,7 +88,7 @@ angular.module 'evaluator'
 
         success = (response) ->
           submission = new Submission response.data
-          $scope.newSubmissionDialog.close()
+          $mdDialog.hide()
           $scope.processingSubmission = false
           addNewSubmission submission
 
@@ -98,11 +99,13 @@ angular.module 'evaluator'
         ).then(success, failure)
 
 
-      $scope.showAddDialog = ->
-        return if $scope.newSubmissionDialog &&
-          ngDialog.isOpen($scope.newSubmissionDialog)
+      $scope.showAddDialog = ($event)->
         $scope.newSubmissionData = {}
         $scope.submissionCreateError = ''
-        $scope.newSubmissionDialog = ngDialog.open
-          template: 'private/create/submission.html'
+        $mdDialog.show
+          targetEvent: $event
+          clickOutsideToClose: true
           scope: $scope
+          parent: angular.element(document.body)
+          preserveScope: true
+          templateUrl:'private/create/submission.html'

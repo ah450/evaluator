@@ -17,7 +17,7 @@
       analytics-on="click"
       data-ng-if="canSubmit()"
       analytics-event="submission-submit"
-      data-ng-click="showAddDialog()"
+      data-ng-click="showAddDialog($event)"
       ><i class="material-icons">add</i></li>
       <li class="submission-item"
       data-ng-class="submission.status"

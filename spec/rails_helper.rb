@@ -12,6 +12,7 @@ require File.expand_path('../../config/environment', __FILE__)
 # Prevent database truncation if the environment is production
 abort('The Rails environment is running in production mode!') if Rails.env.production?
 Faye.ensure_reactor_running!
+sleep 1
 
 require 'spec_helper'
 require 'rspec/rails'

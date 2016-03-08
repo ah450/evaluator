@@ -4,7 +4,7 @@
     <i class="material-icons spinner">refresh</i>
   </div>
 <section class="actions">
-  <md-button data-ng-if="isAdmin" data-ng-click="showSetTeamsDialog()" class="card action-card">
+  <md-button data-ng-if="isAdmin" data-ng-click="showSetTeamsDialog($event)" class="card action-card">
     <header>
       <h2>Set Teams</h2>
     </header>
@@ -19,7 +19,7 @@
     <p>Download CSV file (this is expensive)</p>
   </md-button>
 
-  <md-button data-ng-click="showDownloadResultsDialog()" class="card action-card">
+  <md-button data-ng-click="showDownloadResultsDialog($event)" class="card action-card">
     <header>
       <h2>Download Results CSV</h2>
     </header>
@@ -45,7 +45,7 @@
     <p>View submission results</p>
   </md-button>
 
-  <md-button data-ng-click="showCreateBundleDialog()" class="card action-card">
+  <md-button data-ng-click="showCreateBundleDialog($event)" class="card action-card">
   <header>
     <h2>Download Latest submissions of a project</h2>
   </header>
