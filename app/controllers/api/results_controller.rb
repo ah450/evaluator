@@ -41,10 +41,6 @@ class Api::ResultsController < ApplicationController
         else
           all_results(submission, suites, &process_submission)
         end
-        # Total Grade
-        data << submission.results.reduce(0) { |a, e| a + e.grade }
-        # All Compiled
-        data << submission.results.reduce(true) { |a, e| a && e.compiled }
         csv << data
       end
     end
