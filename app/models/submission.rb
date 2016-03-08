@@ -75,6 +75,7 @@ class Submission < ActiveRecord::Base
       'SELECT 1 FROM submissions AS other ' \
       'WHERE other.submitter_id = submissions.submitter_id ' \
       'AND other.created_at > submissions.created_at ' \
+      "AND other.project_id = #{project.id}" \
       ')'
     )
   end
