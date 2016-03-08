@@ -21,7 +21,7 @@ data-ng-if="isTeacher && isAdmin">
   >
     <li class="project-item btn-green"
     data-ng-if="canAddProject"
-    data-ng-click="showAddDialog()"
+    data-ng-click="showAddDialog($event)"
     ><i class="material-icons">add</i></li>
 
     <li class="project-item"

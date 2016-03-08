@@ -1,7 +1,7 @@
 angular.module 'evaluator'
   .controller 'CourseController', ($scope, CoursesResource, $stateParams,
     UserAuth, CourseProjectsResource, defaultPageSize, Pagination,
-    ngDialog, Project, Course, NotificationDispatcher, configurations) ->
+    $mdDialog, Project, Course, NotificationDispatcher, configurations) ->
 
       $scope.isTeacher = UserAuth.user.teacher
       $scope.isAdmin = UserAuth.user.admin
@@ -92,14 +92,22 @@ angular.module 'evaluator'
 
       $scope.newProjectData = {}
 
-      $scope.showAddDialog = ->
-        return if $scope.newProjectDialog &&
-          ngDialog.isOpen($scope.newProjectDialog.id)
+      $scope.showAddDialog = ($event)->
         $scope.newProjectData = {}
         $scope.projectCreateError = ''
-        $scope.newProjectDialog = ngDialog.open
-          template: 'private/create/project.html'
+        $mdDialog.show
+          targetEvent: $event
+          clickOutsideToClose: true
           scope: $scope
+          parent: angular.element(document.body)
+          templateUrl: 'private/create/project.html'
+          preserveScope: true
+          openFrom:
+            top: -100
+            width: 100
+            height: 100
+          closeTo:
+            top: 200
 
       $scope.submit = ->
         return if $scope.processingProject
@@ -113,7 +121,7 @@ angular.module 'evaluator'
         project = new CourseProjectsResource $scope.newProjectData
         project.course_id = $stateParams.id
         success = (project) ->
-          $scope.newProjectDialog.close()
+          $mdDialog.hide()
           $scope.processingProject = false
           addProjectsCallback [projectFactory project], 0
         failure = (response) ->
@@ -126,6 +134,3 @@ angular.module 'evaluator'
             $scope.projectCreateError = response.data.message.capitalize
             $scope.processingProject = false
         project.$save success, failure
-
-
-
