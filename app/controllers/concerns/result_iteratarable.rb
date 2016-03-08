@@ -25,8 +25,8 @@ module ResultIteratarable
         all_compiled = false
       else
         yield submission_result.result if submission_result.present?
-        total_grade += submission.result.grade
-        all_compiled &= submission.result.compiled
+        total_grade += submission_result.result.grade
+        all_compiled &= submission_result.result.compiled
       end
     end
     # Total Grade & All Compiled
