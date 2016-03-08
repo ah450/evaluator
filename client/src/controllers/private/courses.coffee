@@ -1,6 +1,6 @@
 angular.module 'evaluator'
   .controller 'CoursesController', ($scope, $state, Pagination,
-    ngDialog, CoursesResource, UserAuth, defaultPageSize, Course,
+    $mdDialog, CoursesResource, UserAuth, defaultPageSize, Course,
     NotificationDispatcher, configurations) ->
       $scope.courses = []
       ids = []
@@ -21,7 +21,7 @@ angular.module 'evaluator'
       publishedCourseCallback = (course) ->
         if not $scope.isTeacher
           $scope.addCoursesCallback [course], 0
-      
+
 
       deletedCourseCallback = (courseID) ->
         _.remove ids, (id) ->
@@ -80,22 +80,24 @@ angular.module 'evaluator'
             addCoursesCallback courses, $scope.courses.length
             $scope.scrollDisabled = false
 
-      $scope.showAddDialog = ->
-        return if $scope.newCourseDialog &&
-          ngDialog.isOpen($scope.newCourseDialog.id)
+      $scope.showAddDialog = ($event) ->
         $scope.newCourseData = {}
         $scope.courseCreateError = ''
 
-        $scope.newCourseDialog = ngDialog.open
-          template: 'private/create/course.html'
+        $mdDialog.show
+          targetEvent: $event
+          clickOutsideToClose: true
           scope: $scope
+          parent: angular.element(document.body)
+          preserveScope: true
+          templateUrl: 'private/create/course.html'
 
       $scope.submit = ->
         return if $scope.processingCourse
         $scope.processingCourse = true
         course = new CoursesResource $scope.newCourseData
         success = (data) ->
-          $scope.newCourseDialog.close()
+          $mdDialog.hide()
           $scope.processingCourse = false
           course = new Course data
           addCoursesCallback [course], $scope.courses.length

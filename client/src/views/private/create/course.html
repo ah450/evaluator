@@ -1,3 +1,5 @@
+<md-dialog aria-label="Add course" ng-cloak>
+<md-dialog-content>
 <form
 class="creation-dialog-form contract-form"
 data-ng-submit="submit()"
@@ -21,12 +23,15 @@ novalidate
   </div>
 
   <div class="relative form-line">
-    <input class="material-text" type="text" id="description" name="description"
-    data-ng-model="newCourseData.description" required>
-    <label for="description">Description (This is the game course)</label>
-    <span class="form-field-error"
-    data-ng-class="{hidden: !courseForm.description.$error.required}"
-    >This field is required</span>
+    <md-input-container class="md-block">
+      <label>Description</label>
+      <textarea data-ng-model="newCourseData.description" rows="8"
+      name="description"
+      id="description"
+      md-select-on-focus
+      required
+      ></textarea>
+    </md-input-container>
   </div>
 </fieldset>
 
@@ -41,5 +46,7 @@ novalidate
   <i class="material-icons spinner">refresh</i>
   </button>
 </div>
-  
+
 </form>
+</md-dialog-content>
+</md-dialog>
