@@ -3,6 +3,7 @@ class Api::TeamsController < ApplicationController
   before_action :authenticate, :authorize
   before_action :authorize_super_user, only: [:create]
   before_action :authorize_teacher
+  include TempFileResponder
 
   def index
     file = Tempfile.new 'teams'
@@ -10,19 +11,11 @@ class Api::TeamsController < ApplicationController
       csv << %w(ID TEAM EMAIL MAJOR CREATED_AT)
       User.students.each do |student|
         csv << [student.guc_id, student.team, student.email, student.major,
-              student.created_at]
+                student.created_at
+              ]
       end
     end
-
-    options = {
-      type: Rack::Mime.mime_type('.csv'),
-      disposition: 'attachment',
-      filename: "#{DateTime.now.utc}-students.csv"
-    }
-    file.rewind
-    send_data file.read, **options
-    file.close
-    file.unlink
+    send_temp_file(file, "#{DateTime.now.utc}-students.csv", '.csv')
   end
 
   def create

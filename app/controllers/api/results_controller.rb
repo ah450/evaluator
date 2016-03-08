@@ -6,6 +6,8 @@ class Api::ResultsController < ApplicationController
   prepend_before_action :authenticate
   before_action :can_view, only: [:show]
   before_action :authorize_teacher, only: [:csv]
+  include ResultIteratarable
+  include TempFileResponder
 
   def csv
     file = Tempfile.new 'results'
@@ -26,30 +28,27 @@ class Api::ResultsController < ApplicationController
                 submission.submitter.major,
                 submission.created_at
         ]
-        # Total Grade
-        suites.each do |suite|
-          submission_result = submission.results.where(test_suite_id: suite.id).take
+
+        process_submission = lambda do |submission_result|
           if submission_result.nil?
             data << 'NO_RESULT' << 'NO_RESULT'
           else
             data << submission_result.grade << submission_result.compiled
           end
         end
+        if params[:teams_only]
+          team_grade_results(submission, suites, &process_submission)
+        else
+          all_results(submission, suites, &process_submission)
+        end
+        # Total Grade
         data << submission.results.reduce(0) { |a, e| a + e.grade }
         # All Compiled
         data << submission.results.reduce(true) { |a, e| a && e.compiled }
         csv << data
       end
     end
-    options = {
-      type: Rack::Mime.mime_type('.csv'),
-      disposition: 'attachment',
-      filename: "#{@project.name}-results.csv"
-    }
-    file.rewind
-    send_data file.read, **options
-    file.close
-    file.unlink
+    send_temp_file(file, "#{@project.name}-results.csv", '.csv')
   end
 
   private
@@ -70,7 +69,7 @@ class Api::ResultsController < ApplicationController
     if params.key?(:submitter) &&
        possible_user_fields.any? { |e| params[:submitter].key? e }
       user_query = {}
-      for user_field in possible_user_fields do
+      possible_user_fields.each do |user_field|
         if params[:submitter].key? user_field
           user_query[user_field] = params[:submitter][user_field]
         end
