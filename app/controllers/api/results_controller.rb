@@ -37,9 +37,9 @@ class Api::ResultsController < ApplicationController
           end
         end
         if params[:teams_only]
-          team_grade_results(submission, suites, &process_submission)
+          team_grade_results(submission, suites, data, &process_submission)
         else
-          all_results(submission, suites, &process_submission)
+          all_results(submission, suites, data, &process_submission)
         end
         csv << data
       end
