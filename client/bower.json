@@ -26,7 +26,6 @@
     "satellizer": "~0.14.0",
     "lodash": "~4.5.1",
     "ngInfiniteScroll": "~1.2.1",
-    "ng-dialog": "~0.5.8",
     "angulartics": "~1.0.3",
     "angulartics-google-analytics": "~0.1.4",
     "moment": "~2.11.2",
