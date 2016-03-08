@@ -1,3 +1,5 @@
+<md-dialog aria-label="Edit project" ng-cloak>
+<md-dialog-content>
 <form
 class="creation-dialog-form contract-form"
 data-ng-submit="update()"
@@ -9,7 +11,7 @@ novalidate
   <header>
     <h3>Edit {{project.name}}</h3>
   </header>
-  
+
   <fieldset>
     <div class="relative form-line">
       <input class="material-text" type="text" id="name" name="name"
@@ -45,3 +47,5 @@ novalidate
     </button>
   </div>
 </form>
+</md-dialog-content>
+</md-dialog>

@@ -1,6 +1,6 @@
 angular.module 'evaluator'
   .controller 'ProjectController', ($scope, $stateParams, ProjectResource,
-    UserAuth, ProjectSuitesResource, defaultPageSize, Pagination, ngDialog,
+    UserAuth, ProjectSuitesResource, defaultPageSize, Pagination,
     Upload, endpoints, Project, Suite, $state, deletedSuiteIds, $mdDialog) ->
 
       $scope.isTeacher = UserAuth.user.teacher
@@ -118,20 +118,22 @@ angular.module 'evaluator'
             $scope.scrollDisabled = false
 
 
-      $scope.showEditDialog = ->
-        $return if $scope.editProjectDialog &&
-          ngDialog.isOpen($scope.editProjectDialog.id)
+      $scope.showEditDialog = ($event) ->
         $scope.projectEditError = ''
-        $scope.editProjectDialog = ngDialog.open
-          template: 'edit/project.html'
+        $mdDialog.show
+          targetEvent: $event
+          clickOutsideToClose: true
           scope: $scope
+          preserveScope: true
+          parent: angular.element(document.body)
+          templateUrl: 'edit/project.html'
 
 
       $scope.update = ->
         return if $scope.processingProject
         $scope.processingProject = true
         success = (response) ->
-          $scope.editProjectDialog.close()
+          $mdDialog.hide()
           $scope.processingProject = false
         failure = (response) ->
           if response.status is 422
@@ -147,21 +149,23 @@ angular.module 'evaluator'
 
       $scope.newSuiteData = {}
 
-      $scope.showAddDialog = ->
-        return if $scope.newSuiteDialog &&
-          ngDialog.isOpen($scope.newSuiteDialog.id)
+      $scope.showAddDialog = ($event) ->
         $scope.newSuiteData = {}
         $scope.suiteCreateError = ''
-        $scope.newSuiteDialog = ngDialog.open
-          template: 'private/create/suite.html'
+        $mdDialog.show
+          targetEvent: $event
+          clickOutsideToClose: true
           scope: $scope
+          parent: angular.element(document.body)
+          preserveScope: true
+          templateUrl: 'private/create/suite.html'
 
       $scope.submit = ->
         return if $scope.processingSuite
         $scope.processingSuite = true
 
         success = (response) ->
-          $scope.newSuiteDialog.close()
+          $mdDialog.hide()
           $scope.processingSuite = false
           suite = new Suite response.data
           addSuitesCallback [suite], 0

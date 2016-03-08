@@ -10,7 +10,7 @@
   <button class="btn-green" data-ng-if="!project.published && isAdmin" data-ng-click="publish()">Publish</button>
   <button class="btn-red" data-ng-if="project.published && isAdmin" data-ng-click="unpublish()">Unpublish</button>
   <button class="btn-blue" data-ng-if="!project.reruning_submissions && isAdmin" data-ng-click="rerunSubmissions()">Rerun Submissions</button>
-  <md-button class="md-fab md-mini md-primary" data-ng-if="canEdit" data-ng-click="showEditDialog()">
+  <md-button class="md-fab md-mini md-primary" data-ng-if="canEdit" data-ng-click="showEditDialog($event)">
     <md-icon md-font-set="material-icons">mode_edit</md-icon>
   </md-button>
   <a
@@ -32,7 +32,7 @@
   >
     <li class="suite-item btn-green pseudo-item"
     data-ng-if="canAddSuite && !project.published"
-    data-ng-click="showAddDialog()"
+    data-ng-click="showAddDialog($event)"
     ><i class="material-icons">add</i></li>
     <li class="suite-item"
     data-ng-repeat="suite in suites track by $index"
