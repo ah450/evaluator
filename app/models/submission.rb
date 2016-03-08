@@ -28,7 +28,7 @@ class Submission < ActiveRecord::Base
   validates :project, :submitter, presence: true
   has_many :results, dependent: :destroy
   validate :published_project_and_course
-  validate :project_not_due
+  validate :project_can_submit
   after_destroy :send_deleted_notification
 
   def as_json(_options = {})
@@ -81,8 +81,8 @@ class Submission < ActiveRecord::Base
 
   private
 
-  def project_not_due
-    errors.add(:project, 'Must be before deadline') unless
+  def project_can_submit
+    errors.add(:project, 'Must be before deadline and after start date') unless
       project.nil? || project.can_submit?
   end
 

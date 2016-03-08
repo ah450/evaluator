@@ -15,7 +15,7 @@ RSpec.describe Submission, type: :model do
     )
     submission = FactoryGirl.build(:submission, project: project)
     expect(submission).to_not be_valid
-    expect(submission.errors[:project]).to contain_exactly('Must be before deadline')
+    expect(submission.errors[:project]).to contain_exactly('Must be before deadline and after start date')
   end
 
   it 'has a valid factory' do
