@@ -35,10 +35,11 @@ class Project < ActiveRecord::Base
   # Resuts and team grades destroyed by submissions
   has_many :results, inverse_of: :project, dependent: :destroy
   has_many :team_grades, dependent: :destroy
+  before_validation :default_start_date
   validates :name, :due_date, :course, presence: true
   validate :unique_name_per_course
   validate :rerun_due_only
-  before_save :due_date_to_utc, :default_start_date, :start_date_to_utc
+  before_save :due_date_to_utc, :start_date_to_utc
   before_save :due_start_dates_times
   after_save :rerun_submissions_check
   scope :published, -> { where published: true }
@@ -116,7 +117,7 @@ class Project < ActiveRecord::Base
   end
 
   def can_submit?
-    due_date.utc > DateTime.now.utc
+    due_date.utc > DateTime.now.utc && start_date.utc <= DateTime.now.utc
   end
 
   private
