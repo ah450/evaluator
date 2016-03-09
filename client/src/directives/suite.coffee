@@ -17,12 +17,12 @@ angular.module 'evaluator'
               $scope.suite.id)
             $http.get(download_url, {responseType: "blob"})
               .then (response) ->
-              try
-                filename = response.headers('content-Disposition').split(';')[1].split("=")[1]
-                filename = filename.substr(1, filename.length - 2)
-              finally
-                filename or= "#{$scope.suite.name}.zip"
-                FileSaver.saveAs(response.data, filename)
+                try
+                  filename = response.headers('content-Disposition').split(';')[1].split("=")[1]
+                  filename = filename.substr(1, filename.length - 2)
+                finally
+                  filename or= "#{$scope.suite.name}.zip"
+                  FileSaver.saveAs(response.data, filename)
           deleteSuite = ->
             return if not $scope.canDelete
             $scope.suite.$delete().catch (response) ->
