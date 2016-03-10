@@ -108,7 +108,8 @@ class SubmissionEvaluationJob < ActiveJob::Base
   def create_team_grade
     @team_grade = TeamGrade.create(project: @result.project,
                                    result: @result,
-                                   name: @result.submission.submitter.team
+                                   name: @result.submission.submitter.team,
+                                   submission: @result.submission
                                   )
   end
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160306191540) do
+ActiveRecord::Schema.define(version: 20160310014639) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -154,17 +154,19 @@ ActiveRecord::Schema.define(version: 20160306191540) do
   add_index "suite_codes", ["test_suite_id"], name: "index_suite_codes_on_test_suite_id", using: :btree
 
   create_table "team_grades", force: :cascade do |t|
-    t.string   "name",       null: false
+    t.string   "name",          null: false
     t.integer  "project_id"
-    t.boolean  "hidden",     null: false
+    t.boolean  "hidden",        null: false
     t.integer  "result_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.integer  "submission_id", null: false
   end
 
   add_index "team_grades", ["name", "project_id"], name: "index_team_grades_on_name_and_project_id", using: :btree
   add_index "team_grades", ["project_id"], name: "index_team_grades_on_project_id", using: :btree
   add_index "team_grades", ["result_id"], name: "index_team_grades_on_result_id", using: :btree
+  add_index "team_grades", ["submission_id", "project_id"], name: "index_team_grades_on_submission_id_and_project_id", using: :btree
 
   create_table "team_jobs", force: :cascade do |t|
     t.integer  "user_id"
@@ -254,6 +256,7 @@ ActiveRecord::Schema.define(version: 20160306191540) do
   add_foreign_key "suite_codes", "test_suites", on_delete: :cascade
   add_foreign_key "team_grades", "projects", on_delete: :cascade
   add_foreign_key "team_grades", "results", on_delete: :cascade
+  add_foreign_key "team_grades", "submissions", on_delete: :cascade
   add_foreign_key "team_jobs", "users", on_delete: :cascade
   add_foreign_key "test_cases", "results", on_delete: :cascade
   add_foreign_key "test_suites", "projects", on_delete: :cascade

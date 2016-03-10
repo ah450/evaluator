@@ -27,6 +27,7 @@ class Submission < ActiveRecord::Base
   has_one :solution, dependent: :delete
   validates :project, :submitter, presence: true
   has_many :results, dependent: :destroy
+  has_many :team_grades, dependent: :delete_all
   validate :published_project_and_course
   validate :project_can_submit
   after_destroy :send_deleted_notification
@@ -89,7 +90,8 @@ class Submission < ActiveRecord::Base
         ' WHERE users.team IS NOT NULL AND submissions.project_id = ? ' \
         'AND NOT EXISTS ( SELECT * FROM team_grades AS other ' \
         ' WHERE other.name = team_grades.name AND other.project_id = ? ' \
-        ' AND other.created_at > team_grades.created_at )',
+        ' AND other.created_at > team_grades.created_at ' \
+        ' AND other.submission_id = submissions.id ) ',
         project.id, project.id
       ]
     )
