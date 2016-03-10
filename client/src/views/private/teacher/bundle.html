@@ -71,6 +71,14 @@ novalidate>
   </div>
 </fieldset>
 
+<fieldset>
+  <div class="relative form-line">
+    <md-switch data-ng-model="bundleData.teams_only">
+      Teams Only: {{bundleData.teams_only ? "Yes" : "No"}}
+    </md-switch>
+  </div>
+</fieldset>
+
 
 <p class="error" role="alert">{{bundleData.error}}</p>
 

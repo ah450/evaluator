@@ -27,6 +27,7 @@ angular.module 'evaluator'
         $scope.bundleData.waiting = false
         $scope.bundleData.ready = false
         $scope.bundleData.bundle = undefined
+        $scope.bundleData.teams_only = false
 
       resetTeamData = ->
         $scope.teamData.processing = false
