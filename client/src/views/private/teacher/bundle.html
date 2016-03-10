@@ -1,6 +1,6 @@
 <md-dialog aria-label="Download Submissions" ng-cloak>
-<md-dialog-content data-ng-if="!bundleData.waiting" class="md-padding">
-<form
+<md-dialog-content class="md-padding">
+<form data-ng-if="!bundleData.waiting"
 name="bundleForm"
 class="creation-dialog-form contract-form"
 id="bundleForm"
@@ -93,12 +93,10 @@ novalidate>
 </div>
 </form>
 </md-content>
-
 <div data-ng-if="bundleData.waiting" class="flex-perfect-center-container max-width">
   <md-progress-circular data-ng-if="!bundleData.ready" md-mode="indeterminate"></md-progress-circular>
-  <p>An email will be sent to you when ready</p>
+  <p data-ng-if="!bundleData.ready">An email will be sent to you when ready</p>
   <p data-ng-if="bundleData.ready">Click <a class="link" data-ui-sref="private.teacher.bundle({id: bundleData.bundle.id})">here</a> to download</p>
 </div>
-
 </md-dialog-content>
 </md-dialog>

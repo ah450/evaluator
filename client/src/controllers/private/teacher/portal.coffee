@@ -133,7 +133,8 @@ angular.module 'evaluator'
             $scope.bundleData.error = response.data.message.capitalize
 
         $http.post(endpoints.project.bundle.resourceUrl, {
-          project_id: $scope.bundleData.selectedProject.id
+          project_id: $scope.bundleData.selectedProject.id,
+          teams_only: $scope.bundleData.teams_only
         }).then(success, failure)
 
       $scope.downloadResults = ->

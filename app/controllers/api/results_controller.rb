@@ -19,7 +19,7 @@ class Api::ResultsController < ApplicationController
       end
       headers << 'TOTAL_GRADE' << 'ALL_COMPILED'
       csv << headers
-      submissions = @project.submissions unless params[:teams_only]
+      submissions = @project.newest_per_submitter_of_project(@project) unless params[:teams_only]
       submissions = Submission.newest_per_team_of_project(@project) if
         params[:teams_only]
       submissions.each do |submission|
@@ -31,13 +31,17 @@ class Api::ResultsController < ApplicationController
                 submission.created_at
         ]
         suites.each do |suite|
-          submission_result = submission.results.where(suite_id: suite.id).take
+          submission_result = submission.results.where(test_suite_id: suite.id).take
           if submission_result.nil?
             data << 'NO_RESULT' << 'NO_RESULT'
           else
             data << submission_result.grade << submission_result.compiled
           end
         end
+        # TOTAL GRADE
+        data << submission.results.reduce(0) { |a, e| a + e.grade }
+        # ALL COMPILEd
+        data << submission.results.reduce(true) { |a, e| a && e.compiled }
         csv << data
       end
     end

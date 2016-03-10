@@ -46,4 +46,31 @@ RSpec.describe Submission, type: :model do
       expect(Submission.newest_per_submitter_of_project(project).count).to eql 4
     end
   end
+
+  context 'newest_per_team_of_project' do
+    before :each do
+      @project_one = FactoryGirl.create(:project, published: true, course: FactoryGirl.create(:course, published: true))
+      @project_two = FactoryGirl.create(:project, published: true, course: FactoryGirl.create(:course, published: true))
+      @create_team_grade = lambda do |team_name, project|
+        submitter = FactoryGirl.create(:student, team: team_name)
+        submission = FactoryGirl.create(:submission_with_code, submitter: submitter, project: project)
+        result = FactoryGirl.create(:result, submission: submission, project: project)
+        result.team_grade
+      end
+    end
+
+    it 'returns all teams' do
+      @create_team_grade.call('one', @project_one)
+      @create_team_grade.call('two', @project_one)
+      @create_team_grade.call('three', @project_one)
+      @create_team_grade.call('four', @project_two)
+      expect(Submission.newest_per_team_of_project(@project_one).size).to eql 3
+    end
+
+    it 'returns one per team' do
+      @create_team_grade.call('one', @project_two)
+      @create_team_grade.call('one', @project_two)
+      expect(Submission.newest_per_team_of_project(@project_two).size).to eql 1
+    end
+  end
 end
