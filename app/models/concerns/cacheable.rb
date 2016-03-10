@@ -33,8 +33,8 @@ module Cacheable
       cached = $redis.get key
       if cached.nil?
         record = method(:find_by).super_method.call(*opts)
-        $redis.set key, Marshal.dump(record)
-        add_related_cache(record.id, key)
+        $redis.set key, Marshal.dump(record) if record.present?
+        add_related_cache(record.id, key) if record.present?
         record
       else
         Marshal.load(cached)
