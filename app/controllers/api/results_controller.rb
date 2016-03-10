@@ -6,21 +6,23 @@ class Api::ResultsController < ApplicationController
   prepend_before_action :authenticate
   before_action :can_view, only: [:show]
   before_action :authorize_teacher, only: [:csv]
-  include ResultIteratarable
   include TempFileResponder
 
   def csv
     file = Tempfile.new 'results'
     CSV.open(file, 'w') do |csv|
       headers = %w(ID TEAM EMAIL MAJOR SUBMISSION_DATE)
-      suites = @project.test_suites.order(:created_at)
+      suites = @project.test_suites.order(:id)
       suites.each do |suite|
         headers << "#{suite.name.upcase}_GRADE"
         headers << "#{suite.name.upcase}_COMPILED"
       end
       headers << 'TOTAL_GRADE' << 'ALL_COMPILED'
       csv << headers
-      @project.submissions.each do |submission|
+      submissions = @project.submissions unless params[:teams_only]
+      submissions = Submission.newest_per_team_of_project(@project) if
+        params[:teams_only]
+      submissions.each do |submission|
         next unless submission.submitter.student?
         data = [submission.submitter.guc_id,
                 submission.submitter.team,
@@ -28,18 +30,13 @@ class Api::ResultsController < ApplicationController
                 submission.submitter.major,
                 submission.created_at
         ]
-
-        process_submission = lambda do |submission_result|
+        suites.each do |suite|
+          submission_result = submission.results.where(suite_id: suite.id).take
           if submission_result.nil?
             data << 'NO_RESULT' << 'NO_RESULT'
           else
             data << submission_result.grade << submission_result.compiled
           end
-        end
-        if params[:teams_only]
-          team_grade_results(submission, suites, data, &process_submission)
-        else
-          all_results(submission, suites, data, &process_submission)
         end
         csv << data
       end

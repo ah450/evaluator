@@ -5,7 +5,11 @@ class Api::ProjectBundlesController < ApplicationController
   def create
     @project_bundle = ProjectBundle.new resource_params
     if @project_bundle.save
-      ProjectBundleJob.perform_later(@project_bundle)
+      if params[:teams_only]
+        ProjectTeamsBundleJob.perform_later(@project_bundle)
+      else
+        ProjectBundleJob.perform_later(@project_bundle)
+      end
       render json: @project_bundle, status: :created
     else
       render json: @project_bundle.errors, status: :unprocessable_entity

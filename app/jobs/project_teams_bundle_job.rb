@@ -1,23 +1,26 @@
-class ProjectBundleJob < ActiveJob::Base
+class ProjectTeamsBundleJob < ActiveJob::Base
   queue_as :default
 
   def perform(project_bundle)
     project = project_bundle.project
     project.with_lock('FOR SHARE') do
+      # Do something later
       @old_working_directory = Dir.pwd
-      @working_directory = Dir.mktmpdir 'project_bundle'
+      @working_directory = Dir.mktmpdir 'project_teams_bundle'
       Dir.chdir @working_directory
       submissions_directory_path = File.join(
         Dir.pwd, 'submissions'
       )
       Dir.mkdir submissions_directory_path
       Dir.chdir submissions_directory_path
-      Submission.newest_per_submitter_of_project(project_bundle.project).each do |submission|
-        IO.binwrite(submission.solution.generate_file_name, submission.solution.code)
+      Submission.newest_per_team_of_project(project).each do |submission|
+        IO.binwrite(submission.solution.generate_file_name,
+                    submission.solution.code)
       end
       Dir.chdir @working_directory
       `tar -czf submissions.tar.gz submissions`
-      raise TarError, "Project bundle #{project_bundle.id}" if $?.exitstatus != 0
+      raise TarError, "Project team bundle #{project_bundle.id}" if
+        $?.exitstatus != 0
       project_bundle.data = File.binread 'submissions.tar.gz'
       project_bundle.save!
       Dir.chdir @old_working_directory

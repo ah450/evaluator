@@ -80,6 +80,21 @@ class Submission < ActiveRecord::Base
     )
   end
 
+  def self.newest_per_team_of_project(project)
+    find_by_sql(
+      [
+        'SELECT submissions.* FROM submissions ' \
+        ' INNER JOIN users ON submissions.submitter_id = users.id ' \
+        ' INNER JOIN team_grades ON users.team = team_grades.name ' \
+        ' WHERE users.team IS NOT NULL AND submissions.project_id = ? ' \
+        'AND NOT EXISTS ( SELECT * FROM team_grades AS other ' \
+        ' WHERE other.name = team_grades.name AND other.project_id = ? ' \
+        ' AND other.created_at > team_grades.created_at )',
+        project.id, project.id
+      ]
+    )
+  end
+
   private
 
   def project_can_submit

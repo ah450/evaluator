@@ -27,7 +27,7 @@ class Solution < ActiveRecord::Base
   include ZipFile
 
   def generate_file_name
-    name = "#{submission.submitter.guc_id}@#{submission.created_at}.zip"
+    name = "#{submission.submitter.guc_id}-#{submission.submitter.team}@#{submission.created_at}.zip"
     sanitize_filename(name)
   end
 end

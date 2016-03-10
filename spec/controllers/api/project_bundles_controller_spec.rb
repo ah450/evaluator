@@ -18,9 +18,20 @@ RSpec.describe Api::ProjectBundlesController, type: :controller do
     end
     it 'allows teacher' do
       expect(ProjectBundleJob).to receive(:perform_later)
+      expect(ProjectTeamsBundleJob).to_not receive(:perform_later)
       expect do
         set_token teacher.token
         post :create, project_id: project.id
+      end.to change(ProjectBundle, :count).by(1)
+      expect(response).to be_success
+    end
+
+    it 'allows teacher to set team only' do
+      expect(ProjectBundleJob).to_not receive(:perform_later)
+      expect(ProjectTeamsBundleJob).to receive(:perform_later)
+      expect do
+        set_token teacher.token
+        post :create, project_id: project.id, teams_only: true
       end.to change(ProjectBundle, :count).by(1)
       expect(response).to be_success
     end
