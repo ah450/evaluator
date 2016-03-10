@@ -51,7 +51,19 @@ class TeamGrade < ActiveRecord::Base
                 })
   end
 
-
+  def send_created_notification
+    event = {
+      type: Rails.application.config.configurations[:notification_event_types][:team_grade_created],
+      date: DateTime.now.utc,
+      payload: {
+        team_grade: as_json
+      }
+    }
+    Notifications::SubmissionsController.publish(
+      "/notifications/teams/#{name}",
+      event
+    )
+  end
 
   private
 

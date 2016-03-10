@@ -10,6 +10,7 @@ Rails.application.config.middleware.use FayeRails::Middleware, mount: '/faye', e
   type: Faye::Redis,
   host: 'localhost'
 }, timeout: 25 do
+  map '/notifactions/teams/**': Notifications::TeamsController
   map '/notifications/submissions/**': Notifications::SubmissionsController
   map '/notifications/test_suites/**': Notifications::TestSuitesController
   map '/notifications/projects/**': Notifications::ProjectsController

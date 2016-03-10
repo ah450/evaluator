@@ -41,7 +41,8 @@ Rails.application.config.configurations = {
     project_deleted: 'PROJECT_DElETED',
     course_deleted: 'COURSE_DELETED',
     team_job_status: 'TEAM_JOB_STATUS',
-    project_bundle_ready: 'BUNDLE_READY'
+    project_bundle_ready: 'BUNDLE_READY',
+    team_grade_created: 'TEAM_GRADE_CREATED'
   },
   project_bundle_life_hours: 24
 }
