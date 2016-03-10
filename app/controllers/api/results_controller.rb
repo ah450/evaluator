@@ -19,7 +19,8 @@ class Api::ResultsController < ApplicationController
       end
       headers << 'TOTAL_GRADE' << 'ALL_COMPILED'
       csv << headers
-      submissions = @project.newest_per_submitter_of_project(@project) unless params[:teams_only]
+      submissions = Submission.newest_per_submitter_of_project(@project) unless
+        params[:teams_only]
       submissions = Submission.newest_per_team_of_project(@project) if
         params[:teams_only]
       submissions.each do |submission|
