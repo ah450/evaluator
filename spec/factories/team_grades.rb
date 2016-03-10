@@ -3,5 +3,6 @@ FactoryGirl.define do
     result
     project { result.project }
     name { result.submission.submitter.team }
+    submission { result.submission }
   end
 end

@@ -39,9 +39,19 @@ class TeamGrade < ActiveRecord::Base
   validates :submission, presence: true
   before_save :set_hidden
 
-  def as_json(_options = {})
-    super(include: [:result])
+  def team_members
+    User.where(team: name)
   end
+
+  def as_json(_options = {})
+    super.merge({
+                  result: result.as_json,
+                  team_members: team_members.map(&:as_json),
+                  submission: submission.as_json
+                })
+  end
+
+
 
   private
 

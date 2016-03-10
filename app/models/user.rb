@@ -59,7 +59,7 @@ class User < ActiveRecord::Base
   has_many :submissions, inverse_of: :submitter, foreign_key: :submitter_id,
                          dependent: :destroy
   has_many :team_grades, dependent: :delete_all, primary_key: 'team',
-    foreign_key: 'name'
+                                                foreign_key: 'name'
   def teacher?
     !student?
   end
