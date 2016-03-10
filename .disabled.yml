@@ -15,3 +15,6 @@ Style/GlobalVars:
 
 Style/CaseEquality:
   Enabled: false
+
+Style/SpecialGlobalVars:
+  Enabled: false
