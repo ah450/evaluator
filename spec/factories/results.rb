@@ -11,7 +11,9 @@ FactoryGirl.define do
                          published: true, course: FactoryGirl.create(:course, published: true))
     end
     after(:build) do |result|
-      result.test_suite = FactoryGirl.create(:public_suite, project: result.project)
+      if result.test_suite.nil?
+        result.test_suite = FactoryGirl.create(:public_suite, project: result.project)
+      end
       if result.submission.nil?
         result.submission = FactoryGirl.create(:submission, project: result.project)
       end
