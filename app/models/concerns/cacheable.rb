@@ -20,6 +20,27 @@ module Cacheable
       "#{table_name.singularize}_#{id}"
     end
 
+    def hash_to_key(hash)
+      hash.each_pair.reduce('') do |a, e|
+        value = e.second
+        value = hash_to_key(e.second) if e.second.is_a? Hash
+        "#{a}&#{e.first}=#{value}"
+      end
+    end
+
+    def find_by(*opts)
+      key = "#{table_name.singularize}_opts_#{hash_to_key(*opts)}"
+      cached = $redis.get key
+      if cached.nil?
+        record = method(:find_by).super_method.call(*opts)
+        $redis.set key, Marshal.dump(record)
+        add_related_cache(record.id, key)
+        record
+      else
+        Marshal.load(cached)
+      end
+    end
+
     def find_one_cache(id)
       id = id.id if ActiveRecord::Base === id
       cached = $redis.get cache_key(id)

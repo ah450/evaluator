@@ -158,18 +158,4 @@ class User < ActiveRecord::Base
   def downcase_email
     self.email = email.downcase unless email.nil?
   end
-
-  def self.find_by_email(email)
-    key = attribute_cache_key(:email, email)
-    cached = $redis.get key
-    if cached.nil?
-      record = super
-      return nil if record.nil?
-      $redis.set key, Marshal.dump(record)
-      add_related_cache(record.id, key)
-      record
-    else
-      Marshal.load(cached)
-    end
-  end
 end
