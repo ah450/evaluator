@@ -6,12 +6,12 @@ FactoryGirl.define do
     success true
     grade 10
     max_grade 30
-    test_suite { FactoryGirl.create(:public_suite) }
     project do
       FactoryGirl.create(:project,
                          published: true, course: FactoryGirl.create(:course, published: true))
     end
     after(:build) do |result|
+      result.test_suite = FactoryGirl.create(:public_suite, project: result.project)
       if result.submission.nil?
         result.submission = FactoryGirl.create(:submission, project: result.project)
       end

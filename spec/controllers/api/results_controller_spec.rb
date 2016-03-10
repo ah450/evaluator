@@ -114,6 +114,7 @@ RSpec.describe Api::ResultsController, type: :controller do
       expect(response).to be_forbidden
     end
     it 'allows teacher' do
+
       teacher = FactoryGirl.create(:teacher, verified: true)
       set_token teacher.token
       get :csv, project_id: @project.id
@@ -121,6 +122,8 @@ RSpec.describe Api::ResultsController, type: :controller do
     end
 
     it 'allows teams only filter' do
+      10.times { @create_result.call 'one'}
+      10.times { @create_result.call 'two' }
       teacher = FactoryGirl.create(:teacher, verified: true)
       set_token teacher.token
       get :csv, project_id: @project.id, teams_only: true
