@@ -17,7 +17,6 @@ class Api::SubmissionsController < ApplicationController
     end
   end
 
-
   # Returns code
   def download
     solution = @submission.solution
