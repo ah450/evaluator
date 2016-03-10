@@ -1,5 +1,7 @@
 class Api::TeamGradesController < ApplicationController
   prepend_before_action :set_parent, except: [:show, :destroy]
+  before_action :set_resource, only: [:show]
+  before_action :authorize_student, only: [:latest]
   prepend_before_action :authenticate
   before_action :can_view?, only: [:show]
 

@@ -43,7 +43,26 @@ RSpec.describe Api::TeamGradesController, type: :controller do
   end
 
   context 'latest' do
+    it 'does not allow unauthorized' do
+      get :latest, project_id: @project_one.id
+      expect(response).to be_unauthorized
+    end
 
+    it 'does not allow teacher' do
+      set_token FactoryGirl.create(:teacher).token
+      get :latest, project_id: @project_one.id
+      expect(response).to be_forbidden
+    end
+
+    it 'shows latest only' do
+      @create_team_grade.call 'one', @project_one
+      grade = @create_team_grade.call 'one', @project_one
+      @create_team_grade.call 'one', @project_two
+      set_token FactoryGirl.create(:student, team: 'one').token
+      get :latest, project_id: @project_one.id
+      expect(response).to be_success
+      expect(json_response[:id]).to eql grade.id
+    end
   end
 
 end

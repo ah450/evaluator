@@ -40,7 +40,7 @@ module Cacheable
 
       case ids.size
       when 0
-        raise RecordNotFound, "Couldn't find #{@klass.name} without an ID"
+        raise ActiveRecord::RecordNotFound, "Couldn't find #{self.name} without an ID"
       when 1
         result = find_one_cache(ids.first)
         expects_array ? [result] : result
@@ -50,7 +50,7 @@ module Cacheable
     end
 
     def find(*args)
-      find_helper(*args)
+      record = find_helper(*args)
     end
   end
 
