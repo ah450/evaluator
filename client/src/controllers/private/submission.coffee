@@ -1,21 +1,16 @@
 angular.module 'evaluator'
   .controller 'SubmissionsController', ($scope, $stateParams, ProjectResource,
     ProjectSubmissionsResource, Pagination, defaultPageSize, Submission,
-    $mdDialog, Upload, endpoints, UserAuth) ->
-
-      $scope.loading = true
-      projectPromise = ProjectResource.get(
-        id: $stateParams.project_id
-        ).$promise
-      projectPromise.then (project) ->
-        $scope.project = project
-        $scope.loading = false
+    $mdDialog, Upload, endpoints, UserAuth, $timeout, $http, Project
+    NotificationDispatcher, configurations) ->
 
       $scope.canSubmit = ->
-        false unless $scope.project && !$scope.project.is_due &&
+        $scope.project && !$scope.project.is_due &&
           $scope.project.started
 
-
+      $scope.teamGradeApplicable = UserAuth.user.student
+      $scope.team = UserAuth.user.team
+      $scope.teamGradeSubmissions = []
       $scope.submissions = []
       $scope.submissionClasses = ['submission-accent-one',
         'submission-accent-two', 'submission-accent-three']
@@ -36,6 +31,14 @@ angular.module 'evaluator'
       addSubmissionsCallback = (newSubmissions) ->
         args = [0, $scope.submissions.length].concat newSubmissions
         $scope.submissions.splice.apply $scope.submissions, args
+
+      changeTeamGrade = (submission) ->
+        if $scope.teamGradeSubmissions.length is 0 ||
+            $scope.teamGradeSubmissions[0].created_at_as_date <
+            submission.created_at_as_date
+              args = [0, $scope.teamGradeSubmissions.length].concat [submission]
+              $scope.teamGradeSubmissions.splice.apply(
+                $scope.teamGradeSubmissions, args)
 
       addNewSubmission = (submission) ->
         $scope.submissions.splice 0, 0, submission
@@ -109,3 +112,28 @@ angular.module 'evaluator'
           parent: angular.element(document.body)
           preserveScope: true
           templateUrl:'private/create/submission.html'
+
+      teamGradeCallback = (teamGrade) ->
+        submission = new Submission teamGrade.submission
+        changeTeamGrade submission
+
+      $http.get(
+        endpoints.teamGrades.latest.replace(':project_id',
+        $stateParams.project_id)
+        ).then (response) ->
+          teamGradeCallback response.data
+
+      $scope.loading = true
+      projectPromise = ProjectResource.get(
+        id: $stateParams.project_id
+        ).$promise
+      projectPromise.then (project) ->
+        $scope.project = new Project project
+        $scope.loading = false
+        if $scope.teamGradeApplicable
+          NotificationDispatcher.subscribeTeamGrade UserAuth.user.team, (e) ->
+            configurations.then (config) ->
+              if (e.type is
+                  config.notification_event_types.team_grade_created)
+                    if e.payload.team_grade.project_id is $scope.project.id
+                      teamGradeCallback e.payload.team_grade

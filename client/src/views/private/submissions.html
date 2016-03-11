@@ -9,6 +9,25 @@
     <h1 class="break-word">{{project.name}} Submissions</h1>
   </header>
 
+  <section class="team-grade-wrapper" data-ng-if="teamGradeApplicable">
+    <header>
+      <h3>Current Grade for team {{team}}</h3>
+    </header>
+    <ul class="submissions-list">
+      <li class="submission-item"
+      data-ng-class="teamGradeSubmission.status"
+      data-ng-repeat="teamGradeSubmission in teamGradeSubmissions track by $index"
+      >
+      <div data-submission data-data="teamGradeSubmission"
+      data-include-submitter="true"
+      data-no-download="true"
+      data-ng-class="submissionClasses[$index % submissionClasses.length]"
+      >
+      </div>
+    </li>
+    </ul>
+  </section>
+
 
   <section class="submissions-wrapper">
     <ul class="submissions-list">

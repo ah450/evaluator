@@ -57,7 +57,7 @@ angular.module 'evaluator'
           get: ->
             @startDateAsDateCache ||= moment(@resource.start_date).toDate()
           set: (value) ->
-            @$resource.start_date = value
+            @resource.start_date = value
 
         @property 'published',
           get: ->
@@ -75,10 +75,10 @@ angular.module 'evaluator'
 
         @property 'is_due',
           get: ->
-            due_date_as_date < new Date()
+            @due_date_as_date < new Date()
         @property 'started',
           get: ->
-            start_date_as_date > new Date()
+            @start_date_as_date < new Date()
 
         @property 'id',
           get: ->

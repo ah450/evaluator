@@ -144,8 +144,8 @@ class Project < ActiveRecord::Base
   end
 
   def due_start_dates_times
-    self.due_date = due_date.utc.change(hour: 21, minute: 59)
-    self.start_date = start_date.utc.change(hour: 0, minute: 0)
+    self.due_date = due_date.utc.change(hour: 21, min: 59)
+    self.start_date = start_date.utc.change(hour: 22, min: 0)
   end
 
   def due_date_to_utc

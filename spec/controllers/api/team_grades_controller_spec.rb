@@ -63,6 +63,12 @@ RSpec.describe Api::TeamGradesController, type: :controller do
       expect(response).to be_success
       expect(json_response[:id]).to eql grade.id
     end
+
+    it '404 on no team grades' do
+      set_token FactoryGirl.create(:student, team: 'one').token
+      get :latest, project_id: @project_one.id
+      expect(response).to be_not_found
+    end
   end
 
 end

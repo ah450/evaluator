@@ -44,12 +44,10 @@ angular.module 'evaluator'
         url = "/notifications/team_jobs/#{job.id}"
         @subscribe url, callback
 
+      subscribeTeamGrade: (team_name, callback) ->
+        url = "/notifications/teams/#{team_name.replace(' ', '_')}"
+        @subscribe url, callback
 
 
 
     new NotificationDispatcher
-        
-
-
-
-    

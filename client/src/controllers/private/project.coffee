@@ -144,7 +144,7 @@ angular.module 'evaluator'
           else
             $scope.suiteCreateError = response.data.message.capitalize
             $scope.processingProject = false
-        $project.update().then success, failure
+        $scope.project.$update().then success, failure
 
 
       $scope.newSuiteData = {}

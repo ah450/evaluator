@@ -9,7 +9,10 @@ angular.module 'evaluator'
           @resultIds = []
           resultFactory = (data) ->
             new Result data
-          
+          if @resource.results
+            @results = _.map @resource.results, resultFactory
+            Array::push.apply @resultIds, _.map @resource.results, 'id'
+
           NotificationDispatcher.subscribeSubmission @, (e) =>
             configurations.then (config) =>
               if (e.type is
@@ -81,7 +84,7 @@ angular.module 'evaluator'
         @property 'success',
           get: ->
             @status is @SUCCESS_STATE
-        
+
         @property 'partial',
           get: ->
             @status is @PARTIAL_STATE
@@ -98,9 +101,11 @@ angular.module 'evaluator'
           get: ->
             moment(@resource.created_at).format("MMMM Do YYYY, h:mm:ss a")
 
+        @property 'created_at_as_date',
+          get: ->
+            @createdAtAsDateCache ||= moment(@resource.created_at).toDate()
+
         PARTIAL_STATE: 'partial-submission'
         SUCCESS_STATE: 'success-submission'
         COMPILE_ERROR_STATE: 'error-submission'
         PROCESSING_STATE: 'processing-submission'
-      
-    

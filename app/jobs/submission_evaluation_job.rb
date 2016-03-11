@@ -68,7 +68,7 @@ class SubmissionEvaluationJob < ActiveJob::Base
       end
     end
     @new_results.each { |result| submission.send_new_result_notification(result) }
-    @new_team_grades.map(&:send_created_notification)
+    @new_team_grades.each(&:send_created_notification)
   end
 
   def test_suite(submission, suite)

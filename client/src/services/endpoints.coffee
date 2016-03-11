@@ -33,6 +33,9 @@ angular.module 'evaluator'
         csv: [apiHost, 'projects', ':project_id', 'results', 'csv'].join '/'
       result:
         resourceUrl: [apiHost, 'results', ':id.json'].join '/'
+      teamGrades:
+        latest: [apiHost, 'projects', ':project_id', 'team_grades',
+          'latest.json'].join '/'
       teamsJob:
         url: [apiHost, 'teams.json'].join '/'
       contacts:

@@ -59,8 +59,8 @@ class TeamGrade < ActiveRecord::Base
         team_grade: as_json
       }
     }
-    Notifications::SubmissionsController.publish(
-      "/notifications/teams/#{name}",
+    Notifications::TeamsController.publish(
+      "/notifications/teams/#{name.gsub(' ', '_')}",
       event
     )
   end
