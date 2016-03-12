@@ -7,7 +7,7 @@ class Api::TeamGradesController < ApplicationController
 
   def latest
     render json: @current_user.team_grades.where(project: @project)
-      .order(created_at: :desc).take!
+      .order(submission_created_at: :desc).take!
   end
 
   private

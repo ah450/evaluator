@@ -86,10 +86,10 @@ class Submission < ActiveRecord::Base
       [
         'SELECT submissions.* FROM submissions ' \
         ' INNER JOIN team_grades ON team_grades.submission_id = submissions.id ' \
-        ' WHERE submissions.project_id = ? ' \
+        ' WHERE team_grades.project_id = ? ' \
         'AND NOT EXISTS ( SELECT * FROM team_grades AS other ' \
         ' WHERE other.name = team_grades.name AND other.project_id = ? ' \
-        ' AND other.created_at > team_grades.created_at ) ',
+        ' AND other.submission_created_at > team_grades.submission_created_at ) ',
         project.id, project.id
       ]
     )

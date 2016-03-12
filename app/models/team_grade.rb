@@ -2,21 +2,24 @@
 #
 # Table name: team_grades
 #
-#  id            :integer          not null, primary key
-#  name          :string           not null
-#  project_id    :integer
-#  hidden        :boolean          not null
-#  result_id     :integer
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  submission_id :integer          not null
+#  id                    :integer          not null, primary key
+#  name                  :string           not null
+#  project_id            :integer
+#  hidden                :boolean          not null
+#  result_id             :integer
+#  created_at            :datetime         not null
+#  updated_at            :datetime         not null
+#  submission_id         :integer          not null
+#  submission_created_at :datetime         not null
 #
 # Indexes
 #
 #  index_team_grades_on_name_and_project_id           (name,project_id)
 #  index_team_grades_on_project_id                    (project_id)
 #  index_team_grades_on_result_id                     (result_id)
+#  index_team_grades_on_submission_created_at         (submission_created_at)
 #  index_team_grades_on_submission_id_and_project_id  (submission_id,project_id)
+#  per_team_optimization                              (submission_created_at,project_id,name)
 #
 # Foreign Keys
 #
@@ -33,10 +36,12 @@ class TeamGrade < ActiveRecord::Base
   belongs_to :project
   belongs_to :result
   belongs_to :submission
+  before_validation :set_submission_created_at
   validates :result, presence: true
   validates :project, presence: true
   validates :name, presence: true
   validates :submission, presence: true
+  validates :submission_created_at, presence: true
   before_save :set_hidden
 
   def team_members
@@ -66,6 +71,12 @@ class TeamGrade < ActiveRecord::Base
   end
 
   private
+
+  def set_submission_created_at
+    if submission.present?
+      self.submission_created_at = submission.created_at
+    end
+  end
 
   def set_hidden
     self.hidden = result.hidden.to_s
