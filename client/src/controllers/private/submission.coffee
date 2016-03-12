@@ -34,7 +34,7 @@ angular.module 'evaluator'
 
       changeTeamGrade = (submission) ->
         if $scope.teamGradeSubmissions.length is 0 ||
-            $scope.teamGradeSubmissions[0].submission_created_at <
+            $scope.teamGradeSubmissions[0].created_at_as_date <
             submission.created_at_as_date
               args = [0, $scope.teamGradeSubmissions.length].concat [submission]
               $scope.teamGradeSubmissions.splice.apply(
