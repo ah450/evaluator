@@ -42,22 +42,16 @@ RSpec.describe SubmissionEvaluationJob, type: :job do
         SubmissionEvaluationJob.perform_now @submission
       end
 
-      it 'creates a result and TeamGrade' do
+      it 'creates a result' do
         expect do
           SubmissionEvaluationJob.perform_now @submission
-        end.to change(Result, :count).by(1).and change(TeamGrade, :count).by(1)
+        end.to change(Result, :count).by(1)
       end
 
       it 'sets correct grade' do
         SubmissionEvaluationJob.perform_now @submission
         result = @submission.results.first
         expect(result.grade).to eql @suite.max_grade
-      end
-
-      it 'sets correct team grade' do
-        SubmissionEvaluationJob.perform_now @submission
-        result = @submission.results.first
-        expect(result.team_grade.nil?).to be false
       end
 
       it 'sets correct result attributes and cases' do
@@ -94,22 +88,16 @@ RSpec.describe SubmissionEvaluationJob, type: :job do
         SubmissionEvaluationJob.perform_now @submission
       end
 
-      it 'creates a result and TeamGrade' do
+      it 'creates a result' do
         expect do
           SubmissionEvaluationJob.perform_now @submission
-        end.to change(Result, :count).by(1).and change(TeamGrade, :count).by(1)
+        end.to change(Result, :count).by(1)
       end
 
       it 'sets correct grade' do
         SubmissionEvaluationJob.perform_now @submission
         result = @submission.results.first
         expect(result.grade).to eql @suite.max_grade
-      end
-
-      it 'sets correct team grade' do
-        SubmissionEvaluationJob.perform_now @submission
-        result = @submission.results.first
-        expect(result.team_grade.nil?).to be false
       end
 
       it 'sets correct result attributes and cases' do
@@ -145,21 +133,15 @@ RSpec.describe SubmissionEvaluationJob, type: :job do
         expect(@submission).to receive(:send_new_result_notification).once
         SubmissionEvaluationJob.perform_now @submission
       end
-      it 'creates a result and TeamGrade' do
+      it 'creates a result' do
         expect do
           SubmissionEvaluationJob.perform_now @submission
-        end.to change(Result, :count).by(1).and change(TeamGrade, :count).by(1)
+        end.to change(Result, :count).by(1)
       end
       it 'sets correct grade' do
         SubmissionEvaluationJob.perform_now @submission
         result = @submission.results.first
         expect(result.grade).to eql 0
-      end
-
-      it 'sets correct team grade' do
-        SubmissionEvaluationJob.perform_now @submission
-        result = @submission.results.first
-        expect(result.team_grade.nil?).to be false
       end
 
       it 'is not successfull' do
@@ -200,22 +182,16 @@ RSpec.describe SubmissionEvaluationJob, type: :job do
         SubmissionEvaluationJob.perform_now @submission
       end
 
-      it 'creates a result and TeamGrade' do
+      it 'creates a result' do
         expect do
           SubmissionEvaluationJob.perform_now @submission
-        end.to change(Result, :count).by(1).and change(TeamGrade, :count).by(1)
+        end.to change(Result, :count).by(1)
       end
 
       it 'sets correct grade' do
         SubmissionEvaluationJob.perform_now @submission
         result = @submission.results.first
         expect(result.grade).to eql 0
-      end
-
-      it 'sets correct team grade' do
-        SubmissionEvaluationJob.perform_now @submission
-        result = @submission.results.first
-        expect(result.team_grade.nil?).to be false
       end
 
       it 'sets correct result attributes and cases' do
@@ -282,10 +258,10 @@ RSpec.describe SubmissionEvaluationJob, type: :job do
         SubmissionEvaluationJob.perform_now @submission
       end
 
-      it 'creates two results and a TeamGrade' do
+      it 'creates two results' do
         expect do
           SubmissionEvaluationJob.perform_now @submission
-        end.to change(Result, :count).by(2).and change(TeamGrade, :count).by(2)
+        end.to change(Result, :count).by(2)
       end
 
       it 'sets correct grade' do
@@ -347,10 +323,10 @@ RSpec.describe SubmissionEvaluationJob, type: :job do
   #       SubmissionEvaluationJob.perform_now @submission
   #     end
   #
-  #     it 'creates two results and a TeamGrade' do
+  #     it 'creates two results' do
   #       expect do
   #         SubmissionEvaluationJob.perform_now @submission
-  #       end.to change(Result, :count).by(2).and change(TeamGrade, :count).by(2)
+  #       end.to change(Result, :count).by(2)
   #     end
   #
   #     it 'sets correct grade' do
@@ -387,10 +363,10 @@ RSpec.describe SubmissionEvaluationJob, type: :job do
   #       SubmissionEvaluationJob.perform_now @submission
   #     end
   #
-  #     it 'creates two results and a TeamGrade' do
+  #     it 'creates two results' do
   #       expect do
   #         SubmissionEvaluationJob.perform_now @submission
-  #       end.to change(Result, :count).by(2).and change(TeamGrade, :count).by(2)
+  #       end.to change(Result, :count).by(2)
   #     end
   #
   #     it 'sets correct grade' do
@@ -456,10 +432,10 @@ RSpec.describe SubmissionEvaluationJob, type: :job do
   #       SubmissionEvaluationJob.perform_now @submission
   #     end
   #
-  #     it 'creates two results and a TeamGrade' do
+  #     it 'creates two results' do
   #       expect do
   #         SubmissionEvaluationJob.perform_now @submission
-  #       end.to change(Result, :count).by(2).and change(TeamGrade, :count).by(2)
+  #       end.to change(Result, :count).by(2)
   #     end
   #
   #     it 'sets correct grade' do

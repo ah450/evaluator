@@ -55,7 +55,6 @@ RSpec.describe Submission, type: :model do
         submitter = FactoryGirl.create(:student, team: team_name)
         submission = FactoryGirl.create(:submission_with_code, submitter: submitter, project: project)
         result = FactoryGirl.create(:result, submission: submission, project: project)
-        result.team_grade
       end
     end
 

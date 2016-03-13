@@ -18,10 +18,5 @@ FactoryGirl.define do
         result.submission = FactoryGirl.create(:submission, project: result.project)
       end
     end
-    after(:create) do |result|
-      result.team_grade = FactoryGirl.create(:team_grade, result: result,
-                                                          project: result.project,
-                                                          name: result.submission.submitter.team)
-    end
   end
 end

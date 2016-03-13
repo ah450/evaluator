@@ -7,12 +7,14 @@
 #  submitter_id :integer          not null
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  team         :string
 #
 # Indexes
 #
-#  index_submissions_on_created_at    (created_at)
-#  index_submissions_on_project_id    (project_id)
-#  index_submissions_on_submitter_id  (submitter_id)
+#  index_submissions_on_created_at           (created_at)
+#  index_submissions_on_project_id           (project_id)
+#  index_submissions_on_project_id_and_team  (project_id,team)
+#  index_submissions_on_submitter_id         (submitter_id)
 #
 # Foreign Keys
 #
@@ -27,7 +29,7 @@ class Submission < ActiveRecord::Base
   has_one :solution, dependent: :delete
   validates :project, :submitter, presence: true
   has_many :results, dependent: :destroy
-  has_many :team_grades, dependent: :delete_all
+  before_validation :set_team
   validate :published_project_and_course
   validate :project_can_submit
   after_destroy :send_deleted_notification
@@ -48,6 +50,20 @@ class Submission < ActiveRecord::Base
     Notifications::SubmissionsController.publish(
       "/notifications/submissions/#{id}",
       event
+    )
+  end
+
+  def send_new_team_grade_notification
+    event = {
+      type: Rails.application.config.configurations[:notification_event_types][:team_grade_created],
+      date: DateTime.now.utc,
+      payload: {
+        submission: as_json
+      }
+    }
+    Notifications::TeamsController.publish(
+    "/notifications/teams/#{team.gsub(' ', '_')}",
+    event
     )
   end
 
@@ -85,17 +101,22 @@ class Submission < ActiveRecord::Base
     find_by_sql(
       [
         'SELECT submissions.* FROM submissions ' \
-        ' INNER JOIN team_grades ON team_grades.submission_id = submissions.id ' \
-        ' WHERE team_grades.project_id = ? ' \
-        'AND NOT EXISTS ( SELECT * FROM team_grades AS other ' \
-        ' WHERE other.name = team_grades.name AND other.project_id = ? ' \
-        ' AND other.submission_created_at > team_grades.submission_created_at ) ',
+        'WHERE submissions.project_id = ? ' \
+        'AND submissions.team IS NOT NULL ' \
+        'AND NOT EXISTS ( ' \
+        'SELECT * FROM submissions AS other '\
+        ' WHERE other.project_id = ? AND other.team = submissions.team ' \
+        'AND other.created_at > submissions.created_at )',
         project.id, project.id
       ]
     )
   end
 
   private
+
+  def set_team
+    self.team = submitter.team if submitter.present?
+  end
 
   def project_can_submit
     errors.add(:project, 'Must be before deadline and after start date') unless

@@ -12,7 +12,6 @@ RSpec.describe Result, type: :model do
   it { should validate_presence_of :grade }
   it { should validate_presence_of :max_grade }
   it { should have_many :test_cases }
-  it { should have_one :team_grade }
 
   it 'has a valid factory' do
     result = FactoryGirl.build(:result)

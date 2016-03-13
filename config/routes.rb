@@ -20,7 +20,7 @@ Rails.application.routes.draw do
         delete :registration, action: :unregister
       end
       resources :projects, shallow: true, except: [:new] do
-        resources :team_grades, shallow: true, only: [:show] do
+        resources :team_grades, shallow: true, only: [] do
           collection do
             get :latest
           end

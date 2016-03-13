@@ -58,10 +58,12 @@ class User < ActiveRecord::Base
   has_many :courses, through: :studentships, dependent: :delete_all
   has_many :submissions, inverse_of: :submitter, foreign_key: :submitter_id,
                          dependent: :destroy
-  has_many :team_grades, dependent: :delete_all, primary_key: 'team',
-                                                foreign_key: 'name'
   def teacher?
     !student?
+  end
+
+  def team_grades
+    Submission.where(team: team)
   end
 
   def full_name
@@ -79,8 +81,6 @@ class User < ActiveRecord::Base
       can_view_submission? object
     elsif object.is_a? Result
       can_view_result? object
-    elsif object.is_a? TeamGrade
-      can_view_team_grade? object
     elsif object.is_a? TestSuite
       can_view_test_suite? object
     elsif object.is_a? Project
@@ -119,10 +119,6 @@ class User < ActiveRecord::Base
 
   def can_view_result?(result)
     teacher? || result.submission.submitter == self
-  end
-
-  def can_view_team_grade?(grade)
-    teacher? || grade.name == team
   end
 
   def can_view_test_suite?(suite)

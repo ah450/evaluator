@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160312200525) do
+ActiveRecord::Schema.define(version: 20160313124313) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -125,9 +125,11 @@ ActiveRecord::Schema.define(version: 20160312200525) do
     t.integer  "submitter_id", null: false
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+    t.string   "team"
   end
 
   add_index "submissions", ["created_at"], name: "index_submissions_on_created_at", using: :btree
+  add_index "submissions", ["project_id", "team"], name: "index_submissions_on_project_id_and_team", using: :btree
   add_index "submissions", ["project_id"], name: "index_submissions_on_project_id", using: :btree
   add_index "submissions", ["submitter_id"], name: "index_submissions_on_submitter_id", using: :btree
 
@@ -152,24 +154,6 @@ ActiveRecord::Schema.define(version: 20160312200525) do
   end
 
   add_index "suite_codes", ["test_suite_id"], name: "index_suite_codes_on_test_suite_id", using: :btree
-
-  create_table "team_grades", force: :cascade do |t|
-    t.string   "name",                  null: false
-    t.integer  "project_id"
-    t.boolean  "hidden",                null: false
-    t.integer  "result_id"
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
-    t.integer  "submission_id",         null: false
-    t.datetime "submission_created_at", null: false
-  end
-
-  add_index "team_grades", ["name", "project_id"], name: "index_team_grades_on_name_and_project_id", using: :btree
-  add_index "team_grades", ["project_id"], name: "index_team_grades_on_project_id", using: :btree
-  add_index "team_grades", ["result_id"], name: "index_team_grades_on_result_id", using: :btree
-  add_index "team_grades", ["submission_created_at", "project_id", "name"], name: "per_team_optimization", using: :btree
-  add_index "team_grades", ["submission_created_at"], name: "index_team_grades_on_submission_created_at", using: :btree
-  add_index "team_grades", ["submission_id", "project_id"], name: "index_team_grades_on_submission_id_and_project_id", using: :btree
 
   create_table "team_jobs", force: :cascade do |t|
     t.integer  "user_id"
@@ -257,9 +241,6 @@ ActiveRecord::Schema.define(version: 20160312200525) do
   add_foreign_key "submissions", "users", column: "submitter_id", on_delete: :cascade
   add_foreign_key "suite_cases", "test_suites", on_delete: :cascade
   add_foreign_key "suite_codes", "test_suites", on_delete: :cascade
-  add_foreign_key "team_grades", "projects", on_delete: :cascade
-  add_foreign_key "team_grades", "results", on_delete: :cascade
-  add_foreign_key "team_grades", "submissions", on_delete: :cascade
   add_foreign_key "team_jobs", "users", on_delete: :cascade
   add_foreign_key "test_cases", "results", on_delete: :cascade
   add_foreign_key "test_suites", "projects", on_delete: :cascade

@@ -34,7 +34,6 @@ class Project < ActiveRecord::Base
   has_many :test_suites, inverse_of: :project, dependent: :destroy
   # Resuts and team grades destroyed by submissions
   has_many :results, inverse_of: :project, dependent: :destroy
-  has_many :team_grades, dependent: :destroy
   before_validation :default_start_date
   validates :name, :due_date, :course, presence: true
   validate :unique_name_per_course

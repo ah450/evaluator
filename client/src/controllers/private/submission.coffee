@@ -113,8 +113,8 @@ angular.module 'evaluator'
           preserveScope: true
           templateUrl:'private/create/submission.html'
 
-      teamGradeCallback = (teamGrade) ->
-        submission = new Submission teamGrade.submission
+      teamGradeCallback = (teamSubmission) ->
+        submission = new Submission teamSubmission
         changeTeamGrade submission
 
       $http.get(
@@ -135,5 +135,5 @@ angular.module 'evaluator'
             configurations.then (config) ->
               if (e.type is
                   config.notification_event_types.team_grade_created)
-                    if e.payload.team_grade.project_id is $scope.project.id
-                      teamGradeCallback e.payload.team_grade
+                    if e.payload.submission.project_id is $scope.project.id
+                      teamGradeCallback e.payload.submission

@@ -39,7 +39,6 @@ class Result < ActiveRecord::Base
   validates :submission, :test_suite, :project, presence: true
   validates :compiler_stderr, :compiler_stdout, :grade, :max_grade, presence: true
   has_many :test_cases, dependent: :delete_all
-  has_one :team_grade, dependent: :delete
   validate :grade_range
   validate :boolean_validations
   before_save :set_hidden

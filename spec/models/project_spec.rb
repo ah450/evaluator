@@ -5,7 +5,6 @@ RSpec.describe Project, type: :model do
   it { should have_many :submissions }
   it { should have_many :test_suites }
   it { should have_many :results }
-  it { should have_many :team_grades }
   it { should validate_presence_of :name }
   it { should validate_presence_of :due_date }
   it { should validate_presence_of :course }
