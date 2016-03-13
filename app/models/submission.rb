@@ -105,7 +105,7 @@ class Submission < ActiveRecord::Base
         'WHERE submissions.project_id = ? ' \
         'AND NOT EXISTS ( ' \
         'SELECT 1 FROM results WHERE results.project_id = ? ' \
-        'AND results.submission_id = submissions.id',
+        'AND results.submission_id = submissions.id )',
         project.id, project.id
       ]
     )
