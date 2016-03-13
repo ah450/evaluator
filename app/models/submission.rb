@@ -98,6 +98,19 @@ class Submission < ActiveRecord::Base
     )
   end
 
+  def self.without_results_of_project(project)
+    find_by_sql(
+      [
+        'SELECT submissions.* FROM submissions ' \
+        'WHERE submissions.project_id = ? ' \
+        'AND NOT EXISTS ( ' \
+        'SELECT 1 FROM results WHERE results.project_id = ? ' \
+        'AND results.submission_id = submissions.id',
+        project.id, project.id
+      ]
+    )
+  end
+
   def self.newest_per_team_of_project(project)
     find_by_sql(
       [
@@ -105,7 +118,7 @@ class Submission < ActiveRecord::Base
         'WHERE submissions.project_id = ? ' \
         'AND submissions.team IS NOT NULL ' \
         'AND NOT EXISTS ( ' \
-        'SELECT * FROM submissions AS other '\
+        'SELECT 1 FROM submissions AS other '\
         ' WHERE other.project_id = ? AND other.team = submissions.team ' \
         'AND other.created_at > submissions.created_at )',
         project.id, project.id
