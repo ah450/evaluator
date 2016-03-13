@@ -1,7 +1,7 @@
 class ProjectBundleJob < ActiveJob::Base
   queue_as :default
 
-  def perform(project_bundle)
+  def perform(project_bundle, latest)
     project = project_bundle.project
     project.with_lock('FOR SHARE') do
       @old_working_directory = Dir.pwd
@@ -12,8 +12,15 @@ class ProjectBundleJob < ActiveJob::Base
       )
       Dir.mkdir submissions_directory_path
       Dir.chdir submissions_directory_path
-      Submission.newest_per_submitter_of_project(project_bundle.project).each do |submission|
-        IO.binwrite(submission.solution.generate_file_name, submission.solution.code)
+      if latest
+        submissions = Submission.newest_per_submitter_of_project(
+          project_bundle.project)
+      else
+        submissions = project_bundle.project.submissions
+      end
+      submissions.each do |submission|
+        IO.binwrite(submission.solution.generate_file_name,
+          submission.solution.code)
       end
       Dir.chdir @working_directory
       `tar -czf submissions.tar.gz submissions`

@@ -8,7 +8,7 @@ class Api::ProjectBundlesController < ApplicationController
       if params[:teams_only]
         ProjectTeamsBundleJob.perform_later(@project_bundle)
       else
-        ProjectBundleJob.perform_later(@project_bundle)
+        ProjectBundleJob.perform_later(@project_bundle, params[:latest])
       end
       render json: @project_bundle, status: :created
     else
