@@ -28,6 +28,7 @@ angular.module 'evaluator'
         $scope.bundleData.ready = false
         $scope.bundleData.bundle = undefined
         $scope.bundleData.teams_only = false
+        $scope.bundleData.latest = false
 
       resetTeamData = ->
         $scope.teamData.processing = false
@@ -134,7 +135,8 @@ angular.module 'evaluator'
 
         $http.post(endpoints.project.bundle.resourceUrl, {
           project_id: $scope.bundleData.selectedProject.id,
-          teams_only: $scope.bundleData.teams_only
+          teams_only: $scope.bundleData.teams_only,
+          latest: $scope.bundleData.latest
         }).then(success, failure)
 
       $scope.downloadResults = ->

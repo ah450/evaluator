@@ -77,6 +77,12 @@ novalidate>
       Teams Only: {{bundleData.teams_only ? "Yes" : "No"}}
     </md-switch>
   </div>
+
+  <div class="relative form-line">
+    <md-switch data-ng-model="bundleData.latest" data-ng-disabled="bundleData.teams_only">
+      Latest Only: {{bundleData.latest ? "Yes" : "No"}}
+    </md-switch>
+  </div>
 </fieldset>
 
 

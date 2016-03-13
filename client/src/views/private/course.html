@@ -28,7 +28,7 @@ data-ng-if="isTeacher && isAdmin">
     data-ng-repeat="project in projects track by $index"
     data-ng-class="projectClasses[$index % projectClasses.length]"
     >
-      <a data-ui-sref="private.project({id: project.id})" data-project data-data="project"
+      <a data-ui-sref="private.submissions({project_id: project.id})" data-project data-data="project"
       ></a>
     </li>
     <li class="project-item center-pseudo"
