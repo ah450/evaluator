@@ -54,6 +54,7 @@ class Submission < ActiveRecord::Base
   end
 
   def send_new_team_grade_notification
+    return if submitter.team.nil?
     event = {
       type: Rails.application.config.configurations[:notification_event_types][:team_grade_created],
       date: DateTime.now.utc,

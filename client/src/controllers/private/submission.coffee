@@ -45,8 +45,6 @@ angular.module 'evaluator'
 
       $scope.loadingSubmissions = true
 
-
-
       $scope.currentPage = 1
 
       loadSubmissionsPage = (page) ->
