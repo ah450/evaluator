@@ -19,6 +19,6 @@ RSpec.describe ProjectBundleJob, type: :job do
     @setup_submissions.call
     bundle = FactoryGirl.create(:project_bundle, project: @project)
     expect(@project).to receive(:notify_bundle_ready).once
-    ProjectBundleJob.perform_now(bundle)
+    ProjectBundleJob.perform_now(bundle, false)
   end
 end
