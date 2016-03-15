@@ -4,40 +4,16 @@
 
   .course-item {
     display: block;
-    padding: 0.6em;
+    padding: .6em;
     margin-bottom: 1em;
-    border-radius: 0.8em;
+    border-radius: .8em;
     transition: all .3s ease;
+
     &:hover {
       transform: scale(1.1);
     }
-
-    box-shadow: 0px 0px 0.2em 0px rgba(0, 0, 0, 0.3);
-
-    &.course-accent-one {
-      &:hover {
-        background: $list-accent-one;
-      }
-      background: transparentize($list-accent-one, 0.4);
-    }
-
-    &.course-accent-two {
-      &:hover {
-        background: $list-accent-two;
-      }
-      background: transparentize($list-accent-two, 0.4);
-    }
-
-    &.course-accent-three {
-      &:hover {
-        background: $list-accent-three;
-      }
-      background: transparentize($list-accent-three, 0.4);
-    }
+    box-shadow: 0 0 .2em 0 rgba(0, 0, 0, .3);
   }
-
-  
-
 
 }
 

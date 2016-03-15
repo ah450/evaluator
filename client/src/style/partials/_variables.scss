@@ -27,12 +27,12 @@ $medium-and-down: "only screen and (max-width : #{$medium-screen})" !default;
 $medium-only: "only screen and (min-width : #{$small-screen-up}) and (max-width : #{$medium-screen})" !default;
 
 // text flow
-$range : $large-screen - $small-screen !default;
+$range: $large-screen - $small-screen !default;
 $intervals: 20 !default;
 $interval-size: $range / $intervals !default;
 
 // Colors
-$main-background: $md-clr-grey-50;
+$main-background: $md-clr-grey-200;
 
 $green: #00C853;
 $blue: #00B0FF;
@@ -43,11 +43,6 @@ $amber: #FF8F00;
 $success-submission-bg: #4CAF50;
 $error-submission-bg: #FF5722;
 $partial-submission-bg: #FFD54F;
-$processing-submission-bg: #95a5a6;
-$suite-background-clr: #95a5a6;
+$processing-submission-bg: #95A5A6;
+$suite-background-clr: #95A5A6;
 $success-result-bg: #ECEFF1;
-
-$list-accent-one: $md-clr-red-A100;
-$list-accent-two: $md-clr-pink-A100;
-$list-accent-three: $md-clr-purple-A100;
-

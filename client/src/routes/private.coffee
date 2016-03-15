@@ -24,7 +24,7 @@ angular.module 'evaluator'
       url: '/courses'
       resolve:
         $title: ->
-          'Courses'
+          'Evaluator| Courses'
       views:
         'pageContent':
           templateUrl: 'private/courses.html'
@@ -108,7 +108,7 @@ angular.module 'evaluator'
               params: {}
               allowed: false
             }
-      
+
 
     teacherPortal =
       name: 'private.teacher.portal'
@@ -210,4 +210,3 @@ angular.module 'evaluator'
       .state usersState
       .state userState
       .state resultsState
-      
