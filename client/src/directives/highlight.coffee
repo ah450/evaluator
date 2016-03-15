@@ -4,4 +4,4 @@ angular.module 'evaluator'
       restrict: 'A'
       link: (scope, element) ->
         $timeout ->
-          element.highlight('error', {className: 'bold-weight'})
+          element.highlight('error', {className: 'bold-weight error'})

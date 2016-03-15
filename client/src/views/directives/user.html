@@ -1,11 +1,11 @@
 <section class="user">
-  <p class="name">{{user.full_name}}</p>
-  <p class="email">{{user.email}}</p>
+  <p class="name break-word">{{user.full_name}}</p>
+  <p class="email break-word">{{user.email}}</p>
   <p data-ng-if="user.student">{{user.guc_id}}</p>
   <p data-ng-if="user.student">Team: {{user.team}}</p>
   <p data-ng-if="user.student">Major: {{user.major}}</p>
-  <p data-ng-if="user.admin">This is an admin</p>
-  <p class="created_at">Created {{user.created_at}}</p>
+  <p data-ng-if="user.admin" class="break-word">This is an admin</p>
+  <p class="created_at break-word">Created {{user.created_at}}</p>
 
   <div data-ng-if="!noControls" class="user-controls-container">
     <md-button class="md-fab md-mini md-primary" data-ng-if="canEdit" data-ui-sref="private.teacher.user({id: user.id})">

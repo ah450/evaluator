@@ -5,40 +5,22 @@
     padding: .6em;
     margin-bottom: 1em;
     border-radius: .8em;
+    border-style: solid;
     transition: all .3s ease;
-
     &.success-submission {
-      background-color: transparentize($success-submission-bg, .3);
-
-      &:hover {
-        background-color: $success-submission-bg;
-      }
+      border-color: $md-clr-green-500;
     }
 
     &.partial-submission {
-      background-color: transparentize($partial-submission-bg, .3);
-
-      &:hover {
-        background-color: $partial-submission-bg;
-      }
-
+      border-color: $md-clr-yellow-500;
     }
 
     &.error-submission {
-      background-color: transparentize($error-submission-bg, .3);
-
-      &:hover {
-        background-color: $error-submission-bg;
-      }
-
+      border-color: $md-clr-deep-orange-500;
     }
 
     &.processing-submission {
-      background-color: transparentize($processing-submission-bg, .3);
-
-      &:hover {
-        background-color: $processing-submission-bg;
-      }
+      border-color: black;
 
     }
 

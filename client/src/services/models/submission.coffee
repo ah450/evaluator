@@ -29,11 +29,12 @@ angular.module 'evaluator'
           @resultsPagination = new Pagination ResultsResource, 'results',
             {submission_id: @id,
             project_id: @resource.project_id}, resultFactory, 10000
-          @resultsPagination.page(1).then (newResults) =>
-            results = _.filter newResults, (result) =>
-              result.id not in @resultIds
-            Array::push.apply @resultIds, _.map results, 'id'
-            @results.push.apply @results, results
+          if @results.size is 0
+            @resultsPagination.page(1).then (newResults) =>
+              results = _.filter newResults, (result) =>
+                result.id not in @resultIds
+              Array::push.apply @resultIds, _.map results, 'id'
+              @results.push.apply @results, results
 
 
         @property 'downloadUrl',

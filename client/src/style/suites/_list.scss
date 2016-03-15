@@ -9,7 +9,6 @@
       transform: scale(1.1);
     }
     &:not(.pseudo-item) {
-      background: transparentize($suite-background-clr, 0.5);
     }
   }
 
