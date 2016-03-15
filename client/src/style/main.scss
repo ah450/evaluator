@@ -42,10 +42,12 @@ a.link {
 
 [data-ui-view='pageContent'] {
   margin: 0 auto;
-  max-width: 700px;
   width: 94%;
   padding-top: 20vh;
   min-height: calc(100vh - 15vh);
+  @include media("width>=875px") {
+    max-width: 80vw;
+  }
 
   @include media("height<=600px") {
     padding-top: 15vh;
