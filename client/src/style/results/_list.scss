@@ -1,5 +1,9 @@
 .results-list {
   padding: 3em;
+  @include media('<tablet') {
+    padding: 0.2rem;
+    font-size: 0.5rem;
+  }
   .result-item {
     display: block;
     padding: .6em;

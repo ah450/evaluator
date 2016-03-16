@@ -1,6 +1,9 @@
 .submission {
   text-transform: none;
-
+  @include media('<tablet') {
+    padding: .2rem;
+    font-size: .5rem;
+  }
   .submission-status-icon {
     font-size: 5em;
   }
