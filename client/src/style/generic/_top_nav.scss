@@ -2,16 +2,18 @@
   position: relative;
   background: transparent;
   z-index: 100;
-  @include media("width<=500px") {
-    font-size: .5em;
+  @include media('<tablet') {
+    font-size: .8rem;
   }
 
   .menu-wrap {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100px;
-    height: 80px;
+    width: 30vw;
+    height: 15vh;
+    max-width: 100px;
+    max-height: 80px;
     border-bottom-right-radius: 100%;
     cursor: pointer;
     background: $md-clr-blue-500;
@@ -43,7 +45,7 @@
     bottom: 0;
     left: 50px;
     list-style-type: none;
-    @include media("width<=500px") {
+    @include media('<tablet') {
       bottom: -5em;
     }
 
@@ -57,8 +59,8 @@
       @for $i from 2 through 6 {
         &:nth-child(#{$i}) {
           margin-left: (40px * ($i - 1));
-          @include media("width<=500px") {
-            margin-left: 5px * ($i - 1);
+          @include media('<tablet') {
+            margin-left: 20px * ($i - 1);
           }
         }
       }
@@ -72,17 +74,17 @@
         color: $md-clr-pink-500;
         transition: color .2s;
 
-        @include media("width<=500px") {
+        @include media('<tablet') {
           letter-spacing: 1px;
         }
 
         .icon {
+          display: inline-block;
           margin-right: 25px;
           position: relative;
-          display: inline-block;
           color: $md-clr-pink-500;
-          @include media("width<=500px") {
-            margin-right: 15px;
+          @include media('<tablet') {
+            display: none;
           }
           &:after {
             display: block;
@@ -97,11 +99,8 @@
             border-radius: 100%;
             border: 2px solid $md-clr-pink-500;
             transition: border-color .2s;
-            @include media("width<=500px") {
-              width: 25px;
-              height: 25px;
-              top: 130%;
-              left: 130%;
+            @include media('<tablet') {
+              display: none;
             }
           }
         }
@@ -111,10 +110,6 @@
           .icon:after {
             border-color: $md-clr-pink-A100;
           }
-        }
-
-        &.active {
-          filter: blur(.8px);
         }
       }
     }
