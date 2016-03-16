@@ -6,7 +6,7 @@
 
 <section id="submissionsWrapper" data-ng-if="!loading">
   <header>
-    <h1 class="break-word">{{project.name}} Submissions</h1>
+    <h1 class="break-word flow-text">{{project.name}} Submissions</h1>
     <a data-ui-sref="private.project({id: project.id})">
       <button  name="button" class="btn-blue">Test Suites</button>
     </a>
@@ -14,7 +14,7 @@
 
   <section class="team-grade-wrapper" data-ng-if="teamGradeApplicable">
     <header>
-      <h3>Current Grade for team {{team}}</h3>
+      <h3 class="break-word flow-text">Current Grade for team {{team}}</h3>
     </header>
     <ul class="submissions-list">
       <li class="submission-item"
