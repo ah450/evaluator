@@ -5,6 +5,7 @@
   <meta name="keywords" content="grade,java,german university in cairo">
   <meta name="google" content="notranslate">
   <title data-ng-bind="($title || 'Evaluator')"></title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700%7CMaterial+Icons&amp;subset=latin" media="all">
   <link rel="stylesheet" type="text/css" href="main.css">
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -13,14 +14,16 @@
     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
     ga('create', 'UA-71803044-1', 'auto');
   </script>
-  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700%7CMaterial+Icons&amp;subset=latin" media="all">
 </head>
-<body>
-  <div data-ui-view class="wrapper" id="main-view"></div>
-  <footer><a
-  analytics-on="click"
-  analytics-event="gh-repo"
-  target="_blank" href="https://github.com/ah450/evaluator"><img src="images/GitHub-Mark-64px.png"></a></footer>
+<body
+>
+  <div id="pageWrap">
+    <div data-ui-view class="wrapper" id="main-view"></div>
+    <footer><a
+    analytics-on="click"
+    analytics-event="gh-repo"
+    target="_blank" href="https://github.com/ah450/evaluator"><img src="images/GitHub-Mark-64px.png"></a></footer>
+  </div>
   <script type="text/javascript" src="app.js"></script>
 </body>
 </html>

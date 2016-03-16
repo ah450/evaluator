@@ -6,26 +6,27 @@
 @import "partials/variables";
 @import "partials/reset";
 @import "partials/mixins";
+@import "flaticon";
 
 body {
-  background-color: $main-background;
+  background-color: $md-clr-blue-500;
   font-family: $proxima-nova-stack;
   font-weight: $normal-weight;
   position: relative;
   min-height: 100%;
   box-sizing: border-box;
+  background: $main-background;
+
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: $proxima-nova-stack;
   font-weight: $bold-weight;
-}
-
-.wrapper {
-  position: relative;
-  max-width: 98vw;
-  margin: 0px;
-  padding: 0px;
 }
 
 a.active {
@@ -34,33 +35,31 @@ a.active {
 }
 
 a.link {
+  display: inline-block;
   text-decoration: underline;
   color: $blue;
-  display: inline-block;
   cursor: pointer;
 }
 
 [data-ui-view='pageContent'] {
   margin: 0 auto;
-  width: 94%;
-  padding-top: 20vh;
+  padding-top: 15vh;
   min-height: calc(100vh - 15vh);
+  max-width: 80vw;
   @include media("width>=875px") {
-    max-width: 80vw;
-  }
-
-  @include media("height<=600px") {
-    padding-top: 15vh;
-    min-height: calc(100vh - 8vh);
+    max-width: 75vw;
   }
 }
 
 footer {
+  position: relative;
   max-height: 80px;
-  padding: 1rem;
+  padding: 2rem;
   text-align: center;
-  border-top: 1px solid $md-clr-grey-200;
 }
+
+
+
 
 .md-datepicker-calendar-pane {
   z-index: 100001;
@@ -70,6 +69,8 @@ footer {
   z-index: 100001;
 }
 
+#pageWrap {
+}
 
 @import "utility/main";
 @import "animations/main";

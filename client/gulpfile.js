@@ -124,7 +124,7 @@ gulp.task('reload', ['build'], function() {
 gulp.task('dev', ['watch', 'server']);
 
 gulp.task('watch', function() {
-  watch(['src/**', 'images/**', 'assets/**', 'polyfills/**', 'bower.json'], function() {
+  watch(['src/**', 'images/**', 'assets/**', 'polyfills/**', 'fonts/**', 'bower.json'], function() {
     gulp.start('reload');
   });
 });

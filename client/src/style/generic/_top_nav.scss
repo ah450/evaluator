@@ -1,87 +1,166 @@
 .top-nav {
-  width: 75%;
-  top: 2vh;
-  position: absolute;
-
-  .burger-menu {
-    display: none;
+  position: relative;
+  background: transparent;
+  z-index: 100;
+  @include media("width<=500px") {
+    font-size: .5em;
   }
 
-  ul {
-    @include display-flex;
-    @include flex-flow(row, nowrap);
-    @include justify-content(space-between);
-    margin: 0 auto;
-    width: 80%;
+  .menu-wrap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100px;
+    height: 80px;
+    border-bottom-right-radius: 100%;
+    cursor: pointer;
+    background: $md-clr-blue-500;
+    box-shadow: 0 0 1em rgba(0, 0, 0, .5);
+  }
+
+  .menu-open,
+  .menu-close {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -15px;
+    margin-left: -12px;
+    transition: transform .7s $snap;
+  }
+
+  .menu-open {
+    transform-origin: -100px -100px;
+  }
+
+  .menu-close {
+    transform: rotate(20deg);
+    transform-origin: -100px -160px;
+  }
+
+
+  .nav-menu {
+    position: fixed;
+    bottom: 0;
+    left: 50px;
+    list-style-type: none;
+    z-index: 101;
+    @include media("width<=500px") {
+      bottom: -5em;
+    }
 
     li {
-      min-width: 5em;
+      display: block;
+      height: 60px;
+      margin-bottom: 30px;
+      transform: translateX(-500px);
+      transition: transform .7s 0s $snap;
+
+      @for $i from 2 through 6 {
+        &:nth-child(#{$i}) {
+          margin-left: (40px * ($i - 1));
+          @include media("width<=500px") {
+            margin-left: 5px * ($i - 1);
+          }
+        }
+      }
+
+      a {
+        display: block;
+        cursor: pointer;
+        text-decoration: none;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: $md-clr-pink-500;
+        transition: color .2s;
+
+        @include media("width<=500px") {
+          letter-spacing: 1px;
+        }
+
+        .icon {
+          margin-right: 25px;
+          position: relative;
+          display: inline-block;
+          color: $md-clr-pink-500;
+          @include media("width<=500px") {
+            margin-right: 15px;
+          }
+          &:after {
+            display: block;
+            position: absolute;
+            margin-top: -32px;
+            margin-left: -33px;
+            top: 50%;
+            left: 50%;
+            content: '';
+            width: 60px;
+            height: 60px;
+            border-radius: 100%;
+            border: 2px solid $md-clr-pink-500;
+            transition: border-color .2s;
+            @include media("width<=500px") {
+              width: 25px;
+              height: 25px;
+              top: 130%;
+              left: 130%;
+            }
+          }
+        }
+
+        &:hover {
+          color: $md-clr-pink-A100;
+          .icon:after {
+            border-color: $md-clr-pink-A100;
+          }
+        }
+
+        &.active {
+          filter: blur(.8px);
+        }
+      }
     }
   }
 }
 
+.content {
+  transform-origin: top left;
+  transition: transform .7s $snap, box-shadow .7s linear;
+}
 
-@include media('<=440px') {
+.content-inner {
+  transition: transform .7s $snap, box-shadow .7s linear;
+}
+
+
+#pageWrap.open {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  .content {
+    transform: rotate(-35deg);
+    box-shadow: 0 0 1em rgba(0, 0, 0, .4);
+  }
+
+  .content-inner {
+    transform: scale(0.8);
+  }
 
   .top-nav {
-    position: relative;
-    z-index: 100;
-    left: 2vw;
-    padding: .5em;
-    transition: all .5s ease;
-    background: transparent;
-    width: 2em;
-
-    .burger-wrap {
-      cursor: pointer;
-      width: 2em;
-      height: 2em;
+    .menu-open {
+      transform: rotate(-25deg);
     }
 
-    .burger-menu {
-      display: block;
-      position: relative;
-      padding-left: 1.25em;
+    .menu-close {
+      transform: rotate(0);
+    }
 
-      &::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: .25em;
-        width: 2em;
-        height: .2em;
-        background: black;
-        box-shadow:
-          0 .5em 0 0 black,
-          0 1em 0 0 black;
+    .nav-menu {
+      li {
+        transform: translateX(0);
+        transition: transform .35s .45s $bounce;
+
       }
-    }
-    &.open {
-      background: transparentize($md-clr-grey-900, .4);
-    }
-
-    ul {
-      @include display-flex();
-      @include flex-flow(column, nowrap);
-      @include justify-content(space-between);
-      margin-left: 2em;
-      padding: .5em;
-      transition: all .5s ease;
-      transform: scale(0);
-      max-height: 0;
-      max-width: 0;
-    }
-
-    &.open {
-      width: 75%;
-
-      ul {
-        max-width: none;
-        max-height: none;
-        min-height: 50vh;
-        transform: scale(1);
-      }
-
     }
   }
 }
