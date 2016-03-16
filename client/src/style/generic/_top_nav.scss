@@ -40,10 +40,11 @@
 
   .nav-menu {
     position: fixed;
+    z-index: 101;
+    transform: translateX(-500px);
     bottom: 0;
     left: 50px;
     list-style-type: none;
-    z-index: 101;
     @include media("width<=500px") {
       bottom: -5em;
     }
@@ -156,6 +157,7 @@
     }
 
     .nav-menu {
+      transform: translateX(0);
       li {
         transform: translateX(0);
         transition: transform .35s .45s $bounce;
