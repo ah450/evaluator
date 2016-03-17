@@ -26,15 +26,26 @@
       data-ui-sref-active="active"><i class="icon material-icons">person_add</i> Sign Up</a>
     </li>
 
-    <li>
-      <a data-ui-sref="^.contact"
+    <li data-ng-if="signedIn()">
+      <a data-ui-sref="private.contact"
       data-ui-sref-active="active"><i class="icon material-icons">mail</i> contact</a>
     </li>
 
-    <li>
-      <a data-ui-sref="^.about"
+    <li data-ng-if="!signedIn()">
+      <a data-ui-sref="public.contact"
+      data-ui-sref-active="active"><i class="icon material-icons">mail</i> contact</a>
+    </li>
+
+    <li data-ng-if="signedIn()">
+      <a data-ui-sref="private.about"
       data-ui-sref-active="active"><i class="icon fi flaticon-signs large-fi"></i> about</a>
     </li>
+
+    <li data-ng-if="!signedIn()">
+      <a data-ui-sref="public.about"
+      data-ui-sref-active="active"><i class="icon fi flaticon-signs large-fi"></i> about</a>
+    </li>
+
     <li data-ng-if="signedIn()" data-ng-click="logout()">
       <a><i class="icon fi flaticon-school large-fi"></i> Log out</a>
     </li>
