@@ -7,16 +7,20 @@
     border-radius: .8em;
     border-style: solid;
     transition: all .3s ease;
+
     &.success-submission {
       border-color: $md-clr-green-500;
+      background: lighten($md-clr-green-500, 30%);
     }
 
     &.partial-submission {
       border-color: $md-clr-yellow-500;
+      background: lighten($md-clr-yellow-500, 30%);
     }
 
     &.error-submission {
       border-color: $md-clr-deep-orange-500;
+      background: lighten($md-clr-deep-orange-500, 30%);
     }
 
     &.processing-submission {
