@@ -5,10 +5,7 @@ angular.module 'evaluator'
         @resource = new ResultResource data
         @test_suite = @resource.test_suite
         @compiler_out_array = @resource.compiler_stdout.split('\n')
-
-      @property 'cases',
-        get: ->
-          @resource.test_cases
+        @cases =  _.sortBy @resource.test_cases, 'grade'
 
       @property 'compiled',
         get: ->
@@ -54,9 +51,3 @@ angular.module 'evaluator'
       SUCCESS_STATE: 'success-result'
       ERROR_STATE: 'error-result'
       FAILED_STATE: 'failed-result'
-
-
-
-
-
-        
