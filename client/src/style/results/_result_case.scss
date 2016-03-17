@@ -3,4 +3,17 @@
   p {
     padding: 0.5em;
   }
+
+  .result-case-name {
+    max-width: 50%;
+  }
+  .result-head-detail-seperator {
+    margin: 0 auto;
+    content: '';
+    width: 80%;
+    border-top: 1px solid $md-clr-blue-A700;
+    @media screen and (min-resolution: 2dppx) {
+      border-top: 2px solid $md-clr-blue-A700;
+    }
+  }
 }
