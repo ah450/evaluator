@@ -3,18 +3,26 @@
   @include media('<tablet') {
     padding: .2rem;
   }
+
   .result-item {
     display: block;
     padding: .6em;
     margin-bottom: 1em;
     border-radius: .8em;
     transition: all .3s ease;
-    box-shadow: 0 0 .2em 0 rgba(0, 0, 0, .3);
+    border-width: 3px;
+    border-style: solid;
+
     &.success-result {
+      border-color: $md-clr-green-500;
     }
+
     &.error-result {
+      border-color: $md-clr-deep-orange-500;
     }
+
     &.failed-result {
+      border-color: $md-clr-yellow-500;
     }
   }
 }
