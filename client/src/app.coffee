@@ -36,3 +36,17 @@ angular.module 'evaluator'
   .run ($rootScope) ->
     $rootScope.$on '$viewContentLoaded', ->
       window.scroll 0, 0
+
+    contentOffsetHandler = ->
+      wrap = $ '#pageWrap'
+      content = $ '.content'
+      if wrap.hasClass 'open'
+        y = window.scrollY
+        xoffset = Math.tan(35 * Math.PI / 180) * y
+        content.css('left', "-#{xoffset}px")
+      else
+        content.css('left', '0')
+      return
+
+    $(window).scroll contentOffsetHandler
+    $rootScope.$on 'toggled', contentOffsetHandler
