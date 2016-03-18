@@ -1,7 +1,12 @@
 .result-case {
-  padding: 0.4em;
+  padding: .4em;
   p {
-    padding: 0.5em;
+    padding: .5em;
+  }
+
+  .result-case-detail {
+    font-size: .5em;
+    line-height: 1.2em;
   }
 
   .result-case-name {

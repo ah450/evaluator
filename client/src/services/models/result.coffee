@@ -5,7 +5,9 @@ angular.module 'evaluator'
         @resource = new ResultResource data
         @test_suite = @resource.test_suite
         @compiler_out_array = @resource.compiler_stdout.split('\n')
-        @cases =  _.sortBy @resource.test_cases, 'grade'
+        @cases =  _.sortBy @resource.test_cases, (test_case) ->
+          #  Sort by most lost
+          test_case.grade - test_case.max_grade
 
       @property 'compiled',
         get: ->

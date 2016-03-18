@@ -119,7 +119,7 @@
 .content {
   position: relative;
   transform-origin: top left;
-  transition: transform .7s $snap, box-shadow .7s linear;
+  transition: transform .7s $snap, box-shadow .7s linear, left .7s $snap;
 }
 
 .content-inner {
