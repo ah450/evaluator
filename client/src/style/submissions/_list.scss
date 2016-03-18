@@ -5,8 +5,11 @@
     padding: .6em;
     margin-bottom: 1em;
     border-radius: .8em;
-    border-width: 5px;
-    border-style: solid;
+
+    &:not(.btn-green){
+      border-width: 5px;
+      border-style: solid;
+    }
     transition: all .3s ease;
 
     &.success-submission {
