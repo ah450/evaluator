@@ -34,10 +34,12 @@
   .result-compilation-error {
     max-width: 100%;
     word-wrap: break-word;
-    margin-top: 0.3em;
+    margin-top: .3em;
   }
 
   .message-container {
+    font-size: .5em;
+    line-height: 1.2em;
     max-width: 80%;
   }
 
