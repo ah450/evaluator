@@ -12,17 +12,15 @@
     transition: all .3s ease;
     border-width: 3px;
     border-style: solid;
+    background: $main-background;
 
     &.success-result {
-      border-color: $md-clr-green-500;
     }
 
     &.error-result {
-      border-color: $md-clr-deep-orange-500;
     }
 
     &.failed-result {
-      border-color: $md-clr-yellow-500;
     }
   }
 }
