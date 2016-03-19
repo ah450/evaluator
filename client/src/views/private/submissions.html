@@ -7,9 +7,7 @@
 <section id="submissionsWrapper" data-ng-if="!loading">
   <header>
     <h1 class="break-word flow-text">{{project.name}} Submissions</h1>
-    <a data-ui-sref="private.project({id: project.id})">
-      <button  name="button" class="btn-blue">Test Suites</button>
-    </a>
+    <a class="icon-link" data-ui-sref="private.project({id: project.id})"><i class="icon fi flaticon-square large-fi"></i> Test Suites</a>
   </header>
 
   <section class="team-grade-wrapper" data-ng-if="teamGradeApplicable">

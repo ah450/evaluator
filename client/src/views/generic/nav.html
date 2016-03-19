@@ -10,48 +10,48 @@
   data-click-remove-target="#pageWrap"
   >
     <li data-ng-if="signedIn()">
-      <a data-ui-sref="private.courses"
+      <a class="icon-link" data-ui-sref="private.courses"
       data-ui-sref-active="active"><i class="icon fi flaticon-open large-fi"></i> courses</a>
     </li>
     <li data-ng-if="signedIn()">
-      <a data-ui-sref="private.profile"
+      <a class="icon-link" data-ui-sref="private.profile"
       data-ui-sref-active="active"><i class="icon material-icons">person</i> profile</a>
     </li>
     <li data-ng-if="signedIn()" data-ng-if="isTeacher">
-      <a data-ui-sref="private.teacher.portal"
+      <a class="icon-link" data-ui-sref="private.teacher.portal"
       data-ui-sref-active="active"><i class="icon fi flaticon-education large-fi"></i> teacher portal</a>
     </li>
     <li data-ng-if="!signedIn()">
-      <a data-ui-sref="public.signup"
+      <a class="icon-link" data-ui-sref="public.signup"
       data-ui-sref-active="active"><i class="icon material-icons">person_add</i> Sign Up</a>
     </li>
 
     <li data-ng-if="signedIn()">
-      <a data-ui-sref="private.contact"
+      <a class="icon-link" data-ui-sref="private.contact"
       data-ui-sref-active="active"><i class="icon material-icons">mail</i> contact</a>
     </li>
 
     <li data-ng-if="!signedIn()">
-      <a data-ui-sref="public.contact"
+      <a class="icon-link" data-ui-sref="public.contact"
       data-ui-sref-active="active"><i class="icon material-icons">mail</i> contact</a>
     </li>
 
     <li data-ng-if="signedIn()">
-      <a data-ui-sref="private.about"
+      <a class="icon-link" data-ui-sref="private.about"
       data-ui-sref-active="active"><i class="icon fi flaticon-signs large-fi"></i> about</a>
     </li>
 
     <li data-ng-if="!signedIn()">
-      <a data-ui-sref="public.about"
+      <a class="icon-link" data-ui-sref="public.about"
       data-ui-sref-active="active"><i class="icon fi flaticon-signs large-fi"></i> about</a>
     </li>
 
     <li data-ng-if="signedIn()" data-ng-click="logout()">
-      <a><i class="icon fi flaticon-school large-fi"></i> Log out</a>
+      <a class="icon-link"><i class="icon fi flaticon-school large-fi"></i> Log out</a>
     </li>
 
     <li data-ng-if="!signedIn()">
-      <a data-ui-sref="public.login"
+      <a class="icon-link" data-ui-sref="public.login"
       data-ui-sref-active="active"><i class="icon fi flaticon-exit large-fi"></i> Login</a>
     </li>
   </ul>
