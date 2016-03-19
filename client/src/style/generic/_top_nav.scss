@@ -64,54 +64,6 @@
           }
         }
       }
-
-      a {
-        display: block;
-        cursor: pointer;
-        text-decoration: none;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        color: $md-clr-pink-500;
-        transition: color .2s;
-
-        @include media('<tablet') {
-          letter-spacing: 1px;
-        }
-
-        .icon {
-          display: inline-block;
-          margin-right: 25px;
-          position: relative;
-          color: $md-clr-pink-500;
-          @include media('<tablet') {
-            display: none;
-          }
-          &:after {
-            display: block;
-            position: absolute;
-            margin-top: -32px;
-            margin-left: -33px;
-            top: 50%;
-            left: 50%;
-            content: '';
-            width: 60px;
-            height: 60px;
-            border-radius: 100%;
-            border: 2px solid $md-clr-pink-500;
-            transition: border-color .2s;
-            @include media('<tablet') {
-              display: none;
-            }
-          }
-        }
-
-        &:hover {
-          color: $md-clr-pink-A100;
-          .icon:after {
-            border-color: $md-clr-pink-A100;
-          }
-        }
-      }
     }
   }
 }

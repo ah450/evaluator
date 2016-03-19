@@ -10,16 +10,19 @@
 
   .result-expand-wrapper {
 
-    .more-icon {
+    .more {
       display: none;
+    }
+    .less {
+      display: inline-block;
     }
 
     &:not(.expand) {
-      .less-icon {
+      .less {
         display: none;
       }
 
-      .more-icon {
+      .more {
         display: inline-block;
       }
     }
