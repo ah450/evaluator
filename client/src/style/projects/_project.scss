@@ -15,18 +15,17 @@
   p {
     padding-bottom: 1em;
     &:last-child {
-      padding-bottom: 0px;
+      padding-bottom: 0;
     }
   }
 
   .project-start, .project-end {
-    font-size: 0.8em;
+    font-size: .8em;
   }
-  
+
 }
 
 .project-ctrls {
-  margin-bottom: 2em;
+  margin: 0 auto 2em;
   width: 80%;
-  margin: 0 auto;
 }

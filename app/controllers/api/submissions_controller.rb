@@ -3,6 +3,7 @@ class Api::SubmissionsController < ApplicationController
   # Authenticate on all actions
   prepend_before_action :authenticate, :authorize
   before_action :can_view, only: [:show, :download]
+  before_action :authorize_teacher, only: [:rerun]
 
   def create
     create_helper
@@ -26,6 +27,11 @@ class Api::SubmissionsController < ApplicationController
       filename: "#{solution.file_name}-#{@submission.id}"
     }
     send_data solution.code, **options
+  end
+
+  def rerun
+    @submission.results.destroy_all
+    SubmissionEvaluationJob.perform_later @submission
   end
 
   private
