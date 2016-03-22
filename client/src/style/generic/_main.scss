@@ -31,10 +31,6 @@
 
 .clickable-icon {
   cursor: pointer;
-  transition: all .3s ease;
-  &:hover {
-    transform: scale(1.5);
-  }
 }
 
 .check {

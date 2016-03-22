@@ -33,6 +33,7 @@ Rails.application.routes.draw do
         resources :submissions, shallow: true, except: [:destroy, :new, :update] do
           member do
             get :download
+            get :rerun
           end
         end
         resources :test_suites, shallow: true, except: [:new, :update] do

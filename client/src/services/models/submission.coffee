@@ -36,10 +36,17 @@ angular.module 'evaluator'
               Array::push.apply @resultIds, _.map results, 'id'
               @results.push.apply @results, results
 
+        clearResults: ->
+          @results.splice 0, @results.length
+
 
         @property 'downloadUrl',
           get: ->
             endpoints.submission.downloadUrl.replace(':id', @id)
+
+        @property 'rerunUrl',
+          get: ->
+            endpoints.submission.rerunUrl.replace(':id', @id)
 
         @property 'id',
           get: ->

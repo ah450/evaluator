@@ -27,6 +27,7 @@ angular.module 'evaluator'
       submission:
         resourceUrl: [apiHost, 'submissions', ':id.json'].join '/'
         downloadUrl: [apiHost, 'submissions', ':id', 'download'].join '/'
+        rerunUrl: [apiHost, 'submissions', ':id', 'rerun.json'].join '/'
       projectResults:
         resourceUrl: [apiHost, 'projects', ':project_id',
           'results.json'].join '/'
