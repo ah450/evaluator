@@ -73,6 +73,35 @@ RSpec.describe Api::SubmissionsController, type: :controller do
     end
   end
 
+  context 'rerun' do
+    before :each do
+      @submission = FactoryGirl.create(:submission)
+      @solution = FactoryGirl.build(:solution)
+      @solution.submission = @submission
+      @solution.save!
+      @submission.solution = @solution
+      @submission.save!
+    end
+    let(:teacher) { FactoryGirl.create(:teacher) }
+    it 'queues evaluation job' do
+      expect(SubmissionEvaluationJob).to receive(:perform_later).once
+      set_token teacher.token
+      get :rerun, id: @submission.id
+      expect(response).to be_success
+    end
+    it 'does not allow unauthorized' do
+      expect(SubmissionEvaluationJob).to_not receive(:perform_later)
+      get :rerun, id: @submission.id
+      expect(response).to be_unauthorized
+    end
+    it 'does not allow student' do
+      expect(SubmissionEvaluationJob).to_not receive(:perform_later)
+      set_token @submission.submitter.token
+      get :rerun, id: @submission.id
+      expect(response).to be_forbidden
+    end
+  end
+
   context 'download' do
     before :each do
       @submission = FactoryGirl.create(:submission)
