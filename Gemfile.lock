@@ -112,7 +112,7 @@ GEM
     http_parser.rb (0.6.0)
     i18n (0.7.0)
     json (1.8.3)
-    jwt (1.5.3)
+    jwt (1.5.2)
     kaminari (0.16.3)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -283,7 +283,7 @@ DEPENDENCIES
   faye-rails
   faye-redis
   hiredis
-  jwt
+  jwt (= 1.5.2)
   kaminari
   nokogiri (>= 1.6.7.2)
   pg (~> 0.15)
