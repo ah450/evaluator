@@ -37,7 +37,6 @@ class Project < ActiveRecord::Base
   before_validation :default_start_date
   validates :name, :due_date, :course, presence: true
   validate :unique_name_per_course
-  validate :rerun_due_only
   before_save :due_date_to_utc, :start_date_to_utc
   before_save :due_start_dates_times
   after_save :rerun_submissions_check
@@ -124,13 +123,6 @@ class Project < ActiveRecord::Base
   def rerun_submissions_check
     if reruning_submissions_changed? && reruning_submissions?
       RerunSubmissionsJob.perform_later(self)
-    end
-  end
-
-  def rerun_due_only
-    return if due_date.nil? || reruning_submissions.nil?
-    if can_submit? && reruning_submissions?
-      errors.add(:reruning_submissions, 'Must be past due to rerun submissions')
     end
   end
 

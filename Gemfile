@@ -27,7 +27,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'bcrypt', '~> 3.1.7'
 gem 'thin', require: false
 gem 'kaminari'
-gem 'jwt'
+gem 'jwt', '1.5.2'
 gem 'faye-rails'
 gem 'rails-api'
 gem 'nokogiri', '>= 1.6.7.2'
