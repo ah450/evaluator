@@ -28,7 +28,7 @@
 
   <target name="test">
     <mkdir dir="<%= html_escape(@build_directory) %>/tests" />
-    <junit includeantruntime="true" haltonerror="no" haltonfailure="no" fork="yes" dir="<%= html_escape(@src_directory) %>" maxmemory="512mb">
+    <junit includeantruntime="true" haltonerror="no" haltonfailure="no" fork="yes" dir="<%= html_escape(@src_directory) %>" maxmemory="512m">
               <classpath>
                       <pathelement location="lib/hamcrest-junit-2.0.0.0.jar" />
                       <pathelement location="lib/java-hamcrest-2.0.0.0.jar" />
