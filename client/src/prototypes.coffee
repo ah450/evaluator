@@ -9,6 +9,10 @@ angular.module 'evaluator'
           return true
         else
           return false
+    Object.defineProperty Array::, 'size', {
+      get: ->
+        @length
+    }
 
 angular.module 'evaluator'
   .config ->
