@@ -24,7 +24,7 @@ class Api::SubmissionsController < ApplicationController
     options = {
       type: solution.mime_type,
       disposition: 'attachment',
-      filename: "#{solution.file_name}-#{@submission.id}"
+      filename: "#{@submission.id}-#{solution.file_name}"
     }
     send_data solution.code, **options
   end
