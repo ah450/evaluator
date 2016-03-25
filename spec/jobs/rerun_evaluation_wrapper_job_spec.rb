@@ -19,6 +19,7 @@ RSpec.describe RerunEvaluationWrapperJob, type: :job do
       $redis.set track_key, 2
       submissions = [submission, FactoryGirl.create(:submission_with_code,
         project: project)]
+      project.reruning_submissions = true
       expect(SubmissionEvaluationJob).to receive(:perform_now).twice
       expect(project).to receive(:save!).once
       expect(project).to receive(:reruning_submissions=).with(false).once

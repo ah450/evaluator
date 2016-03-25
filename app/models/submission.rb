@@ -59,7 +59,7 @@ class Submission < ActiveRecord::Base
       date: DateTime.now.utc,
       payload: {
         submission: as_json.merge(submitter: submitter.as_json,
-        results: results.as_json)
+                                  results: results.as_json)
       }
     }
     Notifications::TeamsController.publish(
