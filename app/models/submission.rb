@@ -60,8 +60,7 @@ class Submission < ActiveRecord::Base
       type: Rails.application.config.configurations[:notification_event_types][:team_grade_created],
       date: DateTime.now.utc,
       payload: {
-        submission: as_json.merge(submitter: submitter.as_json,
-                                  results: results.as_json)
+        submission: as_json
       }
     }
     Notifications::TeamsController.publish(
