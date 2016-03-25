@@ -36,7 +36,6 @@ class Submission < ActiveRecord::Base
 
   def as_json(_options = {})
     super(except: [:solution_id])
-      .merge(submitter: submitter.as_json, results: results.as_json)
   end
 
   def send_new_result_notification(result)
@@ -59,12 +58,13 @@ class Submission < ActiveRecord::Base
       type: Rails.application.config.configurations[:notification_event_types][:team_grade_created],
       date: DateTime.now.utc,
       payload: {
-        submission: as_json
+        submission: as_json.merge(submitter: submitter.as_json,
+        results: results.as_json)
       }
     }
     Notifications::TeamsController.publish(
-    "/notifications/teams/#{team.gsub(' ', '_')}",
-    event
+      "/notifications/teams/#{team.gsub(' ', '_')}",
+      event
     )
   end
 
