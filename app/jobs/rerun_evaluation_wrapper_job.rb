@@ -3,9 +3,8 @@ class RerunEvaluationWrapperJob < ActiveJob::Base
 
   def perform(submission, track_key, project)
     SubmissionEvaluationJob.perform_now(submission)
-  ensure
     new_value = $redis.decr track_key
-    if new_value == 0
+    if new_value <= 0 && project.reruning_submissions
       project.reruning_submissions = false
       project.save!
     end
