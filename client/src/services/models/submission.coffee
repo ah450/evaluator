@@ -29,7 +29,7 @@ angular.module 'evaluator'
           @resultsPagination = new Pagination ResultsResource, 'results',
             {submission_id: @id,
             project_id: @resource.project_id}, resultFactory, 10000
-          if @results.size is 0
+          if @results.length is 0
             @resultsPagination.page(1).then (newResults) =>
               results = _.filter newResults, (result) =>
                 result.id not in @resultIds
