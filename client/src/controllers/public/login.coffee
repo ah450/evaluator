@@ -8,7 +8,7 @@ angular.module 'evaluator'
       $scope.processing = true
       if $scope.userData.remember
         $scope.userData.expiration = 48
-      UserAuth.login $scope.userData, $scope.expiration
+      UserAuth.login $scope.userData, $scope.userData.expiration
         .then ->
           if redirect.empty
             $state.go 'private.courses'
