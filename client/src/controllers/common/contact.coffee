@@ -21,7 +21,7 @@ angular.module 'evaluator'
             .join ' '
           $scope.processing = false
         else if response.status is 500
-          $stage.go '^.internal_error'
+          $state.go '^.internal_error'
         else
           $scope.error = response.data.message.capitalize
           $scope.processing = false

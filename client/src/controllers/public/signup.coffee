@@ -1,7 +1,7 @@
 angular.module 'evaluator'
   .controller 'SignupController', ($scope, UserAuth, $state, GUC_ID_REGEX) ->
     STUDENT_EMAIL_REGEX = /^[a-zA-Z\.\-]+@student.guc.edu.eg$/
-    
+
 
     $scope.processing = false
     $scope.userData = {}
@@ -25,4 +25,4 @@ angular.module 'evaluator'
               ("#{key.split('_').join(' ').capitalize()} #{value}." for key, value of response.data)
               .join ' '
           else
-            $stage.go 'public.internal_error'
+            $state.go 'public.internal_error'

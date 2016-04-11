@@ -1,11 +1,11 @@
 angular.module 'evaluator'
   .controller 'ResetController', ($scope, $stateParams, $timeout,
-    $state, $http) ->
+    $state, $http, configurations) ->
       $scope.processing = false
       $scope.done = false
       $scope.userData = {}
 
-      
+
       $scope.resetPassword = ->
         return if $scope.processing
         $scope.processing = true
@@ -26,8 +26,8 @@ angular.module 'evaluator'
             $scope.error = response.data.message
           else if response.status is 420
             configurations.then (config) ->
-              $scope.message = "Can only reset once every " +
+              $scope.error = "Can only reset once every " +
                 "#{config.pass_reset_resend_delay / 60} minutes"
-              $scope.done = true
+              $scope.processing = false
           else
-            $stage.go 'public.internal_error'
+            $state.go 'public.internal_error'

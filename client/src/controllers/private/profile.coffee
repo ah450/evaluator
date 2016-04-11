@@ -40,4 +40,4 @@ angular.module 'evaluator'
             ("#{key.split('_').join(' ').capitalize()} #{value}." for key, value of response.data)
             .join ' '
         else
-          $stage.go '^.internal_error'
+          $state.go '^.internal_error'

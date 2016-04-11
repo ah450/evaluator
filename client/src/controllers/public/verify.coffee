@@ -14,7 +14,6 @@ angular.module 'evaluator'
         $scope.success = true
         $scope.done = true
         $timeout ->
-          # $state.go 'public.login'
           data = response.data.data
           $auth.setToken(data.token)
           localStorageService.set 'currentUser', data.user
@@ -25,14 +24,15 @@ angular.module 'evaluator'
       .catch (response) ->
         $scope.success = false
         if response.status is 422
-          $scope.message = "Incorrect token. Please note tokens expire " +
-            "after #{config.verification_expiration / 60 / 60} hours."
-          $scope.done = true
-            
+          configurations.then (config) ->
+            $scope.message = "Incorrect token. Please note tokens expire " +
+              "after #{config.verification_expiration / 60 / 60} hours."
+            $scope.done = true
+
         else if response.status is 420
           configurations.then (config) ->
             $scope.message = "Can only send email once every " +
               "#{config.user_verification_resend_delay / 60} minutes"
             $scope.done = true
         else
-          $stage.go 'public.internal_error'
+          $state.go 'public.internal_error'

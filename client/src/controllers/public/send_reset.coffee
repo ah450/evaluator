@@ -30,4 +30,4 @@ angular.module 'evaluator'
             $scope.processing = false
             $scope.error = response.data.message
           else
-            $stage.go 'public.internal_error'
+            $state.go 'public.internal_error'
