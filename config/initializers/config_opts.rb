@@ -22,7 +22,7 @@ Rails.application.config.configurations = {
     registration_success: 'Registered to course',
     unregistration_success: 'Unregistered from course'
   },
-  max_num_submissions: 10,
+  max_num_submissions: 3,
   verification_expiration: 5.hours,
   pass_reset_expiration: 24.hours,
   user_verification_resend_delay: 5.minutes,
