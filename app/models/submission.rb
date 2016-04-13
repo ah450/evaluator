@@ -37,6 +37,7 @@ class Submission < ActiveRecord::Base
   def as_json(_options = {})
     super(except: [:solution_id])
       .merge(submitter: submitter.as_json,
+             num_suites: project.test_suites.count,
              results: results.as_json)
   end
 

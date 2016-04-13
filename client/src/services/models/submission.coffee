@@ -39,6 +39,9 @@ angular.module 'evaluator'
         clearResults: ->
           @results.splice 0, @results.length
 
+        @property 'num_suites',
+          get: ->
+            @resource.num_suites
 
         @property 'downloadUrl',
           get: ->
@@ -58,7 +61,7 @@ angular.module 'evaluator'
 
         @property 'done',
           get: ->
-            @results.length > 0
+            @results.length > 0 || @num_suites is 0
 
         @property 'compiled',
           get: ->
@@ -66,7 +69,9 @@ angular.module 'evaluator'
 
         @property 'status',
           get: ->
-            if not @done
+            if @num_suites is 0
+              @SUCCESS_STATE
+            else if not @done
               @PROCESSING_STATE
             else if @compiled
               if @grade == @max_grade
@@ -91,7 +96,7 @@ angular.module 'evaluator'
 
         @property 'success',
           get: ->
-            @status is @SUCCESS_STATE
+            @status is @SUCCESS_STATE || @num_suites is 0
 
         @property 'partial',
           get: ->
