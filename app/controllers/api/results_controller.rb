@@ -20,9 +20,9 @@ class Api::ResultsController < ApplicationController
       headers << 'TOTAL_GRADE' << 'ALL_COMPILED'
       csv << headers
       submissions = Submission.newest_per_submitter_of_project(@project) unless
-        params[:teams_only]
+        params[:teams_only] == 'true'
       submissions = Submission.newest_per_team_of_project(@project) if
-        params[:teams_only]
+        params[:teams_only] == 'true'
       submissions.each do |submission|
         next unless submission.submitter.student?
         data = [submission.submitter.guc_id,
