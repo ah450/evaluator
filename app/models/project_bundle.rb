@@ -7,7 +7,7 @@
 #  user_id    :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  file_name  :string           not null
+#  file_name  :string
 #
 # Indexes
 #
@@ -34,7 +34,7 @@ class ProjectBundle < ActiveRecord::Base
   end
 
   def ready
-    data.present? && data.size != 0
+    file_name.present?
   end
 
   def project_name
