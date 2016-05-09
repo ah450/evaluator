@@ -19,7 +19,7 @@ class ProjectTeamsBundleJob < ActiveJob::Base
       end
       Dir.chdir @working_directory
       bundle_file = File.join(Rails.root, 'bundles', "#{project_bundle.filename}.tar.gz")
-      `tar -czf #{bundle_file} submissions`
+      `tar -czf #{bundle_file.shellescape} submissions`
       raise TarError, "Project bundle #{project_bundle.id}" if $?.exitstatus != 0
       project_bundle.file_name = bundle_file
       project_bundle.save!
