@@ -8,6 +8,8 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  file_name  :string
+#  teams_only :boolean          default(FALSE), not null
+#  size_bytes :integer          default(0), not null
 #
 # Indexes
 #
