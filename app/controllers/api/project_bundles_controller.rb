@@ -4,8 +4,9 @@ class Api::ProjectBundlesController < ApplicationController
 
   def create
     @project_bundle = ProjectBundle.new resource_params
+    @project_bundle.teams_only = params[:teams_only] == 'true'
     if @project_bundle.save
-      if params[:teams_only]
+      if @project_bundle.teams_only?
         ProjectTeamsBundleJob.perform_later(@project_bundle)
       else
         ProjectBundleJob.perform_later(@project_bundle, params[:latest])

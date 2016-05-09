@@ -1,6 +1,16 @@
 angular.module 'evaluator'
   .factory 'Bundle', (NotificationDispatcher, BundlesResource,
     configurations, moment) ->
+      formatBytes = (bytes) ->
+        if bytes == 0
+          return '0 Byte'
+        k = 1024
+        dm = 3
+        sizes = ['Bytes', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB',
+        'YiB']
+        i = Math.floor(Math.log(bytes) / Math.log(k))
+        parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
+
       class Bundle
         constructor: (@resource) ->
           NotificationDispatcher.subscribeProject {id: @project_id}, (e) ->
@@ -24,6 +34,14 @@ angular.module 'evaluator'
         @property 'project_name',
           get: ->
             @resource.project_name
+
+        @property 'size',
+          get: ->
+            formatBytes(@resource.size_bytes)
+
+        @property 'teams_only',
+          get: ->
+            @$resource.teams_only
 
         @property 'created_at',
           get: ->

@@ -27,6 +27,7 @@ class ProjectBundleJob < ActiveJob::Base
       `tar -czf #{bundle_file.shellescape} submissions`
       raise TarError, "Project bundle #{project_bundle.id}" if $?.exitstatus != 0
       project_bundle.file_name = bundle_file
+      project_bundle.size_bytes = File.size(bundle_file)
       project_bundle.save!
       Dir.chdir @old_working_directory
       FileUtils.remove_entry_secure @working_directory
