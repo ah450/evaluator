@@ -41,7 +41,7 @@ angular.module 'evaluator'
 
         @property 'teams_only',
           get: ->
-            @$resource.teams_only
+            @resource.teams_only
 
         @property 'created_at',
           get: ->
