@@ -273,183 +273,183 @@ RSpec.describe SubmissionEvaluationJob, type: :job do
     end
   end
 
-  # context 'milestone 0' do
-  #   before :each do
-  #     @project = FactoryGirl.create(:project, published: true,
-  #                                             course: FactoryGirl.create(:course, published: true))
-  #     @publicSuite = TestSuite.new
-  #     @publicSuite.project = @project
-  #     @publicSuite.name = 'M1PublicTest'
-  #     @publicSuite.save!
-  #     code = SuiteCode.new
-  #     code.code = IO.binread(File.join(Rails.root, 'spec', 'fixtures',
-  #                                      '/files/test_suites/M1PublicTest.zip'))
-  #     code.file_name = 'M1PublicTest.zip'
-  #     code.mime_type = Rack::Mime.mime_type '.zip'
-  #     code.test_suite = @publicSuite
-  #     code.save!
-  #     @privateSuite = TestSuite.new
-  #     @privateSuite.name = 'M1PrivateTest'
-  #     @privateSuite.project = @project
-  #     @privateSuite.save!
-  #     privateCode = SuiteCode.new
-  #     privateCode.code = IO.binread(File.join(Rails.root, 'spec', 'fixtures',
-  #                                             '/files/test_suites/M1PrivateTest.zip'))
-  #     privateCode.file_name = 'M1PrivateTest.zip'
-  #     privateCode.mime_type = Rack::Mime.mime_type '.zip'
-  #     privateCode.test_suite = @privateSuite
-  #     privateCode.save!
-  #     SuitesProcessJob.perform_now @publicSuite
-  #     SuitesProcessJob.perform_now @privateSuite
-  #   end
-  #
-  #   context 'submission_3585.zip (missing public results)' do
-  #     before :each do
-  #       @submission = Submission.new
-  #       @submission.submitter = FactoryGirl.create(:student, verified: true)
-  #       @submission.project = @project
-  #       @submission.save!
-  #       solution = Solution.new
-  #       solution.file_name = 'submission_3585.zip'
-  #       solution.mime_type = Rack::Mime.mime_type '.zip'
-  #       solution.submission = @submission
-  #       solution.code = IO.binread(File.join(Rails.root, 'spec', 'fixtures',
-  #                                            'files', 'submissions', 'submission_3585.zip'))
-  #       solution.save!
-  #     end
-  #
-  #     it 'sends new result notification' do
-  #       expect(@submission).to receive(:send_new_result_notification).twice
-  #       SubmissionEvaluationJob.perform_now @submission
-  #     end
-  #
-  #     it 'creates two results' do
-  #       expect do
-  #         SubmissionEvaluationJob.perform_now @submission
-  #       end.to change(Result, :count).by(2)
-  #     end
-  #
-  #     it 'sets correct grade' do
-  #       SubmissionEvaluationJob.perform_now @submission
-  #       pub_result = @submission.results.where(test_suite: @publicSuite).first
-  #       priv_result = @submission.results.where(test_suite: @privateSuite).first
-  #       expect(pub_result.success).to be true
-  #       expect(pub_result.compiled).to be true
-  #       expect(pub_result.grade).to eql 81
-  #       expect(priv_result.success).to be false
-  #       expect(priv_result.compiled).to be true
-  #       expect(priv_result.grade).to eql 65
-  #     end
-  #
-  #   end
-  #
-  #   context 'submission_2219.zip (build failed)' do
-  #     before :each do
-  #       @submission = Submission.new
-  #       @submission.submitter = FactoryGirl.create(:student, verified: true)
-  #       @submission.project = @project
-  #       @submission.save!
-  #       solution = Solution.new
-  #       solution.file_name = 'submission_2219.zip'
-  #       solution.mime_type = Rack::Mime.mime_type '.zip'
-  #       solution.submission = @submission
-  #       solution.code = IO.binread(File.join(Rails.root, 'spec', 'fixtures',
-  #                                            'files', 'submissions', 'submission_2219.zip'))
-  #       solution.save!
-  #     end
-  #
-  #     it 'sends new result notification' do
-  #       expect(@submission).to receive(:send_new_result_notification).twice
-  #       SubmissionEvaluationJob.perform_now @submission
-  #     end
-  #
-  #     it 'creates two results' do
-  #       expect do
-  #         SubmissionEvaluationJob.perform_now @submission
-  #       end.to change(Result, :count).by(2)
-  #     end
-  #
-  #     it 'sets correct grade' do
-  #       SubmissionEvaluationJob.perform_now @submission
-  #       pub_result = @submission.results.where(test_suite: @publicSuite).first
-  #       priv_result = @submission.results.where(test_suite: @privateSuite).first
-  #       expect(pub_result.success).to be true
-  #       expect(pub_result.compiled).to be true
-  #       expect(pub_result.grade).to eql 81
-  #       expect(priv_result.success).to be true
-  #       expect(priv_result.compiled).to be true
-  #       expect(priv_result.grade).to eql 66
-  #     end
-  #
-  #   end
-  #
-  #   context 'submission_2486.zip (build failed)' do
-  #     before :each do
-  #       @submission = Submission.new
-  #       @submission.submitter = FactoryGirl.create(:student, verified: true)
-  #       @submission.project = @project
-  #       @submission.save!
-  #       solution = Solution.new
-  #       solution.file_name = 'submission_2486.zip'
-  #       solution.mime_type = Rack::Mime.mime_type '.zip'
-  #       solution.submission = @submission
-  #       solution.code = IO.binread(File.join(Rails.root, 'spec', 'fixtures',
-  #                                            'files', 'submissions', 'submission_2486.zip'))
-  #       solution.save!
-  #     end
-  #
-  #     it 'sets correct grade' do
-  #       SubmissionEvaluationJob.perform_now @submission
-  #       pub_result = @submission.results.where(test_suite: @publicSuite).first
-  #       priv_result = @submission.results.where(test_suite: @privateSuite).first
-  #       expect(pub_result.success).to be false
-  #       expect(pub_result.compiled).to be false
-  #       expect(pub_result.grade).to eql 0
-  #       expect(priv_result.success).to be false
-  #       expect(priv_result.compiled).to be false
-  #       expect(priv_result.grade).to eql 0
-  #     end
-  #
-  #   end
-  #
-  #   context 'submission_2732.zip (build failed)' do
-  #     before :each do
-  #       @submission = Submission.new
-  #       @submission.submitter = FactoryGirl.create(:student, verified: true)
-  #       @submission.project = @project
-  #       @submission.save!
-  #       solution = Solution.new
-  #       solution.file_name = 'submission_2732.zip'
-  #       solution.mime_type = Rack::Mime.mime_type '.zip'
-  #       solution.submission = @submission
-  #       solution.code = IO.binread(File.join(Rails.root, 'spec', 'fixtures',
-  #                                            'files', 'submissions', 'submission_2732.zip'))
-  #       solution.save!
-  #     end
-  #
-  #     it 'sends new result notification' do
-  #       expect(@submission).to receive(:send_new_result_notification).twice
-  #       SubmissionEvaluationJob.perform_now @submission
-  #     end
-  #
-  #     it 'creates two results' do
-  #       expect do
-  #         SubmissionEvaluationJob.perform_now @submission
-  #       end.to change(Result, :count).by(2)
-  #     end
-  #
-  #     it 'sets correct grade' do
-  #       SubmissionEvaluationJob.perform_now @submission
-  #       pub_result = @submission.results.where(test_suite: @publicSuite).first
-  #       priv_result = @submission.results.where(test_suite: @privateSuite).first
-  #       expect(pub_result.success).to be true
-  #       expect(pub_result.compiled).to be true
-  #       expect(pub_result.grade).to eql 81
-  #       expect(priv_result.success).to be false
-  #       expect(priv_result.compiled).to be true
-  #       expect(priv_result.grade).to eql 65
-  #     end
-  #
-  #   end
-  # end
+  context 'milestone 0' do
+    before :each do
+      @project = FactoryGirl.create(:project, published: true,
+                                              course: FactoryGirl.create(:course, published: true))
+      @publicSuite = TestSuite.new
+      @publicSuite.project = @project
+      @publicSuite.name = 'M1PublicTest'
+      @publicSuite.save!
+      code = SuiteCode.new
+      code.code = IO.binread(File.join(Rails.root, 'spec', 'fixtures',
+                                       '/files/test_suites/M1PublicTest.zip'))
+      code.file_name = 'M1PublicTest.zip'
+      code.mime_type = Rack::Mime.mime_type '.zip'
+      code.test_suite = @publicSuite
+      code.save!
+      @privateSuite = TestSuite.new
+      @privateSuite.name = 'M1PrivateTest'
+      @privateSuite.project = @project
+      @privateSuite.save!
+      privateCode = SuiteCode.new
+      privateCode.code = IO.binread(File.join(Rails.root, 'spec', 'fixtures',
+                                              '/files/test_suites/M1PrivateTest.zip'))
+      privateCode.file_name = 'M1PrivateTest.zip'
+      privateCode.mime_type = Rack::Mime.mime_type '.zip'
+      privateCode.test_suite = @privateSuite
+      privateCode.save!
+      SuitesProcessJob.perform_now @publicSuite
+      SuitesProcessJob.perform_now @privateSuite
+    end
+  
+    context 'submission_3585.zip (missing public results)' do
+      before :each do
+        @submission = Submission.new
+        @submission.submitter = FactoryGirl.create(:student, verified: true)
+        @submission.project = @project
+        @submission.save!
+        solution = Solution.new
+        solution.file_name = 'submission_3585.zip'
+        solution.mime_type = Rack::Mime.mime_type '.zip'
+        solution.submission = @submission
+        solution.code = IO.binread(File.join(Rails.root, 'spec', 'fixtures',
+                                             'files', 'submissions', 'submission_3585.zip'))
+        solution.save!
+      end
+  
+      it 'sends new result notification' do
+        expect(@submission).to receive(:send_new_result_notification).twice
+        SubmissionEvaluationJob.perform_now @submission
+      end
+  
+      it 'creates two results' do
+        expect do
+          SubmissionEvaluationJob.perform_now @submission
+        end.to change(Result, :count).by(2)
+      end
+  
+      it 'sets correct grade' do
+        SubmissionEvaluationJob.perform_now @submission
+        pub_result = @submission.results.where(test_suite: @publicSuite).first
+        priv_result = @submission.results.where(test_suite: @privateSuite).first
+        expect(pub_result.success).to be true
+        expect(pub_result.compiled).to be true
+        expect(pub_result.grade).to eql 81
+        expect(priv_result.success).to be false
+        expect(priv_result.compiled).to be true
+        expect(priv_result.grade).to eql 65
+      end
+  
+    end
+  
+    context 'submission_2219.zip (build failed)' do
+      before :each do
+        @submission = Submission.new
+        @submission.submitter = FactoryGirl.create(:student, verified: true)
+        @submission.project = @project
+        @submission.save!
+        solution = Solution.new
+        solution.file_name = 'submission_2219.zip'
+        solution.mime_type = Rack::Mime.mime_type '.zip'
+        solution.submission = @submission
+        solution.code = IO.binread(File.join(Rails.root, 'spec', 'fixtures',
+                                             'files', 'submissions', 'submission_2219.zip'))
+        solution.save!
+      end
+  
+      it 'sends new result notification' do
+        expect(@submission).to receive(:send_new_result_notification).twice
+        SubmissionEvaluationJob.perform_now @submission
+      end
+  
+      it 'creates two results' do
+        expect do
+          SubmissionEvaluationJob.perform_now @submission
+        end.to change(Result, :count).by(2)
+      end
+  
+      it 'sets correct grade' do
+        SubmissionEvaluationJob.perform_now @submission
+        pub_result = @submission.results.where(test_suite: @publicSuite).first
+        priv_result = @submission.results.where(test_suite: @privateSuite).first
+        expect(pub_result.success).to be true
+        expect(pub_result.compiled).to be true
+        expect(pub_result.grade).to eql 81
+        expect(priv_result.success).to be true
+        expect(priv_result.compiled).to be true
+        expect(priv_result.grade).to eql 66
+      end
+  
+    end
+  
+    context 'submission_2486.zip (build failed)' do
+      before :each do
+        @submission = Submission.new
+        @submission.submitter = FactoryGirl.create(:student, verified: true)
+        @submission.project = @project
+        @submission.save!
+        solution = Solution.new
+        solution.file_name = 'submission_2486.zip'
+        solution.mime_type = Rack::Mime.mime_type '.zip'
+        solution.submission = @submission
+        solution.code = IO.binread(File.join(Rails.root, 'spec', 'fixtures',
+                                             'files', 'submissions', 'submission_2486.zip'))
+        solution.save!
+      end
+  
+      it 'sets correct grade' do
+        SubmissionEvaluationJob.perform_now @submission
+        pub_result = @submission.results.where(test_suite: @publicSuite).first
+        priv_result = @submission.results.where(test_suite: @privateSuite).first
+        expect(pub_result.success).to be false
+        expect(pub_result.compiled).to be false
+        expect(pub_result.grade).to eql 0
+        expect(priv_result.success).to be false
+        expect(priv_result.compiled).to be false
+        expect(priv_result.grade).to eql 0
+      end
+  
+    end
+  
+    context 'submission_2732.zip (build failed)' do
+      before :each do
+        @submission = Submission.new
+        @submission.submitter = FactoryGirl.create(:student, verified: true)
+        @submission.project = @project
+        @submission.save!
+        solution = Solution.new
+        solution.file_name = 'submission_2732.zip'
+        solution.mime_type = Rack::Mime.mime_type '.zip'
+        solution.submission = @submission
+        solution.code = IO.binread(File.join(Rails.root, 'spec', 'fixtures',
+                                             'files', 'submissions', 'submission_2732.zip'))
+        solution.save!
+      end
+  
+      it 'sends new result notification' do
+        expect(@submission).to receive(:send_new_result_notification).twice
+        SubmissionEvaluationJob.perform_now @submission
+      end
+  
+      it 'creates two results' do
+        expect do
+          SubmissionEvaluationJob.perform_now @submission
+        end.to change(Result, :count).by(2)
+      end
+  
+      it 'sets correct grade' do
+        SubmissionEvaluationJob.perform_now @submission
+        pub_result = @submission.results.where(test_suite: @publicSuite).first
+        priv_result = @submission.results.where(test_suite: @privateSuite).first
+        expect(pub_result.success).to be true
+        expect(pub_result.compiled).to be true
+        expect(pub_result.grade).to eql 81
+        expect(priv_result.success).to be false
+        expect(priv_result.compiled).to be true
+        expect(priv_result.grade).to eql 65
+      end
+  
+    end
+  end
 end
