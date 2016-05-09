@@ -4,12 +4,12 @@ class Api::ProjectBundlesController < ApplicationController
 
   def create
     @project_bundle = ProjectBundle.new resource_params
-    @project_bundle.teams_only = params[:teams_only] == 'true'
+    @project_bundle.teams_only = params[:teams_only]
     if @project_bundle.save
       if @project_bundle.teams_only?
         ProjectTeamsBundleJob.perform_later(@project_bundle)
       else
-        ProjectBundleJob.perform_later(@project_bundle, params[:latest] == 'true')
+        ProjectBundleJob.perform_later(@project_bundle, params[:latest])
       end
       render json: @project_bundle, status: :created
     else
