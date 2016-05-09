@@ -24,3 +24,4 @@ perf.data
 certificate_data
 .rbenv-vars
 client/npm-debug.log
+bundles/
