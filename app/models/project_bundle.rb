@@ -42,7 +42,7 @@ class ProjectBundle < ActiveRecord::Base
   end
 
   def filename
-    "#{created_at}-#{id}-#{project.name}-#{user.name}.tar.gz"
+    "#{created_at}-#{project.name}-#{user.name}.tar.gz"
   end
 
   private
