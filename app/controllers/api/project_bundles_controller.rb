@@ -22,7 +22,7 @@ class Api::ProjectBundlesController < ApplicationController
       disposition: 'attachment',
       filename: @project_bundle.filename
     }
-    send_data @project_bundle.data, **options
+    send_file @project_bundle.file_name, **options
   end
 
   private
