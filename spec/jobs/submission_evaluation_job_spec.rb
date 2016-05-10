@@ -447,7 +447,7 @@ RSpec.describe SubmissionEvaluationJob, type: :job do
         expect(pub_result.grade).to eql 81
         expect(priv_result.success).to be false
         expect(priv_result.compiled).to be true
-        expect(priv_result.grade).to eql 64
+        expect([65, 65]).to include(priv_result.grade)
       end
   
     end
