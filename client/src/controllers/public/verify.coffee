@@ -15,10 +15,7 @@ angular.module 'evaluator'
         $scope.done = true
         $timeout ->
           data = response.data.data
-          $auth.setToken(data.token)
-          localStorageService.set 'currentUser', data.user
-          UserAuth.currentUserData = data
-          UserAuth.currentUser = new User data
+          UserAuth.setUserAndToken(data.user, data.token)
           $state.go 'private.courses'
         , 800
       .catch (response) ->

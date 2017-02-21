@@ -45,10 +45,16 @@ angular.module 'evaluator'
           return @currentUser
         else
           @currentUser = new User localStorageService.get 'currentUser'
+      setUserAndToken: (userData, tokenDat) ->
+        @currentUserData = userData
+        localStorageService.set 'currentUser', @currentUserData
+        @currentUser = new User @currentUserData
+        $auth.setToken(tokenDat)
 
       @property 'user',
         get: ->
           @getUser()
+
         
     return new UserService
     

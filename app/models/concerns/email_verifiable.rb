@@ -59,7 +59,8 @@ module EmailVerifiable
         data: {
           id: id,
           discriminator: password_digest,
-          type: 'verification_token'
+          type: 'verification_token',
+          time: Time.now.getutc
           # discriminator used to detect password changes after token generation
         }
       }

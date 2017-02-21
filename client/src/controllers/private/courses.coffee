@@ -17,7 +17,6 @@ angular.module 'evaluator'
       $scope.isTeacher = UserAuth.user.teacher
       $scope.isAdmin = UserAuth.user.admin
 
-
       publishedCourseCallback = (course) ->
         if not $scope.isTeacher
           $scope.addCoursesCallback [course], 0
