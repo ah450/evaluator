@@ -6,6 +6,9 @@ angular.module 'evaluator'
         _.assign @, @resource
 
       reload: ->
+        if id?
+          return
+        
         UsersResource.get({id: @resource.id}).$promise.then (resource) =>
           @resource = resource
           return @
