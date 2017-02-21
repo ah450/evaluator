@@ -68,6 +68,9 @@ RSpec.configure do |config|
     # `true` in RSpec 4.
     mocks.verify_partial_doubles = true
   end
+  config.after(:each) do
+    $redis.flushall
+  end
   config.profile_examples = 10
   config.order = :random
   RSpec.configure do |config|

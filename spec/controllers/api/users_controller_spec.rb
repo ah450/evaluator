@@ -4,18 +4,19 @@ RSpec.describe Api::UsersController, type: :controller do
   context '.index' do
     let(:students) { FactoryGirl.create_list(:student, 10) }
     let(:teachers) { FactoryGirl.create_list(:teacher, 10) }
-    let(:user) { FactoryGirl.create(:student) }
+    let(:student) {FactoryGirl.create(:student)}
+    let(:teacher) {FactoryGirl.create(:teacher)}
     it 'disallow unauthoried index' do
       get :index, format: :json
       expect(response).to be_unauthorized
     end
     it 'respond to index action' do
-      set_token user.token
+      set_token teacher.token
       get :index, format: :json
       expect(response).to be_success
     end
     it 'has pagination' do
-      set_token user.token
+      set_token teacher.token
       get :index, format: :json, page: 1, page_size: students.length
       expect(json_response).to include(
         :users, :page, :page_size, :total_pages
@@ -24,8 +25,14 @@ RSpec.describe Api::UsersController, type: :controller do
       expected_total_pages = (students.length + teachers.length) % students.length + 2
       expect(json_response[:total_pages]).to eql expected_total_pages
     end
+    it 'disallow student' do
+      set_token student.token
+      get :index, format: :json, page: 1, page_size: students.length
+      expect(response).to be_forbidden
+    end
+    
     it 'return all records' do
-      set_token user.token
+      set_token teacher.token
       get :index, format: :json, page: 1, page_size: students.length + teachers.length
       expect(json_response).to include(
         :users, :page, :page_size, :total_pages
@@ -34,7 +41,7 @@ RSpec.describe Api::UsersController, type: :controller do
       expect(json_response[:page_size]).to eql students.length + teachers.length
       are_equal = json_response[:users].reduce true do |memo, responseUser|
         check = ->(other) { responseUser[:id] == other.id }
-        memo && (user.id == responseUser[:id] || students.any?(&check) || teachers.any?(&check))
+        memo && (teacher.id == responseUser[:id] || students.any?(&check) || teachers.any?(&check))
       end
       expect(are_equal).to be true
     end
@@ -50,6 +57,24 @@ RSpec.describe Api::UsersController, type: :controller do
       set_token student.token
       get :show, format: :json, id: student.id
       expect(json_response[:id]).to eql student.id
+      expect(json_response).to include(
+        :id, :email, :student, :major, :guc_suffix, :guc_prefix, :team, :name,
+        :verified, :guc_id
+      )
+      expect(json_response).to_not include(
+        :password_digest, :password
+      )
+    end
+    it 'does not allow student to view other' do
+      other = FactoryGirl.create(:student)
+      set_token other.token
+      get :show, format: :json, id: student.id
+      expect(response).to be_forbidden
+    end
+    it 'allows teacher to view other' do
+      other = FactoryGirl.create(:teacher)
+      set_token other.token
+      get :show, format: :json, id: student.id
       expect(json_response).to include(
         :id, :email, :student, :major, :guc_suffix, :guc_prefix, :team, :name,
         :verified, :guc_id

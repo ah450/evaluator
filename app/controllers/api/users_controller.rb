@@ -1,6 +1,7 @@
 class Api::UsersController < ApplicationController
   prepend_before_action :authenticate, only: [:index, :show, :update, :destroy]
   before_action :authorize_super_user, only: [:destroy]
+  before_action :authorize_teacher, only: [:index]
   after_action :no_cache, except: [:index, :show]
   after_action :reload_resource, only: [:create]
   after_action :send_verification, only: [:create]
@@ -28,6 +29,11 @@ class Api::UsersController < ApplicationController
       render json: { message: error_messages[:incorrect_reset_token] },
              status: :unprocessable_entity
     end
+  end
+
+  def show
+    raise ForbiddenError, error_messages[:forbidden_teacher_only] unless @current_user.id == get_resource.id || @current_user.teacher?
+    super
   end
 
   def resend_verify

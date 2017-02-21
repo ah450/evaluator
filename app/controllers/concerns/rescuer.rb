@@ -51,8 +51,13 @@ module Rescuer
     message << "\n" << ActionDispatch::ExceptionWrapper.new(env, e)
                        .application_trace.join('\n')
     logger.error "#{message}\n\n"
-    render json: { message: error_messages[:internal_server_error] },
+    if Rails.env.debug? or Rails.env.test?
+      render json: {message: message}, status: :internal_server_error
+    else
+      render json: { message: error_messages[:internal_server_error] },
            status: :internal_server_error
+    end
+    
   end
 
 end

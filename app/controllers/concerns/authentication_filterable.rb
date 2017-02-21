@@ -40,6 +40,7 @@ module AuthenticationFilterable
       @current_user.student?
   end
 
+
   # Attempts to set current user
   def authenticate
     pattern = /^Bearer /

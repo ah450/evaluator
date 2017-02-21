@@ -15,6 +15,8 @@ ActiveRecord::Schema.define(version: 20160509213929) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "hstore"
+  enable_extension "pg_trgm"
 
   create_table "contacts", force: :cascade do |t|
     t.integer  "user_id"

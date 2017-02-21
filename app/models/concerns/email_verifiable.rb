@@ -55,8 +55,16 @@ module EmailVerifiable
         created_at: :desc).offset(1).destroy_all
       token = VerificationToken.where(user_id: id).order(
         created_at: :desc).first
-      token_str = SecureRandom.urlsafe_base64(
-        User.verification_token_str_max_length)
+      payload = {
+        data: {
+          id: id,
+          discriminator: password_digest,
+          type: 'verification_token'
+          # discriminator used to detect password changes after token generation
+        }
+      }
+      # HMAC using SHA-512 algorithm
+      token_str = JWT.encode payload, User.hmac_key, 'HS512'
       if !token.nil? && token.created_at <= expiration_time
         token.destroy
         token = nil
