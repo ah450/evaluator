@@ -17,7 +17,7 @@
       <a class="icon-link" data-ui-sref="private.profile"
       data-ui-sref-active="active"><i class="icon material-icons">person</i> profile</a>
     </li>
-    <li data-ng-if="signedIn()" data-ng-if="isTeacher">
+    <li data-ng-if="signedIn() && isTeacher">
       <a class="icon-link" data-ui-sref="private.teacher.portal"
       data-ui-sref-active="active"><i class="icon fi flaticon-education large-fi"></i> teacher portal</a>
     </li>
